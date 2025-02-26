@@ -1,0 +1,150 @@
+/*font and text styling*/
+.headerPoM {
+  font-family: "Nova Round", sans-serif;
+  font-size: 5vw;
+  color: #00433c;
+  transform: scaleY(1.1);
+}
+
+.textPom {
+  font-size: 1.2rem;
+  hyphens: auto;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+@media (max-width: 1500px) {
+  .textPom {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 990px) {
+  .headerPoM {
+    font-size: 8vw;
+  }
+}
+
+@media (max-width: 500px) {
+  .headerPoM {
+    font-size: 8vw;
+  }
+}
+
+/* PAGE STYLING */
+.wholeScreenPoM {
+  position: relative;
+  height: 100vh;
+  background-color: #f8f7f5;
+  overflow: hidden;
+  padding: 0;
+}
+
+.grid-containerPoM > div {
+  text-align: center;
+}
+
+.grid-containerPoM {
+  display: grid;
+  padding: 5em;
+  width: 100%;
+  height: 100%;
+  grid-template-columns: 40% 60%;
+  grid-template-rows: 15% 90%;
+}
+
+.elementPoM1 {
+  grid-column: 1 / span 2;
+  grid-row: 1;
+  justify-self: center;
+  align-self: center;
+
+  transition: all 1s ease-in-out;
+  opacity: 0;
+  transform: translateX(-500px);
+}
+
+.elementPoM2 {
+  grid-column: 1;
+  grid-row: 2;
+  max-width: 80%;
+  justify-self: center;
+  align-self: center;
+
+  transition: all 1.5s ease-in-out;
+  opacity: 0;
+  transform: translateY(500px);
+}
+.elementPoM3 {
+  grid-column: 2;
+  grid-row: 2;
+  max-height: 100%;
+  max-width: 90%;
+  transition: all 0.5s ease-in-out;
+  transition-delay: 0.5s;
+  opacity: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.elementPoM1.fade-in,
+.elementPoM2.fade-in,
+.elementPoM3.fade-in {
+  opacity: 1;
+  transform: translateX(0px);
+  transform: translateY(0px);
+}
+
+@media (max-width: 990px) {
+  .wholeScreenPoM {
+    height: auto;
+  }
+
+  .grid-containerPoM {
+    position: relative;
+    display: grid;
+    justify-content: center;
+    padding: 1em;
+    padding-bottom: 2em;
+    width: 100%;
+    grid-template-columns: 90%;
+    grid-template-rows: auto auto auto;
+  }
+
+  .elementPoM1 {
+    grid-column: 1;
+    grid-row: 1;
+    max-width: 100%;
+  }
+
+  .elementPoM2 {
+    grid-column: 1;
+    grid-row: 3;
+    padding: 2em 0;
+    max-width: 90%;
+    transform: translateX(500px);
+  }
+
+  .elementPoM3 {
+    grid-column: 1;
+    grid-row: 2;
+    max-width: 100%;
+    max-height: fit-content;
+  }
+}
+
+.prints2 {
+  right: 40px;
+  transform: rotate(175deg);
+  left: initial;
+}
+
+@media (max-width: 990px) {
+  .prints2 {
+    transform: rotate(178deg);
+    right: 5px;
+    left: initial;
+    gap: 3rem;
+  }
+}

@@ -1,0 +1,340 @@
+.navbar {
+  padding: 0;
+  margin: 0;
+  background-color: #00433c;
+}
+.Navbar {
+  background-color: #00433c;
+  padding: 0;
+  margin: 0;
+}
+
+.navBar {
+  display: flex;
+  min-width: 100% !important;
+  padding: 0;
+  margin: 0;
+}
+
+.navbar-nav {
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+.menuText {
+  color: white !important;
+  margin: 0;
+  font-family: "Nova Round", sans-serif;
+  white-space: nowrap;
+}
+
+.logoAK {
+  height: auto;
+  cursor: default;
+}
+
+.logoBigScreen {
+  margin-left: 2em;
+}
+
+.logoSmallScreen {
+  display: none;
+}
+
+.bird {
+  width: 50px;
+  height: 50px;
+  transform: translateX(-10px);
+}
+.leaf {
+  width: 50px;
+  height: 50px;
+  transform: rotate(-10deg) translateX(10px);
+}
+
+.links {
+  display: flex;
+  text-align: center;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.nav-link {
+  white-space: nowrap;
+}
+
+.languageSelect {
+  margin: 5em;
+  margin-left: 2em;
+  font-size: 1.2em;
+}
+
+.custom-dropdown .dropdown-menu {
+  background-color: #00433c;
+  border: none;
+  margin: 0;
+}
+
+.dropdown-item {
+  margin: 0;
+}
+
+.custom-dropdown .dropdown-menu .dropdown-item:hover {
+  background-color: #00433c;
+  color: white;
+}
+
+.custom-dropdown .dropdown-item {
+  font-size: 1rem;
+}
+
+.custom-dropdown .dropdown-item {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.custom-dropdown {
+  text-transform: uppercase;
+}
+
+.dropdown-toggle::after {
+  display: none;
+}
+
+#pictures-dropdown .dropdown-toggle {
+  background: none;
+  border: none;
+  color: inherit;
+}
+
+.menuLink {
+  position: relative;
+  text-decoration: none;
+  color: #00202c;
+  text-transform: uppercase;
+  font-size: 1.2em;
+  cursor: pointer;
+}
+
+.menuLink::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: white;
+  transition: width 0.3s ease-in-out;
+}
+
+.menuLink:hover::after {
+  width: 100%;
+}
+
+.navbar-toggler {
+  background: none;
+  border: none;
+  position: relative;
+  width: 40px;
+  height: 30px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+}
+
+.navbar-toggler:focus {
+  border: none;
+  box-shadow: none;
+}
+
+.navbar-toggler .line {
+  position: absolute;
+  width: 100%;
+  height: 3px;
+  background-color: white;
+  border-radius: 2px;
+  transition: transform 0.3s ease, top 0.3s ease;
+}
+
+.navbar-toggler .line:nth-child(1) {
+  top: 10px;
+}
+
+.navbar-toggler .line:nth-child(2) {
+  top: 25px;
+}
+
+.navbar-toggler:not(.collapsed) .line:nth-child(1) {
+  transform: rotate(45deg);
+  top: 15px;
+}
+
+.navbar-toggler:not(.collapsed) .line:nth-child(2) {
+  transform: rotate(-45deg);
+  top: 15px;
+}
+
+.icon {
+  display: flex;
+  color: white;
+  align-items: center;
+}
+
+.buttonSmall {
+  all: unset;
+  cursor: pointer;
+}
+
+.dropVisible {
+  display: none;
+}
+
+.dropSmallButton {
+  display: none;
+}
+
+@media (max-width: 990px) {
+  .logoAK {
+    margin-left: 0;
+  }
+
+  .logoBigScreen {
+    display: none;
+  }
+
+  .logoSmallScreen {
+    display: block;
+  }
+  .links {
+    flex-direction: column;
+  }
+
+  .languageSelect {
+    margin: 0;
+  }
+
+  .navBar {
+    position: relative;
+    display: flex;
+    z-index: 2;
+  }
+
+  .navBarSmall {
+    width: 100%;
+    background-color: #00433c;
+    display: inline !important;
+    position: absolute;
+    padding: 3em 0;
+    z-index: 1;
+    opacity: 0;
+    transform: translatey(500px);
+    transition: opacity 0.3s ease-out, padding-top 1s ease-out,
+      transform 0.5s ease-out, height 0.5s ease-out;
+  }
+
+  .navBarSmall.show {
+    transform: translatey(120px);
+    background-color: #00433c;
+    opacity: 1;
+    min-height: 90vh;
+  }
+
+  .custom-dropdown {
+    display: none;
+  }
+
+  .logoAndToggle {
+    display: flex;
+    align-items: center;
+    z-index: 2;
+    width: 100%;
+    margin: 2em 0;
+    justify-content: space-around;
+  }
+
+  .bird {
+    width: 50px;
+    height: 50px;
+  }
+
+  .icon {
+    padding-top: 5em;
+  }
+
+  .languageSelect {
+    padding-top: 2em;
+  }
+
+  .iconDropdown {
+    transform: rotate(-90deg);
+    align-self: flex-end;
+  }
+
+  .dropSmallButton {
+    display: block;
+  }
+
+  .dropSmallButLang {
+    margin-top: 2em;
+  }
+
+  .dropVisible.visible {
+    display: flex;
+    position: absolute;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+
+  .dropSmall,
+  .dropSmallLang {
+    position: fixed !important;
+    top: 0;
+    right: -110%;
+    width: 100vw;
+    min-height: 100vh;
+    background-color: #00433c;
+    transition: right 0.5s ease-out, opacity 0.5s ease-out;
+    visibility: hidden;
+    z-index: 3;
+  }
+
+  .dropSmall.show,
+  .dropSmallLang.show {
+    right: 0 !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+
+  /* Kun piilotetaan näkyvyyden sijaan */
+  .dropSmall.collapsed,
+  .dropSmallLang.collapsed {
+    right: -110%;
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+.buttonBack {
+  background-color: transparent;
+  border: none;
+  color: rgb(214, 214, 214) !important;
+  padding: 0;
+  margin: 0;
+}
+
+.buttonBackMargin {
+  padding: 0 0 2em 0;
+}
+
+.iconButtonBack {
+  margin-right: 0.5em;
+  transform: rotate(90deg);
+}
+
+.nav-link-small {
+  padding: 0.5em 0;
+}

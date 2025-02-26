@@ -1,0 +1,38 @@
+body {
+  margin: 0;
+  background-color: #f8f7f5;
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.no-scroll {
+  overflow: hidden;
+  height: 100vh;
+}
+
+#root {
+  max-width: 100% !important;
+  min-width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+h1,
+h2,
+h3 {
+  font-family: "Nova Round", sans-serif;
+}
+
+/* remove basic a style */
+a {
+  text-decoration: none !important;
+  color: inherit !important;
+  outline: none !important;
+}
+
+a:hover,
+a:focus {
+  color: inherit;
+  text-decoration: underline;
+}

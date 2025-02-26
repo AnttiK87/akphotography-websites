@@ -1,0 +1,129 @@
+.wholeScreen {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  height: 80vh;
+  background-color: #00433c;
+  overflow: hidden;
+}
+
+.inline-block {
+  display: inline-block;
+}
+
+.animated-text {
+  font-size: 5.5vw;
+  margin-bottom: 4vw;
+  color: white;
+  font-family: "Nova Round", sans-serif;
+  transform: scaleY(1.5);
+  z-index: 1;
+}
+
+.maskImg {
+  display: flex;
+  max-width: 98%;
+  position: relative;
+  -webkit-mask-image: url("../../assets/film.png");
+  mask-image: url("../../assets/film.png");
+  mask-repeat: no-repeat;
+  mask-size: 100% 145%;
+  mask-position: center;
+  opacity: 0;
+  animation: fadeInMask 1.5s ease-in-out forwards;
+  animation-delay: 1.5s;
+  overflow: hidden;
+  top: 4vw;
+  justify-content: center;
+}
+
+@keyframes fadeInMask {
+  from {
+    opacity: 0;
+    transform: rotate(-15deg);
+    scale: 0;
+  }
+  to {
+    opacity: 1;
+    transform: rotate(5deg);
+    scale: 1;
+  }
+}
+
+.background-image {
+  height: 100%;
+  max-width: 100%;
+  object-fit: cover;
+  opacity: 1;
+  animation: fadeInPicture 1.5s ease-in-out forwards;
+  animation-delay: 1.7s;
+  align-self: center;
+  transform: rotate(-40deg);
+}
+
+@keyframes fadeInPicture {
+  from {
+    transform: rotate(-40deg);
+  }
+  to {
+    transform: rotate(-5deg);
+  }
+}
+
+@media (max-width: 1570px) {
+  .animated-text {
+    font-size: 6vw;
+    line-height: 0.8em;
+    padding-bottom: 0.5em;
+  }
+}
+
+@media (max-width: 990px) {
+  .animated-text {
+    font-size: 11vw;
+    line-height: 0.8em;
+    top: 80vw;
+  }
+
+  .wholeScreen {
+    height: auto;
+    justify-content: flex-start;
+    min-height: 88vh;
+  }
+
+  .maskImg {
+    mask-size: 90% 130%;
+    margin-top: 2em;
+  }
+
+  .background-image {
+    height: 120%;
+    max-width: 120%;
+    object-fit: cover;
+  }
+
+  @keyframes fadeInPicture {
+    from {
+      transform: rotate(20deg);
+    }
+    to {
+      transform: rotate(-5deg);
+    }
+  }
+}
+
+@media (max-width: 500px) {
+  .wholeScreen {
+    padding-bottom: 8em;
+    min-height: 85vh;
+    max-height: 85vh !important;
+    justify-content: center;
+  }
+
+  .animated-text {
+    font-size: 11vw;
+    top: 110vw;
+  }
+}

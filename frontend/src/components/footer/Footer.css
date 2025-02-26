@@ -1,0 +1,161 @@
+a {
+  margin: 0 0.5em;
+  font-size: 1.1em;
+}
+
+p {
+  margin: 0 0.5em;
+  font-size: 1.1em;
+}
+
+.footer {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background-color: #bacdc4;
+  padding: 3rem 2rem 3rem 0;
+  display: flex;
+}
+
+.footerDiv {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  margin-left: 6em;
+  margin-bottom: 2em;
+}
+
+.footerH1 {
+  color: #00202c;
+  font-size: 10em;
+  visibility: hidden;
+  opacity: 0;
+  padding: 0.1em 0 0 0.1em;
+  margin-bottom: 0;
+  text-align: start;
+  opacity: 0;
+  visibility: hidden;
+  transform: translatex(100%);
+  transition: opacity ease-in-out 1.5s, transform ease-in-out 1.5s;
+}
+
+.footerH1.fade-in {
+  opacity: 1;
+  visibility: visible;
+  transform: translatex(0);
+}
+
+.copyRight {
+  color: #00202c;
+  font-size: 1.2em;
+  visibility: hidden;
+  opacity: 0;
+  margin-left: 75px;
+  text-align: start;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(50px);
+  transition: opacity ease-in-out 1.5s, transform ease-in-out 1.5s;
+}
+
+.copyRight.fade-in {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.smallColumn {
+  gap: 1rem;
+}
+
+.social {
+  margin-top: 8em;
+  margin-right: 3em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: end;
+}
+
+.social-link {
+  position: relative;
+  opacity: 0;
+  transition: opacity 1s ease-out;
+  transition: opacity 0.3s ease;
+  transition-delay: 1s;
+}
+
+.social-link.show {
+  opacity: 1;
+}
+
+/* Pseudo-elementti, joka luo viivan */
+.social-link::after {
+  content: ""; /* Pseudo-elementin sisällöksi ei tarvitse mitään */
+  position: absolute;
+  bottom: 0; /* Asetetaan viiva linkin alareunaan */
+  left: 0;
+  width: 0; /* Aluksi viiva on piilossa */
+  height: 2px; /* Viivan korkeus */
+  background-color: #00202c; /* Viivan väri */
+  transition: width 0.4s ease-out; /* Liukuminen vasemmalta oikealle */
+}
+
+/* Animaatio hover-tilassa */
+.social-link:hover::after {
+  width: 100%; /* Viiva laajenee täyteen leveyteen, kun linkkiä viedään päälle */
+}
+
+/* Media query pienille näytöille (esim. mobiililaitteet) */
+@media (max-width: 1500px) {
+  .footerH1 {
+    font-size: 6em; /* Pienempi fonttikoko pienille näytöille */
+  }
+}
+
+@media (max-width: 990px) {
+  .social {
+    padding: 0 1em !important;
+  }
+}
+
+/* Media query todella pienille näytöille (esim. puhelimet) */
+@media (max-width: 750px) {
+  .footerH1 {
+    font-size: 2.2em;
+    margin-left: 0;
+    padding: 0 1em;
+    text-align: center;
+  }
+
+  .social {
+    margin-top: 5em;
+    margin-right: 0;
+    padding: 0 5em !important;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  .smallColumn {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .copyRight {
+    padding: 0 3em !important;
+    display: flex;
+    margin-top: 1em;
+    margin-left: 0;
+    justify-content: center;
+    text-align: center;
+  }
+  .footerDiv {
+    margin-left: 0;
+  }
+
+  .footer {
+    padding-right: 0;
+  }
+}

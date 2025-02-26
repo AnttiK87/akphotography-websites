@@ -1,0 +1,13 @@
+/* Home.css */
+.homeScreen {
+  display: flex;
+  flex-direction: column;
+}
+
+.separatorLine {
+  color: #00433c;
+  width: 97%;
+  border-top: 2px solid;
+  margin: 0 auto;
+  padding: 0 2em;
+}

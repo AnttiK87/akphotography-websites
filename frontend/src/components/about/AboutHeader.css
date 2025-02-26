@@ -1,0 +1,69 @@
+.wholeScreenAbout1 {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  height: 80vh;
+  background-color: #00433c;
+  overflow: hidden;
+}
+
+.inline-block {
+  display: inline-block;
+}
+
+.animated-text {
+  font-size: 5.5vw;
+  margin-bottom: 4vw;
+  color: white;
+  font-family: "Nova Round", sans-serif;
+  transform: scaleY(1.5);
+  z-index: 1;
+}
+
+.imgContainer {
+  height: 70%;
+}
+
+.background-image-about {
+  height: 100%;
+  max-width: 100%;
+  object-fit: cover;
+  animation: fadeInPicture 1.5s ease-in-out forwards;
+  animation-delay: 1s;
+  opacity: 0;
+  scale: 0;
+  transform: rotate(20deg);
+  align-self: center;
+}
+
+@keyframes fadeInPicture {
+  from {
+    transform: rotate(20deg);
+    opacity: 0;
+    scale: 0;
+  }
+  to {
+    transform: rotate(-5deg);
+    opacity: 1;
+    scale: 1;
+  }
+}
+
+@media (max-width: 990px) {
+  .wholeScreenAbout1 {
+    justify-content: center;
+  }
+
+  .imgContainer {
+    padding-top: 0;
+    max-width: 80%;
+    height: auto;
+  }
+
+  .background-image-about {
+    height: auto;
+    max-width: 100%;
+  }
+}
