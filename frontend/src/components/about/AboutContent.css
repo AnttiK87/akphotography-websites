@@ -1,4 +1,11 @@
 /*font and text styling*/
+.headerAbout {
+  font-size: 4vw;
+  color: #00433c;
+  transform: scaleY(1.1);
+  margin: 1em auto;
+  margin-bottom: 0;
+}
 
 .textAbout {
   font-size: 1.2rem;
@@ -8,15 +15,25 @@
 }
 
 @media (max-width: 1500px) {
+  .headerAbout {
+    font-size: 7vw;
+    background-color: #f8f7f5c1;
+    width: 80%;
+    align-self: center;
+    margin: 2em auto;
+    margin-bottom: 0;
+  }
+
   .textAbout {
-    font-size: 1.1rem;
+    font-size: 1rem;
+    margin: 0;
+    background-color: #f8f7f5c1;
   }
 }
 
 /* PAGE STYLING */
 .wholeScreenAbout {
   position: relative;
-  height: 80vh;
   background-color: #f8f7f5;
   overflow: hidden;
   padding: 0;
@@ -28,9 +45,9 @@
 
 .grid-container-about {
   display: grid;
-  padding: 5em;
+  padding: 2em;
   width: 100%;
-  height: 100%;
+  height: 80vh;
   grid-template-columns: 50% 50%;
   grid-template-rows: 100%;
 }
@@ -103,12 +120,13 @@
     padding: 0;
     padding-bottom: 2em;
     width: 100%;
+    height: auto;
     grid-template-columns: auto;
     grid-template-rows: auto;
   }
 
   .elementAbout1 {
-    padding: 2em 5em !important;
+    padding: 2em 0 !important;
     grid-column: 1 !important;
     grid-row: 1 !important;
     justify-self: center !important;
@@ -119,7 +137,8 @@
     grid-column: 1 !important;
     grid-row: 2 !important;
     padding: 0;
-    max-width: 90% !important;
+    max-width: 80% !important;
+    height: fit-content;
     transform: translateX(500px);
     justify-self: center !important;
     justify-content: center !important;

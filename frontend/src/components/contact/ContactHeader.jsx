@@ -1,6 +1,6 @@
-import "./HomeHeader.css";
+import "./ContactHeader.css";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useLanguage } from "../../hooks/useLanguage";
 
 import AnimatedText from "../animations/AnimatedText";
@@ -9,51 +9,30 @@ import FootPrints from "../animations/FootPrints";
 import toesLeft from "../../assets/toes-left-white.png";
 import toesRight from "../../assets/toes-right-white.png";
 
-const HomeHeader = () => {
+const ContactHeader = () => {
   const { language } = useLanguage();
   const [textIsAnimated, setTextIsAnimated] = useState(false);
-  const [currentImageIndex, setCurrentImageIndex] = useState(
-    Math.floor(Math.random() * 8) + 1
-  );
-  const duration = 10000;
 
-  const headerText =
-    language === "fin"
-      ? "Luonnonvaloa kuvaamassa"
-      : "Chasing the Light of Nature";
+  const headerText = language === "fin" ? "Ota yhteyttä" : "Contact me";
   const textToHeader = headerText.split("\n");
 
-  useEffect(() => {
-    // Luodaan intervali kuvan vaihdolle
-    const interval = setInterval(() => {
-      setCurrentImageIndex((prevIndex) => {
-        return prevIndex === 8 ? 1 : prevIndex + 1; // Vaihdetaan kuvaa
-      });
-    }, duration);
-
-    // Siivous
-    return () => {
-      clearInterval(interval); // Siivotaan interval
-    };
-  }, [duration]);
-
   return (
-    <div className="wholeScreen">
+    <div className="wholeScreenContact1">
       <FootPrints
         toesLeft={toesLeft}
         toesRight={toesRight}
-        printCount={15}
+        printCount={10}
         isVisible={true}
       />
-      <div className="maskImg">
+      <div className="imgContainerContact">
         <img
-          src={`../../../images/homeBackground/background${currentImageIndex}.jpg`}
+          src={`../../../images/homeBackground/background2.jpg`}
           alt="Background Image"
-          className="background-image"
+          className="background-image-contact"
         />
       </div>
       {textIsAnimated ? (
-        <p className={"animated-text inline-block"}>
+        <p className={"animated-text-contact inline-block"}>
           {textToHeader.map((line, lineIndex) => (
             <span className="block" key={`${line}-${lineIndex}`}>
               {line.split(" ").map((word, wordIndex, wordArray) => (
@@ -74,7 +53,7 @@ const HomeHeader = () => {
       ) : (
         <AnimatedText
           textToAnimate={headerText}
-          classNames="animated-text"
+          classNames="animated-text-contact"
           setTextIsAnimated={setTextIsAnimated}
         />
       )}
@@ -82,4 +61,4 @@ const HomeHeader = () => {
   );
 };
 
-export default HomeHeader;
+export default ContactHeader;

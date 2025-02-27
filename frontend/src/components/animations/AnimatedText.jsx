@@ -61,7 +61,7 @@ const AnimatedText = ({
       >
         {textToAnimateArray.map((line, lineIndex) => (
           <span className="block" key={`${line}-${lineIndex}`}>
-            {line.split(" ").map((word, wordIndex) => (
+            {line.split(" ").map((word, wordIndex, wordArray) => (
               <span className="inline-block" key={`${word}-${wordIndex}`}>
                 {word.split("").map((char, charIndex) => (
                   <motion.span
@@ -72,7 +72,9 @@ const AnimatedText = ({
                     {char}
                   </motion.span>
                 ))}
-                <span className="inline-block">&nbsp;</span>
+                {wordIndex < wordArray.length - 1 && (
+                  <span className="inline-block">&nbsp;</span>
+                )}
               </span>
             ))}
           </span>

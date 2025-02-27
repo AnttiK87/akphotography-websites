@@ -1,4 +1,4 @@
-.wholeScreenAbout1 {
+.wholeScreenContact1 {
   position: relative;
   display: flex;
   flex-direction: column;
@@ -13,7 +13,7 @@
   display: inline-block;
 }
 
-.animated-text {
+.animated-text-contact {
   font-size: 5.5vw;
   margin-bottom: 4vw;
   color: white;
@@ -22,24 +22,24 @@
   z-index: 1;
 }
 
-.imgContainer {
+.imgContainerContact {
   display: flex;
   max-width: 100%;
   position: relative;
-  -webkit-mask-image: url("../../assets/camera.png");
-  mask-image: url("../../assets/camera.png");
+  -webkit-mask-image: url("../../assets/mail.png");
+  mask-image: url("../../assets/mail.png");
   mask-repeat: no-repeat;
-  mask-size: 125% 125%;
+  mask-size: 100% 115%;
   mask-position: center;
   opacity: 0;
   animation: fadeInMask 1.5s ease-in-out forwards;
   animation-delay: 1.5s;
   overflow: hidden;
-  top: 4vw;
+  top: 3vw;
   justify-content: center;
 }
 
-.background-image-about {
+.background-image-contact {
   height: 100%;
   max-width: 100%;
   object-fit: cover;
@@ -66,7 +66,7 @@
 }
 
 @media (max-width: 1570px) {
-  .animated-text {
+  .animated-text-contact {
     font-size: 6vw;
     line-height: 0.8em;
     padding-bottom: 0.5em;
@@ -74,17 +74,18 @@
 }
 
 @media (max-width: 990px) {
-  .animated-text {
+  .animated-text-contact {
     font-size: 11vw;
     line-height: 0.8em;
     top: 80vw;
   }
 
-  .wholeScreenAbout1 {
+  .wholeScreenContact1 {
+    height: auto;
     justify-content: center;
   }
 
-  .imgContainer {
+  .imgContainerContact {
     top: 0vw;
     padding-top: 0;
     max-width: 100%;
@@ -92,14 +93,14 @@
     mask-size: 110% 110%;
   }
 
-  .background-image-about {
+  .background-image-contact {
     height: fit-content;
     max-width: 100%;
   }
 }
 
 @media (max-height: 790px) {
-  .wholeScreenAbout1 {
+  .wholeScreenContact1 {
     height: auto;
   }
 }
