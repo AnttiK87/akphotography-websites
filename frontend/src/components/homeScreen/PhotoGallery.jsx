@@ -12,7 +12,7 @@ import toesRight from "../../assets/toes-right.png";
 
 const PhotoGallery = () => {
   const { language } = useLanguage();
-  const { isVisible, elementRef } = useAnimationLauncher(0.01);
+  const { isVisible, startAnim, elementRef } = useAnimationLauncher(0.01);
 
   const navigate = useNavigate();
 
@@ -35,6 +35,18 @@ const PhotoGallery = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, [elementRef]);
+
+  if (isVisible) {
+    const links = document.querySelectorAll(".card");
+    let delay = 300;
+
+    links.forEach((link) => {
+      setTimeout(() => {
+        link.classList.add("show");
+      }, delay);
+      delay += 700;
+    });
+  }
 
   const galleryItems = [
     {
@@ -99,8 +111,12 @@ const PhotoGallery = () => {
           isVisible={isVisible}
         />
         <div className="containerGalleryText">
-          <p className="headerGallery">{galleryHeader}</p>
-          <p className="textGallery">{galleryText}</p>
+          <p className={`headerGallery ${startAnim ? "fade-in" : ""}`}>
+            {galleryHeader}
+          </p>
+          <p className={`textGallery ${startAnim ? "fade-in" : ""}`}>
+            {galleryText}
+          </p>
         </div>
         <div className="galleryContainer">
           {galleryItems.map(

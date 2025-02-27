@@ -33,25 +33,22 @@ const AboutHeader = () => {
       </div>
       {textIsAnimated ? (
         <p className={"animated-text inline-block"}>
-          <span aria-hidden>
-            {textToHeader.map((line, lineIndex) => (
-              <span className="block" key={`${line}-${lineIndex}`}>
-                {line.split(" ").map((word, wordIndex) => (
-                  <span className="inline-block" key={`${word}-${wordIndex}`}>
-                    {word.split("").map((char, charIndex) => (
-                      <span
-                        key={`${char}-${charIndex}`}
-                        className="inline-block"
-                      >
-                        {char}
-                      </span>
-                    ))}
+          {textToHeader.map((line, lineIndex) => (
+            <span className="block" key={`${line}-${lineIndex}`}>
+              {line.split(" ").map((word, wordIndex, wordArray) => (
+                <span className="inline-block" key={`${word}-${wordIndex}`}>
+                  {word.split("").map((char, charIndex) => (
+                    <span key={`${char}-${charIndex}`} className="inline-block">
+                      {char}
+                    </span>
+                  ))}
+                  {wordIndex < wordArray.length - 1 && (
                     <span className="inline-block">&nbsp;</span>
-                  </span>
-                ))}
-              </span>
-            ))}
-          </span>
+                  )}
+                </span>
+              ))}
+            </span>
+          ))}
         </p>
       ) : (
         <AnimatedText

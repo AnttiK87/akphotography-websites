@@ -1,0 +1,58 @@
+input[type="text"],
+textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  margin-top: 6px;
+  margin-bottom: 16px;
+  resize: vertical;
+}
+
+input[type="checkbox"] {
+  margin-top: 6px;
+  margin-bottom: 16px;
+}
+
+textarea#message {
+  height: 10em;
+}
+
+.textLabel {
+  align-self: start !important;
+}
+
+input[type="submit"] {
+  background-color: #00433c;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+input[type="submit"]:hover {
+  background-color: #007569;
+}
+
+.container {
+  border-radius: 5px;
+  background-color: #f2f2f281;
+  padding: 20px;
+  width: 80%;
+  height: fit-content;
+  margin: 0;
+}
+
+@media (max-width: 990px) {
+  .container {
+    width: 100%;
+  }
+}
+
+.contactForm {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+}

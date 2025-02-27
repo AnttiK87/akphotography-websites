@@ -6,10 +6,15 @@ import { useLanguage } from "../../hooks/useLanguage";
 const About = () => {
   const { language } = useLanguage();
 
+  const headerAbout =
+    language === "fin"
+      ? "Matkani luontokuvauksen parissa"
+      : " My Journey into the Nature Photography";
+
   const textAbout1 =
     language === "fin" ? (
       <p lang="fi" className="textAbout">
-        Moi!
+        <b>Moi!</b>
         <br />
         <br />
         Olen Antti Kortelainen, valokuvauksen ja erityisesti luontokuvauksen
@@ -29,7 +34,7 @@ const About = () => {
       </p>
     ) : (
       <p lang="en" className="textAbout">
-        Hi!
+        <b>Hi!</b>
         <br />
         <br />
         I&#39;m Antti Kortelainen, a photography enthusiast with a passion for
@@ -115,7 +120,7 @@ const About = () => {
         ...ja muissa mitä ihmeellisimmissä paikoissa.
         <br />
         <br />
-        -Antti-
+        <b>-Antti-</b>
       </p>
     ) : (
       <p lang="en" className="textAbout">
@@ -133,7 +138,8 @@ const About = () => {
         <br />
         ...and in other most unexpected places.
         <br />
-        <br />- Antti -
+        <br />
+        <b>-Antti-</b>
       </p>
     );
 
@@ -142,8 +148,8 @@ const About = () => {
   return (
     <>
       <AboutHeader />
-      <h1></h1>
       <AboutContent
+        headerAbout={headerAbout}
         textAbout={textAbout1}
         src={pictureAbout1}
         alt={"pictureAbout1"}

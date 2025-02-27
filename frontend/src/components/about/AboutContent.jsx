@@ -9,23 +9,25 @@ import toesLeft from "../../assets/toes-left.png";
 import toesRight from "../../assets/toes-right.png";
 
 const AboutContent = ({
+  headerAbout,
   textAbout,
   src,
   alt,
   classNamePrints,
   classNameElement,
 }) => {
-  const { isVisible, startAnim, elementRef } = useAnimationLauncher(0.2);
+  const { isVisible, startAnim, elementRef } = useAnimationLauncher(0.3);
 
   return (
     <div ref={elementRef} className="wholeScreenAbout">
       <FootPrints
         toesLeft={toesLeft}
         toesRight={toesRight}
-        printCount={10}
+        printCount={15}
         isVisible={isVisible}
         className={classNamePrints}
       />
+      {headerAbout ? <h1 className="headerAbout">{headerAbout}</h1> : <></>}
       <div className="grid-container-about">
         <div
           className={`elementAbout1 ${classNameElement} ${
@@ -47,7 +49,8 @@ const AboutContent = ({
 };
 
 AboutContent.propTypes = {
-  textAbout: PropTypes.string.isRequired,
+  headerAbout: PropTypes.string,
+  textAbout: PropTypes.object.isRequired,
   src: PropTypes.string.isRequired,
   alt: PropTypes.string.isRequired,
   classNamePrints: PropTypes.string,

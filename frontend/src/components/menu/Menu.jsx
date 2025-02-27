@@ -301,7 +301,7 @@ const Menu = () => {
                 <Nav.Link as="span">
                   <Link
                     className="menuText menuLink"
-                    to="/test"
+                    to="/contact"
                     onClick={() => closeAllMenus()}
                   >
                     {language === "fin" ? "Yhteystiedot" : "Contact"}
