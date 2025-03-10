@@ -1,0 +1,19 @@
+.drop-zone {
+  border: 2px dashed #ccc;
+  padding: 20px;
+  height: 10em;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.3s;
+  align-items: center !important;
+  justify-content: center;
+}
+
+.drop-zone.drag-active {
+  border-color: #007bff;
+  background-color: rgba(0, 123, 255, 0.1);
+}
+
+.drop-area {
+  padding: 10px;
+}

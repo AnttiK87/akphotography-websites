@@ -1,0 +1,63 @@
+.rating {
+  unicode-bidi: bidi-override;
+  direction: rtl;
+  font-size: 35px;
+  color: gray;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.rating > span {
+  display: inline-block;
+  position: relative;
+}
+
+.rating > span:before {
+  content: "\2606"; /* Tyhjä tähti */
+  position: absolute;
+  color: gray;
+  z-index: 5;
+  cursor: pointer;
+}
+
+.rating > span:hover:before,
+.rating > span:hover ~ span:before {
+  content: "\2605"; /* Tähti */
+  position: absolute;
+  color: gold;
+  z-index: 10;
+  cursor: pointer;
+}
+
+.golden {
+  content: "\2605"; /* Tähti */
+  color: gold;
+  z-index: 5;
+  cursor: pointer;
+}
+
+.golden:hover {
+  color: gold;
+}
+
+.raitingLength {
+  color: rgb(203, 203, 203);
+  font-size: 25px;
+  position: relative;
+  padding-left: 0.3em;
+  bottom: -2px;
+}
+
+.buttonInfoStars {
+  cursor: pointer;
+  position: relative;
+  color: rgb(203, 203, 203);
+  height: 26px;
+  padding-left: 0.3em;
+  bottom: 2px;
+}
+
+.buttonInfoStars:hover {
+  color: rgb(237, 237, 237);
+}

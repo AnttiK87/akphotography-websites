@@ -17,7 +17,7 @@ const HomePhotoOfMonth = () => {
     language === "fin" ? (
       <h1 className="headerPoM">Kuukauden kuva</h1>
     ) : (
-      <h1 className="headerPoM">Photo of the month</h1>
+      <h1 className="headerPoM">Photo of the Month</h1>
     );
 
   const textPhotoOfMonth =

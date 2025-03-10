@@ -7,17 +7,14 @@
   text-align: center;
   font-size: 18px;
   background: transparent;
-
-  /* Center slide text vertically */
   display: flex;
   justify-content: center;
+  flex-direction: column;
   align-items: center;
 }
 
 .swiper-slide img {
   display: block;
-  max-height: 100%;
-  max-width: 99%;
   object-fit: contain;
 }
 
@@ -27,4 +24,44 @@
 
 .swiper-button-next {
   color: #00796d;
+}
+
+.carouselle {
+  display: grid;
+  max-height: 90% !important;
+  max-width: fit-content !important;
+  grid-template-rows: 100%;
+}
+
+.carouTextAndImg {
+  display: inline-block;
+  grid-column: 1;
+  grid-row: 1;
+  max-height: 100%;
+  width: fit-content;
+  position: relative;
+  cursor: pointer;
+}
+
+.carouselleText {
+  position: absolute;
+  bottom: 0;
+  flex-direction: column;
+  align-self: end;
+  justify-self: center;
+  color: white;
+  background-color: rgba(86, 86, 86, 0.7);
+  width: 100%;
+}
+
+.carouselleH1 {
+  margin: 0;
+  justify-self: center;
+}
+
+.carouselleImg {
+  justify-self: center;
+  width: 100%;
+  max-width: fit-content;
+  max-height: 100% !important;
 }
