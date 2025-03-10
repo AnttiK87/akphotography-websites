@@ -1,0 +1,48 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "ak photography website backend",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "lint": "eslint \"./**/*.{js,jsx}\"",
+    "build:ui": "@powershell Remove-Item -Recurse -Force dist && cd ../frontend && npm run build && @powershell Copy-Item dist -Recurse ../backend",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "migration:down": "node utils/rollback.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AnttiK87/akphotography-websites.git"
+  },
+  "keywords": [
+    "website",
+    "backend",
+    "nodejs",
+    "express",
+    "mysql"
+  ],
+  "author": "Antti Kortelainen",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "@sequelize/mysql": "^7.0.0-alpha.45",
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "express-async-errors": "^3.1.1",
+    "jsonwebtoken": "^9.0.2",
+    "multer": "^1.4.5-lts.1",
+    "mysql2": "^3.12.0",
+    "sequelize": "^6.37.5",
+    "sharp": "^0.33.5",
+    "umzug": "^3.8.2"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.13.0",
+    "eslint": "^9.13.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "nodemon": "^3.1.7",
+    "prettier": "3.3.3"
+  }
+}

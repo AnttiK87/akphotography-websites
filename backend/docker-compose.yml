@@ -1,0 +1,16 @@
+services:
+  mysql:
+    image: mysql:latest
+    container_name: mysql_container
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - '3306:3306' # Ota portti käyttöön isännällä ja kontissa
+    expose:
+      - '3306'
+    volumes:
+      - mysql_data:/var/lib/mysql # Tallennustilavuus tietokannan tietoihin
+
+volumes:
+  mysql_data: # Määritellään Dockerin volyymi tietokannan säilyttämiseksi

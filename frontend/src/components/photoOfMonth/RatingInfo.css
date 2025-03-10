@@ -1,0 +1,108 @@
+.ratingInfo {
+  position: fixed; /* Kiinnittää elementin näkymään aina */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* Siirtää sen tarkasti keskelle */
+  background: rgba(31, 31, 31, 0.9);
+  font-size: 20px;
+  color: white;
+  border-style: solid;
+  border-radius: 10px;
+  padding: 2em;
+  width: 90vw;
+  max-width: 550px; /* Rajoittaa leveyden */
+  text-align: start;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: start;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Lisää varjon */
+  z-index: 9998; /* Asettaa kaiken päälle */
+}
+
+.ratingInfoText1 {
+  padding: 0.8em 0;
+}
+
+.ratingInfoText2 {
+  margin-top: 0.8em;
+}
+
+.ratingInfo > h3 {
+  text-align: start;
+  width: 100%;
+}
+
+.ratingInfoButtons {
+  width: 100%;
+}
+
+.ratingInfoButtons > button {
+  margin-top: 1.5em;
+  margin-right: 0;
+  margin-left: auto;
+}
+
+.button-primary {
+  font-family: "Nova Round", sans-serif;
+  font-size: 18px;
+  letter-spacing: 1px;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+  background-color: white;
+  color: #000 !important;
+  cursor: pointer;
+  border: 3px solid;
+  border-radius: 5px;
+  padding: 0.25em 1em !important;
+  box-shadow: 1px 1px 0px 0px, 2px 2px 0px 0px, 3px 3px 0px 0px, 4px 4px 0px 0px,
+    5px 5px 0px 0px;
+  position: relative;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  transition: background-color 0.5s;
+}
+
+.button-primary:hover {
+  background-color: rgb(230, 230, 230) !important;
+  color: #000;
+  border: 3px solid;
+}
+
+.button-primary:active {
+  background-color: rgb(230, 230, 230) !important;
+  color: #000 !important;
+  border: 3px solid !important;
+  box-shadow: 0px 0px 0px 0px;
+  top: 5px;
+  left: 5px;
+}
+
+.delButton {
+  background-color: rgb(254, 0, 0) !important;
+  transition: background-color 0.5s;
+}
+
+.delButton:hover {
+  border-color: black;
+  background-color: rgb(200, 0, 0) !important;
+}
+
+.delButton:active {
+  background-color: rgb(200, 0, 0) !important;
+  border-color: black !important;
+}
+
+.ratingInfoHeader {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.CloseRatingInfo {
+  font-size: 1.5em;
+  cursor: pointer;
+}

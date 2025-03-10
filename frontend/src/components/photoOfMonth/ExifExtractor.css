@@ -1,0 +1,16 @@
+.exifText {
+  color: white;
+  font-size: 1em;
+  text-align: start;
+}
+
+.iconExif {
+  height: 30px;
+  width: 30px;
+  margin-right: 1em;
+}
+
+.iconExifText {
+  display: flex;
+  flex-direction: row;
+}
