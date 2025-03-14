@@ -7,6 +7,7 @@ const middleware = require('./utils/middleware')
 
 const picturesRouter = require('./controllers/pictures')
 const ratingsRouter = require('./controllers/ratings')
+const commentsRouter = require('./controllers/comments')
 
 //for serving photos at the backend
 const path = require('path')
@@ -16,6 +17,7 @@ app.use(express.json())
 
 app.use('/api/pictures', picturesRouter)
 app.use('/api/ratings', ratingsRouter)
+app.use('/api/comments', commentsRouter)
 
 connectToDatabase()
 

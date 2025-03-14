@@ -2,15 +2,19 @@ const { DataTypes, fn } = require('sequelize')
 
 module.exports = {
   up: async ({ context: queryInterface }) => {
-    await queryInterface.createTable('ratings', {
+    await queryInterface.createTable('comments', {
       id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
       },
-      rating: {
-        type: DataTypes.INTEGER,
-        defaultValue: 0,
+      comment: {
+        type: DataTypes.TEXT,
+        allowNull: false,
+      },
+      username: {
+        type: DataTypes.STRING,
+        allowNull: false,
       },
       user_id: {
         type: DataTypes.STRING,
@@ -28,32 +32,32 @@ module.exports = {
       },
     })
 
-    await queryInterface.addColumn('pictures', 'rating_id', {
+    await queryInterface.addColumn('pictures', 'comment_id', {
       type: DataTypes.INTEGER,
       allowNull: true,
     })
 
     // Lisätään ulkoinen avain -rajoite
     await queryInterface.addConstraint('pictures', {
-      fields: ['rating_id'],
+      fields: ['comment_id'],
       type: 'foreign key',
-      name: 'fk_rating_id',
+      name: 'fk_comment_id',
       references: {
-        table: 'ratings',
+        table: 'comments',
         field: 'id',
       },
       onDelete: 'CASCADE',
     })
 
-    await queryInterface.addColumn('ratings', 'picture_id', {
+    await queryInterface.addColumn('comments', 'picture_id', {
       type: DataTypes.INTEGER,
       allowNull: true,
     })
 
-    await queryInterface.addConstraint('ratings', {
+    await queryInterface.addConstraint('comments', {
       fields: ['picture_id'],
       type: 'foreign key',
-      name: 'fk_ratings_picture_id',
+      name: 'fk_comments_picture_id',
       references: {
         table: 'pictures',
         field: 'id',
@@ -63,12 +67,10 @@ module.exports = {
   },
 
   down: async ({ context: queryInterface }) => {
-    await queryInterface.removeConstraint('pictures', 'fk_rating_id')
-    await queryInterface.removeColumn('pictures', 'rating_id')
-    await queryInterface.removeConstraint('ratings', 'fk_picture_id')
-    await queryInterface.removeColumn('ratings', 'picture_id')
-    await queryInterface.dropTable('ratings')
     await queryInterface.removeConstraint('pictures', 'fk_comment_id')
     await queryInterface.removeColumn('pictures', 'comment_id')
+    await queryInterface.removeConstraint('comments', 'fk_comment_picture_id')
+    await queryInterface.removeColumn('comments', 'comment_picture_id')
+    await queryInterface.dropTable('comments')
   },
 }
