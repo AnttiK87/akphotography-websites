@@ -9,7 +9,7 @@ import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import "./RatingInfo.css";
 
 const RatingInfo = ({ show, setShow, lenght, avgRating, addRating, id }) => {
-  console.log(`rating info: ${show}, ${lenght}, ${avgRating}, ${id}`);
+  //console.log(`rating info: ${show}, ${lenght}, ${avgRating}, ${id}`);
   const { language } = useLanguage();
   const savedRating = Number(localStorage.getItem(`rating${id}`));
 
@@ -117,7 +117,7 @@ RatingInfo.propTypes = {
   setShow: PropTypes.func.isRequired,
   lenght: PropTypes.number.isRequired,
   avgRating: PropTypes.number.isRequired,
-  currenUserRating: PropTypes.number.isRequired,
+  currenUserRating: PropTypes.number,
   addRating: PropTypes.func.isRequired,
   id: PropTypes.number.isRequired,
 };

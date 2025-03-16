@@ -19,7 +19,7 @@ const UploadImages = () => {
   const [textEn, setTextEn] = useState("");
 
   const currentYear = new Date().getFullYear();
-  const currentMonth = new Date().getMonth() + 1; // getMonth() palauttaa 0-11, joten lisätään 1
+  const currentMonth = new Date().getMonth() + 1;
 
   const monthNames = [
     "January",

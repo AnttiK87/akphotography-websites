@@ -28,6 +28,7 @@ const useMonthlyPictures = (language) => {
     id: item.id,
     title: formatMonthYear(item.month_year, language),
     description: language === "fin" ? item.text.textFi : item.text.textEn,
+    uploadedAt: item.uploadedAt,
   }));
 
   return { isLoading, isError, pictures };

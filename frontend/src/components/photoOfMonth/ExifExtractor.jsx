@@ -36,8 +36,14 @@ const ImageMetadata = ({ src }) => {
 
   return (
     <div className="exifText">
-      <h3>{language === "fin" ? "Tekniset tiedot:" : "Technica data:"}</h3>
-      {metadata && (
+      <div className="exifHeader">
+        <h3>
+          {language === "fin"
+            ? "Kuvan tekniset tiedot:"
+            : "Pictures technical data:"}
+        </h3>
+      </div>
+      {metadata ? (
         <div>
           <div className="iconExifText">
             <img className="iconExif" src={CameraIcon} alt="camera-iconExif" />
@@ -69,7 +75,7 @@ const ImageMetadata = ({ src }) => {
               src={LenghtIcon}
               alt="focal-lenght-iconExif"
             />
-            {metadata.FocalLength} mm
+            @ {metadata.FocalLength} mm
           </div>
           <div className="iconExifText">
             <img className="iconExif" src={TimeIcon} alt="date-iconExif" />
@@ -77,6 +83,12 @@ const ImageMetadata = ({ src }) => {
               language === "fin" ? "fi-FI" : "en-EN"
             )}
           </div>
+        </div>
+      ) : (
+        <div>
+          {language === "fin"
+            ? "Tekniset tiedot puuttuva"
+            : "No technical data"}
         </div>
       )}
     </div>

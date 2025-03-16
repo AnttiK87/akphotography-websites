@@ -13,20 +13,19 @@ const useAnimationLauncher = (threshold) => {
       ([entry]) => {
         setIsVisible(entry.isIntersecting);
 
-        // Käynnistä animaatio vain ensimmäisellä kerralla, kun elementti näkyy
         if (entry.isIntersecting && !startAnim) {
           setStartAnim(true);
         }
       },
       { threshold: threshold }
-    ); // Voit lisätä thresholdin, jos haluat hienosäätöä
+    );
 
     observer.observe(targetNode);
 
     return () => {
       observer.unobserve(targetNode);
     };
-  }, [startAnim, threshold]); // startAnim riippuvuus varmistaa, että arvo ei mene väärin
+  }, [startAnim, threshold]);
 
   return { isVisible, startAnim, elementRef };
 };

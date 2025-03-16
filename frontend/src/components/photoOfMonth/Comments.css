@@ -1,0 +1,226 @@
+.comments {
+  color: White;
+  padding: 0 2em 2em 0;
+  height: 92%;
+}
+
+.button-primary {
+  font-size: 1em;
+}
+
+.CommentHeaderAndButton {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: end;
+  flex-wrap: wrap;
+  padding: 0 1em 0.5em 1em;
+  margin-bottom: 1em;
+  border-bottom: 2px solid white;
+  height: 70px;
+}
+
+.commentsHeader {
+  margin: 0;
+}
+
+.listContainer {
+  height: 100%;
+  width: 100%;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+ul {
+  padding: 0 1em;
+  margin: 0;
+}
+
+.commentButtons {
+  gap: 1em;
+  margin: 1em 0;
+}
+
+.form__group.input {
+  margin: 0;
+  width: 100%;
+}
+
+.formContainer {
+  width: 90%;
+}
+
+.commentTextArea {
+  width: 100%;
+}
+
+.noComments {
+  list-style-type: none;
+  padding-top: 1em;
+  font-size: 1.5em;
+}
+
+.commentLi {
+  background-color: #bacdc4;
+  list-style-type: none;
+  border: solid 2px black;
+  border-radius: 15px;
+  padding: 1em 1em;
+  color: black;
+  width: 80%;
+  margin-bottom: 0.2em;
+  display: flex;
+}
+
+.CommentAndReplyContainer {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.commentLiContainer {
+  width: 80%;
+}
+
+.reply {
+  width: 70%;
+  display: flex;
+  flex-direction: column;
+  align-content: flex-end;
+  flex-wrap: wrap;
+}
+
+.userAndOrigComment {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+.replyLi {
+  background-color: #dee7e3;
+  list-style-type: none;
+  border: solid 2px black;
+  border-radius: 15px;
+  padding: 1em 1em;
+  color: black;
+  width: 90%;
+  margin-bottom: 0.2em;
+  display: flex;
+}
+
+.childReplies {
+  width: 100%;
+}
+
+.arrowAndReply {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: flex-end;
+}
+
+.parentAndChild {
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+}
+
+.replyArrow {
+  position: relative;
+  height: 55px;
+  width: 55px;
+  top: -15px;
+  left: 10px;
+}
+
+.containerUsername {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: stretch; /* Varmistaa, että kaikki lapset venyvät */
+  height: 100%; /* Lisää tämä */
+  width: 100%;
+  padding: 0.2em;
+}
+
+.IconAndTexts {
+  display: flex;
+  flex-direction: row;
+  align-items: start;
+  min-width: 90%;
+  max-width: 90%;
+}
+
+.CommentTexts {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  width: 85%;
+  text-align: start;
+}
+
+.commentText {
+  max-width: 100%;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  white-space: normal;
+}
+
+.commentTextForReply {
+  color: rgba(70, 70, 70, 0.759);
+  padding-left: 0.5em;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.commentTime {
+  color: #353535;
+}
+
+.iconUser {
+  font-size: 2em;
+  padding-right: 0.5em;
+}
+
+.EditIcon {
+  cursor: pointer;
+}
+
+.EditIcon:hover {
+  color: #353535;
+}
+
+.editIconsAndAnswer {
+  height: auto; /* Tai voit kokeilla myös height: 100% */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-left: auto;
+  width: fit-content;
+  padding-right: 0.3em;
+}
+
+.h5Username {
+  margin: 0;
+}
+
+.EditsIcons {
+  display: flex;
+  flex-direction: row;
+  padding: 0.2em 0.5em 0 0;
+  gap: 0.5em;
+}
+
+.answerText {
+  margin-top: auto;
+  margin-bottom: 0;
+  cursor: pointer;
+}
+
+.answerText:hover {
+  color: #353535;
+}

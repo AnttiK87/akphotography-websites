@@ -1,61 +1,63 @@
 .rating {
-  unicode-bidi: bidi-override;
-  direction: rtl;
-  font-size: 35px;
-  color: gray;
   display: flex;
-  flex-direction: row;
-  align-items: center;
+  flex-direction: row-reverse;
+  cursor: pointer;
+  color: white;
 }
 
-.rating > span {
-  display: inline-block;
+.star {
   position: relative;
+  color: white;
+  font-size: 25px;
 }
 
-.rating > span:before {
-  content: "\2606"; /* Tyhjä tähti */
+.star::before {
+  content: "\f006"; /* Ääriviivallinen tähti */
+  font-family: "Font Awesome 6 Free";
+  font-weight: 400;
+}
+
+.star.rated:hover::before,
+.star:hover::before,
+.star:hover ~ .star::before {
+  content: "\f005"; /* Täytetty tähti */
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+  color: gold;
+}
+
+.star.rated::before {
+  content: "\f005"; /* Kokonaan täytetty tähti */
+  font-family: "Font Awesome 6 Free";
+  font-weight: 400;
+  color: gold;
+}
+
+.star.half::after {
+  content: "\f005"; /* Sama tähti uudestaan */
+  font-family: "Font Awesome 6 Free";
+  font-weight: 400; /* Täytetty tähti */
+  color: gold;
   position: absolute;
-  color: gray;
-  z-index: 5;
-  cursor: pointer;
-}
-
-.rating > span:hover:before,
-.rating > span:hover ~ span:before {
-  content: "\2605"; /* Tähti */
-  position: absolute;
-  color: gold;
-  z-index: 10;
-  cursor: pointer;
-}
-
-.golden {
-  content: "\2605"; /* Tähti */
-  color: gold;
-  z-index: 5;
-  cursor: pointer;
-}
-
-.golden:hover {
-  color: gold;
+  top: 1px;
+  left: 0;
+  width: 50%; /* Vain puolet tähdestä */
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 .raitingLength {
-  color: rgb(203, 203, 203);
-  font-size: 25px;
   position: relative;
-  padding-left: 0.3em;
-  bottom: -2px;
+  margin: 0 0.5em 0 0.2em;
+  font-size: 29px;
+  bottom: 4px;
 }
 
 .buttonInfoStars {
   cursor: pointer;
   position: relative;
-  color: rgb(203, 203, 203);
-  height: 26px;
-  padding-left: 0.3em;
-  bottom: 2px;
+  height: 29px;
+  bottom: -6px;
 }
 
 .buttonInfoStars:hover {
