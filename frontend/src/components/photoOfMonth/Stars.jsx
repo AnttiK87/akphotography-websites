@@ -8,6 +8,7 @@ import { getUserId } from "../../utils/createAndGetUserId";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleInfo } from "@fortawesome/free-solid-svg-icons";
+import "@fortawesome/fontawesome-free/css/all.min.css";
 
 import RatingInfo from "./RatingInfo";
 
@@ -87,18 +88,8 @@ const StarIcons = ({ id }) => {
     dispatch(createRating(addRating));
   };
 
-  console.log(`avg rating ${avgRating}`);
-
   return (
     <>
-      <RatingInfo
-        show={show}
-        setShow={setShow}
-        lenght={ratingsLenght}
-        avgRating={Number(avgRating)}
-        addRating={addRating}
-        id={Number(id)}
-      />
       <div className="rating">
         <div
           onClick={() => {
@@ -111,13 +102,21 @@ const StarIcons = ({ id }) => {
         {Array.from({ length: 5 }, (_, i) => 5 - i).map((i) => (
           <span
             key={i}
-            className={avgRating >= i - 0.5 ? "golden" : ""}
+            className={`star ${avgRating - i >= 0 ? "rated" : ""}  ${
+              avgRating - i < 0 && avgRating - i > -1 ? "half" : ""
+            }`}
             onClick={() => handleSettingRating(currentUserRating, i, id)}
-          >
-            {avgRating >= i - 0.5 ? "★" : "☆"}
-          </span>
+          ></span>
         ))}
       </div>
+      <RatingInfo
+        show={show}
+        setShow={setShow}
+        lenght={ratingsLenght}
+        avgRating={Number(avgRating)}
+        addRating={addRating}
+        id={Number(id)}
+      />
     </>
   );
 };
