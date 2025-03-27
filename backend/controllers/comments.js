@@ -64,7 +64,7 @@ router.put('/:id', commentFinder, async (req, res) => {
 router.delete('/:id', commentFinder, async (req, res) => {
   console.log(`regbody for delete: ${JSON.stringify(req.body)}`)
   console.log(`reg.comment: ${JSON.stringify(req.comment)}`)
-  if (req.body.userId != req.comment.userId) {
+  if (req.body.userId != req.comment.userId && req.body.userId != 'admin') {
     return res.status(401).json({ error: 'unauthorized' })
   }
 

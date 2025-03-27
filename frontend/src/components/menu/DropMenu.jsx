@@ -29,7 +29,7 @@ const DropMenu = ({
           as="span"
           onClick={() => {
             if (languageSelect) {
-              console.log("you called me");
+              //console.log("you called me");
               setLanguage(item.value);
             }
           }}

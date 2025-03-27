@@ -30,6 +30,10 @@ Reply.init(
       type: DataTypes.INTEGER,
       allowNull: true,
     },
+    adminReply: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
   },
   {
     sequelize,

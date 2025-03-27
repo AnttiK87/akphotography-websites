@@ -74,17 +74,6 @@ export const createRating = (content) => {
       } else {
         dispatch(updateRating(newRating.rating));
       }
-
-      // show message comment added
-      dispatch(
-        showMessage(
-          {
-            text: `${newRating.message}`,
-            type: "success",
-          },
-          5
-        )
-      );
     } catch (error) {
       // handle error and show error message
       dispatch(

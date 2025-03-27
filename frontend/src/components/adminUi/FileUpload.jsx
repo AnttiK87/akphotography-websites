@@ -1,42 +1,37 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import PropTypes from "prop-types";
 import "./FileUpload.css";
 
 const FileUpload = ({ setFile, file }) => {
   const [dragActive, setDragActive] = useState(false);
 
-  useEffect(() => {
-    if (setFile === null) {
-      setDragActive(true);
-    }
-    if (setFile) {
-      setDragActive(false);
-    }
-  }, [setFile]);
-
   const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      setFile(file);
+    const selectedFile = event.target.files[0];
+    if (selectedFile) {
+      setFile(selectedFile);
     }
   };
 
   const handleDragOver = (event) => {
     event.preventDefault();
+    event.stopPropagation();
     setDragActive(true);
   };
 
-  const handleDragLeave = () => {
+  const handleDragLeave = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
     setDragActive(false);
   };
 
   const handleDrop = (event) => {
     event.preventDefault();
+    event.stopPropagation();
     setDragActive(false);
 
-    const file = event.dataTransfer.files[0];
-    if (file) {
-      setFile(file);
+    const droppedFile = event.dataTransfer.files[0];
+    if (droppedFile) {
+      setFile(droppedFile);
     }
   };
 
@@ -59,7 +54,8 @@ const FileUpload = ({ setFile, file }) => {
         name="image"
         onChange={handleFileChange}
         required
-        style={{ display: "none" }} // Piilotetaan oletus-input
+        style={{ display: "none" }}
+        accept=".jpg"
       />
       <div
         className="drop-area"
@@ -68,12 +64,16 @@ const FileUpload = ({ setFile, file }) => {
         {file ? (
           <p>{file.name}</p>
         ) : (
-          <p>Drag a file here or click to select one</p>
+          <>
+            <p>Drag a file here or click to select one</p>
+            <p>(use only .jpg files)</p>
+          </>
         )}
       </div>
     </div>
   );
 };
+
 FileUpload.propTypes = {
   setFile: PropTypes.func.isRequired,
   file: PropTypes.instanceOf(File),

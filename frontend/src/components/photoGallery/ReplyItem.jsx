@@ -21,6 +21,7 @@ const ReplyItem = ({
   deleteReply,
   handleReplyComment,
   language,
+  child,
 }) => {
   //console.log(`reply info in reply item; ${JSON.stringify(reply)}`);
 
@@ -39,12 +40,20 @@ const ReplyItem = ({
   return (
     <>
       {/* Pääreply */}
-      <div className="arrowAndReply">
+      <div className={`arrowAndReply ${child ? "makeNarrow" : ""}`}>
         <img className="replyArrow" src={arrow} alt="arrow" />
         <div className="replyLi">
           <div className="containerUsername">
             <div className="IconAndTexts">
-              <FontAwesomeIcon className="iconUser" icon={faCircleUser} />
+              {reply.adminReply === true ? (
+                <img
+                  className="adminUserImg"
+                  src="/images/about/me2.jpg"
+                  alt="adminPhoto"
+                />
+              ) : (
+                <FontAwesomeIcon className="iconUser" icon={faCircleUser} />
+              )}
               <div className="CommentTexts">
                 <div className="userAndOrigComment">
                   <h5 className="h5Username">{reply.username}</h5>
@@ -99,6 +108,7 @@ const ReplyItem = ({
               deleteReply={deleteReply}
               handleReplyComment={handleReplyComment}
               language={language}
+              child={true}
             />
           ))}
         </div>
@@ -124,6 +134,7 @@ ReplyItem.propTypes = {
       username: PropTypes.string,
       reply: PropTypes.string,
     }),
+    adminReply: PropTypes.bool.isRequired,
   }).isRequired,
   replies: PropTypes.arrayOf(
     PropTypes.shape({
@@ -136,6 +147,7 @@ ReplyItem.propTypes = {
   deleteReply: PropTypes.func.isRequired,
   handleReplyComment: PropTypes.func.isRequired,
   language: PropTypes.string.isRequired,
+  child: PropTypes.bool,
 };
 
 export default ReplyItem;

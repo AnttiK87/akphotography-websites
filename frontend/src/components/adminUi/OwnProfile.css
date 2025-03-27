@@ -1,0 +1,35 @@
+.group-header {
+  border-bottom: 2px solid black;
+  text-align: start;
+}
+
+.searchKwCont {
+  width: 250px;
+  max-width: 90%;
+  display: flex;
+  height: fit-content;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  padding: 0 0.7em 0.2em 0.5em;
+  border-bottom: 2px solid black;
+}
+
+.searchKw {
+  all: unset;
+  text-align: start;
+  border: none !important;
+  margin: 0 !important;
+  overflow: hidden;
+  padding: 0 !important;
+}
+
+.tableOP {
+  min-width: 500px;
+  max-width: 90%;
+}
+
+.clikkableOP {
+  cursor: pointer;
+}

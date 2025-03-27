@@ -37,9 +37,9 @@ const AnimatedText = ({
         if (setTextIsAnimated) {
           setTimeout(() => {
             setTextIsAnimated(true);
-          }, 2000);
+          }, 3000);
         }
-      }, 1800); // Viiveen kesto millisekunteina (esim. 500 ms = 0.5 sekuntia)
+      }, 200); // Viiveen kesto millisekunteina (esim. 500 ms = 0.5 sekuntia)
     };
 
     show();

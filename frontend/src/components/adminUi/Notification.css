@@ -4,6 +4,7 @@
   left: 50%;
   transform: translate(-50%, -50%); /* Siirtää sen tarkasti keskelle */
   background: lightgrey;
+  color: white;
   font-size: 20px;
   border-style: solid;
   border-radius: 5px;
@@ -19,9 +20,9 @@
 }
 
 .success {
-  color: rgb(0, 165, 27);
+  background: #00433c;
 }
 
 .error {
-  color: red;
+  background: #8b0012;
 }

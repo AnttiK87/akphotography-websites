@@ -3,6 +3,11 @@
   flex-direction: row-reverse;
   cursor: pointer;
   color: white;
+  z-index: 50;
+}
+
+.ratingContainer {
+  display: flex;
 }
 
 .star {

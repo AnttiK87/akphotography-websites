@@ -6,20 +6,21 @@ import axios from "axios";
 const baseUrl = "/api/pictures/";
 
 // retrieve all blogs
-const getAll = async () => {
-  const response = await axios.get(baseUrl);
+const getAllData = async (category) => {
+  const response = await axios.get(`${baseUrl}/allData/?search=${category}`);
   return response.data;
 };
 
 // retrieve all blogs
-const getMonthly = async () => {
-  const response = await axios.get(`${baseUrl}?search=monthly`);
+const getPicturesByCategory = async (category) => {
+  const response = await axios.get(`${baseUrl}?search=${category}`);
   return response.data;
 };
 
 // retrieve all blogs
-const getMonthlyLatest = async () => {
-  const response = await axios.get(`${baseUrl}latest`);
+const getCategoryLatest = async (category) => {
+  console.log(`category ${category}`);
+  const response = await axios.get(`${baseUrl}latest/?search=${category}`);
   return response.data;
 };
 
@@ -29,11 +30,35 @@ const create = async (newObject) => {
   return response.data;
 };
 
+// update the comment
+const update = async (content) => {
+  console.log(`edit picture: ${JSON.stringify(content)}`);
+  const newObject = {
+    type: content.formData.type,
+    textFi: content.formData.textFi,
+    textEn: content.formData.textEn,
+    keywords: content.formData.keywords,
+    month: content.formData.month,
+    year: content.formData.year,
+  };
+
+  const response = await axios.put(`${baseUrl}${content.pictureId}`, newObject);
+  return response.data;
+};
+
 // delete the blog
-const remove = async (content) => {
-  const response = await axios.delete(`${baseUrl}/${content.id}`);
+const remove = async (pictureId) => {
+  console.log(`id in services: ${pictureId}`);
+  const response = await axios.delete(`${baseUrl}${pictureId}`);
   return response.data;
 };
 
 // exports
-export default { getAll, create, remove, getMonthly, getMonthlyLatest };
+export default {
+  getAllData,
+  create,
+  update,
+  remove,
+  getPicturesByCategory,
+  getCategoryLatest,
+};

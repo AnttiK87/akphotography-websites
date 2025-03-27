@@ -1,11 +1,11 @@
-// core version + navigation, pagination modules:
+import PropTypes from "prop-types";
 
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
 
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { initializeMonthlyLatest } from "../../reducers/pictureReducer";
+import { initializeCategoryLatest } from "../../reducers/pictureReducer";
 
 // import Swiper and modules styles
 import "swiper/css";
@@ -14,25 +14,33 @@ import "swiper/css/pagination";
 
 import "./Carouselle.css";
 
-import { useNavigate } from "react-router-dom";
-import { useLanguage } from "../../hooks/useLanguage";
+import { useNavigate, useLocation } from "react-router-dom";
 
-import { formatMonthYear } from "../../utils/dateUtils";
+//import { useLanguage } from "../../hooks/useLanguage";
+//import { formatMonthYear } from "../../utils/dateUtils";
 
-const Carouselle = () => {
+const Carouselle = ({ category }) => {
   const navigate = useNavigate();
-  const { language } = useLanguage();
+  //const { language } = useLanguage();
   //set dispatch
   const dispatch = useDispatch();
+  const location = useLocation();
+
+  console.log(`path: ${location.pathname.replace(/\/\d+$/, "")}`);
+
+  const basePath =
+    location.pathname.replace(/\/\d+$/, "") === "/"
+      ? "/pictures/photo-of-the-month"
+      : location.pathname.replace(/\/\d+$/, "");
 
   //Initialize blogs
   useEffect(() => {
-    dispatch(initializeMonthlyLatest());
-  }, [dispatch]);
+    dispatch(initializeCategoryLatest(category));
+  }, [dispatch, category]);
 
   //get pictures state
-  const monthlyPictures = useSelector(
-    (state) => state.pictures.latestMonthlyPictures
+  const latestPictures = useSelector(
+    (state) => state.pictures.latestCategoryPictures
   );
 
   return (
@@ -43,24 +51,27 @@ const Carouselle = () => {
         modules={[Pagination, Navigation]}
         className="mySwiper"
       >
-        {monthlyPictures.length === 0 ? (
-          <SwiperSlide>No added Photos of the Month</SwiperSlide>
+        {latestPictures.length === 0 ? (
+          <SwiperSlide>No added Photos in this category</SwiperSlide>
         ) : (
-          monthlyPictures.map((picture, index) => (
+          latestPictures.map((picture, index) => (
             <SwiperSlide key={picture.id}>
               <div className="carouselle">
                 <div
                   className="carouTextAndImg"
-                  onClick={() =>
-                    navigate(`/pictures/photo-of-the-month/${index}`)
-                  }
+                  onClick={() => {
+                    sessionStorage.setItem("scrollPosition", window.scrollY);
+                    navigate(`${basePath}/${index}`, {
+                      state: { from: location.pathname },
+                    });
+                  }}
                 >
                   <img className="carouselleImg" src={picture.url} />
-                  <div className="carouselleText">
+                  {/*<div className="carouselleText">
                     <h1 className="carouselleH1">
                       {formatMonthYear(picture.month_year, language)}
                     </h1>
-                  </div>
+                  </div>*/}
                 </div>
               </div>
             </SwiperSlide>
@@ -69,6 +80,10 @@ const Carouselle = () => {
       </Swiper>
     </>
   );
+};
+
+Carouselle.propTypes = {
+  category: PropTypes.string.isRequired,
 };
 
 export default Carouselle;

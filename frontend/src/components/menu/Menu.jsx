@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useLanguage } from "../../hooks/useLanguage";
-import { useNavigate } from "react-router-dom";
 
 import { Link } from "react-router-dom";
 import { Navbar, Nav } from "react-bootstrap";
@@ -19,7 +18,6 @@ import birdWhite from "../../assets/bird-white.png";
 import leaf from "../../assets/leaf.png";
 
 const Menu = () => {
-  const navigate = useNavigate();
   const { language } = useLanguage();
 
   const languageTitle =
@@ -65,12 +63,7 @@ const Menu = () => {
   ];
 
   const picturesTitle = (
-    <span
-      className="menuText menuLink"
-      onClick={() => {
-        navigate("/pictures");
-      }}
-    >
+    <span className="menuText menuPictures">
       {language === "fin" ? "Kuvat" : "Pictures"}
     </span>
   );

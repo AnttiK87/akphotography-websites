@@ -5,7 +5,7 @@ import { useLanguage } from "../../hooks/useLanguage";
 import "./ExifExtractor.css";
 
 const AdditionalInfo = ({ picture }) => {
-  console.log(`picture add info ${JSON.stringify(picture)}`);
+  console.log(`picture add info ${JSON.stringify(picture.keywords)}`);
   const { language } = useLanguage();
 
   return (
@@ -23,6 +23,19 @@ const AdditionalInfo = ({ picture }) => {
         </div>
         <div className="additionalText">
           <b>{language === "fin" ? "Avainsanat:" : "Key words:"}</b>
+          <div className="keywordsLB">
+            {picture?.keywords?.length > 0 ? (
+              picture.keywords.map((keyword, index) => (
+                <div className="keywordTextLB" key={index}>
+                  {keyword.keyword}
+                </div>
+              ))
+            ) : (
+              <div className="keywordTextLB">
+                {language === "fin" ? "Ei avainsanoja" : "No keywords"}{" "}
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>

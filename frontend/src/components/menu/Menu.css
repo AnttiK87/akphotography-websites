@@ -109,6 +109,15 @@
   color: inherit;
 }
 
+.menuPictures {
+  position: relative;
+  text-decoration: none;
+  color: #00202c;
+  text-transform: uppercase;
+  font-size: 1.2em;
+  cursor: pointer;
+}
+
 .menuLink {
   position: relative;
   text-decoration: none;

@@ -12,8 +12,8 @@ import { createReply, editReply } from "../../reducers/replyReducer.js";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 
-import { useLanguage } from "../../hooks/useLanguage";
-import { getUserId } from "../../utils/createAndGetUserId";
+import { useLanguage } from "../../hooks/useLanguage.js";
+import { getUserId } from "../../utils/createAndGetUserId.js";
 
 import "./RatingInfo.css";
 
@@ -26,13 +26,16 @@ const CommentForm = ({
   reply,
   setReply,
   currentComment,
+  adminComment,
 }) => {
   // console.log(`commentform reply: ${JSON.stringify(currentComment)}`);
   // console.log(`currentComment.comment: ${currentComment.comment}`);
   const { language } = useLanguage();
 
   const [comment, setComment] = useState("");
-  const [username, setUsername] = useState("");
+  const [username, setUsername] = useState(
+    adminComment ? "Antti Kortelainen" : ""
+  );
 
   const dispatch = useDispatch();
 
@@ -44,8 +47,10 @@ const CommentForm = ({
         setComment(currentComment.comment);
       }
       setUsername(currentComment.username);
+      return;
     }
-  }, [show, edit, currentComment]);
+    setUsername(adminComment ? "Antti Kortelainen" : "");
+  }, [show, edit, currentComment, adminComment]);
 
   const reset = () => {
     setComment("");
@@ -98,6 +103,7 @@ const CommentForm = ({
       userId: userId,
       pictureId: currentComment.pictureId,
       parentReplyId: parentReply,
+      adminReply: adminComment ? true : false,
     };
 
     dispatch(createReply(formData));
@@ -200,74 +206,90 @@ const CommentForm = ({
     setComment(e.target.value);
   };
 
+  const handleOverlayClose = (event) => {
+    if (event.target.id === "closeCFModal") {
+      setShow(false);
+    }
+  };
+
   return (
-    <div className="ratingInfo">
-      <div className="ratingInfoHeader">
-        <h3>{headerText}</h3>
-        <div onClick={() => handleClose()}>
-          <FontAwesomeIcon className="CloseRatingInfo" icon={faXmark} />
-        </div>
-      </div>
-      <Form
-        onSubmit={handleSubmit}
-        encType="multipart/form-data"
-        className="formContainer"
-      >
-        <div className="form__group input">
-          <div className="form__group input">
-            <label htmlFor="username" className="form__label">
-              {language === "fin" ? "Nimimerkki" : "Username"}
-            </label>
-            <input
-              type="text"
-              className="form__field commentUsername"
-              id="username"
-              name="username"
-              value={username} // Käytetään tilamuuttujaa
-              onChange={handleUsernameChange} // Käyttäjä voi muokata arvoa
-              placeholder={
-                language === "fin" ? "Anna nimimerkki" : "Add username"
-              }
-              required
-            />
+    <div
+      id="closeCFModal"
+      className="OverlayRI comment"
+      onClick={handleOverlayClose}
+    >
+      <div className="ratingInfo comment">
+        <div className="ratingInfoHeader">
+          <h3>{headerText}</h3>
+          <div onClick={() => handleClose()}>
+            <FontAwesomeIcon className="CloseRatingInfo" icon={faXmark} />
           </div>
-
+        </div>
+        <Form
+          onSubmit={handleSubmit}
+          encType="multipart/form-data"
+          className="formContainer"
+        >
           <div className="form__group input">
-            <label htmlFor="comment" className="form__label">
-              {reply
-                ? altCommentLabel
-                : language === "fin"
-                ? "Kommentti"
-                : "Comment"}
-            </label>
-            <textarea
-              className="form__field commentTextArea"
-              id="comment"
-              name="comment"
-              value={comment}
-              onChange={handleCommentChange}
-              placeholder={
-                reply
-                  ? altCommentPlaceHold
+            <div className="form__group input">
+              <label htmlFor="username" className="form__label">
+                {language === "fin" ? "Nimimerkki" : "Username"}
+              </label>
+              <input
+                type="text"
+                className="form__field commentUsername"
+                id="username"
+                name="username"
+                value={username} // Käytetään tilamuuttujaa
+                onChange={handleUsernameChange} // Käyttäjä voi muokata arvoa
+                placeholder={
+                  language === "fin" ? "Anna nimimerkki" : "Add username"
+                }
+                required
+              />
+            </div>
+
+            <div className="form__group input">
+              <label htmlFor="comment" className="form__label">
+                {reply
+                  ? altCommentLabel
                   : language === "fin"
-                  ? "Anna lisättävä kommentti..."
-                  : "Add comment here..."
-              }
-              required
-              rows="2"
-            />
+                  ? "Kommentti"
+                  : "Comment"}
+              </label>
+              <textarea
+                className="form__field commentTextArea"
+                id="comment"
+                name="comment"
+                value={comment}
+                onChange={handleCommentChange}
+                placeholder={
+                  reply
+                    ? altCommentPlaceHold
+                    : language === "fin"
+                    ? "Anna lisättävä kommentti..."
+                    : "Add comment here..."
+                }
+                required
+                rows="2"
+              />
+            </div>
           </div>
-        </div>
 
-        <div className="commentButtons">
-          <button className="button-primary" type="submit">
-            {buttonText}
-          </button>
-          <button className="button-primary  delButton" onClick={reset}>
-            {language === "fin" ? "Tyhjennä" : "Clear All"}
-          </button>
-        </div>
-      </Form>
+          <div className="commentButtons">
+            <button className="button-primary" type="submit">
+              {buttonText}
+            </button>
+            <button
+              className="button-primary  delButton"
+              type="button"
+              onClick={reset}
+            >
+              {language === "fin" ? "Tyhjennä" : "Clear All"}
+            </button>
+          </div>
+        </Form>
+      </div>
     </div>
   );
 };
@@ -281,6 +303,7 @@ CommentForm.propTypes = {
   reply: PropTypes.bool.isRequired,
   setReply: PropTypes.func.isRequired,
   currentComment: PropTypes.object,
+  adminComment: PropTypes.bool,
 };
 
 export default CommentForm;

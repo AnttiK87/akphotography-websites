@@ -50,7 +50,7 @@ export const initializeReplies = (pictureId) => {
             text: `Failed to load replies: ${error.message}`,
             type: "error",
           },
-          5
+          2
         )
       );
     }
@@ -74,7 +74,7 @@ export const createReply = (content) => {
             text: `${newReply.message}`,
             type: "success",
           },
-          5
+          1
         )
       );
     } catch (error) {
@@ -85,7 +85,7 @@ export const createReply = (content) => {
             text: `Failed to add reply: ${error.message}`,
             type: "error",
           },
-          5
+          2
         )
       );
     }
@@ -105,7 +105,7 @@ export const editReply = (content) => {
             text: `Reply edited!`,
             type: "success",
           },
-          10
+          1
         )
       );
     } catch (error) {
@@ -115,7 +115,7 @@ export const editReply = (content) => {
             text: `Failed to edit Reply: ${error.message}`,
             type: "error",
           },
-          10
+          2
         )
       );
     }
@@ -134,7 +134,7 @@ export const remove = (content) => {
             text: `Reply deleted successfully!`,
             type: "success",
           },
-          10
+          1
         )
       );
     } catch (error) {
@@ -143,7 +143,7 @@ export const remove = (content) => {
           ? `Failed to delete the reply: ${error.message}`
           : `An unexpected error occurred: ${error.message}`;
 
-      dispatch(showMessage({ text: errorMessage, type: "error" }, 10));
+      dispatch(showMessage({ text: errorMessage, type: "error" }, 2));
 
       if (error.response && error.response.status === 404) {
         dispatch(deleteReply(content));

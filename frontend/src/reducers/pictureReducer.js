@@ -9,7 +9,7 @@ const pictureSlice = createSlice({
   name: "pictures",
   initialState: {
     allPictures: [],
-    latestMonthlyPictures: [],
+    latestCategoryPictures: [],
   },
   reducers: {
     appendPicture(state, action) {
@@ -18,11 +18,20 @@ const pictureSlice = createSlice({
     setPictures(state, action) {
       state.allPictures = action.payload;
     },
-    setLatestMonthlyPictures(state, action) {
-      state.latestMonthlyPictures = action.payload;
+    setLatestCategoryPictures(state, action) {
+      state.latestCategoryPictures = action.payload;
+    },
+    updatePicture(state, action) {
+      const updatedPicture = action.payload;
+      state.allPictures = state.allPictures.map((picture) =>
+        picture.id === updatedPicture.id ? updatedPicture : picture
+      );
     },
     deletePicture(state, action) {
       state.allPictures = state.allPictures.filter(
+        (picture) => picture.id !== action.payload
+      );
+      state.latestCategoryPictures = state.latestCategoryPictures.filter(
         (picture) => picture.id !== action.payload.id
       );
     },
@@ -32,15 +41,16 @@ const pictureSlice = createSlice({
 export const {
   appendPicture,
   setPictures,
-  setLatestMonthlyPictures,
+  setLatestCategoryPictures,
+  updatePicture,
   deletePicture,
 } = pictureSlice.actions;
 
 // Setting blogs at db to current state with error handling
-export const initializePictures = () => {
+export const initializePicturesAllData = (category) => {
   return async (dispatch) => {
     try {
-      const pictures = await pictureService.getAll();
+      const pictures = await pictureService.getAllData(category);
       dispatch(setPictures(pictures));
     } catch (error) {
       // handle possible error and show error message
@@ -50,18 +60,22 @@ export const initializePictures = () => {
             text: `Failed to load pictures: ${error.message}`,
             type: "error",
           },
-          5
+          1
         )
       );
     }
   };
 };
 
-export const initializeMonthlyLatest = () => {
+export const initializeCategoryLatest = (category) => {
+  console.log(`category reducer: ${category}`);
   return async (dispatch) => {
     try {
-      const latestMontlyPictures = await pictureService.getMonthlyLatest();
-      dispatch(setLatestMonthlyPictures(latestMontlyPictures));
+      const latestCategoryPictures = await pictureService.getCategoryLatest(
+        category
+      );
+      console.log(`latest: ${JSON.stringify(latestCategoryPictures)}`);
+      dispatch(setLatestCategoryPictures(latestCategoryPictures));
     } catch (error) {
       // handle possible error and show error message
       dispatch(
@@ -70,17 +84,17 @@ export const initializeMonthlyLatest = () => {
             text: `Failed to load pictures: ${error.message}`,
             type: "error",
           },
-          5
+          1
         )
       );
     }
   };
 };
 
-export const initializeMonthly = () => {
+export const initializePicturesByCategory = (category) => {
   return async (dispatch) => {
     try {
-      const pictures = await pictureService.getMonthly();
+      const pictures = await pictureService.getPicturesByCategory(category);
       dispatch(setPictures(pictures));
     } catch (error) {
       // handle possible error and show error message
@@ -90,7 +104,7 @@ export const initializeMonthly = () => {
             text: `Failed to load pictures: ${error.message}`,
             type: "error",
           },
-          5
+          3
         )
       );
     }
@@ -111,7 +125,7 @@ export const createPicture = (content) => {
             text: `Added a new picture!`,
             type: "success",
           },
-          5
+          1
         )
       );
     } catch (error) {
@@ -121,26 +135,57 @@ export const createPicture = (content) => {
             text: `Failed to add picture: ${error.message}`,
             type: "error",
           },
-          5
+          3
         )
       );
     }
   };
 };
 
-export const remove = (content) => {
+export const editPicture = (content) => {
   return async (dispatch) => {
     try {
-      await pictureService.remove(content);
-      dispatch(deletePicture(content));
+      console.log("this update indeed happens");
+      const updatedPicture = await pictureService.update(content);
+      console.log(`updated picture: ${JSON.stringify(updatedPicture)}`);
+      dispatch(updatePicture(updatedPicture));
 
       dispatch(
         showMessage(
           {
-            text: `Picture ${content.id} deleted successfully!`,
+            text: `Picture edited!`,
             type: "success",
           },
-          10
+          1
+        )
+      );
+    } catch (error) {
+      dispatch(
+        showMessage(
+          {
+            text: `Failed to edit Picture: ${error.message}`,
+            type: "error",
+          },
+          3
+        )
+      );
+    }
+  };
+};
+
+export const removePicture = (pictureId) => {
+  return async (dispatch) => {
+    try {
+      await pictureService.remove(pictureId);
+      dispatch(deletePicture(pictureId));
+
+      dispatch(
+        showMessage(
+          {
+            text: `PictureId: ${pictureId} deleted successfully!`,
+            type: "success",
+          },
+          1
         )
       );
     } catch (error) {
@@ -149,10 +194,10 @@ export const remove = (content) => {
           ? `Failed to delete the picture: ${error.message}`
           : `An unexpected error occurred: ${error.message}`;
 
-      dispatch(showMessage({ text: errorMessage, type: "error" }, 10));
+      dispatch(showMessage({ text: errorMessage, type: "error" }, 3));
 
       if (error.response && error.response.status === 404) {
-        dispatch(deletePicture(content));
+        dispatch(deletePicture(pictureId));
       }
     }
   };
