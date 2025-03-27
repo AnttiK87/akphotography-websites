@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import PropTypes from "prop-types";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -29,10 +29,14 @@ const TopButtons = ({
   handleZoomIn,
   openItem,
   toggleItem,
+  isText,
+  setPicturesByCategory,
 }) => {
   const navigate = useNavigate();
-
+  const location = useLocation();
   //console.log("topButtons", isActive);
+  const scrollPosition = sessionStorage.getItem("scrollPosition");
+  console.log(`position ${scrollPosition}`);
 
   useEffect(() => {
     let timer;
@@ -58,7 +62,9 @@ const TopButtons = ({
   ]);
 
   const handleExit = () => {
-    navigate(basePath);
+    const previousPath = location.state?.from || basePath;
+
+    setPicturesByCategory([]);
     if (isFullScreen) {
       exitFullscreen();
     } else if (zoomed > 1) {
@@ -68,17 +74,29 @@ const TopButtons = ({
     } else if (openItem) {
       toggleItem(openItem);
     }
+
+    navigate(previousPath);
+    if (scrollPosition !== null && !isNaN(scrollPosition)) {
+      setTimeout(() => {
+        window.scrollTo(0, parseInt(scrollPosition, 10));
+      }, 100); // Viive 100 ms
+    }
   };
+
   return (
     <div className="ButtonsLbTop">
       <div className="buttonsLbLeft">
-        <div>
-          <FontAwesomeIcon
-            onClick={() => toggleItem(".textPomContainer")}
-            className="buttonLB"
-            icon={faFileLines}
-          />
-        </div>
+        {isText ? (
+          <div>
+            <FontAwesomeIcon
+              onClick={() => toggleItem(".textPomContainer")}
+              className="buttonLB"
+              icon={faFileLines}
+            />
+          </div>
+        ) : (
+          <></>
+        )}
         <div>
           <FontAwesomeIcon
             onClick={() => toggleItem(".photoInfoContainer")}
@@ -157,6 +175,8 @@ TopButtons.propTypes = {
   handleZoomIn: PropTypes.func.isRequired,
   openItem: PropTypes.string,
   toggleItem: PropTypes.func.isRequired,
+  isText: PropTypes.bool.isRequired,
+  setPicturesByCategory: PropTypes.func.isRequired,
 };
 
 export default TopButtons;

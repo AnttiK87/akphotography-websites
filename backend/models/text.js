@@ -12,21 +12,11 @@ Text.init(
     },
     textFi: {
       type: DataTypes.TEXT,
-      allowNull: false,
-      validate: {
-        notEmpty: {
-          msg: 'Text cannot be empty',
-        },
-      },
+      allowNull: true,
     },
     textEn: {
       type: DataTypes.TEXT,
-      allowNull: false,
-      validate: {
-        notEmpty: {
-          msg: 'Text cannot be empty',
-        },
-      },
+      allowNull: true,
     },
   },
   {

@@ -43,8 +43,15 @@ router.get('/', async (req, res) => {
 
 router.post('/', async (req, res) => {
   console.log(`new reply reg.body: ${JSON.stringify(req.body)}`)
-  const { reply, username, userId, commentId, pictureId, parentReplyId } =
-    req.body
+  const {
+    reply,
+    username,
+    userId,
+    commentId,
+    pictureId,
+    parentReplyId,
+    adminReply,
+  } = req.body
 
   if (!userId || !commentId || !username || !reply || !pictureId) {
     return res.status(400).json({ error: 'Missing required fields' })
@@ -57,6 +64,7 @@ router.post('/', async (req, res) => {
     commentId,
     pictureId,
     parentReplyId,
+    adminReply,
   })
 
   const replyWithComment = await Reply.findByPk(newReply.id, {
@@ -72,12 +80,13 @@ router.post('/', async (req, res) => {
           'userId',
           'parentReplyId',
           'commentId',
+          'adminReply',
         ],
       },
       {
         model: Reply,
         as: 'parentReply',
-        attributes: ['reply', 'username'],
+        attributes: ['reply', 'username', 'adminReply'],
       },
     ],
   })
@@ -130,7 +139,7 @@ router.put('/:id', replyFinder, async (req, res) => {
 })
 
 router.delete('/:id', replyFinder, async (req, res) => {
-  if (req.body.userId != req.reply.userId) {
+  if (req.body.userId != req.reply.userId && req.body.userId != 'admin') {
     return res.status(401).json({ error: 'unauthorized' })
   }
 

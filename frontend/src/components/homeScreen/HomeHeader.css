@@ -32,8 +32,8 @@
   mask-size: 100% 145%;
   mask-position: center;
   opacity: 0;
-  animation: fadeInMask 1.5s ease-in-out forwards;
-  animation-delay: 1.5s;
+  animation: fadeInMask 1s ease-in-out forwards;
+  animation-delay: 0.2s;
   overflow: hidden;
   top: 4vw;
   justify-content: center;
@@ -57,8 +57,8 @@
   max-width: 100%;
   object-fit: cover;
   opacity: 1;
-  animation: fadeInPicture 1.5s ease-in-out forwards;
-  animation-delay: 1.7s;
+  animation: fadeInPicture 1s ease-in-out forwards;
+  animation-delay: 0.2s;
   align-self: center;
   transform: rotate(-40deg);
 }

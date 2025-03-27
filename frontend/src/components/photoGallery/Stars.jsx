@@ -89,7 +89,7 @@ const StarIcons = ({ id }) => {
   };
 
   return (
-    <>
+    <div className="ratingContainer">
       <div className="rating">
         <div
           onClick={() => {
@@ -117,7 +117,7 @@ const StarIcons = ({ id }) => {
         addRating={addRating}
         id={Number(id)}
       />
-    </>
+    </div>
   );
 };
 

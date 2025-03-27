@@ -34,7 +34,7 @@
   width: 100%;
   display: flex;
   align-items: start;
-  margin: 0 1em;
+  margin: 0;
 }
 
 .month,
@@ -43,5 +43,25 @@
 }
 
 .monthly {
+  text-align: start;
   margin-top: 1em;
+}
+
+#keyword {
+  padding: 0.1em 0.5em;
+}
+
+.formAddKeyword {
+  display: flex;
+  flex-direction: row;
+}
+
+.smallButtonUI {
+  font-size: 0.7em;
+  height: fit-content;
+  margin-left: 1em;
+}
+
+.ComboBoxUI {
+  text-align: start;
 }

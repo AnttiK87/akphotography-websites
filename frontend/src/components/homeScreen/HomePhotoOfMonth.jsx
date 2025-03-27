@@ -1,4 +1,4 @@
-import "./HomePhotOfMonth.css";
+import "./HomePhotoOfMonth.css";
 
 import { useLanguage } from "../../hooks/useLanguage";
 import useAnimationLauncher from "../../hooks/useAnimationLauncher";
@@ -80,7 +80,7 @@ const HomePhotoOfMonth = () => {
           {textPhotoOfMonth}
         </div>
         <div className={`elementPoM3 ${startAnim ? "fade-in" : ""}`}>
-          <Carouselle />
+          <Carouselle category={"monthly"} />
         </div>
       </div>
     </div>

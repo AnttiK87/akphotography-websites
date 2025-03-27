@@ -1,22 +1,42 @@
 //component for rendering form for adding blogs
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 //dependencies
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { createPicture } from "../../reducers/pictureReducer.js";
+import { initializeKeywords } from "../../reducers/keywordReducer.js";
+
 import { Form, Button } from "react-bootstrap";
+
+import Autocomplete from "@mui/material/Autocomplete";
+import TextField from "@mui/material/TextField";
+import Chip from "@mui/material/Chip";
 
 import FileUpload from "./FileUpload.jsx";
 
 import "./UploadImages.css";
 
 const UploadImages = () => {
+  const dispatch = useDispatch();
+
   const [file, setFile] = useState(null);
   const [selectedType, setSelectedType] = useState("");
   const [month, setMonth] = useState("");
   const [year, setYear] = useState("");
   const [textFi, setTextFi] = useState("");
   const [textEn, setTextEn] = useState("");
+  const [keyword, setKeyword] = useState("");
+  const [keywordArray, setKeywordArray] = useState([]);
+
+  useEffect(() => {
+    dispatch(initializeKeywords());
+  }, [dispatch]);
+
+  const keywords = useSelector((state) =>
+    state.keywords.keywords.map((keyword) => String(keyword.keyword))
+  );
+
+  console.log(`keywords: ${JSON.stringify(keywordArray)}`);
 
   const currentYear = new Date().getFullYear();
   const currentMonth = new Date().getMonth() + 1;
@@ -40,57 +60,123 @@ const UploadImages = () => {
     { length: year == currentYear ? currentMonth : 12 },
     (_, i) => ({
       value: i + 1,
-      name: monthNames[i], // Haetaan nimi listasta
+      name: monthNames[i],
     })
   );
 
   const availableYears = Array.from(
-    { length: currentYear - 2020 + 1 }, // Lisätään 1, jotta 2020 tulee mukaan
+    { length: currentYear - 2020 + 1 },
     (_, i) => ({
-      value: 2020 + i, // 2020 + indeksi
+      value: 2020 + i,
     })
   );
 
-  const dispatch = useDispatch();
+  if (keywordArray.includes(keyword)) {
+    // Poista avainsana, jos se on jo listassa
+    setKeywordArray(keywordArray.filter((kw) => kw !== keyword));
+  }
 
   const reset = () => {
     setSelectedType("");
     setFile(null);
-    setMonth("");
-    setYear("");
+    setMonth(null);
+    setYear(null);
     setTextFi("");
     setTextEn("");
+    setKeyword("");
+    setKeywordArray([]);
   };
 
-  // function for sending form content and calling createBlog
   const addPicture = (event) => {
     event.preventDefault();
 
     const { type } = event.target.elements;
     const image = file;
 
+    console.log(`keywords: ${keywordArray}`);
     const formData = new FormData();
     formData.append("image", image);
     formData.append("type", type.value);
+    formData.append("keywords", keywordArray);
 
     if (selectedType === "monthly") {
-      formData.append("month", month);
-      formData.append("year", year);
+      formData.append("month", Number(month));
+      formData.append("year", Number(year));
+      formData.append("textFi", textFi);
+      formData.append("textEn", textEn);
+    } else if (textFi || textEn) {
       formData.append("textFi", textFi);
       formData.append("textEn", textEn);
     }
 
-    dispatch(createPicture(formData));
+    console.log(`formData: ${JSON.stringify(formData)}`);
+
+    dispatch(createPicture(formData)).then(() => {
+      dispatch(initializeKeywords());
+    });
 
     reset();
   };
 
-  // rendering the form
   return (
     <div className="marginAddImage">
       <h3>Add new picture</h3>
       <Form onSubmit={addPicture} encType="multipart/form-data">
         <FileUpload setFile={setFile} file={file} />
+        <div className="ComboBoxUI">
+          <label>Keywords:</label>
+          <Autocomplete
+            sx={{
+              width: 500,
+              maxWidth: "100%",
+              backgroundColor: "white",
+              "& .MuiOutlinedInput-root": {
+                "&:hover .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "#ccc", // Hover border color
+                },
+                "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                  borderColor: "black", // Active (focused) border color
+                },
+              },
+            }}
+            multiple
+            id="tags-outlined"
+            options={keywords.sort(
+              (a, b) =>
+                -b
+                  .charAt(0)
+                  .toUpperCase()
+                  .localeCompare(a.charAt(0).toUpperCase())
+            )}
+            getOptionLabel={(keyword) => String(keyword)}
+            groupBy={(keyword) => keyword.charAt(0).toUpperCase()}
+            value={keywordArray}
+            filterSelectedOptions
+            freeSolo
+            onChange={(event, newValue) => {
+              setKeywordArray(newValue); // 🔹 Tallentaa valitut arvot
+            }}
+            renderTags={(value, getTagProps) =>
+              value.map((option, index) => {
+                const { key, ...tagProps } = getTagProps({ index });
+                return (
+                  <Chip
+                    sx={{
+                      backgroundColor: "#f8f7f5",
+                    }}
+                    variant="outlined"
+                    label={option}
+                    key={key}
+                    {...tagProps}
+                  />
+                );
+              })
+            }
+            renderInput={(params) => (
+              <TextField {...params} placeholder="Add keywords" />
+            )}
+          />
+        </div>
         <div className="form__group input">
           <label htmlFor="type" className="form__label">
             Select type
@@ -191,6 +277,41 @@ const UploadImages = () => {
                   onChange={(e) => setTextEn(e.target.value)}
                   placeholder="Enter english text here..."
                   required
+                  rows="4"
+                />
+              </div>
+            </div>
+          </>
+        )}
+        {selectedType != "monthly" && selectedType != "" && (
+          <>
+            <h5 className="monthly">Add additional information</h5>
+            <div>
+              <div className="form__group input">
+                <label htmlFor="textEn" className="form__label">
+                  {"Finnish text (optional)"}
+                </label>
+                <textarea
+                  className="form__field"
+                  id="textFi"
+                  name="textFi"
+                  value={textFi}
+                  onChange={(e) => setTextFi(e.target.value)}
+                  placeholder="Enter finnish text here..."
+                  rows="4"
+                />
+              </div>
+              <div className="form__group input">
+                <label htmlFor="textEn" className="form__label">
+                  {"English text (optional)"}
+                </label>
+                <textarea
+                  className="form__field"
+                  id="textEn"
+                  name="textEn"
+                  value={textEn}
+                  onChange={(e) => setTextEn(e.target.value)}
+                  placeholder="Enter english text here..."
                   rows="4"
                 />
               </div>

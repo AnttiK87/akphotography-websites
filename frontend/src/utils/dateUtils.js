@@ -32,6 +32,7 @@ export const monthNamesFi = [
 
 // General function to format month and year
 export const formatMonthYear = (monthYear, language) => {
+  if (!monthYear) return;
   const year = Math.floor(monthYear / 100);
   const month = Number(String(monthYear).slice(-2));
   const monthNames = language === "fin" ? monthNamesFi : monthNamesEn;

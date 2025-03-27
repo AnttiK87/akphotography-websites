@@ -4,6 +4,8 @@ const Text = require('./text')
 const Rating = require('./rating')
 const Comment = require('./comment')
 const Reply = require('./reply')
+const Keyword = require('./keyword')
+const PictureKeyword = require('./PictureKeyword')
 
 Picture.hasOne(Text, { foreignKey: 'pictureId', onDelete: 'CASCADE' })
 Text.belongsTo(Picture, { foreignKey: 'pictureId' })
@@ -31,10 +33,15 @@ Reply.hasMany(Reply, {
   onDelete: 'CASCADE',
 })
 
+Picture.belongsToMany(Keyword, { through: PictureKeyword })
+Keyword.belongsToMany(Picture, { through: PictureKeyword })
+
 module.exports = {
   Picture,
   Text,
   Rating,
   Comment,
   Reply,
+  Keyword,
+  PictureKeyword,
 }

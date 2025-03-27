@@ -1,0 +1,98 @@
+.marginAddImage {
+  width: fit-content !important;
+}
+
+.editImageContainer {
+  position: relative;
+  margin-bottom: 6em;
+}
+
+.hanlePicturesList {
+  display: grid;
+  flex-direction: row;
+  border-bottom: 2px solid black;
+  align-items: center;
+  text-align: start;
+}
+
+.vertical-center {
+  vertical-align: middle !important;
+}
+
+.listItemImg {
+  height: 70px;
+  object-fit: contain;
+}
+
+.HandleEditIcons {
+  padding: 0 0.5em;
+}
+
+.HandleEditIcon {
+  cursor: pointer;
+  padding: 0 0.75em;
+}
+
+.HandleEditIcon:hover {
+  color: rgb(90, 90, 90);
+}
+
+.iconCheck,
+.iconNoText {
+  font-size: 1.8em;
+}
+
+.iconCheck {
+  color: green;
+}
+
+.iconNoText {
+  color: red;
+}
+
+.HPStarsAndCount {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-left: 1em;
+  width: 130px;
+}
+
+.ratingsLenghtHP {
+  margin-right: 0;
+}
+
+.typeAndSearchHP {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.countTotalHP {
+  width: 100%;
+  text-align: start;
+}
+
+.typeHP {
+  min-width: 100px;
+}
+
+.pictureHP {
+  min-width: 180px;
+}
+
+.ratingsHP {
+  min-width: 180px;
+}
+
+.editOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 900;
+}

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import PropTypes from "prop-types";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -12,23 +12,23 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { initializeComments, remove } from "../../reducers/commentReducer.js";
 
-import { useLanguage } from "../../hooks/useLanguage";
+import { useLanguage } from "../../hooks/useLanguage.js";
 
-import { getUserId } from "../../utils/createAndGetUserId";
-import { timeSince } from "../../utils/timeSince";
+import { getUserId } from "../../utils/createAndGetUserId.js";
+import { timeSince } from "../../utils/timeSince.js";
 
-import CommentForm from "./CommentForm";
 import Replies from "./Replies.jsx";
 
 import "./Comments.css";
 
-const Comments = ({ pictureId }) => {
+const Comments = ({
+  pictureId,
+  setShow,
+  setEdit,
+  setReply,
+  setCurrentComment,
+}) => {
   const { language } = useLanguage();
-
-  const [show, setShow] = useState(false);
-  const [edit, setEdit] = useState(false);
-  const [reply, setReply] = useState(false);
-  const [currentComment, setCurrentComment] = useState(null);
 
   const userId = getUserId();
   const dispatch = useDispatch();
@@ -60,16 +60,6 @@ const Comments = ({ pictureId }) => {
 
   return (
     <>
-      <CommentForm
-        show={show}
-        setShow={setShow}
-        pictureId={pictureId}
-        edit={edit}
-        setEdit={setEdit}
-        reply={reply}
-        setReply={setReply}
-        currentComment={currentComment}
-      />
       <div className="comments">
         <div className="CommentHeaderAndButton">
           <h3 className="commentsHeader">
@@ -155,6 +145,10 @@ const Comments = ({ pictureId }) => {
 
 Comments.propTypes = {
   pictureId: PropTypes.number.isRequired,
+  setShow: PropTypes.func.isRequired,
+  setEdit: PropTypes.func.isRequired,
+  setReply: PropTypes.func.isRequired,
+  setCurrentComment: PropTypes.func.isRequired,
 };
 
 export default Comments;

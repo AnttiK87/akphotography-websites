@@ -50,7 +50,7 @@ export const initializeComments = (id) => {
             text: `Failed to load comments: ${error.message}`,
             type: "error",
           },
-          5
+          2
         )
       );
     }
@@ -74,7 +74,7 @@ export const createComment = (content) => {
             text: `${newComment.message}`,
             type: "success",
           },
-          5
+          1
         )
       );
     } catch (error) {
@@ -85,7 +85,7 @@ export const createComment = (content) => {
             text: `Failed to add comment: ${error.message}`,
             type: "error",
           },
-          5
+          2
         )
       );
     }
@@ -105,7 +105,7 @@ export const editComment = (content) => {
             text: `Comment edited!`,
             type: "success",
           },
-          10
+          1
         )
       );
     } catch (error) {
@@ -115,7 +115,7 @@ export const editComment = (content) => {
             text: `Failed to edit comment: ${error.message}`,
             type: "error",
           },
-          10
+          2
         )
       );
     }
@@ -134,7 +134,7 @@ export const remove = (content) => {
             text: `Comment deleted successfully!`,
             type: "success",
           },
-          10
+          1
         )
       );
     } catch (error) {
@@ -143,7 +143,7 @@ export const remove = (content) => {
           ? `Failed to delete the comment: ${error.message}`
           : `An unexpected error occurred: ${error.message}`;
 
-      dispatch(showMessage({ text: errorMessage, type: "error" }, 10));
+      dispatch(showMessage({ text: errorMessage, type: "error" }, 2));
 
       if (error.response && error.response.status === 404) {
         dispatch(deleteComment(content));

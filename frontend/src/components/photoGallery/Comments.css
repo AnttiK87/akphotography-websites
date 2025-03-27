@@ -33,6 +33,26 @@
   align-items: center;
 }
 
+.listContainer::-webkit-scrollbar {
+  position: absolute;
+  width: 10px;
+  left: -100px;
+}
+
+.listContainer::-webkit-scrollbar-track {
+  border-radius: 0px; /* Pehmentää reunoja */
+  background-color: #00433c;
+}
+
+.listContainer::-webkit-scrollbar-thumb {
+  background: #f8f7f5;
+  border-radius: 10px;
+}
+
+.listContainer::-webkit-scrollbar-thumb:hover {
+  background: #005d54;
+}
+
 ul {
   padding: 0 1em;
   margin: 0;
@@ -120,6 +140,13 @@ ul {
   align-items: center;
   width: 100%;
   justify-content: flex-end;
+  margin-right: 5%;
+}
+
+.arrowAndReply.makeNarrow {
+  width: 100%;
+  margin-left: 8%;
+  margin-right: 0 !important;
 }
 
 .parentAndChild {
@@ -182,7 +209,8 @@ ul {
 }
 
 .iconUser {
-  font-size: 2em;
+  height: 50px;
+  width: 50px;
   padding-right: 0.5em;
 }
 
@@ -223,4 +251,12 @@ ul {
 
 .answerText:hover {
   color: #353535;
+}
+
+.adminUserImg {
+  height: 60px;
+  width: 60px;
+  object-fit: cover;
+  border-radius: 30px;
+  margin-right: 0.5em;
 }

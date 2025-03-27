@@ -5,10 +5,10 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { initializeReplies, remove } from "../../reducers/replyReducer.js";
 
-import { useLanguage } from "../../hooks/useLanguage";
-import { getUserId } from "../../utils/createAndGetUserId";
+import { useLanguage } from "../../hooks/useLanguage.js";
+import { getUserId } from "../../utils/createAndGetUserId.js";
 
-import ReplyItem from "./ReplyItem";
+import ReplyItem from "./ReplyItem.jsx";
 
 import "./Comments.css";
 

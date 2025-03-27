@@ -7,7 +7,11 @@ const useAnimationLauncher = (threshold) => {
 
   useEffect(() => {
     const targetNode = elementRef.current;
-    if (!targetNode) return;
+
+    if (!targetNode) {
+      setStartAnim(true);
+      return;
+    }
 
     const observer = new IntersectionObserver(
       ([entry]) => {

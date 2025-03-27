@@ -1,0 +1,97 @@
+.TextAM {
+  color: white !important;
+  margin: 0;
+  font-size: 1em !important;
+  font-family: "Nova Round", sans-serif;
+  white-space: nowrap;
+}
+
+.LinkAM {
+  position: relative;
+  text-decoration: none;
+  color: #00202c;
+  text-transform: uppercase;
+  font-size: 1.2em;
+  cursor: pointer;
+}
+
+.LinkAM::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: white;
+  transition: width 0.3s ease-in-out;
+}
+
+.LinkAM:hover::after {
+  width: 100%;
+}
+
+.logoutAM {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-left: auto;
+  margin-right: 0;
+}
+
+.menubarAM {
+  display: flex;
+  flex-direction: row;
+}
+
+.navbarAM {
+  flex-direction: column;
+}
+
+.navAM {
+  width: 100% !important;
+  padding: 2em 3em;
+}
+
+.navbar-toggler-AM {
+  color: white;
+  height: 60px;
+  width: 80px;
+  display: flex;
+  align-items: center;
+}
+
+.navbar-toggler-icon-AM {
+  filter: invert(100%);
+}
+
+.LinkContainerAM {
+  border-left: 2px solid white;
+  border-right: 2px solid white;
+}
+
+@media (max-width: 990px) {
+  .navbarAM {
+    align-items: start;
+  }
+
+  .LinkContainerAM {
+    border-left: none;
+    border-right: none;
+  }
+
+  .logoutAM {
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 1em;
+    border-top: 1px solid white;
+    padding-top: 1em;
+  }
+
+  .navAM {
+    padding: 1em;
+  }
+}

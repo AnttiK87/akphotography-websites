@@ -1,9 +1,8 @@
 .drop-zone {
   border: 2px dashed #ccc;
-  padding: 20px;
   height: 10em;
+  padding-top: 1em;
   text-align: center;
-  cursor: pointer;
   transition: border-color 0.3s;
   align-items: center !important;
   justify-content: center;
@@ -15,5 +14,8 @@
 }
 
 .drop-area {
-  padding: 10px;
+  cursor: pointer;
+
+  height: 100%;
+  width: 700px;
 }

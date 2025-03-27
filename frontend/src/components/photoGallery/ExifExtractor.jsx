@@ -34,6 +34,8 @@ const ImageMetadata = ({ src }) => {
     fetchMetadata();
   }, [src]);
 
+  console.log(`metadata: ${JSON.stringify(metadata)}`);
+
   return (
     <div className="exifText">
       <div className="exifHeader">
@@ -43,10 +45,17 @@ const ImageMetadata = ({ src }) => {
             : "Pictures technical data:"}
         </h3>
       </div>
-      {metadata ? (
+      {metadata?.Model &&
+      metadata?.ExposureTime &&
+      metadata?.FNumber &&
+      metadata?.ISO &&
+      metadata?.LensModel &&
+      metadata?.FocalLength &&
+      metadata?.DateTimeOriginal ? (
         <div>
           <div className="iconExifText">
             <img className="iconExif" src={CameraIcon} alt="camera-iconExif" />
+            {metadata.Make === "SONY" ? `${metadata.Make} ` : ""}
             {metadata.Model}
           </div>
           <div className="iconExifText">
@@ -62,7 +71,7 @@ const ImageMetadata = ({ src }) => {
             f/{metadata.FNumber}
           </div>
           <div className="iconExifText">
-            <img className="iconExif" src={IsoIcon} alt="iso-iconExif" />{" "}
+            <img className="iconExif" src={IsoIcon} alt="iso-iconExif" /> ISO{" "}
             {metadata.ISO}
           </div>
           <div className="iconExifText">
@@ -85,7 +94,7 @@ const ImageMetadata = ({ src }) => {
           </div>
         </div>
       ) : (
-        <div>
+        <div className="iconExifText">
           {language === "fin"
             ? "Tekniset tiedot puuttuva"
             : "No technical data"}

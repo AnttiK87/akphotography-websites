@@ -44,6 +44,16 @@ input[type="submit"]:hover {
   height: fit-content;
   margin: 0;
 }
+.email-cf {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  margin-top: 6px;
+  margin-bottom: 16px;
+  resize: vertical;
+}
 
 @media (max-width: 990px) {
   .container {
