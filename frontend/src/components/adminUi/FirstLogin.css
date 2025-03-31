@@ -1,0 +1,31 @@
+.FirstLoginContainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9980;
+}
+
+.FirstLoginForm {
+  position: fixed; /* Kiinnittää elementin näkymään aina */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* Siirtää sen tarkasti keskelle */
+  background: #00433c;
+  font-size: 1em;
+  color: white;
+  border-style: solid;
+  border-radius: 10px;
+  padding: 2em;
+  width: 90vw;
+  max-width: 550px; /* Rajoittaa leveyden */
+  text-align: start;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: start;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Lisää varjon */
+  z-index: 9981; /* Asettaa kaiken päälle */
+}

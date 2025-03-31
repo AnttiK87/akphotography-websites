@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
-import { useParams, useNavigate, useLocation } from "react-router-dom";
+import { useState, useEffect, useCallback } from "react";
+
+import { useLocation } from "react-router-dom";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
@@ -8,8 +9,8 @@ import usePicturesByCategory from "../../hooks/usePicturesByCategory";
 import useFullScreen from "../../hooks/useFullScreen";
 import useZoom from "../../hooks/useZoom";
 import useTimer from "../../hooks/useTimer";
-
 import useToggleItem from "../../hooks/useToggleItem";
+import useLightBox from "../../hooks/useLightBox";
 
 import TopButtons from "./TopButtons";
 import LightboxImage from "./LightBoxImage";
@@ -21,45 +22,68 @@ import CommentForm from "./CommentForm.jsx";
 import "./LightBox.css";
 
 const LightBox = () => {
-  const { index } = useParams();
-  const indexNum = parseInt(index, 10);
-  const validIndex = indexNum >= 0 ? indexNum : 0;
-
-  const navigate = useNavigate();
   const location = useLocation();
+
+  const {
+    isLightBoxOpen,
+    closeLightBox,
+    openLightBox,
+    currentIndex,
+    category,
+  } = useLightBox();
+
+  const { isLoading, isError, picturesByCategory } =
+    usePicturesByCategory(category);
+
+  const {
+    zoomed,
+    handleZoomOut,
+    handleZoomIn,
+    startPos,
+    position,
+    updatePosition,
+    dragging,
+    setDragging,
+    setStartPos,
+  } = useZoom();
+
+  const { openItem, closeItem, toggleItem } = useToggleItem();
+
+  const [indexToUse, setIndexToUse] = useState(currentIndex);
+  const [indexNum, setIndexNum] = useState(parseInt(indexToUse));
+  const [validIndex, setvalidIndex] = useState(
+    indexNum >= 0 && !isNaN(indexNum) && indexNum <= picturesByCategory.length
+      ? indexNum
+      : undefined
+  );
 
   const [show, setShow] = useState(false);
   const [edit, setEdit] = useState(false);
   const [reply, setReply] = useState(false);
   const [currentComment, setCurrentComment] = useState(null);
 
-  console.log(`show: ${show}`);
+  //console.log(`lightBoxOpen: ${isLightBoxOpen}`);
+  //console.log(`basePath: ${basePath}`);
+  //console.log(`indexparams: ${index}`);
+  //console.log(`indexToUse: ${indexToUse}`);
+  //console.log(`validIndex: ${validIndex}`);
+  //console.log(`currentIndex: ${currentIndex}`);
+  //console.log(`location.pathname: ${location.pathname}`);
 
-  const basePath = location.pathname.replace(/\/\d+$/, "");
-  console.log(`basePath: ${basePath}`);
-
-  const [category, setCategory] = useState("");
   const [isText, setIsText] = useState(false);
 
   useEffect(() => {
-    if (basePath === "/pictures/photo-of-the-month") {
-      setCategory("monthly");
-    } else if (basePath === "/pictures/mammals") {
-      return setCategory("mammals");
-    } else if (basePath === "/pictures/landscapes") {
-      return setCategory("landscapes");
-    } else if (basePath === "/pictures/nature") {
-      return setCategory("nature");
-    } else if (basePath === "/pictures/birds") {
-      return setCategory("birds");
-    }
-  }, [basePath]);
+    setIndexToUse(currentIndex);
+  }, [currentIndex]);
 
-  console.log(`category: ${category}`);
+  useEffect(() => {
+    setIndexNum(parseInt(indexToUse));
+    setvalidIndex(indexNum >= 0 ? indexNum : undefined);
+  }, [indexToUse, indexNum]);
+
+  console.log(`category in lightbox: ${category}`);
 
   const { isActive, startTimer, stopTimer } = useTimer();
-  const { isLoading, isError, picturesByCategory, setPicturesByCategory } =
-    usePicturesByCategory(category);
 
   useEffect(() => {
     if (!isLoading) {
@@ -73,45 +97,196 @@ const LightBox = () => {
     }
   }, [isLoading, picturesByCategory, validIndex]);
 
-  console.log(
-    `pictures lenght: ${JSON.stringify(
-      picturesByCategory.length
-    )} AND ${JSON.stringify(picturesByCategory)}`
-  );
-  const {
-    zoomed,
-    handleZoomOut,
-    handleZoomIn,
-    startPos,
-    position,
-    updatePosition,
-    dragging,
-    setDragging,
-    setStartPos,
-  } = useZoom();
-  const { openItem, toggleItem } = useToggleItem();
+  useEffect(() => {
+    if (
+      isError ||
+      picturesByCategory.length < validIndex ||
+      !picturesByCategory.length
+    ) {
+      setTimeout(() => {
+        //closeLightBox();
+      }, 1500);
+    }
+  }, [isError, /*closeLightBox,*/ picturesByCategory, validIndex]);
+
   const { isFullScreen, enterFullscreen, exitFullscreen } = useFullScreen();
 
-  const nextUrl =
-    validIndex === picturesByCategory.length - 1
-      ? `${basePath}/${0}`
-      : `${basePath}/${validIndex + 1}`;
+  useEffect(() => {
+    const handlePopState = (event) => {
+      if (event.state?.lightBox) {
+        openLightBox();
+      } else {
+        closeLightBox();
+        setvalidIndex(undefined);
+        if (isFullScreen) {
+          exitFullscreen();
+        } else if (zoomed > 1) {
+          handleZoomOut();
+        } else if (isActive) {
+          stopTimer();
+        } else if (openItem) {
+          toggleItem(openItem);
+        }
+      }
+    };
 
-  const prevUrl =
-    validIndex === 0
-      ? `${basePath}/${picturesByCategory.length - 1}`
-      : `${basePath}/${validIndex - 1}`;
+    window.addEventListener("popstate", handlePopState);
 
-  const handleNavigateNext = () => {
-    navigate(nextUrl);
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, [
+    openLightBox,
+    closeLightBox,
+    exitFullscreen,
+    handleZoomOut,
+    isActive,
+    isFullScreen,
+    openItem,
+    stopTimer,
+    toggleItem,
+    zoomed,
+  ]);
+
+  const nextPictureIndex =
+    validIndex === picturesByCategory.length - 1 ? 0 : validIndex + 1;
+
+  const prevPictureIndex =
+    validIndex === 0 ? picturesByCategory.length - 1 : validIndex - 1;
+
+  const handleNextPicture = useCallback(() => {
+    const basePath = location.pathname.replace(/\/\d+$/, "");
+    setIndexToUse(nextPictureIndex);
+    window.history.replaceState({}, "", `${basePath}/${nextPictureIndex}`);
     if (zoomed > 1) {
       handleZoomOut();
     }
-  };
+  }, [location.pathname, nextPictureIndex, zoomed, handleZoomOut]);
 
-  if (isLoading) return <div>Loading...</div>;
-  if (isError) return <div>Error loading pictures</div>;
-  if (!picturesByCategory.length) return <div>No pictures found</div>;
+  const handlePrevPicture = useCallback(() => {
+    const basePath = location.pathname.replace(/\/\d+$/, "");
+    setIndexToUse(prevPictureIndex);
+    window.history.replaceState({}, "", `${basePath}/${prevPictureIndex}`);
+    if (zoomed > 1) {
+      handleZoomOut();
+    }
+  }, [location.pathname, prevPictureIndex, zoomed, handleZoomOut]);
+
+  const handleExit = useCallback(() => {
+    const basePath = location.pathname.replace(/\/\d+$/, "");
+    closeLightBox();
+    setvalidIndex(undefined);
+    window.history.pushState({ lightBox: false }, "", `${basePath}`);
+
+    if (isFullScreen) {
+      exitFullscreen();
+    } else if (zoomed > 1) {
+      handleZoomOut();
+    } else if (isActive) {
+      stopTimer();
+    } else if (openItem) {
+      toggleItem(openItem);
+    }
+  }, [
+    location.pathname,
+    closeLightBox,
+    setvalidIndex,
+    isFullScreen,
+    exitFullscreen,
+    zoomed,
+    handleZoomOut,
+    isActive,
+    stopTimer,
+    openItem,
+    toggleItem,
+  ]);
+
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      if (!document.fullscreenElement) {
+        exitFullscreen();
+      }
+    };
+
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") {
+        if (isFullScreen) {
+          exitFullscreen();
+        } else if (show) {
+          setShow(false);
+        } else {
+          handleExit();
+        }
+      }
+      if (event.key === "ArrowRight") {
+        handleNextPicture();
+      }
+      if (event.key === "ArrowLeft") {
+        handlePrevPicture();
+      }
+      if (event.key === "ArrowUp" && openItem === null) {
+        toggleItem(".photoInfoContainer");
+        closeItem;
+      }
+      if (event.key === "ArrowDown" && !show) {
+        closeItem(".photoInfoContainer");
+        closeItem;
+      }
+      if (event.key === " " && !show && openItem === null) {
+        if (isActive) {
+          stopTimer();
+        } else {
+          startTimer();
+        }
+      }
+    };
+
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+    window.addEventListener("keydown", handleKeyDown);
+  }, [
+    isLightBoxOpen,
+    closeLightBox,
+    exitFullscreen,
+    isFullScreen,
+    handleNextPicture,
+    handlePrevPicture,
+    isActive,
+    startTimer,
+    stopTimer,
+    show,
+    toggleItem,
+    closeItem,
+    openItem,
+    handleExit,
+  ]);
+
+  if (!isLightBoxOpen) {
+    return null;
+  }
+
+  if (isNaN(currentIndex) || validIndex === undefined)
+    return (
+      <div className="lightBoxBC InfoTextLB">
+        Used index is not valid! Closing...
+      </div>
+    );
+  if (isLoading) return <div className="lightBoxBC InfoTextLB">Loading...</div>;
+  if (isError)
+    return (
+      <div className="lightBoxBC InfoTextLB">
+        Error loading pictures! Closing...
+      </div>
+    );
+  if (!picturesByCategory.length)
+    return (
+      <div className="lightBoxBC InfoTextLB">No pictures found! Closing...</div>
+    );
+  if (picturesByCategory.length < validIndex)
+    return (
+      <div className="lightBoxBC InfoTextLB">
+        Used index is not valid! Closing...
+      </div>
+    );
 
   return (
     <div>
@@ -120,8 +295,6 @@ const LightBox = () => {
         className={`lightBoxBC ${isActive ? "slideShow" : ""}`}
       >
         <TopButtons
-          basePath={basePath}
-          nextUrl={nextUrl}
           isFullScreen={isFullScreen}
           exitFullscreen={exitFullscreen}
           enterFullscreen={enterFullscreen}
@@ -134,12 +307,15 @@ const LightBox = () => {
           openItem={openItem}
           toggleItem={toggleItem}
           isText={isText}
-          setPicturesByCategory={setPicturesByCategory}
+          nextPictureIndex={nextPictureIndex}
+          handleNextPicture={handleNextPicture}
+          setvalidIndex={setvalidIndex}
+          handleExit={handleExit}
         />
         <div className="lightBoxContainer">
           <div>
             <FontAwesomeIcon
-              onClick={() => navigate(prevUrl)}
+              onClick={() => handlePrevPicture()}
               className="buttonLB buttonBackLB"
               icon={faChevronDown}
             />
@@ -160,7 +336,7 @@ const LightBox = () => {
           />
           <div>
             <FontAwesomeIcon
-              onClick={() => handleNavigateNext()}
+              onClick={() => handleNextPicture()}
               className="buttonLB buttonNextLB"
               icon={faChevronDown}
             />

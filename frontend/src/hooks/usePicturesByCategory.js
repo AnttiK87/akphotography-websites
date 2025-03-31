@@ -10,7 +10,7 @@ const usePicturesByCategory = (category) => {
   const [isError, setIsError] = useState(false);
   const { language } = useLanguage();
   const [picturesByCategory, setPicturesByCategory] = useState([]);
-
+  const [currentCategory, setCurrentCategory] = useState("");
   //console.log(`loading: ${isLoading}`);
   //console.log(`category: ${category}`);
 
@@ -18,17 +18,38 @@ const usePicturesByCategory = (category) => {
     setIsLoading(true);
     setIsError(false);
 
-    if (category) {
+    if (category && category != currentCategory) {
       dispatch(initializePicturesByCategory(category))
-        .then(() => setIsLoading(false))
+        .then(() => setIsLoading(false), setCurrentCategory(category))
         .catch(() => {
           setIsLoading(false);
           setIsError(true);
         });
     }
-  }, [dispatch, category]);
+  }, [dispatch, category, currentCategory]);
 
   const allPictures = useSelector((state) => state.pictures.allPictures);
+  const monthlyPictures = useSelector((state) => state.pictures.monthly);
+  const naturePictures = useSelector((state) => state.pictures.nature);
+  const birdsPictures = useSelector((state) => state.pictures.birds);
+  const mammalsPictures = useSelector((state) => state.pictures.mammals);
+  const landscapesPictures = useSelector((state) => state.pictures.landscapes);
+
+  const picturesToReturn = (() => {
+    if (category === "monthly") {
+      return monthlyPictures;
+    } else if (category === "nature") {
+      return naturePictures;
+    } else if (category === "birds") {
+      return birdsPictures;
+    } else if (category === "mammals") {
+      return mammalsPictures;
+    } else if (category === "landscapes") {
+      return landscapesPictures;
+    } else {
+      return allPictures;
+    }
+  })();
 
   /*console.log(
     `picturedByCategory length: ${JSON.stringify(
@@ -39,7 +60,7 @@ const usePicturesByCategory = (category) => {
   useEffect(() => {
     if (!isLoading) {
       setPicturesByCategory(
-        allPictures.map((item) => ({
+        picturesToReturn.map((item) => ({
           src: item.url,
           width: item.width,
           height: item.height,
@@ -54,12 +75,12 @@ const usePicturesByCategory = (category) => {
         }))
       );
     }
-  }, [allPictures, isLoading, category, language]);
+  }, [picturesToReturn, isLoading, category, language]);
   return {
     isLoading,
     isError,
     picturesByCategory,
-    allPictures,
+    picturesToReturn,
     setPicturesByCategory,
   };
 };

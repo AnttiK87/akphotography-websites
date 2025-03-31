@@ -3,6 +3,7 @@ const { Op } = require('sequelize')
 const multer = require('multer')
 const path = require('path')
 const sharp = require('sharp')
+const { tokenExtractor } = require('../utils/middleware')
 
 const { Picture, Text, Reply, Comment, Rating, Keyword } = require('../models')
 
@@ -26,66 +27,74 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage })
 
-router.post('/upload', upload.single('image'), async (req, res, next) => {
-  console.log(req.body)
-  if (!req.file) {
-    return res.status(400).json({ error: 'File was not uploaded' })
-  }
-
-  const metadata = await sharp(req.file.path).metadata()
-  const { width, height } = metadata
-
-  const picture = await Picture.create({
-    fileName: req.file.filename,
-    url: '/uploads/pictures/' + req.file.filename,
-    type: req.body.type,
-    width,
-    height,
-  })
-
-  if (req.body.textFi || req.body.textEn) {
-    const text = await Text.create({
-      textFi: req.body.textFi || null,
-      textEn: req.body.textEn || null,
-      pictureId: picture.id,
-    })
-
-    if (req.body.year && req.body.month) {
-      picture.month_year = Number(req.body.year) * 100 + Number(req.body.month)
+router.post(
+  '/upload',
+  tokenExtractor,
+  upload.single('image'),
+  async (req, res, next) => {
+    console.log(req.body)
+    if (!req.file) {
+      return res.status(400).json({ error: 'File was not uploaded' })
     }
 
-    picture.textId = text.id
-    await picture.save()
-  }
+    const metadata = await sharp(req.file.path).metadata()
+    const { width, height } = metadata
 
-  if (req.body.keywords) {
-    let keywords = req.body.keywords
-
-    if (typeof keywords === 'string') {
-      keywords = keywords.split(',').map((kw) => kw.trim())
-    }
-
-    console.log(`keywords: ${keywords}`)
-
-    const existingKeywords = await Keyword.findAll({
-      where: { keyword: keywords },
+    const picture = await Picture.create({
+      fileName: req.file.filename,
+      url: '/uploads/pictures/' + req.file.filename,
+      type: req.body.type,
+      width,
+      height,
     })
 
-    const existingKeywordSet = new Set(existingKeywords.map((kw) => kw.keyword))
+    if (req.body.textFi || req.body.textEn) {
+      const text = await Text.create({
+        textFi: req.body.textFi || null,
+        textEn: req.body.textEn || null,
+        pictureId: picture.id,
+      })
 
-    const newKeywords = keywords.filter((kw) => !existingKeywordSet.has(kw))
+      if (req.body.year && req.body.month) {
+        picture.month_year =
+          Number(req.body.year) * 100 + Number(req.body.month)
+      }
 
-    const createdKeywords = await Promise.all(
-      newKeywords.map((keyword) => Keyword.create({ keyword })),
-    )
+      picture.textId = text.id
+      await picture.save()
+    }
 
-    const allKeywords = [...existingKeywords, ...createdKeywords]
+    if (req.body.keywords) {
+      let keywords = req.body.keywords
 
-    await picture.addKeywords(allKeywords)
-  }
+      if (typeof keywords === 'string') {
+        keywords = keywords.split(',').map((kw) => kw.trim())
+      }
 
-  res.json({ message: 'File uploaded successfully!', picture })
-})
+      console.log(`keywords: ${keywords}`)
+
+      const existingKeywords = await Keyword.findAll({
+        where: { keyword: keywords },
+      })
+
+      const existingKeywordSet = new Set(
+        existingKeywords.map((kw) => kw.keyword),
+      )
+
+      const newKeywords = keywords.filter((kw) => !existingKeywordSet.has(kw))
+
+      const createdKeywords = await Promise.all(
+        newKeywords.map((keyword) => Keyword.create({ keyword })),
+      )
+
+      const allKeywords = [...existingKeywords, ...createdKeywords]
+
+      await picture.addKeywords(allKeywords)
+    }
+
+    res.json({ message: 'File uploaded successfully!', picture })
+  },
+)
 
 router.get('/allData/', async (req, res) => {
   const where = {}
@@ -213,7 +222,7 @@ const pictureFinder = async (req, res, next) => {
   next()
 }
 
-router.put('/:id', pictureFinder, async (req, res) => {
+router.put('/:id', tokenExtractor, pictureFinder, async (req, res) => {
   console.log(`req.body: ${JSON.stringify(req.body)}`)
   console.log(`req.picture: ${JSON.stringify(req.picture)}`)
   if (req.picture) {
@@ -225,8 +234,9 @@ router.put('/:id', pictureFinder, async (req, res) => {
           pictureId: req.picture.id,
         })
 
-        req.picture.text.textFi = text.textFi
-        req.picture.text.textEn = text.textEn
+        req.picture.textId = text.id
+        req.picture.text = text.textFi
+        req.picture.text = text.textEn
       } catch (error) {
         console.error('Error saving text:', error)
         return res.status(500).json({ error: 'Error saving text to database' })
@@ -333,37 +343,33 @@ router.put('/:id', pictureFinder, async (req, res) => {
   }
 })
 
-router.delete(
-  '/:id',
-  pictureFinder,
-  /*tokenExtractor,*/ async (req, res) => {
-    /*const user = await User.findByPk(req.decodedToken.id)
+router.delete('/:id', tokenExtractor, pictureFinder, async (req, res) => {
+  const user = await User.findByPk(req.decodedToken.id)
   if (user.id !== req.blog.userId) {
     return res.status(401).json({ error: 'unauthorized' })
-  }*/
+  }
 
-    if (req.picture) {
-      try {
-        // Poista tiedosto levyltä
-        const filePath = path.join(__dirname, '../', req.picture.url)
-        if (fs.existsSync(filePath)) {
-          fs.unlinkSync(filePath)
-          console.log(`File deleted: ${filePath}`)
-        } else {
-          console.warn(`File not found: ${filePath}`)
-        }
-
-        // Poista tietue tietokannasta
-        await req.picture.destroy()
-        res.status(204).end()
-      } catch (error) {
-        console.error('Error deleting file:', error)
-        res.status(500).json({ error: 'Error deleting file' })
+  if (req.picture) {
+    try {
+      // Poista tiedosto levyltä
+      const filePath = path.join(__dirname, '../', req.picture.url)
+      if (fs.existsSync(filePath)) {
+        fs.unlinkSync(filePath)
+        console.log(`File deleted: ${filePath}`)
+      } else {
+        console.warn(`File not found: ${filePath}`)
       }
-    } else {
-      res.status(404).json({ error: 'Picture not found' })
+
+      // Poista tietue tietokannasta
+      await req.picture.destroy()
+      res.status(204).end()
+    } catch (error) {
+      console.error('Error deleting file:', error)
+      res.status(500).json({ error: 'Error deleting file' })
     }
-  },
-)
+  } else {
+    res.status(404).json({ error: 'Picture not found' })
+  }
+})
 
 module.exports = router

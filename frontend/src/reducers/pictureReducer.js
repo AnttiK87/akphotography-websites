@@ -9,6 +9,11 @@ const pictureSlice = createSlice({
   name: "pictures",
   initialState: {
     allPictures: [],
+    monthly: [],
+    nature: [],
+    birds: [],
+    mammals: [],
+    landscapes: [],
     latestCategoryPictures: [],
   },
   reducers: {
@@ -17,6 +22,21 @@ const pictureSlice = createSlice({
     },
     setPictures(state, action) {
       state.allPictures = action.payload;
+    },
+    setMonthly(state, action) {
+      state.monthly = action.payload;
+    },
+    setNature(state, action) {
+      state.nature = action.payload;
+    },
+    setBirds(state, action) {
+      state.birds = action.payload;
+    },
+    setMammals(state, action) {
+      state.mammals = action.payload;
+    },
+    setLandscapes(state, action) {
+      state.landscapes = action.payload;
     },
     setLatestCategoryPictures(state, action) {
       state.latestCategoryPictures = action.payload;
@@ -41,6 +61,11 @@ const pictureSlice = createSlice({
 export const {
   appendPicture,
   setPictures,
+  setMonthly,
+  setNature,
+  setBirds,
+  setMammals,
+  setLandscapes,
   setLatestCategoryPictures,
   updatePicture,
   deletePicture,
@@ -68,13 +93,13 @@ export const initializePicturesAllData = (category) => {
 };
 
 export const initializeCategoryLatest = (category) => {
-  console.log(`category reducer: ${category}`);
+  //console.log(`category reducer: ${category}`);
   return async (dispatch) => {
     try {
       const latestCategoryPictures = await pictureService.getCategoryLatest(
         category
       );
-      console.log(`latest: ${JSON.stringify(latestCategoryPictures)}`);
+      //console.log(`latest: ${JSON.stringify(latestCategoryPictures)}`);
       dispatch(setLatestCategoryPictures(latestCategoryPictures));
     } catch (error) {
       // handle possible error and show error message
@@ -95,7 +120,22 @@ export const initializePicturesByCategory = (category) => {
   return async (dispatch) => {
     try {
       const pictures = await pictureService.getPicturesByCategory(category);
-      dispatch(setPictures(pictures));
+      if (category === "monthly") {
+        dispatch(setMonthly(pictures));
+        return;
+      } else if (category === "nature") {
+        dispatch(setNature(pictures));
+        return;
+      } else if (category === "birds") {
+        dispatch(setBirds(pictures));
+        return;
+      } else if (category === "mammals") {
+        dispatch(setMammals(pictures));
+        return;
+      } else if (category === "landscapes") {
+        dispatch(setLandscapes(pictures));
+        return;
+      }
     } catch (error) {
       // handle possible error and show error message
       dispatch(
@@ -145,9 +185,9 @@ export const createPicture = (content) => {
 export const editPicture = (content) => {
   return async (dispatch) => {
     try {
-      console.log("this update indeed happens");
+      //console.log("this update indeed happens");
       const updatedPicture = await pictureService.update(content);
-      console.log(`updated picture: ${JSON.stringify(updatedPicture)}`);
+      //console.log(`updated picture: ${JSON.stringify(updatedPicture)}`);
       dispatch(updatePicture(updatedPicture));
 
       dispatch(

@@ -14,9 +14,13 @@ import Chip from "@mui/material/Chip";
 
 import FileUpload from "./FileUpload.jsx";
 
+import useNotLoggedin from "../../hooks/useNotLoggedIn.js";
+import NotLoggedin from "./NotLoggedIn.jsx";
+
 import "./UploadImages.css";
 
 const UploadImages = () => {
+  const { user } = useNotLoggedin();
   const dispatch = useDispatch();
 
   const [file, setFile] = useState(null);
@@ -117,6 +121,10 @@ const UploadImages = () => {
 
     reset();
   };
+
+  if (!user) {
+    return <NotLoggedin />;
+  }
 
   return (
     <div className="marginAddImage">

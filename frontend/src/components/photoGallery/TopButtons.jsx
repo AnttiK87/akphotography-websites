@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import PropTypes from "prop-types";
-import { useNavigate, useLocation } from "react-router-dom";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -16,8 +15,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 const TopButtons = ({
-  basePath,
-  nextUrl,
   isFullScreen,
   exitFullscreen,
   enterFullscreen,
@@ -30,19 +27,15 @@ const TopButtons = ({
   openItem,
   toggleItem,
   isText,
-  setPicturesByCategory,
+  nextPictureIndex,
+  handleNextPicture,
+  handleExit,
 }) => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  //console.log("topButtons", isActive);
-  const scrollPosition = sessionStorage.getItem("scrollPosition");
-  console.log(`position ${scrollPosition}`);
-
   useEffect(() => {
     let timer;
     if (isActive) {
       timer = setTimeout(() => {
-        navigate(nextUrl);
+        handleNextPicture();
         if (openItem) {
           toggleItem(openItem);
         } else if (zoomed > 1) {
@@ -55,33 +48,11 @@ const TopButtons = ({
     isActive,
     openItem,
     zoomed,
-    nextUrl,
-    navigate,
+    nextPictureIndex,
     toggleItem,
     handleZoomOut,
+    handleNextPicture,
   ]);
-
-  const handleExit = () => {
-    const previousPath = location.state?.from || basePath;
-
-    setPicturesByCategory([]);
-    if (isFullScreen) {
-      exitFullscreen();
-    } else if (zoomed > 1) {
-      handleZoomOut();
-    } else if (isActive) {
-      stopTimer();
-    } else if (openItem) {
-      toggleItem(openItem);
-    }
-
-    navigate(previousPath);
-    if (scrollPosition !== null && !isNaN(scrollPosition)) {
-      setTimeout(() => {
-        window.scrollTo(0, parseInt(scrollPosition, 10));
-      }, 100); // Viive 100 ms
-    }
-  };
 
   return (
     <div className="ButtonsLbTop">
@@ -162,8 +133,6 @@ const TopButtons = ({
   );
 };
 TopButtons.propTypes = {
-  basePath: PropTypes.string.isRequired,
-  nextUrl: PropTypes.string.isRequired,
   isFullScreen: PropTypes.bool.isRequired,
   exitFullscreen: PropTypes.func.isRequired,
   enterFullscreen: PropTypes.func.isRequired,
@@ -176,7 +145,9 @@ TopButtons.propTypes = {
   openItem: PropTypes.string,
   toggleItem: PropTypes.func.isRequired,
   isText: PropTypes.bool.isRequired,
-  setPicturesByCategory: PropTypes.func.isRequired,
+  nextPictureIndex: PropTypes.number.isRequired,
+  handleNextPicture: PropTypes.func.isRequired,
+  handleExit: PropTypes.func.isRequired,
 };
 
 export default TopButtons;

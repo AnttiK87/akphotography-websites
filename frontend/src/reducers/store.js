@@ -6,6 +6,7 @@ import messageReducer from "./messageReducer.js";
 import commentReducer from "./commentReducer.js";
 import replyReducer from "./replyReducer.js";
 import keywordReducer from "./keywordReducer.js";
+import userReducer from "./userReducer";
 
 const store = configureStore({
   reducer: {
@@ -15,6 +16,7 @@ const store = configureStore({
     comments: commentReducer,
     replies: replyReducer,
     keywords: keywordReducer,
+    user: userReducer,
   },
 });
 

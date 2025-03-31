@@ -4,13 +4,16 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { useDispatch, useSelector } from "react-redux";
 import { initializeKeywords, removeKw } from "../../reducers/keywordReducer.js";
+import useNotLoggedin from "../../hooks/useNotLoggedIn.js";
+import NotLoggedin from "./NotLoggedIn.jsx";
 import "./OwnProfile.css";
 
 const OwnProfile = () => {
+  const { user } = useNotLoggedin();
+  console.log("user in ownproofile: ", user);
   const dispatch = useDispatch();
   const keywordsFromStore = useSelector((state) => state.keywords.keywords);
 
-  const [username /*setUsername*/] = useState("testUser");
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   const [search, setSearch] = useState("");
@@ -56,6 +59,10 @@ const OwnProfile = () => {
     );
   });
 
+  if (!user) {
+    return <NotLoggedin />;
+  }
+
   const renderTableBody = () => {
     if (sortedKeywords.length === 0) {
       return (
@@ -92,8 +99,8 @@ const OwnProfile = () => {
             <tr key={keyword.id}>
               <td className="vertical-center"></td>
               <td className="vertical-center">{index + 1}</td>
-              <td className="vertical-center">{keyword.keyword}</td>
-              <td className="vertical-center">
+              <td className="vertical-center keywordsOP">{keyword.keyword}</td>
+              <td className="vertical-center UsedTimesOP">
                 {keyword?.pictures.length || 0} times
               </td>
               <td className="vertical-center">
@@ -113,41 +120,70 @@ const OwnProfile = () => {
 
   return (
     <div className="marginAddImage">
-      <h3>User {username} information</h3>
-      <h4>Handle keywords</h4>
-
-      <div className="searchKwCont">
-        <input
-          className="searchKw"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          type="text"
-          placeholder="Search keywords"
-        />
-        <FontAwesomeIcon icon={faMagnifyingGlass} />
-      </div>
-
-      {isLoading && <div>Loading...</div>}
-      {isError && <div>Error loading keywords</div>}
-
-      {!isLoading && !isError && (
-        <Table className="tableOP" responsive="md" striped>
-          <thead>
-            <tr>
-              <th></th>
-              <th>#</th>
-              <th className="clikkableOP" onClick={() => setOrder("alpha")}>
-                Keyword
-              </th>
-              <th className="clikkableOP" onClick={() => setOrder("count")}>
-                Used
-              </th>
-              <th>Delete</th>
-            </tr>
-          </thead>
-          {renderTableBody()}
+      <h3>{user.name} own profile</h3>
+      <div>
+        <h4>Current admin user&apos;s information:</h4>
+        <Table>
+          <tr>
+            <td className="vertical-start">Name:</td>
+            <td>{user.name}</td>
+          </tr>
+          <tr>
+            <td>Username:</td>
+            <td>{user.username}</td>
+          </tr>
+          <tr>
+            <td>Email:</td>
+            <td>{user.email}</td>
+          </tr>
+          <tr>
+            <td>Last login:</td>
+            <td>{user.lastLogin}</td>
+          </tr>
         </Table>
-      )}
+      </div>
+      <div>
+        <h4>Handle keywords</h4>
+
+        <div className="searchKwCont">
+          <input
+            className="searchKw"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            type="text"
+            placeholder="Search keywords"
+          />
+          <FontAwesomeIcon icon={faMagnifyingGlass} />
+        </div>
+
+        {isLoading && <div>Loading...</div>}
+        {isError && <div>Error loading keywords</div>}
+
+        {!isLoading && !isError && (
+          <Table className="tableOP" responsive="md" striped>
+            <thead>
+              <tr>
+                <th></th>
+                <th>#</th>
+                <th
+                  className="clikkableOP keywordsOP"
+                  onClick={() => setOrder("alpha")}
+                >
+                  Keyword
+                </th>
+                <th
+                  className="clikkableOP UsedTimesOP"
+                  onClick={() => setOrder("count")}
+                >
+                  Used
+                </th>
+                <th>Delete</th>
+              </tr>
+            </thead>
+            {renderTableBody()}
+          </Table>
+        )}
+      </div>
     </div>
   );
 };
