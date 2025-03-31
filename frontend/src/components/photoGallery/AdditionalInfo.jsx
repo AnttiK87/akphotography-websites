@@ -5,7 +5,7 @@ import { useLanguage } from "../../hooks/useLanguage";
 import "./ExifExtractor.css";
 
 const AdditionalInfo = ({ picture }) => {
-  console.log(`picture add info ${JSON.stringify(picture.keywords)}`);
+  //console.log(`picture add info ${JSON.stringify(picture.keywords)}`);
   const { language } = useLanguage();
 
   return (

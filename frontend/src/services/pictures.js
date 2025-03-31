@@ -5,6 +5,15 @@ import axios from "axios";
 
 const baseUrl = "/api/pictures/";
 
+let token = null;
+
+//set logged in users token
+const setToken = (newToken) => {
+  token = `Bearer ${newToken}`;
+};
+
+const getToken = () => token;
+
 // retrieve all blogs
 const getAllData = async (category) => {
   const response = await axios.get(`${baseUrl}/allData/?search=${category}`);
@@ -19,20 +28,27 @@ const getPicturesByCategory = async (category) => {
 
 // retrieve all blogs
 const getCategoryLatest = async (category) => {
-  console.log(`category ${category}`);
+  //console.log(`category ${category}`);
   const response = await axios.get(`${baseUrl}latest/?search=${category}`);
   return response.data;
 };
 
 // create new blog
 const create = async (newObject) => {
-  const response = await axios.post(`${baseUrl}upload`, newObject);
+  const config = {
+    headers: { Authorization: token },
+  };
+
+  const response = await axios.post(`${baseUrl}upload`, newObject, config);
   return response.data;
 };
 
 // update the comment
 const update = async (content) => {
-  console.log(`edit picture: ${JSON.stringify(content)}`);
+  const config = {
+    headers: { Authorization: token },
+  };
+
   const newObject = {
     type: content.formData.type,
     textFi: content.formData.textFi,
@@ -42,23 +58,31 @@ const update = async (content) => {
     year: content.formData.year,
   };
 
-  const response = await axios.put(`${baseUrl}${content.pictureId}`, newObject);
+  const response = await axios.put(
+    `${baseUrl}${content.pictureId}`,
+    newObject,
+    config
+  );
   return response.data;
 };
 
 // delete the blog
 const remove = async (pictureId) => {
-  console.log(`id in services: ${pictureId}`);
-  const response = await axios.delete(`${baseUrl}${pictureId}`);
+  const config = {
+    headers: { Authorization: token },
+  };
+  const response = await axios.delete(`${baseUrl}${pictureId}`, config);
   return response.data;
 };
 
 // exports
 export default {
+  setToken,
   getAllData,
   create,
   update,
   remove,
   getPicturesByCategory,
   getCategoryLatest,
+  getToken,
 };

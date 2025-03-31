@@ -3,6 +3,17 @@ import { useState } from "react";
 const useToggleItem = () => {
   const [openItem, setOpenItem] = useState(null);
 
+  const closeItem = (componentClass) => {
+    const components = document.querySelectorAll(componentClass);
+    if (openItem === componentClass) {
+      components.forEach((element) => {
+        element.classList.remove("show");
+        element.classList.add("collapsed");
+      });
+      setOpenItem(null);
+    }
+  };
+
   const toggleItem = (componentClass) => {
     const components = document.querySelectorAll(componentClass);
 
@@ -29,7 +40,7 @@ const useToggleItem = () => {
     }
   };
 
-  return { openItem, toggleItem };
+  return { openItem, closeItem, toggleItem };
 };
 
 export default useToggleItem;

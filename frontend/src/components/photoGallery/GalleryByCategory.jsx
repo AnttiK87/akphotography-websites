@@ -1,8 +1,9 @@
 import { useLanguage } from "../../hooks/useLanguage";
-import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useEffect, useRef } from "react";
+import { useParams } from "react-router-dom";
 
 import useAnimationLauncher from "../../hooks/useAnimationLauncher";
+import useLightBox from "../../hooks/useLightBox";
 
 import Carouselle from "../homeScreen/Carouselle";
 import Gallery from "./Gallery";
@@ -14,31 +15,45 @@ import toesRight from "../../assets/toes-right.png";
 import "./GalleryByCategory.css";
 
 const GalleryByCategory = () => {
+  const { index, category } = useParams();
+  //console.log(`category in gallery: ${category}`);
+  const {
+    openLightBox,
+    closeLightBox,
+    currentIndex,
+    lightBoxOpen,
+    setCategory,
+  } = useLightBox();
+
+  useEffect(() => {
+    setCategory(category);
+  }, [category, setCategory]);
+
+  const isLightBoxOpening = useRef(false);
+
+  useEffect(() => {
+    if (
+      index &&
+      currentIndex === undefined &&
+      !lightBoxOpen &&
+      !isLightBoxOpening.current
+    ) {
+      //console.log("tries open by paramindex");
+      isLightBoxOpening.current = true;
+      openLightBox(index);
+    }
+
+    if (!index && currentIndex === undefined) {
+      //console.log("tries close by paramindex");
+      isLightBoxOpening.current = false;
+      closeLightBox();
+    }
+  }, [index, lightBoxOpen, openLightBox, currentIndex, closeLightBox]);
+
   const { language } = useLanguage();
   const { isVisible, startAnim, elementRef } = useAnimationLauncher(0);
 
-  const location = useLocation();
-
-  const basePath = location.pathname.replace(/\/\d+$/, "");
-  console.log(`basePath: ${basePath}`);
-
-  const [category, setCategory] = useState("");
-
-  useEffect(() => {
-    if (basePath === "/pictures/photo-of-the-month") {
-      setCategory("monthly");
-    } else if (basePath === "/pictures/mammals") {
-      return setCategory("mammals");
-    } else if (basePath === "/pictures/landscapes") {
-      return setCategory("landscapes");
-    } else if (basePath === "/pictures/nature") {
-      return setCategory("nature");
-    } else if (basePath === "/pictures/birds") {
-      return setCategory("birds");
-    }
-  }, [basePath]);
-
-  console.log(`category: ${category}`);
+  //console.log(`category: ${category}`);
 
   const TextByCategory = {
     monthly: {
@@ -105,6 +120,7 @@ const GalleryByCategory = () => {
           isVisible={isVisible}
           className={"prints2"}
         />
+
         <div className="grid-containerPoM">
           <div className={`elementPoM1 ${startAnim ? "fade-in" : ""}`}>
             {headerPhotoOfMonth}

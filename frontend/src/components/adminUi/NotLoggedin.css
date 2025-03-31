@@ -1,0 +1,7 @@
+.notLoggedIn {
+  height: 50vh;
+  width: 100vw !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

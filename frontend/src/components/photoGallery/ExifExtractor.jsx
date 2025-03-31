@@ -34,7 +34,7 @@ const ImageMetadata = ({ src }) => {
     fetchMetadata();
   }, [src]);
 
-  console.log(`metadata: ${JSON.stringify(metadata)}`);
+  //console.log(`metadata: ${JSON.stringify(metadata)}`);
 
   return (
     <div className="exifText">

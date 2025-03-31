@@ -153,7 +153,7 @@ const EditPicture = ({ show, setShow, picture }) => {
     //console.log(`id: ${pictureId}`);
 
     if (!pictureId) {
-      console.error("No comment ID found!");
+      console.error("No picture found!");
       return;
     }
 
@@ -176,7 +176,7 @@ const EditPicture = ({ show, setShow, picture }) => {
       ? null
       : keywordArray;
 
-    console.log(`newkeywords: ${newKeywordsSet}`);
+    //console.log(`newkeywords: ${newKeywordsSet}`);
 
     const formData = {
       type: typeValue,
@@ -187,7 +187,7 @@ const EditPicture = ({ show, setShow, picture }) => {
       year: yearValue,
     };
 
-    console.log(`formdata: ${JSON.stringify(formData)}`);
+    //console.log(`formdata: ${JSON.stringify(formData)}`);
     dispatch(editPicture({ pictureId, formData }));
     handleClose();
   };

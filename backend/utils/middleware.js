@@ -2,8 +2,6 @@
 
 // Dependencies
 const logger = require('./logger')
-//const jwt = require('jsonwebtoken')
-//const User = require('../models/user')
 
 // Middleware for logging HTTP requests
 const requestLogger = (request, response, next) => {
@@ -14,41 +12,44 @@ const requestLogger = (request, response, next) => {
   next()
 }
 
+// Middleware for getting token of token based login
+// Middleware for extracting token from request and checking if it is valid and has active session
+const jwt = require('jsonwebtoken')
+const { SECRET } = require('./config')
+const Session = require('../models/session')
+
+const tokenExtractor = async (req, res, next) => {
+  const authorization = req.get('authorization')
+  if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
+    try {
+      let session = await Session.findOne({
+        where: {
+          activeToken: authorization.substring(7),
+        },
+      })
+      if (!session) {
+        return res.status(401).json({ error: 'You are not logged in!' })
+      }
+      req.decodedToken = jwt.verify(authorization.substring(7), SECRET)
+
+      if (decoded.exp * 1000 < Date.now()) {
+        return res
+          .status(401)
+          .json({ error: 'Your session has expired. Please login again' })
+      }
+    } catch (error) {
+      return res.status(401).json({ error: 'token invalid' })
+    }
+  } else {
+    return res.status(401).json({ error: 'token missing' })
+  }
+  next()
+}
+
 // Middleware for handling unknown endpoint error
 const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: 'unknown endpoint' })
 }
-
-// Middleware for getting token of token based login
-/*const tokenExtractor = (request, response, next) => {
-  const authorization = request.get('authorization')
-  if (authorization && authorization.startsWith('Bearer ')) {
-    request.token = authorization.replace('Bearer ', '')
-  } else {
-    request.token = null
-  }
-  next()
-}*/
-
-// Middleware for getting user information
-/*const userExtractor = async (request, response, next) => {
-  try {
-    const decodedToken = jwt.verify(request.token, process.env.SECRET)
-    if (!decodedToken.id) {
-      return response.status(401).json({ error: 'token invalid' })
-    }
-
-    const user = await User.findById(decodedToken.id)
-    if (!user) {
-      return response.status(404).json({ error: 'user not found' })
-    }
-
-    request.user = user
-    next()
-  } catch (error) {
-    next(error)
-  }
-}*/
 
 // Middleware for handling errors
 const errorHandler = (error, request, response, next) => {
@@ -71,6 +72,5 @@ module.exports = {
   requestLogger,
   unknownEndpoint,
   errorHandler,
-  /*tokenExtractor,
-  userExtractor,*/
+  tokenExtractor,
 }

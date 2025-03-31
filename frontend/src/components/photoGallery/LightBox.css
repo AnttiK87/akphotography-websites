@@ -1,12 +1,22 @@
 .lightBoxBC {
   background-color: black;
-  position: relative;
-  height: 100vh;
   overflow: hidden;
   display: flex;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9000;
+  color: white;
+}
+
+.lightBoxBC.InfoTextLB {
+  align-items: center;
+  justify-content: center;
 }
 .slideShow {
-  position: relative;
+  position: fixed;
   z-index: 100;
 }
 
@@ -56,6 +66,7 @@
   max-height: 99% !important;
   max-width: 100% !important;
   object-fit: contain;
+  user-select: none;
 }
 
 .buttonLB {
@@ -259,10 +270,10 @@
 
 .stars {
   width: fit-content;
-  position: absolute;
+  position: fixed;
   bottom: 0em;
   right: 4em;
-  z-index: 32;
+  z-index: 9001;
   order: 2;
 }
 

@@ -1,3 +1,9 @@
+.containerOP {
+  width: 40em;
+  max-width: 90vw;
+  margin: 2em auto;
+}
+
 .group-header {
   border-bottom: 2px solid black;
   text-align: start;
@@ -32,4 +38,16 @@
 
 .clikkableOP {
   cursor: pointer;
+  width: fit-content !important;
+}
+
+.keywordsOP {
+  width: fit-content;
+}
+
+@media (max-width: 500px) {
+  .tableOP {
+    min-width: 100%;
+    max-width: 100%;
+  }
 }

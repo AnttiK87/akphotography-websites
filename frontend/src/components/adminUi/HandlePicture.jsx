@@ -21,9 +21,13 @@ import {
 import EditPicture from "./EditPicture.jsx";
 import StarRating from "./StarsAdmin.jsx";
 
+import useNotLoggedin from "../../hooks/useNotLoggedIn.js";
+import NotLoggedin from "./NotLoggedIn.jsx";
+
 import "./HandlePicture.css";
 
 const HandlePictures = () => {
+  const { user } = useNotLoggedin();
   const [selectedType, setSelectedType] = useState("");
   const [show, setShow] = useState(false);
   const [currentPicture, setCurrentPicture] = useState(false);
@@ -48,7 +52,7 @@ const HandlePictures = () => {
   const allPictures = useSelector((state) => state.pictures.allPictures);
   const [picturesToShow, setPicturesToShow] = useState([allPictures]);
   const [search, setSearch] = useState("");
-  console.log(`allPictures: ${JSON.stringify(picturesToShow)}`);
+  //console.log(`allPictures: ${JSON.stringify(picturesToShow)}`);
 
   useEffect(() => {
     setPicturesToShow(
@@ -112,6 +116,10 @@ const HandlePictures = () => {
     setShow(true);
   };
 
+  if (!user) {
+    return <NotLoggedin />;
+  }
+
   return (
     <div className={`editImageContainer ${show ? "disableScroll" : ""}`}>
       <div className="marginAddImage">
@@ -150,32 +158,40 @@ const HandlePictures = () => {
             </div>
           </div>
         </Form>
-        <Table className="tableHP" responsive="md" striped>
+        <Table className="tableHP" responsive="lg" striped>
           <thead>
             <tr>
               <th className="pictureHP">Picture</th>
-              <th>#</th>
+              <th className="indexHP">#</th>
               <th
                 className="clikkableOP typeHP"
                 onClick={() => setOrder("type")}
               >
                 Type
               </th>
-              {selectedType === "monthly" ? <th>PoM</th> : null}
+              {selectedType === "monthly" ? (
+                <th className="monthlyHP">PoM</th>
+              ) : null}
               <th
                 className="clikkableOP ratingsHP"
                 onClick={() => setOrder("ratings")}
               >
                 Ratings
               </th>
-              <th className="clikkableOP" onClick={() => setOrder("comments")}>
+              <th
+                className="clikkableOP commentsHP"
+                onClick={() => setOrder("comments")}
+              >
                 Comments
               </th>
-              <th className="clikkableOP" onClick={() => setOrder("keywords")}>
+              <th
+                className="clikkableOP keywordsHP"
+                onClick={() => setOrder("keywords")}
+              >
                 Keywords
               </th>
-              <th>Fi text</th>
-              <th>En text</th>
+              <th className="textHP">Fi text</th>
+              <th className="textHP">En text</th>
               <th>Edit/Delete</th>
             </tr>
           </thead>
@@ -214,12 +230,14 @@ const HandlePictures = () => {
                   <td className="vertical-center">
                     <img className="listItemImg" src={picture.url} />
                   </td>
-                  <td className="vertical-center">{index + 1}</td>
-                  <td className="vertical-center">{picture.type}</td>
+                  <td className="vertical-center indexHP">{index + 1}</td>
+                  <td className="vertical-center typeHP">{picture.type}</td>
                   {selectedType === "monthly" ? (
-                    <td className="vertical-center">{picture.month_year}</td>
+                    <td className="vertical-center monthlyHP">
+                      {picture.month_year}
+                    </td>
                   ) : null}
-                  <td className="vertical-center">
+                  <td className="vertical-center ratingsHP">
                     <div className="HPStarsAndCount">
                       <StarRating ratings={picture?.ratings || []} />{" "}
                       <p className="ratingsLenghtHP">
@@ -227,23 +245,23 @@ const HandlePictures = () => {
                       </p>
                     </div>
                   </td>
-                  <td className="vertical-center">
+                  <td className="vertical-center commentsHP">
                     {picture.comments?.reduce(
                       (sum, comment) => sum + 1 + comment.replies.length,
                       0
                     ) || 0}
                   </td>
-                  <td className="vertical-center">
+                  <td className="vertical-center keywordsHP">
                     {picture.keywords?.length || 0}
                   </td>
-                  <td className="vertical-center">
+                  <td className="vertical-center textHP">
                     {picture.text?.textFi ? (
                       <FontAwesomeIcon className="iconCheck" icon={faCheck} />
                     ) : (
                       <FontAwesomeIcon className="iconNoText" icon={faXmark} />
                     )}
                   </td>
-                  <td className="vertical-center">
+                  <td className="vertical-center textHP">
                     {picture.text?.textEn ? (
                       <FontAwesomeIcon className="iconCheck" icon={faCheck} />
                     ) : (

@@ -84,7 +84,7 @@ const Menu = () => {
     { label: language === "fin" ? "Linnut" : "Birds", link: "/pictures/birds" },
     {
       label: language === "fin" ? "Kuukauden kuva" : "Photo of the Month",
-      link: "/pictures/photo-of-the-month",
+      link: "/pictures/monthly",
     },
   ];
 

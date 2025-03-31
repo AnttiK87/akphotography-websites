@@ -11,6 +11,9 @@ const commentsRouter = require('./controllers/comments')
 const repliesRouter = require('./controllers/replies')
 const keywordsRouter = require('./controllers/keywords')
 const contactFormRouter = require('./controllers/contactForm')
+const usersRouter = require('./controllers/users')
+const loginRouter = require('./controllers/login')
+const logoutRouter = require('./controllers/logout')
 
 //for serving photos at the backend
 const path = require('path')
@@ -24,6 +27,9 @@ app.use('/api/comments', commentsRouter)
 app.use('/api/replies', repliesRouter)
 app.use('/api/keywords', keywordsRouter)
 app.use('/api/contact', contactFormRouter)
+app.use('/api/users', usersRouter)
+app.use('/api/login', loginRouter)
+app.use('/api/logout', logoutRouter)
 
 connectToDatabase()
 

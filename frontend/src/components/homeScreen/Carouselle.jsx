@@ -1,5 +1,7 @@
 import PropTypes from "prop-types";
 
+import { useLocation } from "react-router-dom";
+
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination } from "swiper/modules";
 
@@ -7,6 +9,9 @@ import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { initializeCategoryLatest } from "../../reducers/pictureReducer";
 
+//import { useLocation } from "react-router-dom";
+
+import useLightBox from "../../hooks/useLightBox";
 // import Swiper and modules styles
 import "swiper/css";
 import "swiper/css/navigation";
@@ -14,34 +19,41 @@ import "swiper/css/pagination";
 
 import "./Carouselle.css";
 
-import { useNavigate, useLocation } from "react-router-dom";
-
-//import { useLanguage } from "../../hooks/useLanguage";
-//import { formatMonthYear } from "../../utils/dateUtils";
-
 const Carouselle = ({ category }) => {
-  const navigate = useNavigate();
-  //const { language } = useLanguage();
-  //set dispatch
-  const dispatch = useDispatch();
   const location = useLocation();
+  const dispatch = useDispatch();
+  //const location = useLocation();
 
-  console.log(`path: ${location.pathname.replace(/\/\d+$/, "")}`);
+  const { openLightBox, setCategory } = useLightBox();
 
-  const basePath =
-    location.pathname.replace(/\/\d+$/, "") === "/"
-      ? "/pictures/photo-of-the-month"
-      : location.pathname.replace(/\/\d+$/, "");
+  //console.log(`path: ${location.pathname.replace(/\/\d+$/, "")}`);
 
-  //Initialize blogs
   useEffect(() => {
     dispatch(initializeCategoryLatest(category));
   }, [dispatch, category]);
 
-  //get pictures state
   const latestPictures = useSelector(
     (state) => state.pictures.latestCategoryPictures
   );
+
+  const handleOpenLightbox = (index) => {
+    if (location.pathname === "/") {
+      openLightBox(index);
+      setCategory("monthly");
+      window.history.pushState(
+        { lightBox: true },
+        "",
+        `/pictures/monthly/${index}`
+      );
+    } else {
+      openLightBox(index);
+      window.history.pushState(
+        { lightBox: true },
+        "",
+        `${location.pathname}/${index}`
+      );
+    }
+  };
 
   return (
     <>
@@ -57,21 +69,14 @@ const Carouselle = ({ category }) => {
           latestPictures.map((picture, index) => (
             <SwiperSlide key={picture.id}>
               <div className="carouselle">
-                <div
-                  className="carouTextAndImg"
-                  onClick={() => {
-                    sessionStorage.setItem("scrollPosition", window.scrollY);
-                    navigate(`${basePath}/${index}`, {
-                      state: { from: location.pathname },
-                    });
-                  }}
-                >
+                <div className="carouTextAndImg">
+                  <div
+                    onClick={() => {
+                      handleOpenLightbox(index);
+                    }}
+                    className="clickArea"
+                  />
                   <img className="carouselleImg" src={picture.url} />
-                  {/*<div className="carouselleText">
-                    <h1 className="carouselleH1">
-                      {formatMonthYear(picture.month_year, language)}
-                    </h1>
-                  </div>*/}
                 </div>
               </div>
             </SwiperSlide>

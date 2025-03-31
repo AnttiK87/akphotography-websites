@@ -6,6 +6,8 @@ const Comment = require('./comment')
 const Reply = require('./reply')
 const Keyword = require('./keyword')
 const PictureKeyword = require('./PictureKeyword')
+const User = require('./user')
+const Session = require('./session')
 
 Picture.hasOne(Text, { foreignKey: 'pictureId', onDelete: 'CASCADE' })
 Text.belongsTo(Picture, { foreignKey: 'pictureId' })
@@ -44,4 +46,6 @@ module.exports = {
   Reply,
   Keyword,
   PictureKeyword,
+  User,
+  Session,
 }
