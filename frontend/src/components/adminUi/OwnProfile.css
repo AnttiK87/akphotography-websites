@@ -1,7 +1,18 @@
 .containerOP {
   width: 40em;
-  max-width: 90vw;
-  margin: 2em auto;
+  width: 100%;
+  margin: 2em 0 4em 0;
+  padding: 0 2em;
+}
+
+.InfoAndKeywords {
+  margin-top: 1em;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  max-height: 61vh;
+  justify-content: center;
+  overflow: hidden;
 }
 
 .group-header {
@@ -27,13 +38,30 @@
   text-align: start;
   border: none !important;
   margin: 0 !important;
-  overflow: hidden;
   padding: 0 !important;
 }
 
-.tableOP {
+.tableOP,
+.infoCont {
+  padding: 0 5em 0 0;
+  text-align: start;
   min-width: 500px;
   max-width: 90%;
+}
+
+.HeaderHK {
+  text-align: start;
+}
+
+.keywordsContainerOP {
+  max-height: 87%;
+  overflow-y: auto;
+}
+
+.EditButtonsOP {
+  display: flex;
+  flex-direction: column;
+  width: 80%;
 }
 
 .clikkableOP {
@@ -45,9 +73,69 @@
   width: fit-content;
 }
 
+.mainHeaderEKW {
+  display: flex;
+  flex-direction: row;
+  width: 400px;
+  max-width: 100%;
+  justify-content: space-between;
+}
+.inputKeyword {
+  width: 90% !important;
+}
+.editKW {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #f8f7f5;
+  font-size: 1em;
+  color: black;
+  border: 5px solid #00433c;
+  border-radius: 15px;
+  padding: 1em 2em 1em 2em;
+  max-height: 90vh;
+  width: fit-content;
+  max-width: 100%;
+  text-align: start;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  z-index: 1010 !important;
+}
+
+@media (max-width: 990px) {
+  .InfoAndKeywords {
+    flex-direction: column;
+    width: 100%;
+    max-height: fit-content;
+    align-content: center;
+    flex-wrap: wrap;
+  }
+
+  .KeywordsTableCont,
+  .infoCont {
+    margin-top: 2em;
+  }
+
+  .editKW {
+    width: 60%;
+    padding: 0.5em;
+  }
+}
+
 @media (max-width: 500px) {
-  .tableOP {
+  .tableOP,
+  .infoCont {
     min-width: 100%;
     max-width: 100%;
+    padding: 0;
+    text-align: center;
+  }
+
+  .editKW {
+    width: 90%;
   }
 }

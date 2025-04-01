@@ -21,7 +21,7 @@ import {
 import EditPicture from "./EditPicture.jsx";
 import StarRating from "./StarsAdmin.jsx";
 
-import useNotLoggedin from "../../hooks/useNotLoggedIn.js";
+import useNotLoggedin from "../../hooks/useNotLoggedin.js";
 import NotLoggedin from "./NotLoggedIn.jsx";
 
 import "./HandlePicture.css";
@@ -131,7 +131,7 @@ const HandlePictures = () => {
                 Select type
               </label>
               <select
-                className="form__field"
+                className="form__field SelectTypeHP"
                 id="type"
                 name="type"
                 required

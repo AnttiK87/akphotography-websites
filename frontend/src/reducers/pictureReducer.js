@@ -3,6 +3,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import pictureService from "../services/pictures";
 import { showMessage } from "./messageReducer";
+import { clearUser } from "./userReducer.js";
 
 //create slice
 const pictureSlice = createSlice({
@@ -200,10 +201,18 @@ export const editPicture = (content) => {
         )
       );
     } catch (error) {
+      console.log("error editing picture", error);
+      if (error.response && error.response.status === 401) {
+        localStorage.removeItem("loggedAdminUser");
+        window.location.href = "/admin";
+        dispatch(clearUser());
+      }
       dispatch(
         showMessage(
           {
-            text: `Failed to edit Picture: ${error.message}`,
+            text: `Failed to edit Picture: ${
+              error.response.data.error || error.response.statusText
+            }`,
             type: "error",
           },
           3
@@ -229,6 +238,11 @@ export const removePicture = (pictureId) => {
         )
       );
     } catch (error) {
+      if (error.response && error.response.status === 401) {
+        localStorage.removeItem("loggedAdminUser");
+        window.location.href = "/admin";
+        dispatch(clearUser());
+      }
       const errorMessage =
         error.response && error.response.status === 404
           ? `Failed to delete the picture: ${error.message}`

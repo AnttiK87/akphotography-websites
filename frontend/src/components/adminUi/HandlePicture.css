@@ -25,6 +25,10 @@
   margin: 0 1em;
 }
 
+.SelectTypeHP {
+  min-width: fit-content !important;
+}
+
 .HandleEditIcons {
   padding: 0 0.5em;
 }

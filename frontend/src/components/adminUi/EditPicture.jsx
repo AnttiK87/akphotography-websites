@@ -87,7 +87,7 @@ const EditPicture = ({ show, setShow, picture }) => {
     })
   );
 
-  console.log(`picture ${JSON.stringify(picture)}`);
+  //console.log(`picture ${JSON.stringify(picture)}`);
 
   useEffect(() => {
     if (picture && show) {
@@ -108,9 +108,9 @@ const EditPicture = ({ show, setShow, picture }) => {
 
   const comments = useSelector((state) => state.comments.comments);
 
-  const deleteComment = ({ comment, userId }) => {
+  const deleteComment = (comment) => {
     if (window.confirm(`Do you really want to delete this comment?`)) {
-      dispatch(remove({ comment, userId }));
+      dispatch(remove({ comment }));
     }
     return;
   };
@@ -486,9 +486,7 @@ const EditPicture = ({ show, setShow, picture }) => {
                       <FontAwesomeIcon
                         className="iconDeleteEP"
                         icon={faTrash}
-                        onClick={() =>
-                          deleteComment({ comment, userId: "admin" })
-                        }
+                        onClick={() => deleteComment(comment)}
                       />
                       <div
                         onClick={() => handleReplyComment(comment)}
