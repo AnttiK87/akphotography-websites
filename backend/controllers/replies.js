@@ -1,7 +1,9 @@
 const router = require('express').Router()
 const { Op } = require('sequelize')
+const jwt = require('jsonwebtoken')
+const { SECRET } = require('../utils/config')
 
-const { Reply, Comment } = require('../models')
+const { Reply, Comment, Session } = require('../models')
 
 router.get('/', async (req, res) => {
   const where = {}
@@ -124,7 +126,25 @@ const replyFinder = async (req, res, next) => {
 }
 
 router.put('/:id', replyFinder, async (req, res) => {
-  if (req.body.referenceUserId !== req.reply.userId) {
+  const authorization = req.get('authorization')
+  if (authorization) {
+    if (!authorization || !authorization.toLowerCase().startsWith('bearer ')) {
+      return next(new Error('TOKEN_MISSING'))
+    }
+
+    const token = authorization.substring(7)
+    const session = await Session.findOne({ where: { activeToken: token } })
+
+    if (!session) {
+      return next(new Error('NOT_LOGGED_IN'))
+    }
+
+    req.decodedToken = jwt.verify(token, SECRET)
+
+    if (req.decodedToken.exp <= Math.floor(Date.now() / 1000)) {
+      return next(new Error('TOKEN_EXPIRED'))
+    }
+  } else if (req.body.userId != req.reply.userId) {
     return res.status(401).json({ error: 'unauthorized' })
   }
 
@@ -139,7 +159,25 @@ router.put('/:id', replyFinder, async (req, res) => {
 })
 
 router.delete('/:id', replyFinder, async (req, res) => {
-  if (req.body.userId != req.reply.userId && req.body.userId != 'admin') {
+  const authorization = req.get('authorization')
+  if (authorization) {
+    if (!authorization || !authorization.toLowerCase().startsWith('bearer ')) {
+      return next(new Error('TOKEN_MISSING'))
+    }
+
+    const token = authorization.substring(7)
+    const session = await Session.findOne({ where: { activeToken: token } })
+
+    if (!session) {
+      return next(new Error('NOT_LOGGED_IN'))
+    }
+
+    req.decodedToken = jwt.verify(token, SECRET)
+
+    if (req.decodedToken.exp <= Math.floor(Date.now() / 1000)) {
+      return next(new Error('TOKEN_EXPIRED'))
+    }
+  } else if (req.body.userId != req.reply.userId) {
     return res.status(401).json({ error: 'unauthorized' })
   }
 

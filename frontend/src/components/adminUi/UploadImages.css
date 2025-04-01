@@ -1,7 +1,8 @@
 .marginAddImage {
   width: 40em;
-  max-width: 90vw;
+  max-width: 90%;
   margin: 2em auto;
+  overflow: hidden;
 }
 
 .input {
@@ -10,7 +11,7 @@
 
 .form__field {
   margin: 0.25em 0;
-  min-width: 10em;
+  min-width: auto;
 }
 
 .button-primary {

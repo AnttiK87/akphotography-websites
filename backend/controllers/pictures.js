@@ -32,20 +32,18 @@ router.post(
   tokenExtractor,
   upload.single('image'),
   async (req, res, next) => {
-    console.log(req.body)
     if (!req.file) {
       return res.status(400).json({ error: 'File was not uploaded' })
     }
 
-    const metadata = await sharp(req.file.path).metadata()
-    const { width, height } = metadata
+    const { width, height } = await sharp(req.file.path).metadata()
 
     const picture = await Picture.create({
       fileName: req.file.filename,
-      url: '/uploads/pictures/' + req.file.filename,
+      url: `/uploads/pictures/${req.file.filename}`,
       type: req.body.type,
-      width,
-      height,
+      width: width,
+      height: height,
     })
 
     if (req.body.textFi || req.body.textEn) {
@@ -55,41 +53,17 @@ router.post(
         pictureId: picture.id,
       })
 
-      if (req.body.year && req.body.month) {
-        picture.month_year =
-          Number(req.body.year) * 100 + Number(req.body.month)
-      }
-
       picture.textId = text.id
-      await picture.save()
     }
 
+    if (req.body.year && req.body.month) {
+      picture.month_year = Number(req.body.year) * 100 + Number(req.body.month)
+    }
+
+    await picture.save()
+
     if (req.body.keywords) {
-      let keywords = req.body.keywords
-
-      if (typeof keywords === 'string') {
-        keywords = keywords.split(',').map((kw) => kw.trim())
-      }
-
-      console.log(`keywords: ${keywords}`)
-
-      const existingKeywords = await Keyword.findAll({
-        where: { keyword: keywords },
-      })
-
-      const existingKeywordSet = new Set(
-        existingKeywords.map((kw) => kw.keyword),
-      )
-
-      const newKeywords = keywords.filter((kw) => !existingKeywordSet.has(kw))
-
-      const createdKeywords = await Promise.all(
-        newKeywords.map((keyword) => Keyword.create({ keyword })),
-      )
-
-      const allKeywords = [...existingKeywords, ...createdKeywords]
-
-      await picture.addKeywords(allKeywords)
+      await attachKeywordsToPicture(picture, req.body.keywords)
     }
 
     res.json({ message: 'File uploaded successfully!', picture })
@@ -223,135 +197,59 @@ const pictureFinder = async (req, res, next) => {
 }
 
 router.put('/:id', tokenExtractor, pictureFinder, async (req, res) => {
-  console.log(`req.body: ${JSON.stringify(req.body)}`)
-  console.log(`req.picture: ${JSON.stringify(req.picture)}`)
-  if (req.picture) {
-    if (req.picture.text === null && (req.body?.textFi || req.body?.textEn)) {
-      try {
-        const text = await Text.create({
-          textFi: req.body?.textFi || '',
-          textEn: req.body?.textEn || '',
-          pictureId: req.picture.id,
-        })
+  if (!req.picture) {
+    return res.status(404).json({ error: 'Picture not found' })
+  }
 
-        req.picture.textId = text.id
-        req.picture.text = text.textFi
-        req.picture.text = text.textEn
-      } catch (error) {
-        console.error('Error saving text:', error)
-        return res.status(500).json({ error: 'Error saving text to database' })
-      }
-    } else if (
-      (req.picture.text && req.picture?.text?.textFi != req.body?.textFi) ||
-      req.picture?.text?.textEn != req.body?.textEn
-    ) {
-      try {
-        const text = await Text.findByPk(req.picture.text.id)
-
-        if (text) {
-          text.textFi = req.body.textFi === null ? null : req.body.textFi
-          text.textEn = req.body.textEn === null ? null : req.body.textEn
-
-          await text.save()
-        }
-
-        req.picture.text.textFi = text.textFi
-        req.picture.text.textEn = text.textEn
-      } catch (error) {
-        console.error('Error editing text:', error)
-        return res.status(500).json({ error: 'Error editing text to database' })
-      }
-    }
-
-    if (req.body.keywords != null) {
-      let keywords = req.body.keywords
-
-      if (typeof keywords === 'string') {
-        keywords = keywords.split(',').map((kw) => kw.trim())
-      }
-
-      console.log(`keywords: ${keywords}`)
-
-      const existingKeywords = await Keyword.findAll({
-        where: { keyword: keywords },
-      })
-
-      const existingKeywordSet = new Set(
-        existingKeywords.map((kw) => kw.keyword),
-      )
-
-      // Löydä uudet avainsanat, joita ei vielä ole kannassa
-      const newKeywords = keywords.filter((kw) => !existingKeywordSet.has(kw))
-
-      // Luo puuttuvat avainsanat
-      const createdKeywords = await Promise.all(
-        newKeywords.map((keyword) => Keyword.create({ keyword })),
-      )
-
-      // Yhdistä kaikki avainsanat (vanhat + uudet)
-      const allKeywords = [...existingKeywords, ...createdKeywords]
-
-      // 🔹 **POISTO-LOGIIKKA:**
-      // Hae nykyiset avainsanat, jotka on liitetty kuvaan
-      const currentKeywords = await req.picture?.keywords
-
-      // Etsi avainsanat, jotka pitää poistaa (ovat kannassa mutta eivät uudessa listassa)
-      const keywordsToRemove = currentKeywords.filter(
-        (kw) => !keywords.includes(kw.keyword),
-      )
-
-      if (keywordsToRemove.length > 0) {
-        await req.picture.removeKeywords(keywordsToRemove)
-      }
-
-      console.log(`all keywords: ${JSON.stringify(allKeywords)}`)
-
-      // Päivitä kuvan avainsanat
-      await req.picture.setKeywords(allKeywords)
-    }
-
-    if (req.picture.type != req.body.type) {
-      req.picture.type = req.body.type
-    }
-
-    if (req.body.type === 'monthly') {
-      if (req.body.year && req.body.month) {
-        req.picture.month_year =
-          Number(req.body.year) * 100 + Number(req.body.month)
-      }
-    } else if (req.picture.month_year != null && req.body.type != 'monthly') {
-      req.picture.month_year = null
-    }
-
-    await req.picture.save()
-
-    await req.picture.reload({
-      include: [
-        { model: Text, attributes: ['id', 'textFi', 'textEn'] },
-        {
-          model: Keyword,
-          attributes: { exclude: 'id' },
-          through: { attributes: [] },
-        },
-      ],
+  if (!req.picture.text && (req.body?.textFi || req.body?.textEn)) {
+    const text = await Text.create({
+      textFi: req.body?.textFi || '',
+      textEn: req.body?.textEn || '',
+      pictureId: req.picture.id,
     })
 
-    console.log(`returned updated picture: ${JSON.stringify(req.picture)}`)
-    res.json(req.picture)
-  } else {
-    res.status(404).end()
+    req.picture.textId = text.id
+  } else if (req.picture.text) {
+    const text = await Text.findByPk(req.picture.text.id)
+    if (text) {
+      text.textFi = req.body.textFi ?? text.textFi
+      text.textEn = req.body.textEn ?? text.textEn
+      await text.save()
+    }
   }
+
+  await attachKeywordsToPicture(req.picture, req.body.keywords)
+
+  if (req.picture.type !== req.body.type) {
+    req.picture.type = req.body.type
+  }
+
+  if (req.body.type === 'monthly' && req.body.year && req.body.month) {
+    req.picture.month_year =
+      Number(req.body.year) * 100 + Number(req.body.month)
+  } else if (req.picture.month_year && req.body.type !== 'monthly') {
+    req.picture.month_year = null
+  }
+
+  await req.picture.save()
+
+  await req.picture.reload({
+    include: [
+      { model: Text, attributes: ['id', 'textFi', 'textEn'] },
+      {
+        model: Keyword,
+        attributes: { exclude: 'id' },
+        through: { attributes: [] },
+      },
+    ],
+  })
+
+  res.json(req.picture)
 })
 
 router.delete('/:id', tokenExtractor, pictureFinder, async (req, res) => {
-  const user = await User.findByPk(req.decodedToken.id)
-  if (user.id !== req.blog.userId) {
-    return res.status(401).json({ error: 'unauthorized' })
-  }
-
   if (req.picture) {
     try {
-      // Poista tiedosto levyltä
       const filePath = path.join(__dirname, '../', req.picture.url)
       if (fs.existsSync(filePath)) {
         fs.unlinkSync(filePath)
@@ -360,7 +258,6 @@ router.delete('/:id', tokenExtractor, pictureFinder, async (req, res) => {
         console.warn(`File not found: ${filePath}`)
       }
 
-      // Poista tietue tietokannasta
       await req.picture.destroy()
       res.status(204).end()
     } catch (error) {
@@ -371,5 +268,50 @@ router.delete('/:id', tokenExtractor, pictureFinder, async (req, res) => {
     res.status(404).json({ error: 'Picture not found' })
   }
 })
+
+const attachKeywordsToPicture = async (picture, keywords) => {
+  if (!keywords) return
+
+  if (typeof keywords === 'string') {
+    keywords = keywords.split(',').map((kw) => kw.trim())
+  }
+
+  // Haetaan jo olemassa olevat avainsanat tietokannasta
+  const existingKeywords = await Keyword.findAll({
+    where: { keyword: keywords },
+  })
+
+  const existingKeywordSet = new Set(existingKeywords.map((kw) => kw.keyword))
+
+  // Suodatetaan uudet avainsanat, joita ei vielä ole tietokannassa
+  const newKeywords = keywords.filter((kw) => !existingKeywordSet.has(kw))
+
+  // Luodaan uudet avainsanat, jos niitä on
+  let createdKeywords = []
+  if (newKeywords.length > 0) {
+    createdKeywords = await Keyword.bulkCreate(
+      newKeywords.map((keyword) => ({ keyword })),
+    )
+  }
+
+  // Yhdistetään kaikki avainsanat (olemassa olevat + uudet)
+  const allKeywords = [...existingKeywords, ...createdKeywords]
+
+  // Haetaan kuvan nykyiset avainsanat
+  const currentKeywords = await picture.getKeywords()
+
+  // Selvitetään poistettavat avainsanat
+  const keywordsToRemove = currentKeywords.filter(
+    (kw) => !keywords.includes(kw.keyword),
+  )
+
+  // Poistetaan avainsanat, joita ei enää ole mukana
+  if (keywordsToRemove.length > 0) {
+    await picture.removeKeywords(keywordsToRemove)
+  }
+
+  // Liitetään päivitetyt avainsanat kuvaan
+  await picture.setKeywords(allKeywords)
+}
 
 module.exports = router

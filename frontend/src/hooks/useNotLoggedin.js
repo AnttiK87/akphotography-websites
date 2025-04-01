@@ -1,26 +1,30 @@
 //dependencies
-import { useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const useNotLoggedin = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const userInStore = useSelector((state) => state.user.user);
-  const user = !userInStore
-    ? localStorage.getItem("loggedAdminUser")
-    : userInStore;
+  const userInLocalStorage = JSON.parse(
+    localStorage.getItem("loggedAdminUser") || "null"
+  );
+  const [user, setUser] = useState(userInStore);
 
   useEffect(() => {
-    if (!user) {
+    if (!user && !userInStore && !userInLocalStorage) {
       const timer = setTimeout(() => {
         navigate("/admin");
       }, 3000);
 
       return () => clearTimeout(timer);
-    } else {
-      return;
+    } else if (!user && userInStore) {
+      setUser(userInStore);
+    } else if (!user && !userInStore && userInLocalStorage) {
+      setUser(userInLocalStorage);
     }
-  }, [user, navigate]);
+  }, [user, userInStore, userInLocalStorage, dispatch, navigate]);
 
   return { user };
 };

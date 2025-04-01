@@ -20,30 +20,29 @@ const Session = require('../models/session')
 
 const tokenExtractor = async (req, res, next) => {
   const authorization = req.get('authorization')
-  if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
-    try {
-      let session = await Session.findOne({
-        where: {
-          activeToken: authorization.substring(7),
-        },
-      })
-      if (!session) {
-        return res.status(401).json({ error: 'You are not logged in!' })
-      }
-      req.decodedToken = jwt.verify(authorization.substring(7), SECRET)
 
-      if (decoded.exp * 1000 < Date.now()) {
-        return res
-          .status(401)
-          .json({ error: 'Your session has expired. Please login again' })
-      }
-    } catch (error) {
-      return res.status(401).json({ error: 'token invalid' })
-    }
-  } else {
-    return res.status(401).json({ error: 'token missing' })
+  if (!authorization || !authorization.toLowerCase().startsWith('bearer ')) {
+    return next(new Error('TOKEN_MISSING'))
   }
-  next()
+
+  try {
+    const token = authorization.substring(7)
+    const session = await Session.findOne({ where: { activeToken: token } })
+
+    if (!session) {
+      return next(new Error('NOT_LOGGED_IN'))
+    }
+
+    req.decodedToken = jwt.verify(token, SECRET)
+
+    if (req.decodedToken.exp <= Math.floor(Date.now() / 1000)) {
+      return next(new Error('TOKEN_EXPIRED'))
+    }
+
+    next()
+  } catch (error) {
+    return next(new Error('TOKEN_INVALID'))
+  }
 }
 
 // Middleware for handling unknown endpoint error
@@ -51,10 +50,10 @@ const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: 'unknown endpoint' })
 }
 
-// Middleware for handling errors
 const errorHandler = (error, request, response, next) => {
   console.error(error.message)
 
+  // Sequelize-virheet
   if (error.name === 'SequelizeValidationError') {
     const messages = error.errors.map((err) => err.message)
     return response.status(400).json({ error: 'Validation error', messages })
@@ -64,7 +63,25 @@ const errorHandler = (error, request, response, next) => {
     return response.status(400).json({ error: 'Username must be unique' })
   }
 
-  next(error)
+  // Token- ja autentikointivirheet
+  switch (error.message) {
+    case 'TOKEN_MISSING':
+      return response.status(401).json({ error: 'Token missing' })
+
+    case 'NOT_LOGGED_IN':
+      return response.status(401).json({ error: 'You are not logged in!' })
+
+    case 'TOKEN_EXPIRED':
+      return response
+        .status(401)
+        .json({ error: 'Your session has expired. Please login again' })
+
+    case 'TOKEN_INVALID':
+      return response.status(401).json({ error: 'Invalid token' })
+
+    default:
+      return response.status(500).json({ error: 'Something went wrong' })
+  }
 }
 
 // Exports

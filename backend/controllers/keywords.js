@@ -4,6 +4,8 @@
 const router = require('express').Router()
 const Keyword = require('../models/keyword')
 const Picture = require('../models/picture')
+const { tokenExtractor } = require('../utils/middleware')
+
 // Get all comments
 router.get('/', async (req, res) => {
   console.log('called keywords')
@@ -17,8 +19,31 @@ router.get('/', async (req, res) => {
   res.json(keywords)
 })
 
-router.delete('/:id', async (req, res) => {
-  console.log(`reqparams: ${req.params.id}`)
+router.put('/update/:id', tokenExtractor, async (req, res) => {
+  console.log(
+    'ended up here editing keyword with data: ',
+    JSON.stringify(req.body),
+  )
+  const keyword = await Keyword.findByPk(Number(req.params.id))
+  if (!keyword) {
+    return res.status(404).json({ error: 'Keyword not found' })
+  }
+
+  keyword.keyword = req.body.keyword
+  await keyword.save()
+
+  await keyword.reload({
+    include: {
+      model: Picture,
+      attributes: ['id'],
+      through: { attributes: [] },
+    },
+  })
+
+  res.json(keyword)
+})
+
+router.delete('/:id', tokenExtractor, async (req, res) => {
   const keyword = await Keyword.findByPk(Number(req.params.id))
   if (req.body.userId != 'admin') {
     return res.status(401).json({ error: 'unauthorized' })

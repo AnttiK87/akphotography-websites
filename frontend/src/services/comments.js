@@ -1,4 +1,5 @@
 import axios from "axios";
+import picturesService from "../services/pictures";
 
 const baseUrl = "/api/comments";
 
@@ -35,11 +36,19 @@ const update = async (content) => {
 };
 
 const remove = async (content) => {
-  console.log(`remove content: ${JSON.stringify(content)}`);
-
-  const response = await axios.delete(`${baseUrl}/${content.comment.id}`, {
-    data: content,
-  });
+  const token = picturesService.getToken();
+  const config = token
+    ? {
+        headers: { Authorization: token },
+        data: content,
+      }
+    : {
+        data: content,
+      };
+  const response = await axios.delete(
+    `${baseUrl}/${content.comment.id}`,
+    config
+  );
 
   return response.data;
 };

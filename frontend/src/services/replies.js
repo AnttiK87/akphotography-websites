@@ -1,4 +1,5 @@
 import axios from "axios";
+import picturesService from "../services/pictures";
 
 const baseUrl = "/api/replies";
 
@@ -16,6 +17,10 @@ const create = async (newObject) => {
 
 // update the comment
 const update = async (content) => {
+  const token = picturesService.getToken();
+  const config = {
+    headers: { Authorization: token },
+  };
   console.log(`edit reply: ${JSON.stringify(content)}`);
   const newObject = {
     reply: content.formData.reply,
@@ -25,15 +30,24 @@ const update = async (content) => {
 
   const response = await axios.put(
     `${baseUrl}/${content.commentId}`,
-    newObject
+    newObject,
+    config
   );
   return response.data;
 };
 
 const remove = async (content) => {
-  const response = await axios.delete(`${baseUrl}/${content.reply.id}`, {
-    data: content,
-  });
+  console.log("reply content: ", JSON.stringify(content));
+  const token = picturesService.getToken();
+  const config = token
+    ? {
+        headers: { Authorization: token },
+        data: content,
+      }
+    : {
+        data: content,
+      };
+  const response = await axios.delete(`${baseUrl}/${content.reply.id}`, config);
 
   return response.data;
 };

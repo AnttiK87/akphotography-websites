@@ -75,10 +75,9 @@ export const getUser = (id) => {
 
 // Creating new user and setting it to the state with error handling
 export const modifyUser = (content) => {
-  console.log("tries to modify user with data:", JSON.stringify(content));
   return async (dispatch) => {
     try {
-      const newUser = await userService.update(content);
+      const newUser = await userService.updateFirstLogin(content);
       dispatch(updateUser(newUser));
 
       dispatch(
@@ -96,6 +95,68 @@ export const modifyUser = (content) => {
         showMessage(
           {
             text: `Failed to change user info ${error.message}`,
+            type: "error",
+          },
+          5
+        )
+      );
+    }
+  };
+};
+
+export const changePassword = (content) => {
+  console.log("tries to modify password with data:", JSON.stringify(content));
+  return async (dispatch) => {
+    try {
+      const updatedUser = await userService.changePassword(content);
+      dispatch(updateUser(updatedUser));
+
+      dispatch(
+        showMessage(
+          {
+            text: `Password changed!`,
+            type: "success",
+          },
+          5
+        )
+      );
+    } catch (error) {
+      // handle possible error and show error message
+      dispatch(
+        showMessage(
+          {
+            text: `Failed to change user info ${error.message}`,
+            type: "error",
+          },
+          5
+        )
+      );
+    }
+  };
+};
+
+export const updateUserInfo = (content) => {
+  console.log("tries to modify password with data:", JSON.stringify(content));
+  return async (dispatch) => {
+    try {
+      const updatedUser = await userService.updateInfo(content);
+      dispatch(updateUser(updatedUser));
+
+      dispatch(
+        showMessage(
+          {
+            text: `User information changed!`,
+            type: "success",
+          },
+          5
+        )
+      );
+    } catch (error) {
+      // handle possible error and show error message
+      dispatch(
+        showMessage(
+          {
+            text: `Failed to change user information ${error.message}`,
             type: "error",
           },
           5

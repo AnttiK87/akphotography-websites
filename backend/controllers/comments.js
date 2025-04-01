@@ -1,7 +1,9 @@
 const router = require('express').Router()
 const { Op } = require('sequelize')
+const jwt = require('jsonwebtoken')
+const { SECRET } = require('../utils/config')
 
-const { Comment } = require('../models')
+const { Comment, Session } = require('../models')
 
 router.get('/', async (req, res) => {
   const where = {}
@@ -61,10 +63,29 @@ router.put('/:id', commentFinder, async (req, res) => {
   }
 })
 
-router.delete('/:id', commentFinder, async (req, res) => {
-  console.log(`regbody for delete: ${JSON.stringify(req.body)}`)
-  console.log(`reg.comment: ${JSON.stringify(req.comment)}`)
-  if (req.body.userId != req.comment.userId && req.body.userId != 'admin') {
+router.delete('/:id', commentFinder, async (req, res, next) => {
+  //console.log(`regbody for delete: ${JSON.stringify(req.body)}`)
+  //console.log(`reg.comment: ${JSON.stringify(req.comment)}`)
+  //console.log(`reg.authorization: ${req.get('authorization')}`)
+  const authorization = req.get('authorization')
+  if (authorization) {
+    if (!authorization || !authorization.toLowerCase().startsWith('bearer ')) {
+      return next(new Error('TOKEN_MISSING'))
+    }
+
+    const token = authorization.substring(7)
+    const session = await Session.findOne({ where: { activeToken: token } })
+
+    if (!session) {
+      return next(new Error('NOT_LOGGED_IN'))
+    }
+
+    req.decodedToken = jwt.verify(token, SECRET)
+
+    if (req.decodedToken.exp <= Math.floor(Date.now() / 1000)) {
+      return next(new Error('TOKEN_EXPIRED'))
+    }
+  } else if (req.body.userId != req.comment.userId) {
     return res.status(401).json({ error: 'unauthorized' })
   }
 
