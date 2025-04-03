@@ -15,14 +15,14 @@ const AdditionalInfo = ({ picture }) => {
       </div>
       <div>
         <div className="additionalText">
-          <b>{language === "fin" ? "Lisätty: " : "Added: "}</b>
+          {language === "fin" ? "Lisätty:" : "Added:"}
           &nbsp;&nbsp;
           {new Date(picture.uploadedAt).toLocaleString(
             language === "fin" ? "fi-FI" : "en-EN"
           )}
         </div>
         <div className="additionalText">
-          <b>{language === "fin" ? "Avainsanat:" : "Key words:"}</b>
+          {language === "fin" ? "Avainsanat:" : "Key words:"}
           <div className="keywordsLB">
             {picture?.keywords?.length > 0 ? (
               picture.keywords.map((keyword, index) => (

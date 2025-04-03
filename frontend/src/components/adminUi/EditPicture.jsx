@@ -266,6 +266,9 @@ const EditPicture = ({ show, setShow, picture }) => {
               <p className="textAddedEP">
                 URL: <b>{picture.url}</b>
               </p>
+              <p className="textAddedEP">
+                Views: <b>{picture.viewCount}</b>
+              </p>
             </div>
           </div>
           <Form

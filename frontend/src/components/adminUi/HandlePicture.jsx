@@ -99,8 +99,10 @@ const HandlePictures = () => {
       return (b?.ratings.length || 0) - (a?.ratings.length || 0);
     } else if (order === "keywords") {
       return (b?.keywords.length || 0) - (a?.keywords.length || 0);
+    } else if (order === "views") {
+      return (b?.viewCount || 0) - (a?.viewCount || 0);
     } else {
-      return 0; // Oletusarvoisesti ei järjestetä
+      return 0;
     }
   });
 
@@ -173,6 +175,12 @@ const HandlePictures = () => {
                 <th className="monthlyHP">PoM</th>
               ) : null}
               <th
+                className="clikkableOP keywordsHP"
+                onClick={() => setOrder("views")}
+              >
+                views
+              </th>
+              <th
                 className="clikkableOP ratingsHP"
                 onClick={() => setOrder("ratings")}
               >
@@ -237,6 +245,9 @@ const HandlePictures = () => {
                       {picture.month_year}
                     </td>
                   ) : null}
+                  <td className="vertical-center keywordsHP">
+                    {picture.viewCount || 0}
+                  </td>
                   <td className="vertical-center ratingsHP">
                     <div className="HPStarsAndCount">
                       <StarRating ratings={picture?.ratings || []} />{" "}

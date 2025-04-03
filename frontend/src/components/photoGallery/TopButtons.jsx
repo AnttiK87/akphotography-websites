@@ -30,6 +30,7 @@ const TopButtons = ({
   nextPictureIndex,
   handleNextPicture,
   handleExit,
+  isMobile,
 }) => {
   useEffect(() => {
     let timer;
@@ -56,12 +57,12 @@ const TopButtons = ({
 
   return (
     <div className="ButtonsLbTop">
-      <div className="buttonsLbLeft">
+      <div className={`buttonsLbLeft`}>
         {isText ? (
           <div>
             <FontAwesomeIcon
               onClick={() => toggleItem(".textPomContainer")}
-              className="buttonLB"
+              className={`buttonLB ${isActive ? "hide" : ""}`}
               icon={faFileLines}
             />
           </div>
@@ -71,7 +72,7 @@ const TopButtons = ({
         <div>
           <FontAwesomeIcon
             onClick={() => toggleItem(".photoInfoContainer")}
-            className="buttonLB"
+            className={`buttonLB ${isActive ? "hide" : ""}`}
             icon={faComments}
           />
         </div>
@@ -81,7 +82,7 @@ const TopButtons = ({
           {isActive ? (
             <FontAwesomeIcon
               onClick={() => stopTimer()}
-              className="buttonLB"
+              className="buttonLB pause"
               icon={faPause}
             />
           ) : (
@@ -92,21 +93,23 @@ const TopButtons = ({
             />
           )}
         </div>
-        <div className="fullscreen-btn">
-          <FontAwesomeIcon
-            onClick={() => handleZoomOut()}
-            className={`buttonLB ${zoomed >= 1.1 ? "" : "disabled"}`}
-            icon={faMagnifyingGlassMinus}
-          />
+        <div className={`buttonsToHide ${isActive ? "hide" : ""}`}>
+          <div className="fullscreen-btn">
+            <FontAwesomeIcon
+              onClick={() => handleZoomOut()}
+              className={`buttonLB ${zoomed >= 1.1 ? "" : "disabled"}`}
+              icon={faMagnifyingGlassMinus}
+            />
+          </div>
+          <div className="fullscreen-btn">
+            <FontAwesomeIcon
+              onClick={() => handleZoomIn()}
+              className={`buttonLB ${zoomed < 2.5 ? "" : "disabled"}`}
+              icon={faMagnifyingGlassPlus}
+            />
+          </div>
         </div>
-        <div className="fullscreen-btn">
-          <FontAwesomeIcon
-            onClick={() => handleZoomIn()}
-            className={`buttonLB ${zoomed < 2.5 ? "" : "disabled"}`}
-            icon={faMagnifyingGlassPlus}
-          />
-        </div>
-        <div className="fullscreen-btn">
+        <div className={`fullscreen-btn ${isMobile ? "disabled" : ""}`}>
           {isFullScreen ? (
             <FontAwesomeIcon
               onClick={() => exitFullscreen()}
@@ -148,6 +151,7 @@ TopButtons.propTypes = {
   nextPictureIndex: PropTypes.number.isRequired,
   handleNextPicture: PropTypes.func.isRequired,
   handleExit: PropTypes.func.isRequired,
+  isMobile: PropTypes.bool,
 };
 
 export default TopButtons;

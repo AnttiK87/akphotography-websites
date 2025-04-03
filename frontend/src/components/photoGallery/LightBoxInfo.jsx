@@ -37,25 +37,27 @@ const LightBoxInfo = ({
           openItem === ".photoInfoContainer" ? "show" : "collapsed"
         }`}
       >
-        <div className="toggle">
-          <FontAwesomeIcon
-            onClick={() => toggleItem(".photoInfoContainer")}
-            className="buttonLB buttonClose white"
-            icon={faXmark}
-          />
-        </div>
-        <div className="metadataContainer">
-          <ImageMetadata src={picture.src} />
-          <AdditionalInfo picture={picture} />
-        </div>
-        <div className="commentsContainer">
-          <Comments
-            pictureId={picture.id}
-            setShow={setShow}
-            setEdit={setEdit}
-            setReply={setReply}
-            setCurrentComment={setCurrentComment}
-          />
+        <div className="paddingForSB">
+          <div className="toggle">
+            <FontAwesomeIcon
+              onClick={() => toggleItem(".photoInfoContainer")}
+              className="buttonLB buttonClose white"
+              icon={faXmark}
+            />
+          </div>
+          <div className="metadataContainer">
+            <ImageMetadata src={picture.src} />
+            <AdditionalInfo picture={picture} />
+          </div>
+          <div className="commentsContainer">
+            <Comments
+              pictureId={picture.id}
+              setShow={setShow}
+              setEdit={setEdit}
+              setReply={setReply}
+              setCurrentComment={setCurrentComment}
+            />
+          </div>
         </div>
       </div>
     </div>

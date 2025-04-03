@@ -8,9 +8,12 @@ import "./Gallery.css";
 import PropTypes from "prop-types";
 import usePicturesByCategory from "../../hooks/usePicturesByCategory";
 import useLightBox from "../../hooks/useLightBox";
+import useWindowWidth from "../../hooks/useWindowWidth";
 
 const Gallery = ({ category }) => {
   const location = useLocation();
+  const width = useWindowWidth();
+
   const [page, setPage] = useState(1);
   const [allLoaded, setAllLoaded] = useState(false);
   const [photoAlbums, setPhotoAlbums] = useState([]);
@@ -97,7 +100,9 @@ const Gallery = ({ category }) => {
             key={albumIndex}
             photos={album}
             targetRowHeight={100}
-            rowConstraints={{ maxPhotos: 3 }}
+            rowConstraints={{
+              maxPhotos: width < 600 ? 1 : width < 900 ? 2 : 3,
+            }}
             onClick={({ index }) => {
               const globalIndex = albumIndex * 6 + index;
 
