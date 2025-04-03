@@ -9,7 +9,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { initializeKeywords, removeKw } from "../../reducers/keywordReducer.js";
 import useNotLoggedin from "../../hooks/useNotLoggedin.js";
-import NotLoggedin from "./NotLoggedIn.jsx";
+import NotLoggedin from "./NotLoggedin.jsx";
 import EditKeyword from "./EditKeyword.jsx";
 import ChangePassword from "./ChangePassword.jsx";
 import EditUserInfo from "./EditUserInfo.jsx";
