@@ -3,7 +3,7 @@
 import { Link } from "react-router-dom";
 import useLogout from "../../hooks/useLogout";
 import { Navbar, Nav } from "react-bootstrap";
-import useNotLoggedin from "../../hooks/useNotLoggedIn.js";
+import useNotLoggedin from "../../hooks/useNotLoggedin.js";
 
 import "./AdminMenu.css";
 
