@@ -192,6 +192,7 @@
 
 .paddingForSB {
   display: flex;
+  width: 100vw;
 }
 
 .photoInfoContainer.show {

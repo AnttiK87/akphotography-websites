@@ -1,0 +1,35 @@
+name: Deploy Backend
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build project
+        run: npm run build
+
+      - name: Copy files to server
+        run: |
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > private_key && chmod 600 private_key
+          rsync -avz -e "ssh -i private_key -o StrictHostKeyChecking=no" ./ chgqkclj@akphotography.fi:public_html
+
+      - name: Create .env file on server
+        run: |
+          ssh -i private_key -o StrictHostKeyChecking=no chgqkclj@akphotography.fi "echo '${{ secrets.ENV_FILE }}' > public_html/.env && chmod 600 public_html/.env"
+
+      - name: Restart Node.js app
+        run: |
+          ssh -i private_key -o StrictHostKeyChecking=no chgqkclj@akphotography.fi "cd public_html && pm2 restart index.js || pm2 start index.js"
+
+      - name: Cleanup private key
+        run: rm -f private_key
