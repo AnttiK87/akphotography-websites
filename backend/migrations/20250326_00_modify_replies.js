@@ -6,10 +6,6 @@ module.exports = {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
     })
-    await queryInterface.addColumn('texts', 'text_fi', {
-      type: DataTypes.TEXT,
-      allowNull: true,
-    })
   },
 
   down: async ({ context: queryInterface }) => {
