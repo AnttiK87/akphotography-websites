@@ -127,7 +127,8 @@ const LightBox = () => {
     }
   }, [isError, /*closeLightBox,*/ picturesByCategory, validIndex]);
 
-  const { isFullScreen, enterFullscreen, exitFullscreen } = useFullScreen();
+  const { isFullScreen, enterFullscreen, exitFullscreen } =
+    useFullScreen(isMobile);
 
   useEffect(() => {
     const handlePopState = (event) => {

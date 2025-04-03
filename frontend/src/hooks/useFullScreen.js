@@ -1,7 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-const useFullScreen = () => {
+const useFullScreen = (isMobile) => {
   const [isFullScreen, setIsFullScreen] = useState(false);
+
+  useEffect(() => {
+    if (isMobile) {
+      enterFullscreen();
+    }
+  }, [isMobile]);
 
   // Mene koko näyttöön
   const enterFullscreen = () => {
