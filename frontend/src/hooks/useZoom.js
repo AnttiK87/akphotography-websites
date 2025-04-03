@@ -2,7 +2,7 @@ import { useState, useRef } from "react";
 
 const useZoom = () => {
   const [zoomed, setZoomed] = useState(1);
-  const positionRef = useRef({ x: 0, y: 0 }); // Käytetään ref-arvoa nopeaan päivittämiseen
+  const positionRef = useRef({ x: 0, y: 0 });
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [dragging, setDragging] = useState(false);
   const [startPos, setStartPos] = useState({ x: 0, y: 0 });
@@ -20,7 +20,7 @@ const useZoom = () => {
 
   const updatePosition = (x, y) => {
     positionRef.current = { x, y };
-    setPosition({ x, y }); // Päivitetään tila (re-render)
+    setPosition({ x, y });
   };
 
   return {

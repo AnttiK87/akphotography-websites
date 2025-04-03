@@ -57,7 +57,7 @@ router.post(
     }
 
     if (req.body.year && req.body.month) {
-      picture.month_year = Number(req.body.year) * 100 + Number(req.body.month)
+      picture.monthYear = Number(req.body.year) * 100 + Number(req.body.month)
     }
 
     await picture.save()
@@ -79,7 +79,7 @@ router.get('/allData/', async (req, res) => {
   }
 
   if (req.query.search === 'monthly') {
-    order = [['month_year', 'DESC']]
+    order = [['monthYear', 'DESC']]
   } else {
     order = [
       ['type', 'ASC'],
@@ -127,7 +127,7 @@ router.get('/', async (req, res) => {
   }
 
   if (req.query.search === 'monthly') {
-    order = [['month_year', 'DESC']]
+    order = [['monthYear', 'DESC']]
   } else {
     order = [
       ['type', 'ASC'],
@@ -163,7 +163,7 @@ router.get('/latest', async (req, res) => {
   }
 
   if (req.query.search === 'monthly') {
-    order = [['month_year', 'DESC']]
+    order = [['monthYear', 'DESC']]
   } else {
     order = [['uploadedAt', 'DESC']]
   }
@@ -225,11 +225,33 @@ router.put('/:id', tokenExtractor, pictureFinder, async (req, res) => {
   }
 
   if (req.body.type === 'monthly' && req.body.year && req.body.month) {
-    req.picture.month_year =
-      Number(req.body.year) * 100 + Number(req.body.month)
-  } else if (req.picture.month_year && req.body.type !== 'monthly') {
-    req.picture.month_year = null
+    req.picture.monthYear = Number(req.body.year) * 100 + Number(req.body.month)
+  } else if (req.picture.monthYear && req.body.type !== 'monthly') {
+    req.picture.monthYear = null
   }
+
+  await req.picture.save()
+
+  await req.picture.reload({
+    include: [
+      { model: Text, attributes: ['id', 'textFi', 'textEn'] },
+      {
+        model: Keyword,
+        attributes: { exclude: 'id' },
+        through: { attributes: [] },
+      },
+    ],
+  })
+
+  res.json(req.picture)
+})
+
+router.put('/addView/:id', pictureFinder, async (req, res) => {
+  if (!req.picture) {
+    return res.status(404).json({ error: 'Picture not found' })
+  }
+
+  req.picture.viewCount = req.picture.viewCount + 1
 
   await req.picture.save()
 

@@ -45,7 +45,7 @@ Picture.init(
         },
       },
     },
-    month_year: {
+    monthYear: {
       type: DataTypes.INTEGER,
       allowNull: true,
     },
@@ -55,7 +55,6 @@ Picture.init(
       defaultValue: fn('NOW'),
     },
     textId: {
-      // Huom! CamelCase Sequelize-mallissa, mutta snake_case tietokannassa
       type: DataTypes.INTEGER,
       allowNull: true,
       references: {
@@ -63,6 +62,11 @@ Picture.init(
         key: 'id',
       },
       onDelete: 'CASCADE',
+    },
+    viewCount: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      defaultValue: 0,
     },
   },
   {

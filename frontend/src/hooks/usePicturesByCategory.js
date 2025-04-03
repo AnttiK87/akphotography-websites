@@ -66,7 +66,7 @@ const usePicturesByCategory = (category) => {
           height: item.height,
           id: item.id,
           uploadedAt: item.uploadedAt,
-          title: formatMonthYear(item.month_year, language),
+          title: formatMonthYear(item.monthYear, language),
           keywords: item.keywords,
           description:
             language === "fin"

@@ -66,6 +66,12 @@ const update = async (content) => {
   return response.data;
 };
 
+// update the comment
+const addView = async (pictureId) => {
+  const response = await axios.put(`${baseUrl}addView/${pictureId}`);
+  return response.data;
+};
+
 // delete the blog
 const remove = async (pictureId) => {
   const config = {
@@ -85,4 +91,5 @@ export default {
   getPicturesByCategory,
   getCategoryLatest,
   getToken,
+  addView,
 };

@@ -11,6 +11,7 @@ import useZoom from "../../hooks/useZoom";
 import useTimer from "../../hooks/useTimer";
 import useToggleItem from "../../hooks/useToggleItem";
 import useLightBox from "../../hooks/useLightBox";
+import useIsMobile from "../../hooks/useIsMobile.js";
 
 import TopButtons from "./TopButtons";
 import LightboxImage from "./LightBoxImage";
@@ -19,10 +20,13 @@ import LightboxText from "./LightBoxText";
 import StarIcons from "./Stars";
 import CommentForm from "./CommentForm.jsx";
 
+import pictureServices from "../../services/pictures.js";
+
 import "./LightBox.css";
 
 const LightBox = () => {
   const location = useLocation();
+  const isMobile = useIsMobile();
 
   const {
     isLightBoxOpen,
@@ -56,6 +60,20 @@ const LightBox = () => {
       ? indexNum
       : undefined
   );
+
+  const addViewedImage = (imageId) => {
+    let viewedImages = JSON.parse(sessionStorage.getItem("viewedImages")) || [];
+
+    if (!viewedImages.includes(imageId) && imageId) {
+      viewedImages.push(imageId);
+      sessionStorage.setItem("viewedImages", JSON.stringify(viewedImages));
+      pictureServices.addView(imageId);
+    }
+  };
+
+  useEffect(() => {
+    addViewedImage(picturesByCategory[validIndex]?.id);
+  }, [validIndex, picturesByCategory]);
 
   const [show, setShow] = useState(false);
   const [edit, setEdit] = useState(false);
@@ -311,12 +329,13 @@ const LightBox = () => {
           handleNextPicture={handleNextPicture}
           setvalidIndex={setvalidIndex}
           handleExit={handleExit}
+          isMobile={isMobile}
         />
         <div className="lightBoxContainer">
           <div>
             <FontAwesomeIcon
               onClick={() => handlePrevPicture()}
-              className="buttonLB buttonBackLB"
+              className={`buttonLB buttonBackLB ${isMobile ? "mobile" : ""}`}
               icon={faChevronDown}
             />
           </div>
@@ -333,11 +352,14 @@ const LightBox = () => {
             dragging={dragging}
             setDragging={setDragging}
             setStartPos={setStartPos}
+            handleSwipeLeft={handleNextPicture}
+            handleSwipeRight={handlePrevPicture}
+            isMobile={isMobile}
           />
           <div>
             <FontAwesomeIcon
               onClick={() => handleNextPicture()}
-              className="buttonLB buttonNextLB"
+              className={`buttonLB buttonNextLB ${isMobile ? "mobile" : ""}`}
               icon={faChevronDown}
             />
           </div>
@@ -357,7 +379,7 @@ const LightBox = () => {
           toggleItem={toggleItem}
         />
       </div>
-      <div className="stars">
+      <div className={`stars ${isActive ? "hide" : ""}`}>
         <StarIcons id={picturesByCategory[validIndex].id} />
       </div>
       <CommentForm
