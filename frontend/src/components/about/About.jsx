@@ -1,5 +1,5 @@
 import AboutHeader from "./AboutHeader";
-import AboutContent from "./Aboutcontent";
+import AboutContent from "./AboutContent";
 
 import { useLanguage } from "../../hooks/useLanguage";
 
