@@ -14,7 +14,7 @@ import Chip from "@mui/material/Chip";
 
 import FileUpload from "./FileUpload.jsx";
 
-import useNotLoggedin from "../../hooks/useNotLoggedIn.js";
+import useNotLoggedin from "../../hooks/useNotLoggedin.js";
 import NotLoggedin from "./NotLoggedIn.jsx";
 
 import "./UploadImages.css";
