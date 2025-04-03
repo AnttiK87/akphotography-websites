@@ -16,7 +16,7 @@ jobs:
         run: cd backend && npm install
 
       - name: Build project
-        run: cd backend && npm run build
+        run: cd backend && npm run build:ui
 
       - name: Copy files to server
         run: |
