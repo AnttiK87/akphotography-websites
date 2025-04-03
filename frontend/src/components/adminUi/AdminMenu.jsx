@@ -10,6 +10,7 @@ import "./AdminMenu.css";
 const AdminMenu = () => {
   //get user state
   const { user } = useNotLoggedin();
+
   // get handleLogout
   const { handleLogout } = useLogout();
 

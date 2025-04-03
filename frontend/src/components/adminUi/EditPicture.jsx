@@ -1,7 +1,7 @@
 //component for rendering form for adding blogs
 
 //dependencies
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Form } from "react-bootstrap";
 import PropTypes from "prop-types";
 
@@ -45,9 +45,13 @@ const EditPicture = ({ show, setShow, picture }) => {
     dispatch(initializeKeywords());
   }, [dispatch, show]);
 
-  const keywords = useSelector((state) =>
-    state.keywords.keywords.map((keyword) => String(keyword.keyword))
+  const keywordsList = useSelector(
+    (state) => state.keywords?.keywords ?? [] // Jos keywords on undefined tai null, palautetaan tyhjä lista
   );
+
+  const keywords = useMemo(() => {
+    return keywordsList.map((keyword) => String(keyword.keyword));
+  }, [keywordsList]);
 
   //console.log(`all keywords: ${JSON.stringify(keywords)}`);
   //console.log(`pictures keywords: ${JSON.stringify(picture.keywords)}`);
@@ -528,7 +532,7 @@ const EditPicture = ({ show, setShow, picture }) => {
 EditPicture.propTypes = {
   show: PropTypes.bool.isRequired,
   setShow: PropTypes.func.isRequired,
-  picture: PropTypes.object,
+  picture: PropTypes.oneOfType([PropTypes.object, PropTypes.oneOf([false])]),
 };
 
 export default EditPicture;

@@ -13,7 +13,7 @@ const useLogout = () => {
       // Clear local storage
       window.localStorage.clear("loggedAdminUser");
       //const loggedUserJSON = window.localStorage.getItem('loggedBlogAppUser')
-      console.log("triesto log out");
+      //console.log("triesto log out");
 
       // Set state
       dispatch(clearUser());
