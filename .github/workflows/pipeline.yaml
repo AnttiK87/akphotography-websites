@@ -21,10 +21,10 @@ jobs:
       - name: Build project
         run: cd backend && npm run build:ui
 
-      - name: Copy files to server
+      - name: Copy backend files to server
         run: |
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > private_key && chmod 600 private_key
-          rsync -avz -e "ssh -i private_key -o StrictHostKeyChecking=no" ./ chgqkclj@akphotography.fi:public_html
+          rsync -avz -e "ssh -i private_key -o StrictHostKeyChecking=no" ./backend/ chgqkclj@akphotography.fi:public_html
 
       - name: Create .env file on server
         run: |
