@@ -24,7 +24,7 @@ jobs:
       - name: Copy backend files to server
         run: |
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > private_key && chmod 600 private_key
-          rsync -avz -e "ssh -i private_key -o StrictHostKeyChecking=no" ./backend/ chgqkclj@akphotography.fi:public_html/backend/
+          rsync -avz -e "ssh -i private_key -o StrictHostKeyChecking=no" ./backend/ chgqkclj@akphotography.fi:public_html/
 
       - name: Copy frontend files to server
         run: |
@@ -36,11 +36,11 @@ jobs:
 
       - name: Restart Node.js app
         run: |
-          ssh -i private_key -o StrictHostKeyChecking=no chgqkclj@akphotography.fi "cd public_html/backend && pm2 restart index.js || pm2 start index.js"
+          ssh -i private_key -o StrictHostKeyChecking=no chgqkclj@akphotography.fi "cd public_html && pm2 restart index.js || pm2 start index.js"
 
       - name: Debug server files
         run: |
-          ssh -i private_key -o StrictHostKeyChecking=no chgqkclj@akphotography.fi "ls -l public_html && ls -l public_html/dist && ls -l public_html/backend"
+          ssh -i private_key -o StrictHostKeyChecking=no chgqkclj@akphotography.fi "ls -l public_html && ls -l public_html/dist"
 
       - name: Cleanup private key
         run: rm -f private_key
