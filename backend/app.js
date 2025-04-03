@@ -1,6 +1,7 @@
 const express = require('express')
 require('express-async-errors')
 const app = express()
+const cors = require('cors')
 
 const { connectToDatabase } = require('./utils/db')
 const middleware = require('./utils/middleware')
@@ -19,6 +20,7 @@ const logoutRouter = require('./controllers/logout')
 const path = require('path')
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
 
+app.use(cors())
 app.use(express.json())
 
 app.use('/api/pictures', picturesRouter)
