@@ -224,7 +224,7 @@ const HandlePictures = () => {
               </tr>
             </tbody>
           )}
-          {picturesToShow.length === 0 && (
+          {picturesToShow.length === 0 && allPictures.length > 0 && (
             <tbody>
               <tr>
                 <td colSpan="10">No pictures with the seached input</td>

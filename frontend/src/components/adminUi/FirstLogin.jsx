@@ -59,7 +59,7 @@ const FirstLogin = () => {
     };
 
     try {
-      const newUser = await userService.update(formData);
+      const newUser = await userService.updateFirstLogin(formData);
       dispatch(updateUser(newUser));
 
       dispatch(
