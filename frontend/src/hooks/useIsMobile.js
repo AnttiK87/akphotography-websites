@@ -5,10 +5,7 @@ const useIsMobile = () => {
 
   useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(
-        /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent) ||
-          navigator.maxTouchPoints > 0
-      );
+      setIsMobile(navigator.maxTouchPoints > 0);
     };
 
     checkMobile();

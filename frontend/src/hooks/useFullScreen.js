@@ -11,13 +11,29 @@ const useFullScreen = (isMobile) => {
 
   // Mene koko näyttöön
   const enterFullscreen = () => {
-    document.body.requestFullscreen();
+    if (document.body.requestFullscreen) {
+      document.body.requestFullscreen();
+    } else if (document.body.webkitRequestFullscreen) {
+      // Safari
+      document.body.webkitRequestFullscreen();
+    } else if (document.body.msRequestFullscreen) {
+      // IE
+      document.body.msRequestFullscreen();
+    }
     setIsFullScreen(true);
   };
 
   // Poistu koko näytöstä
   const exitFullscreen = () => {
-    document.exitFullscreen();
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    } else if (document.webkitExitFullscreen) {
+      // Safari
+      document.webkitExitFullscreen();
+    } else if (document.msExitFullscreen) {
+      // IE
+      document.msExitFullscreen();
+    }
     setIsFullScreen(false);
   };
 
