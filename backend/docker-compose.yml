@@ -6,11 +6,11 @@ services:
     env_file:
       - .env
     ports:
-      - '3306:3306' # Ota portti käyttöön isännällä ja kontissa
+      - '3306:3306'
     expose:
       - '3306'
     volumes:
-      - mysql_data:/var/lib/mysql # Tallennustilavuus tietokannan tietoihin
+      - mysql_data:/var/lib/mysql
 
 volumes:
-  mysql_data: # Määritellään Dockerin volyymi tietokannan säilyttämiseksi
+  mysql_data:

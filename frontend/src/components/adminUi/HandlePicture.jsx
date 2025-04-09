@@ -230,7 +230,7 @@ const HandlePictures = () => {
               {sortedPictures.map((picture, index) => (
                 <tr key={picture.id}>
                   <td className="vertical-center">
-                    <img className="listItemImg" src={picture.url} />
+                    <img className="listItemImg" src={picture.urlThumbnail} />
                   </td>
                   <td className="vertical-center indexHP">{index + 1}</td>
                   <td className="vertical-center typeHP">{picture.type}</td>

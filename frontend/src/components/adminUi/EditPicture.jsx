@@ -234,7 +234,7 @@ const EditPicture = ({ show, setShow, picture }) => {
             <div className="imgAndRatings">
               <img
                 className="imageForEditPicture"
-                src={picture.url}
+                src={picture.urlThumbnail}
                 alt={picture.fileName}
               />
               <div className="raitingsContainerEP">

@@ -13,7 +13,7 @@ const About = () => {
 
   const textAbout1 =
     language === "fin" ? (
-      <p lang="fi" className="textAbout">
+      <p className="textAbout">
         <b>Moi!</b>
         <br />
         <br />
@@ -33,7 +33,7 @@ const About = () => {
         näyttäytyy jälleen, kunhan vain muistan lähteä ulos riittävän usein.
       </p>
     ) : (
-      <p lang="en" className="textAbout">
+      <p className="textAbout">
         <b>Hi!</b>
         <br />
         <br />
@@ -57,7 +57,7 @@ const About = () => {
 
   const textAbout2 =
     language === "fin" ? (
-      <p lang="fi" className="textAbout">
+      <p className="textAbout">
         Valokuvauksen tekninen puoli, niin itse kamerassa, optiikassa kuin
         kuvankäsittelyssäkin, on yksi niistä asioista, jotka tekevät tästä
         harrastuksesta minulle niin mielekkään. Toki on hyvä muistaa, että edes
@@ -79,7 +79,7 @@ const About = () => {
         hintalaatusuhteeltaan toimiviksi <b>Benron</b> jalustat sekä kamerapäät.
       </p>
     ) : (
-      <p lang="en" className="textAbout">
+      <p className="textAbout">
         The technical side of photography — whether it&#39;s the camera itself,
         optics, or post-processing — is one of the things that makes this hobby
         so enjoyable for me. Of course, it&#39;s important to remember that even
@@ -105,7 +105,7 @@ const About = () => {
 
   const textAbout3 =
     language === "fin" ? (
-      <p lang="fi" className="textAbout">
+      <p className="textAbout">
         Kuvaajana olen itseoppinut ja kuvia napsin täysin harrastepohjalta
         omaksi iloksi. Kuvatessa pääsen luonnonhelmaan rentoutumaan. Silloin
         huolet ja murheet unohtuvat helposti. Kuvaaminen on minulle myös
@@ -123,7 +123,7 @@ const About = () => {
         <b>-Antti-</b>
       </p>
     ) : (
-      <p lang="en" className="textAbout">
+      <p className="textAbout">
         I am a self-taught photographer, capturing moments purely as a hobby for
         my own enjoyment. Being out in nature with my camera helps me relax. For
         me it&#39;s a time when everyday worries fade away. Photography is also

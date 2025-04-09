@@ -3,19 +3,19 @@
 // Logger for info messages
 const info = (...params) => {
   if (process.env.NODE_ENV !== 'test') {
-    console.log(...params)
+    console.warn(...params);
   }
-}
+};
 
 // Logger for error messages
 const error = (...params) => {
   if (process.env.NODE_ENV !== 'test') {
-    console.error(...params)
+    console.error(...params);
   }
-}
+};
 
 // Exports
 module.exports = {
   info,
   error,
-}
+};

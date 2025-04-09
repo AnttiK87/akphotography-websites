@@ -1,5 +1,5 @@
-const { sequelize } = require('../utils/db')
-const { Model, DataTypes } = require('sequelize')
+const { sequelize } = require('../utils/db');
+const { Model, DataTypes } = require('sequelize');
 
 class Reply extends Model {}
 
@@ -41,6 +41,6 @@ Reply.init(
     underscored: true,
     modelName: 'reply',
   },
-)
+);
 
-module.exports = Reply
+module.exports = Reply;

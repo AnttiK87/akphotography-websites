@@ -1,5 +1,5 @@
-const { sequelize } = require('../utils/db')
-const { Model, DataTypes } = require('sequelize')
+const { sequelize } = require('../utils/db');
+const { Model, DataTypes } = require('sequelize');
 
 class Text extends Model {}
 
@@ -25,6 +25,6 @@ Text.init(
     underscored: true,
     modelName: 'text',
   },
-)
+);
 
-module.exports = Text
+module.exports = Text;

@@ -8,10 +8,11 @@
 }
 
 .textAbout {
-  font-size: 1.2rem;
+  text-align: justify;
   hyphens: auto;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
+  -webkit-hyphens: auto;
+  -ms-hyphens: auto;
+  text-align-last: left;
 }
 
 @media (max-width: 1500px) {

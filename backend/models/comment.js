@@ -1,5 +1,5 @@
-const { sequelize } = require('../utils/db')
-const { Model, DataTypes } = require('sequelize')
+const { sequelize } = require('../utils/db');
+const { Model, DataTypes } = require('sequelize');
 
 class Comment extends Model {}
 
@@ -29,6 +29,6 @@ Comment.init(
     underscored: true,
     modelName: 'comment',
   },
-)
+);
 
-module.exports = Comment
+module.exports = Comment;

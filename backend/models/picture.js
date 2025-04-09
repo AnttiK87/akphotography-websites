@@ -1,5 +1,5 @@
-const { sequelize } = require('../utils/db')
-const { Model, DataTypes, fn } = require('sequelize')
+const { sequelize } = require('../utils/db');
+const { Model, DataTypes, fn } = require('sequelize');
 
 class Picture extends Model {}
 
@@ -79,6 +79,6 @@ Picture.init(
     underscored: true,
     modelName: 'picture',
   },
-)
+);
 
-module.exports = Picture
+module.exports = Picture;

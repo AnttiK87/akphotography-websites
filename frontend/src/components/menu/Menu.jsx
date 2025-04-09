@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLanguage } from "../../hooks/useLanguage";
 
 import { Link } from "react-router-dom";
@@ -177,7 +177,6 @@ const Menu = () => {
       }, 10);
     }
     if (window.innerWidth > 990) {
-      enableScroll();
       navBarSmall.style.transition = "none";
       if (subMenu) {
         subMenu.forEach((element) => {
@@ -194,13 +193,16 @@ const Menu = () => {
     }
   });
 
-  const disableScroll = () => {
-    document.body.classList.add("no-scroll");
-  };
-
-  const enableScroll = () => {
-    document.body.classList.remove("no-scroll");
-  };
+  useEffect(() => {
+    if (isMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [isMenuOpen]);
 
   return (
     <>
@@ -273,7 +275,6 @@ const Menu = () => {
                         isDropdownOpen,
                         setIsDropdownOpen
                       );
-                      disableScroll();
                     }}
                   >
                     {language === "fin" ? "Kuvat" : "Pictures"}{" "}
@@ -337,7 +338,6 @@ const Menu = () => {
                       isDropdownOpen,
                       setIsDropdownOpen
                     );
-                    disableScroll();
                   }}
                 >
                   {languageTitle}

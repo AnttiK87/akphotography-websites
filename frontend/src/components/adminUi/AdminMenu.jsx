@@ -3,13 +3,13 @@
 import { Link } from "react-router-dom";
 import useLogout from "../../hooks/useLogout";
 import { Navbar, Nav } from "react-bootstrap";
-import useNotLoggedin from "../../hooks/useNotLoggedin.js";
+import { useSelector } from "react-redux";
 
 import "./AdminMenu.css";
 
 const AdminMenu = () => {
   //get user state
-  const { user } = useNotLoggedin();
+  const user = useSelector((state) => state.user.user);
 
   // get handleLogout
   const { handleLogout } = useLogout();

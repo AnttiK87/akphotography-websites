@@ -1,4 +1,4 @@
-const { DataTypes } = require('sequelize')
+const { DataTypes } = require('sequelize');
 
 module.exports = {
   up: async ({ context: queryInterface }) => {
@@ -6,10 +6,10 @@ module.exports = {
       type: DataTypes.DATE,
       allowNull: true,
       defaultValue: null,
-    })
+    });
   },
 
   down: async ({ context: queryInterface }) => {
-    await queryInterface.removeColumn('users', 'last_login')
+    await queryInterface.removeColumn('users', 'last_login');
   },
-}
+};

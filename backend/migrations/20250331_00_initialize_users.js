@@ -1,6 +1,6 @@
-const { DataTypes } = require('sequelize')
-const bcrypt = require('bcryptjs')
-require('dotenv').config()
+const { DataTypes } = require('sequelize');
+const bcrypt = require('bcryptjs');
+require('dotenv').config();
 
 module.exports = {
   up: async ({ context: queryInterface }) => {
@@ -31,7 +31,7 @@ module.exports = {
         type: DataTypes.STRING,
         allowNull: false,
       },
-    })
+    });
     await queryInterface.createTable('sessions', {
       id: {
         type: DataTypes.INTEGER,
@@ -47,10 +47,10 @@ module.exports = {
         allowNull: false,
         references: { model: 'users', key: 'id' },
       },
-    })
+    });
 
-    const adminPassword = process.env.ADMIN_PASSWORD || 'defaultPassword'
-    const hashedPassword = await bcrypt.hash(adminPassword, 10)
+    const adminPassword = process.env.ADMIN_PASSWORD || 'defaultPassword';
+    const hashedPassword = await bcrypt.hash(adminPassword, 10);
 
     return queryInterface.bulkInsert('users', [
       {
@@ -60,11 +60,11 @@ module.exports = {
         password_hash: hashedPassword,
         role: 'admin',
       },
-    ])
+    ]);
   },
 
   down: async ({ context: queryInterface }) => {
-    await queryInterface.dropTable('users')
-    await queryInterface.dropTable('sessions')
+    await queryInterface.dropTable('users');
+    await queryInterface.dropTable('sessions');
   },
-}
+};
