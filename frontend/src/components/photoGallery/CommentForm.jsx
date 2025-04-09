@@ -28,8 +28,6 @@ const CommentForm = ({
   currentComment,
   adminComment,
 }) => {
-  // console.log(`commentform reply: ${JSON.stringify(currentComment)}`);
-  // console.log(`currentComment.comment: ${currentComment.comment}`);
   const { language } = useLanguage();
 
   const [comment, setComment] = useState("");
@@ -84,8 +82,6 @@ const CommentForm = ({
 
     const { comment, username } = event.target.elements;
 
-    //console.log(`add reply currentComment: ${JSON.stringify(currentComment)}`);
-
     const commentId =
       currentComment.reply !== undefined
         ? currentComment.commentId
@@ -93,8 +89,6 @@ const CommentForm = ({
 
     const parentReply =
       currentComment.reply !== undefined ? currentComment.id : null;
-
-    //console.log(`add reply comment id: ${commentId}`);
 
     const formData = {
       reply: comment.value,
@@ -113,7 +107,6 @@ const CommentForm = ({
   };
 
   const handleEditComment = (event) => {
-    //console.log("tries to edit");
     event.preventDefault();
 
     const userId = getUserId();
@@ -135,8 +128,6 @@ const CommentForm = ({
     const key = currentComment.reply !== undefined ? "reply" : "comment";
     const formData = { [key]: commentValue, username: usernameValue };
 
-    console.log(`formdata ${JSON.stringify(formData)}`);
-
     if (key === "comment") {
       dispatch(editComment({ commentId, userId, formData }));
     } else {
@@ -148,8 +139,6 @@ const CommentForm = ({
 
   const handleSubmit = (event) => {
     event.preventDefault();
-
-    //console.log(`handlesubmit and edit state: ${edit}`);
 
     if (edit) {
       handleEditComment(event);
@@ -240,8 +229,8 @@ const CommentForm = ({
                 className="form__field commentUsername"
                 id="username"
                 name="username"
-                value={username} // Käytetään tilamuuttujaa
-                onChange={handleUsernameChange} // Käyttäjä voi muokata arvoa
+                value={username}
+                onChange={handleUsernameChange}
                 placeholder={
                   language === "fin" ? "Anna nimimerkki" : "Add username"
                 }

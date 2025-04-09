@@ -1,5 +1,3 @@
-//component for rendering form for logging in
-//dependencies
 import { useDispatch } from "react-redux";
 import { useState } from "react";
 import useLogin from "../../hooks/useLogin.js";
@@ -75,7 +73,6 @@ const FirstLogin = () => {
       reset();
       hangleFirstLogin(false);
     } catch (error) {
-      // handle possible error and show error message
       close();
       dispatch(
         showMessage(
@@ -93,7 +90,6 @@ const FirstLogin = () => {
     return null;
   }
 
-  // rendering the form
   return (
     <div className="FirstLoginContainer">
       <div className="FirstLoginForm">
@@ -115,7 +111,7 @@ const FirstLogin = () => {
                 className="form__field commentUsername"
                 id="name"
                 name="name"
-                value={name} // Käytetään tilamuuttujaa
+                value={name}
                 onChange={(e) => {
                   setName(e.target.value);
                 }}
@@ -133,7 +129,7 @@ const FirstLogin = () => {
                 className="form__field commentUsername"
                 id="username"
                 name="username"
-                value={username} // Käytetään tilamuuttujaa
+                value={username}
                 onChange={(e) => {
                   setUsername(e.target.value);
                 }}
@@ -151,7 +147,7 @@ const FirstLogin = () => {
                 className="form__field commentUsername"
                 id="email"
                 name="email"
-                value={email} // Käytetään tilamuuttujaa
+                value={email}
                 onChange={(e) => {
                   setEmail(e.target.value);
                 }}
@@ -165,11 +161,11 @@ const FirstLogin = () => {
                 Old password
               </label>
               <input
-                type="text"
+                type="password"
                 className="form__field commentUsername"
                 id="oldPassword"
                 name="oldPassword"
-                value={oldPassword} // Käytetään tilamuuttujaa
+                value={oldPassword}
                 onChange={(e) => {
                   setOldPassword(e.target.value);
                 }}
@@ -183,11 +179,11 @@ const FirstLogin = () => {
                 New password
               </label>
               <input
-                type="text"
+                type="password"
                 className="form__field commentUsername"
                 id="newPassword1"
                 name="newPassword1"
-                value={newPassword1} // Käytetään tilamuuttujaa
+                value={newPassword1}
                 onChange={(e) => {
                   setNewPassword1(e.target.value);
                 }}
@@ -201,11 +197,11 @@ const FirstLogin = () => {
                 Confirm new password
               </label>
               <input
-                type="text"
+                type="password"
                 className="form__field commentUsername"
                 id="newPassword2"
                 name="newPassword2"
-                value={newPassword2} // Käytetään tilamuuttujaa
+                value={newPassword2}
                 onChange={(e) => {
                   setNewPassword2(e.target.value);
                 }}

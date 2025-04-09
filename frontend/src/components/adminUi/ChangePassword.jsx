@@ -57,7 +57,6 @@ const ChangePassword = ({ show, setShow }) => {
     return null;
   }
 
-  // rendering the form
   return (
     <div id="closeModal" className="editOverlay" onClick={handleOverlayClose}>
       <div id="modal" className="editKW">
@@ -84,7 +83,7 @@ const ChangePassword = ({ show, setShow }) => {
                   className="form__field commentUsername"
                   id="oldPassword"
                   name="oldPassword"
-                  value={oldPassword} // Käytetään tilamuuttujaa
+                  value={oldPassword}
                   onChange={(e) => {
                     setOldPassword(e.target.value);
                   }}
@@ -102,7 +101,7 @@ const ChangePassword = ({ show, setShow }) => {
                   className="form__field commentUsername"
                   id="newPassword1"
                   name="newPassword1"
-                  value={newPassword1} // Käytetään tilamuuttujaa
+                  value={newPassword1}
                   onChange={(e) => {
                     setNewPassword1(e.target.value);
                   }}
@@ -120,7 +119,7 @@ const ChangePassword = ({ show, setShow }) => {
                   className="form__field commentUsername"
                   id="newPassword2"
                   name="newPassword2"
-                  value={newPassword2} // Käytetään tilamuuttujaa
+                  value={newPassword2}
                   onChange={(e) => {
                     setNewPassword2(e.target.value);
                   }}

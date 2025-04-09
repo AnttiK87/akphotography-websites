@@ -8,7 +8,6 @@ const initialState = {
   comments: [],
 };
 
-//create slice
 const commentSlice = createSlice({
   name: "comment",
   initialState,
@@ -36,14 +35,12 @@ const commentSlice = createSlice({
 export const { setComments, appendComment, updateComment, deleteComment } =
   commentSlice.actions;
 
-// Setting comments at db to current state with error handling
 export const initializeComments = (id) => {
   return async (dispatch) => {
     try {
       const comments = await commentService.getAll(id);
       dispatch(setComments(comments));
     } catch (error) {
-      // handle possible error and show error message
       dispatch(
         showMessage(
           {
@@ -57,7 +54,6 @@ export const initializeComments = (id) => {
   };
 };
 
-// Creating new comment and setting it to the state with error handling
 export const createComment = (content) => {
   return async (dispatch) => {
     try {
@@ -66,8 +62,6 @@ export const createComment = (content) => {
       if (newComment.message === "Comment saved" && newComment.comment.id) {
         dispatch(appendComment(newComment.comment));
       }
-
-      // show message comment added
       dispatch(
         showMessage(
           {
@@ -78,7 +72,6 @@ export const createComment = (content) => {
         )
       );
     } catch (error) {
-      // handle error and show error message
       dispatch(
         showMessage(
           {
@@ -95,7 +88,6 @@ export const createComment = (content) => {
 export const editComment = (content) => {
   return async (dispatch) => {
     try {
-      console.log("this update indeed happens");
       const updatedComment = await commentService.update(content);
       dispatch(updateComment(updatedComment));
 
@@ -152,5 +144,4 @@ export const remove = (content) => {
   };
 };
 
-//export
 export default commentSlice.reducer;

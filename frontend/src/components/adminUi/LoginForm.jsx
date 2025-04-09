@@ -1,4 +1,3 @@
-//component for rendering form for logging in
 //dependencies
 import { useSelector, useDispatch } from "react-redux";
 import { setUsername, setPassword } from "../../reducers/userReducer.js";
@@ -8,10 +7,8 @@ import { Form } from "react-bootstrap";
 import "./LoginForm.css";
 
 const LoginForm = () => {
-  //set dispatch
   const dispatch = useDispatch();
 
-  // Get username and password state
   const username = useSelector((state) => state.user.username);
   const password = useSelector((state) => state.user.password);
 
@@ -19,10 +16,8 @@ const LoginForm = () => {
     dispatch(setPassword(""));
     dispatch(setUsername(""));
   };
-  // get handleLogin
   const { handleLogin } = useLogin();
 
-  // rendering the form
   return (
     <div className="LoginFormContainer">
       <div className="LoginForm">

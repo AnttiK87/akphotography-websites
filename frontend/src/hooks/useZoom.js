@@ -28,7 +28,7 @@ const useZoom = () => {
     handleZoomIn,
     handleZoomOut,
     position,
-    updatePosition, // Uusi funktio ref-arvon päivittämiseen
+    updatePosition,
     dragging,
     setDragging,
     startPos,

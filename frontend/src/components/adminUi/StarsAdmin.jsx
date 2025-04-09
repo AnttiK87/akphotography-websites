@@ -6,7 +6,6 @@ import { faStar } from "@fortawesome/free-solid-svg-icons";
 import PropTypes from "prop-types";
 
 const AdminStarRating = ({ ratings, bars }) => {
-  //console.log(`ratings: ${ratings?.length}`);
   const totalStars = 5;
   const [avgRating, setAvgRating] = useState(
     ratings?.length
@@ -37,8 +36,6 @@ const AdminStarRating = ({ ratings, bars }) => {
         : 0
     );
   }, [ratings]);
-
-  //console.log(`avg: ${avgRating}`);
 
   return (
     <>

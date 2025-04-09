@@ -1,5 +1,3 @@
-// utils/dateUtils.js
-
 export const monthNamesEn = [
   "January",
   "February",
@@ -30,7 +28,6 @@ export const monthNamesFi = [
   "Joulukuu",
 ];
 
-// General function to format month and year
 export const formatMonthYear = (monthYear, language) => {
   if (!monthYear) return;
   const year = Math.floor(monthYear / 100);

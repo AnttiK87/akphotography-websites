@@ -56,8 +56,8 @@ const ContactContent = () => {
 
   const textContact = (
     <div className="contactTextElem">
-      <h1 className="headerMore">{textContact1}</h1>
-      <h2 className="headerName">Antti Kortelainen</h2>
+      <h3 className="headerMore">{textContact1}</h3>
+      <h3 className="headerName">Antti Kortelainen</h3>
       <p className="textContact">{textContact2}</p>
       <p className="textContact">anttikortelainenphotography(at)gmail.com</p>
       {socialIcons}

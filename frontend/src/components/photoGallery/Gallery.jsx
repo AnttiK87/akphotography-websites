@@ -34,6 +34,8 @@ const Gallery = ({ category }) => {
     var end = start + 6;
     if (picturesByCategory.length - end === 1) {
       end = start + 7;
+    } else if (picturesByCategory.length - end === 2) {
+      end = start + 8;
     }
     const newPhotos = picturesByCategory.slice(start, end);
 
@@ -86,8 +88,8 @@ const Gallery = ({ category }) => {
 
   const renderPhoto = ({ photo, index }) => (
     <div key={index}>
-      <div className={category === "monthly" ? "galleryImgText" : ""}>
-        <h1>{photo.title}</h1>
+      <div className={category === "monthly" ? "galleryImgText" : "hideText"}>
+        <h1 className="GalleryPhotoHeader">{photo.title}</h1>
       </div>
     </div>
   );
@@ -99,7 +101,6 @@ const Gallery = ({ category }) => {
           <RowsPhotoAlbum
             key={albumIndex}
             photos={album}
-            targetRowHeight={100}
             rowConstraints={{
               maxPhotos: width < 600 ? 1 : width < 900 ? 2 : 3,
             }}

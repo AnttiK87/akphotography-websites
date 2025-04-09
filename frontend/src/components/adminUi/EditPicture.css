@@ -47,7 +47,7 @@
 }
 
 .editPicture::-webkit-scrollbar-track {
-  border-radius: 0px; /* Pehmentää reunoja */
+  border-radius: 0px;
   background-color: #f8f7f5;
 }
 
@@ -183,11 +183,11 @@
   left: 0;
   white-space: nowrap;
   overflow: hidden;
-  color: gold; /* Tähtien täyttövärin määrittely */
+  color: gold;
 }
 
 .star-background {
-  color: lightgray; /* Taustatähtien väri */
+  color: lightgray;
 }
 
 .raitingsContainerEP {

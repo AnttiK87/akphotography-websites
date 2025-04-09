@@ -1,4 +1,3 @@
-//dependencies
 import { useDispatch, useSelector } from "react-redux";
 import loginService from "../services/login";
 import pictureService from "../services/pictures.js";
@@ -32,9 +31,6 @@ const useLogin = () => {
         password,
       });
 
-      console.log(`user: ${JSON.stringify(user.firstLogin)}`);
-
-      // Set logged in user to localStorage and set token
       window.localStorage.setItem("loggedAdminUser", JSON.stringify(user));
       pictureService.setToken(user.token);
 
@@ -43,7 +39,6 @@ const useLogin = () => {
       if (user.firstLogin) {
         hangleFirstLogin(user.firstLogin);
       } else {
-        // Show logged in message
         dispatch(
           showMessage(
             { text: `Logged in user ${user.name}`, type: "success" },
@@ -53,7 +48,6 @@ const useLogin = () => {
       }
 
       navigate("/admin/editContent");
-      // Reset username and password in Redux state
       dispatch(setUsername(""));
       dispatch(setPassword(""));
     } catch (exception) {

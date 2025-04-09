@@ -18,7 +18,6 @@ export const LightBoxProvider = ({ children }) => {
   };
 
   const closeLightBox = () => {
-    console.log("closing now");
     setIsLightBoxOpen(false);
     setCurrentIndex(undefined);
   };

@@ -8,24 +8,49 @@ const { tokenExtractor } = require('../utils/middleware')
 const { Picture, Text, Reply, Comment, Rating, Keyword } = require('../models')
 
 // path for storing uploaded pictures
-const uploadFolder = './uploads/pictures/'
+const uploadFolderHightRes = './uploads/pictures/'
+const uploadFolderThumbnail = './uploads/thumbnail/'
+
+const handlePictureResize = async (file) => {
+  const nameWithoutExt = path.basename(file, path.extname(file))
+  const filename = nameWithoutExt + '.webp'
+  const fullPath = path.join(uploadFolderThumbnail, filename)
+
+  await sharp(file).resize({ height: 600 }).toFormat('webp').toFile(fullPath)
+
+  return { filename }
+}
 
 const fs = require('fs')
 
-if (!fs.existsSync(uploadFolder)) {
-  fs.mkdirSync(uploadFolder, { recursive: true })
+if (!fs.existsSync(uploadFolderHightRes)) {
+  fs.mkdirSync(uploadFolderHightRes, { recursive: true })
+}
+
+if (!fs.existsSync(uploadFolderThumbnail)) {
+  fs.mkdirSync(uploadFolderThumbnail, { recursive: true })
 }
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, uploadFolder)
+    cb(null, uploadFolderHightRes)
   },
   filename: (req, file, cb) => {
     cb(null, Date.now() + path.extname(file.originalname))
   },
 })
 
-const upload = multer({ storage: storage })
+const upload = multer({
+  storage: storage,
+  fileFilter: (req, file, cb) => {
+    const allowed = ['image/jpeg']
+    if (allowed.includes(file.mimetype)) {
+      cb(null, true)
+    } else {
+      cb(new Error('Only .jpg files are allowed!'))
+    }
+  },
+})
 
 router.post(
   '/upload',
@@ -38,9 +63,12 @@ router.post(
 
     const { width, height } = await sharp(req.file.path).metadata()
 
+    const thumbnail = await handlePictureResize(req.file.path)
+
     const picture = await Picture.create({
       fileName: req.file.filename,
       url: `/uploads/pictures/${req.file.filename}`,
+      urlThumbnail: `/uploads/thumbnail/${thumbnail.filename}`,
       type: req.body.type,
       width: width,
       height: height,

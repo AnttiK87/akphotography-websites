@@ -34,7 +34,6 @@ const HandlePictures = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
 
-  // console.log(JSON.stringify(allPictures));
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -52,7 +51,6 @@ const HandlePictures = () => {
   const allPictures = useSelector((state) => state.pictures.allPictures);
   const [picturesToShow, setPicturesToShow] = useState([allPictures]);
   const [search, setSearch] = useState("");
-  //console.log(`allPictures: ${JSON.stringify(picturesToShow)}`);
 
   useEffect(() => {
     setPicturesToShow(
@@ -68,14 +66,10 @@ const HandlePictures = () => {
 
   useEffect(() => {
     if (show) {
-      // Estä scrollaus
       document.body.style.overflow = "hidden";
     } else {
-      // Palauta scrollaus
       document.body.style.overflow = "auto";
     }
-
-    // Siivoa efekti, kun komponentti poistetaan
     return () => {
       document.body.style.overflow = "auto";
     };

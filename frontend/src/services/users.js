@@ -1,12 +1,8 @@
-//HTTP reguests for handling blogs
-
-//dependencies
 import axios from "axios";
 import picturesService from "../services/pictures";
 
 const baseUrl = "/api/users";
 
-// retrieve all blogs
 const getAll = async () => {
   const response = await axios.get(baseUrl);
   return response.data;
@@ -79,7 +75,6 @@ const updateInfo = async (content) => {
   return response.data;
 };
 
-// exports
 export default {
   getAll,
   getUserById,

@@ -1,11 +1,8 @@
-//reducer for blogs
-//depedencies
 import { createSlice } from "@reduxjs/toolkit";
 import pictureService from "../services/pictures";
 import { showMessage } from "./messageReducer";
 import { clearUser } from "./userReducer.js";
 
-//create slice
 const pictureSlice = createSlice({
   name: "pictures",
   initialState: {
@@ -72,14 +69,12 @@ export const {
   deletePicture,
 } = pictureSlice.actions;
 
-// Setting blogs at db to current state with error handling
 export const initializePicturesAllData = (category) => {
   return async (dispatch) => {
     try {
       const pictures = await pictureService.getAllData(category);
       dispatch(setPictures(pictures));
     } catch (error) {
-      // handle possible error and show error message
       dispatch(
         showMessage(
           {
@@ -94,16 +89,13 @@ export const initializePicturesAllData = (category) => {
 };
 
 export const initializeCategoryLatest = (category) => {
-  //console.log(`category reducer: ${category}`);
   return async (dispatch) => {
     try {
       const latestCategoryPictures = await pictureService.getCategoryLatest(
         category
       );
-      //console.log(`latest: ${JSON.stringify(latestCategoryPictures)}`);
       dispatch(setLatestCategoryPictures(latestCategoryPictures));
     } catch (error) {
-      // handle possible error and show error message
       dispatch(
         showMessage(
           {
@@ -138,7 +130,6 @@ export const initializePicturesByCategory = (category) => {
         return;
       }
     } catch (error) {
-      // handle possible error and show error message
       dispatch(
         showMessage(
           {
@@ -152,14 +143,11 @@ export const initializePicturesByCategory = (category) => {
   };
 };
 
-// Creating new blog and setting it to the state with error handling
 export const createPicture = (content) => {
   return async (dispatch) => {
     try {
       const newPicture = await pictureService.create(content);
       dispatch(appendPicture(newPicture));
-
-      // show message blog added
       dispatch(
         showMessage(
           {
@@ -186,9 +174,7 @@ export const createPicture = (content) => {
 export const editPicture = (content) => {
   return async (dispatch) => {
     try {
-      //console.log("this update indeed happens");
       const updatedPicture = await pictureService.update(content);
-      //console.log(`updated picture: ${JSON.stringify(updatedPicture)}`);
       dispatch(updatePicture(updatedPicture));
 
       dispatch(
@@ -201,7 +187,6 @@ export const editPicture = (content) => {
         )
       );
     } catch (error) {
-      console.log("error editing picture", error);
       if (error.response && error.response.status === 401) {
         localStorage.removeItem("loggedAdminUser");
         window.location.href = "/admin";
@@ -257,5 +242,4 @@ export const removePicture = (pictureId) => {
   };
 };
 
-//export
 export default pictureSlice.reducer;

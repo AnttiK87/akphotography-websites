@@ -80,14 +80,6 @@ const LightBox = () => {
   const [reply, setReply] = useState(false);
   const [currentComment, setCurrentComment] = useState(null);
 
-  //console.log(`lightBoxOpen: ${isLightBoxOpen}`);
-  //console.log(`basePath: ${basePath}`);
-  //console.log(`indexparams: ${index}`);
-  //console.log(`indexToUse: ${indexToUse}`);
-  //console.log(`validIndex: ${validIndex}`);
-  //console.log(`currentIndex: ${currentIndex}`);
-  //console.log(`location.pathname: ${location.pathname}`);
-
   const [isText, setIsText] = useState(false);
 
   useEffect(() => {
@@ -98,8 +90,6 @@ const LightBox = () => {
     setIndexNum(parseInt(indexToUse));
     setvalidIndex(indexNum >= 0 ? indexNum : undefined);
   }, [indexToUse, indexNum]);
-
-  console.log(`category in lightbox: ${category}`);
 
   const { isActive, startTimer, stopTimer } = useTimer();
 
@@ -127,8 +117,10 @@ const LightBox = () => {
     }
   }, [isError, /*closeLightBox,*/ picturesByCategory, validIndex]);
 
-  const { isFullScreen, enterFullscreen, exitFullscreen } =
-    useFullScreen(isMobile);
+  const { isFullScreen, enterFullscreen, exitFullscreen } = useFullScreen(
+    isMobile,
+    isLightBoxOpen
+  );
 
   useEffect(() => {
     const handlePopState = (event) => {
@@ -341,8 +333,8 @@ const LightBox = () => {
             />
           </div>
           <LightboxImage
-            src={picturesByCategory[validIndex].src}
-            alt={picturesByCategory[validIndex].src}
+            src={picturesByCategory[validIndex].srcFullRes}
+            alt={picturesByCategory[validIndex].srcFullRes}
             zoomed={zoomed}
             handleZoomOut={handleZoomOut}
             handleZoomIn={handleZoomIn}
@@ -381,7 +373,7 @@ const LightBox = () => {
         />
       </div>
       <div className={`stars ${isActive ? "hide" : ""}`}>
-        <StarIcons id={picturesByCategory[validIndex].id} />
+        <StarIcons id={picturesByCategory[validIndex].id} isMobile={isMobile} />
       </div>
       <CommentForm
         show={show}

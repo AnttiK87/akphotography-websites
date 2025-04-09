@@ -24,16 +24,14 @@ const HomeHeader = () => {
   const textToHeader = headerText.split("\n");
 
   useEffect(() => {
-    // Luodaan intervali kuvan vaihdolle
     const interval = setInterval(() => {
       setCurrentImageIndex((prevIndex) => {
-        return prevIndex === 8 ? 1 : prevIndex + 1; // Vaihdetaan kuvaa
+        return prevIndex === 8 ? 1 : prevIndex + 1;
       });
     }, duration);
 
-    // Siivous
     return () => {
-      clearInterval(interval); // Siivotaan interval
+      clearInterval(interval);
     };
   }, [duration]);
 

@@ -23,8 +23,6 @@ const ReplyItem = ({
   language,
   child,
 }) => {
-  //console.log(`reply info in reply item; ${JSON.stringify(reply)}`);
-
   const childReplies = replies.filter((r) => r.parentReplyId === reply.id);
 
   const UsernameReplied =
@@ -39,7 +37,6 @@ const ReplyItem = ({
 
   return (
     <>
-      {/* Pääreply */}
       <div className={`arrowAndReply ${child ? "makeNarrow" : ""}`}>
         <img className="replyArrow" src={arrow} alt="arrow" />
         <div className="replyLi">
@@ -95,7 +92,6 @@ const ReplyItem = ({
         </div>
       </div>
 
-      {/* REKURSIO: Näytetään lapsivastaukset, jos niitä on */}
       {childReplies.length > 0 && (
         <div className="childReplies">
           {childReplies.map((childReply) => (

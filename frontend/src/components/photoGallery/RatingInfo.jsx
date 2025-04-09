@@ -1,5 +1,3 @@
-//Notification component for rendering notifications to user
-//dependencies
 import { useLanguage } from "../../hooks/useLanguage";
 import PropTypes from "prop-types";
 
@@ -9,7 +7,6 @@ import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import "./RatingInfo.css";
 
 const RatingInfo = ({ show, setShow, lenght, avgRating, addRating, id }) => {
-  //console.log(`rating info: ${show}, ${lenght}, ${avgRating}, ${id}`);
   const { language } = useLanguage();
   const savedRating = Number(localStorage.getItem(`rating${id}`));
 
@@ -134,5 +131,4 @@ RatingInfo.propTypes = {
   id: PropTypes.number.isRequired,
 };
 
-//export
 export default RatingInfo;

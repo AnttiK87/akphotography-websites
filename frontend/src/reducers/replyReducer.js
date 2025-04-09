@@ -1,5 +1,3 @@
-//reducer for comments of the blogs
-//depebdencies
 import { createSlice } from "@reduxjs/toolkit";
 import replyService from "../services/replies";
 import { showMessage } from "./messageReducer";
@@ -8,7 +6,6 @@ const initialState = {
   replies: [],
 };
 
-//create slice
 const replySlice = createSlice({
   name: "reply",
   initialState,
@@ -36,14 +33,12 @@ const replySlice = createSlice({
 export const { setReplies, appendReply, updateReply, deleteReply } =
   replySlice.actions;
 
-// Setting data to current state with error handling
 export const initializeReplies = (pictureId) => {
   return async (dispatch) => {
     try {
       const replies = await replyService.getAll(pictureId);
       dispatch(setReplies(replies));
     } catch (error) {
-      // handle possible error and show error message
       dispatch(
         showMessage(
           {
@@ -57,7 +52,6 @@ export const initializeReplies = (pictureId) => {
   };
 };
 
-// Creating new comment and setting it to the state with error handling
 export const createReply = (content) => {
   return async (dispatch) => {
     try {
@@ -67,7 +61,6 @@ export const createReply = (content) => {
         dispatch(appendReply(newReply.reply));
       }
 
-      // show message comment added
       dispatch(
         showMessage(
           {
@@ -78,7 +71,6 @@ export const createReply = (content) => {
         )
       );
     } catch (error) {
-      // handle error and show error message
       dispatch(
         showMessage(
           {
@@ -95,7 +87,6 @@ export const createReply = (content) => {
 export const editReply = (content) => {
   return async (dispatch) => {
     try {
-      console.log("this update indeed happens");
       const updatedReply = await replyService.update(content);
       dispatch(updateReply(updatedReply));
 
@@ -152,5 +143,4 @@ export const remove = (content) => {
   };
 };
 
-//export
 export default replySlice.reducer;

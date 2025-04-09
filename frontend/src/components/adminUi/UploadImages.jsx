@@ -1,7 +1,5 @@
-//component for rendering form for adding blogs
 import { useState, useEffect } from "react";
 
-//dependencies
 import { useDispatch, useSelector } from "react-redux";
 import { createPicture } from "../../reducers/pictureReducer.js";
 import { initializeKeywords } from "../../reducers/keywordReducer.js";
@@ -40,8 +38,6 @@ const UploadImages = () => {
     state.keywords.keywords.map((keyword) => String(keyword.keyword))
   );
 
-  console.log(`keywords: ${JSON.stringify(keywordArray)}`);
-
   const currentYear = new Date().getFullYear();
   const currentMonth = new Date().getMonth() + 1;
 
@@ -76,7 +72,6 @@ const UploadImages = () => {
   );
 
   if (keywordArray.includes(keyword)) {
-    // Poista avainsana, jos se on jo listassa
     setKeywordArray(keywordArray.filter((kw) => kw !== keyword));
   }
 
@@ -97,7 +92,6 @@ const UploadImages = () => {
     const { type } = event.target.elements;
     const image = file;
 
-    console.log(`keywords: ${keywordArray}`);
     const formData = new FormData();
     formData.append("image", image);
     formData.append("type", type.value);
@@ -112,8 +106,6 @@ const UploadImages = () => {
       formData.append("textFi", textFi);
       formData.append("textEn", textEn);
     }
-
-    console.log(`formData: ${JSON.stringify(formData)}`);
 
     dispatch(createPicture(formData)).then(() => {
       dispatch(initializeKeywords());
@@ -140,10 +132,10 @@ const UploadImages = () => {
               backgroundColor: "white",
               "& .MuiOutlinedInput-root": {
                 "&:hover .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "#ccc", // Hover border color
+                  borderColor: "#ccc",
                 },
                 "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                  borderColor: "black", // Active (focused) border color
+                  borderColor: "black",
                 },
               },
             }}
@@ -162,7 +154,7 @@ const UploadImages = () => {
             filterSelectedOptions
             freeSolo
             onChange={(event, newValue) => {
-              setKeywordArray(newValue); // 🔹 Tallentaa valitut arvot
+              setKeywordArray(newValue);
             }}
             renderTags={(value, getTagProps) =>
               value.map((option, index) => {

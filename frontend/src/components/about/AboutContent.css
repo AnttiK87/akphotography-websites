@@ -96,7 +96,8 @@
 }
 
 .elementAbout1.fade-in,
-.elementAbout2.fade-in {
+.elementAbout2.fade-in,
+.elementAbout2.fade-in.reverse {
   opacity: 1;
   transform: translateX(0px);
   transform: translateY(0px);
@@ -126,11 +127,10 @@
   }
 
   .elementAbout1 {
-    padding: 2em 0 !important;
+    padding: 2em 0.5em !important;
     grid-column: 1 !important;
     grid-row: 1 !important;
     justify-self: center !important;
-    text-align: center !important;
   }
 
   .elementAbout2 {
@@ -142,6 +142,17 @@
     transform: translateX(500px);
     justify-self: center !important;
     justify-content: center !important;
+  }
+
+  .elementAbout2.reverse {
+    grid-column: 1 !important;
+    grid-row: 2 !important;
+    padding: 0;
+    max-width: 70% !important;
+    height: fit-content;
+    justify-self: center !important;
+    justify-content: center !important;
+    transform: translateX(-500px);
   }
 }
 

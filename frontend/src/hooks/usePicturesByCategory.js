@@ -11,8 +11,6 @@ const usePicturesByCategory = (category) => {
   const { language } = useLanguage();
   const [picturesByCategory, setPicturesByCategory] = useState([]);
   const [currentCategory, setCurrentCategory] = useState("");
-  //console.log(`loading: ${isLoading}`);
-  //console.log(`category: ${category}`);
 
   useEffect(() => {
     setIsLoading(true);
@@ -51,17 +49,12 @@ const usePicturesByCategory = (category) => {
     }
   })();
 
-  /*console.log(
-    `picturedByCategory length: ${JSON.stringify(
-      allPictures.length
-    )} and ${JSON.stringify(allPictures)}`
-  );*/
-
   useEffect(() => {
     if (!isLoading) {
       setPicturesByCategory(
         picturesToReturn.map((item) => ({
-          src: item.url,
+          src: item.urlThumbnail,
+          srcFullRes: item.url,
           width: item.width,
           height: item.height,
           id: item.id,

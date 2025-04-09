@@ -91,6 +91,7 @@
     height: auto;
     justify-content: flex-start;
     min-height: 88vh;
+    padding-bottom: 3em;
   }
 
   .maskImg {

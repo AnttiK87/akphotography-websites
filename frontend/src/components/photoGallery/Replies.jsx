@@ -29,8 +29,6 @@ const Replies = ({
 
   const replies = useSelector((state) => state.replies.replies);
 
-  //console.log(`commentID: ${pictureId} replies: ${JSON.stringify(replies)}`);
-
   const deleteReply = ({ reply, userId }) => {
     if (window.confirm(`Do you really want to delete this reply?`)) {
       dispatch(remove({ reply, userId }));
@@ -44,7 +42,7 @@ const Replies = ({
         .filter(
           (reply) =>
             reply.commentId === commentId && reply.parentReplyId === null
-        ) // Vain juuritason vastaukset
+        )
         .map((reply) => (
           <ReplyItem
             key={`replyId-${reply.id}`}

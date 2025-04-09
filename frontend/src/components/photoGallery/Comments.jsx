@@ -39,11 +39,10 @@ const Comments = ({
 
   const comments = useSelector((state) => state.comments.comments);
 
-  const deleteComment = ({ comment, userId }) => {
+  const deleteComment = async ({ comment, userId }) => {
     if (window.confirm(`Do you really want to delete this comment?`)) {
-      dispatch(remove({ comment, userId }));
+      await dispatch(remove({ comment, userId }));
     }
-    return;
   };
 
   const handleEditComment = (comment) => {

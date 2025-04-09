@@ -31,7 +31,6 @@ const useToggleItem = () => {
         });
       }
 
-      // Avaa uusi elementti
       components.forEach((element) => {
         element.classList.add("show");
         element.classList.remove("collapsed");

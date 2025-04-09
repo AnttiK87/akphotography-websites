@@ -1,5 +1,3 @@
-//component for rendering form for adding blogs
-
 //dependencies
 import { useState, useEffect, useMemo } from "react";
 import { Form } from "react-bootstrap";
@@ -45,18 +43,11 @@ const EditPicture = ({ show, setShow, picture }) => {
     dispatch(initializeKeywords());
   }, [dispatch, show]);
 
-  const keywordsList = useSelector(
-    (state) => state.keywords?.keywords ?? [] // Jos keywords on undefined tai null, palautetaan tyhjä lista
-  );
+  const keywordsList = useSelector((state) => state.keywords?.keywords ?? []);
 
   const keywords = useMemo(() => {
     return keywordsList.map((keyword) => String(keyword.keyword));
   }, [keywordsList]);
-
-  //console.log(`all keywords: ${JSON.stringify(keywords)}`);
-  //console.log(`pictures keywords: ${JSON.stringify(picture.keywords)}`);
-  //console.log(`keywords array: ${JSON.stringify(keywordArray)}`);
-  //console.log(`keywords initial: ${JSON.stringify(initialKeywords)}`);
 
   const currentYear = new Date().getFullYear();
   const currentMonth = new Date().getMonth() + 1;
@@ -80,18 +71,16 @@ const EditPicture = ({ show, setShow, picture }) => {
     { length: year == currentYear ? currentMonth : 12 },
     (_, i) => ({
       value: i + 1,
-      name: monthNames[i], // Haetaan nimi listasta
+      name: monthNames[i],
     })
   );
 
   const availableYears = Array.from(
-    { length: currentYear - 2020 + 1 }, // Lisätään 1, jotta 2020 tulee mukaan
+    { length: currentYear - 2020 + 1 },
     (_, i) => ({
-      value: 2020 + i, // 2020 + indeksi
+      value: 2020 + i,
     })
   );
-
-  //console.log(`picture ${JSON.stringify(picture)}`);
 
   useEffect(() => {
     if (picture && show) {
@@ -141,7 +130,7 @@ const EditPicture = ({ show, setShow, picture }) => {
   };
 
   const areKeywordsEqual = (keywords1, keywords2) => {
-    if (keywords1.length !== keywords2.length) return false; // Jos eri pituus, eivät voi olla samat
+    if (keywords1.length !== keywords2.length) return false;
     const set1 = new Set(keywords1);
     const set2 = new Set(keywords2);
     return (
@@ -153,8 +142,6 @@ const EditPicture = ({ show, setShow, picture }) => {
   const handleEditPicture = (event) => {
     event.preventDefault();
     const pictureId = picture.id;
-
-    //console.log(`id: ${pictureId}`);
 
     if (!pictureId) {
       console.error("No picture found!");
@@ -180,8 +167,6 @@ const EditPicture = ({ show, setShow, picture }) => {
       ? null
       : keywordArray;
 
-    //console.log(`newkeywords: ${newKeywordsSet}`);
-
     const formData = {
       type: typeValue,
       textFi: textFiValue,
@@ -191,7 +176,6 @@ const EditPicture = ({ show, setShow, picture }) => {
       year: yearValue,
     };
 
-    //console.log(`formdata: ${JSON.stringify(formData)}`);
     dispatch(editPicture({ pictureId, formData }));
     handleClose();
   };
@@ -389,10 +373,10 @@ const EditPicture = ({ show, setShow, picture }) => {
                 backgroundColor: "white",
                 "& .MuiOutlinedInput-root": {
                   "&:hover .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "#ccc", // Hover border color
+                    borderColor: "#ccc",
                   },
                   "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                    borderColor: "black", // Active (focused) border color
+                    borderColor: "black",
                   },
                 },
               }}
@@ -411,7 +395,7 @@ const EditPicture = ({ show, setShow, picture }) => {
               filterSelectedOptions
               freeSolo
               onChange={(event, newValue) => {
-                setKeywordArray(newValue); // 🔹 Tallentaa valitut arvot
+                setKeywordArray(newValue);
               }}
               renderTags={(value, getTagProps) =>
                 value.map((option, index) => {
