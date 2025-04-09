@@ -1,7 +1,6 @@
 /*text styling*/
 .containerGalleryText {
   min-height: 20vh;
-  margin-top: 2vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -82,7 +81,7 @@
 
 @media (max-width: 500px) {
   .containerGalleryText {
-    margin-top: 2vh;
+    margin-top: 3em;
     flex-direction: column;
     justify-content: end;
   }
@@ -227,7 +226,7 @@
 
 @media (max-width: 500px) {
   .galleryContainer {
-    margin-top: 3em;
+    margin-top: 0;
     grid-template-columns: 90%;
   }
 }

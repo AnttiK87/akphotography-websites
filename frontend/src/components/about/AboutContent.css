@@ -8,7 +8,7 @@
 }
 
 .textAbout {
-  text-align: justify;
+  text-align: start;
   hyphens: auto;
   -webkit-hyphens: auto;
   -ms-hyphens: auto;
@@ -128,7 +128,7 @@
   }
 
   .elementAbout1 {
-    padding: 2em 0.5em !important;
+    padding: 2em 1em !important;
     grid-column: 1 !important;
     grid-row: 1 !important;
     justify-self: center !important;

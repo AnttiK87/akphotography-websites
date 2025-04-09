@@ -17,6 +17,7 @@
 @media (max-width: 1500px) {
   .textPom {
     font-size: 1.1rem;
+    text-align: start;
   }
 }
 

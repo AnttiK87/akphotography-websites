@@ -98,7 +98,7 @@ const GalleryByCategory = () => {
   );
 
   const textPhotoOfMonth = (
-    <p lang="fi" className="textPom">
+    <p className="textPom">
       {language === "fin"
         ? categorysTextData.textContentFi
         : categorysTextData.textContentEn}

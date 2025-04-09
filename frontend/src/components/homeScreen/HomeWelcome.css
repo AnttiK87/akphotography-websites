@@ -3,6 +3,7 @@
   font-size: 5vw;
   color: #00433c;
   transform: scaleY(1.1);
+  text-align: start;
 }
 
 .headerWelcome2 {
@@ -12,6 +13,7 @@
   transition: all 1.5s ease-in-out;
   transition-delay: 1s;
   opacity: 0;
+  text-align: start;
 }
 
 .headerWelcome2.fade-in {
@@ -23,7 +25,8 @@
   hyphens: auto;
   word-wrap: break-word;
   overflow-wrap: break-word;
-  text-align: justify;
+  text-align: start;
+  margin: 0;
 }
 
 @media (max-width: 1500px) {
@@ -102,7 +105,7 @@
   grid-column: 2 / span 2;
   grid-row: 1;
   height: fit-content;
-  width: 100%;
+  width: 75%;
   align-self: flex-end;
   justify-self: center;
 
@@ -191,7 +194,7 @@
     grid-column: 1;
     grid-row: 3;
     height: fit-content;
-    width: 90%;
+    width: 80%;
     align-self: start;
     padding-top: 10vw;
   }
