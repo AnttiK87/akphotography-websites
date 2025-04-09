@@ -14,14 +14,30 @@ const DropMenu = ({
 }) => {
   const { setLanguage } = useLanguage();
 
+  const isTouchDevice = () => {
+    return "ontouchstart" in window || navigator.maxTouchPoints > 0;
+  };
+
+  const handleToggleDropdown = () => {
+    if (isTouchDevice()) {
+      setShowDropdown((prev) => !prev);
+    }
+  };
+
+  const eventHandlers = isTouchDevice()
+    ? { onClick: handleToggleDropdown }
+    : {
+        onMouseEnter: () => setShowDropdown(true),
+        onMouseLeave: () => setShowDropdown(false),
+      };
+
   return (
     <NavDropdown
       className={classes}
       title={title}
       id="custom-dropdown"
       show={showDropdown}
-      onMouseEnter={() => setShowDropdown(true)}
-      onMouseLeave={() => setShowDropdown(false)}
+      {...eventHandlers}
     >
       {items.map((item, index) => (
         <NavDropdown.Item

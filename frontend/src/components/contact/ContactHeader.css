@@ -100,7 +100,7 @@
   }
 }
 
-@media (max-height: 790px) {
+@media (max-height: 500px) {
   .wholeScreenContact1 {
     height: auto;
     padding: 5em;

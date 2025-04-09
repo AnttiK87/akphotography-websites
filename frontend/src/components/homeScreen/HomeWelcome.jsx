@@ -22,7 +22,7 @@ const HomeWelcome = () => {
 
   const textWelcome =
     language === "fin" ? (
-      <p lang="fi" className="textWelcome">
+      <p className="textWelcome">
         Innokas luontokuvauksen harrastaja Leppävirralta. Tämä sivusto on pieni
         ikkuna intohimoni maailmaan. Pääset mukaan tarkastelemaan hetkiä, jotka
         olen saanut vangittua kamerani linssin läpi. Olen koonnut tänne
@@ -39,7 +39,7 @@ const HomeWelcome = () => {
         sukella rauhassa mukaan luonnon kauneuteen!
       </p>
     ) : (
-      <p lang="en" className="textWelcome">
+      <p className="textWelcome">
         A passionate nature photography enthusiast from Leppävirta, Finland.
         This website is a small window into the world of my passion. Here you’ll
         find moments I’ve captured through the lens of my camera – a selection

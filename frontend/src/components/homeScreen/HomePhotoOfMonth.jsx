@@ -22,7 +22,7 @@ const HomePhotoOfMonth = () => {
 
   const textPhotoOfMonth =
     language === "fin" ? (
-      <p lang="fi" className="textPom">
+      <p className="textPom">
         Joka kuukausi valitsen yhden erityisen kuvan, joka on jäänyt mieleeni
         tavalla tai toisella. Se voi olla hetki, jonka onnistuin tallentamaan
         juuri oikeaan aikaan, teknisesti haastava otos tai yksinkertaisesti
@@ -42,7 +42,7 @@ const HomePhotoOfMonth = () => {
         ikuistamaan omia hetkiäsi!
       </p>
     ) : (
-      <p lang="en" className="textPom">
+      <p className="textPom">
         Every month, I choose a special photo that has stayed in my mind for one
         reason or another. It could be a moment I managed to capture at just the
         right time, a technically challenging shot, or simply an image that
