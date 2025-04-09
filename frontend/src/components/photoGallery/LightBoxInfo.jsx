@@ -17,7 +17,6 @@ const LightBoxInfo = ({
   setReply,
   setCurrentComment,
 }) => {
-  //console.log(`picture: ${JSON.stringify(picture)}`);
   const handleOverlayClose = (event) => {
     if (event.target.id === "closeModal") {
       toggleItem(".photoInfoContainer");
@@ -46,7 +45,7 @@ const LightBoxInfo = ({
             />
           </div>
           <div className="metadataContainer">
-            <ImageMetadata src={picture.src} />
+            <ImageMetadata src={picture.srcFullRes} />
             <AdditionalInfo picture={picture} />
           </div>
           <div className="commentsContainer">

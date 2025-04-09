@@ -1,41 +1,46 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 
-const useFullScreen = (isMobile) => {
+const useFullScreen = (isMobile, isLightBoxOpen) => {
   const [isFullScreen, setIsFullScreen] = useState(false);
 
-  useEffect(() => {
-    if (isMobile) {
-      enterFullscreen();
-    }
-  }, [isMobile]);
-
-  // Mene koko näyttöön
-  const enterFullscreen = () => {
+  const enterFullscreen = useCallback(() => {
     if (document.body.requestFullscreen) {
       document.body.requestFullscreen();
     } else if (document.body.webkitRequestFullscreen) {
-      // Safari
       document.body.webkitRequestFullscreen();
     } else if (document.body.msRequestFullscreen) {
-      // IE
       document.body.msRequestFullscreen();
     }
+    if (isMobile) {
+      setTimeout(() => {
+        window.scrollTo(0, 50);
+      }, 100);
+    }
     setIsFullScreen(true);
+  }, [isMobile]);
+
+  const exitFullscreen = () => {
+    if (document.fullscreenElement) {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+      } else if (document.msExitFullscreen) {
+        document.msExitFullscreen();
+      }
+      setIsFullScreen(false);
+    }
   };
 
-  // Poistu koko näytöstä
-  const exitFullscreen = () => {
-    if (document.exitFullscreen) {
-      document.exitFullscreen();
-    } else if (document.webkitExitFullscreen) {
-      // Safari
-      document.webkitExitFullscreen();
-    } else if (document.msExitFullscreen) {
-      // IE
-      document.msExitFullscreen();
+  useEffect(() => {
+    if (isMobile && isLightBoxOpen) {
+      enterFullscreen();
     }
-    setIsFullScreen(false);
-  };
+
+    if (!isLightBoxOpen) {
+      exitFullscreen();
+    }
+  }, [isMobile, isLightBoxOpen, enterFullscreen]);
 
   return { isFullScreen, enterFullscreen, exitFullscreen };
 };

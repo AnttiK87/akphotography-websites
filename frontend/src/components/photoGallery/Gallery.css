@@ -1,5 +1,5 @@
 .albumContainer {
-  margin: 3em 5em;
+  margin: 3em 12em;
 }
 
 .galleryImgText {
@@ -23,9 +23,38 @@
 .galleryImgText:hover {
   opacity: 1;
 }
+.react-photo-album {
+  margin-bottom: 20px;
+}
+
+.hideText {
+  display: none;
+}
+
+.GalleryPhotoHeader {
+  font-size: 1.5rem;
+}
 
 @media (max-width: 990px) {
   .albumContainer {
     margin: 0em 2em 3em 2em;
+  }
+}
+
+@media (max-width: 1200px) {
+  .react-photo-album {
+    margin-bottom: 15px;
+  }
+}
+
+@media (max-width: 600px) {
+  .react-photo-album {
+    margin-bottom: 10px;
+  }
+}
+
+@media (max-width: 300px) {
+  .react-photo-album {
+    margin-bottom: 5px;
   }
 }

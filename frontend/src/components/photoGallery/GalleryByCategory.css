@@ -35,7 +35,7 @@
 /* PAGE STYLING */
 .wholeScreenPoM {
   position: relative;
-  height: 100vh;
+  height: auto;
   background-color: #f8f7f5;
   overflow: hidden;
   padding: 0;
@@ -47,11 +47,10 @@
 
 .grid-containerPoM {
   display: grid;
-  padding: 5em;
+  padding: 5em 9em;
   width: 100%;
   height: 100%;
-  grid-template-columns: 40% 60%;
-  grid-template-rows: 15% 90%;
+  grid-template-columns: 50% 50%;
 }
 
 .elementPoM1 {
@@ -68,7 +67,7 @@
 .elementPoM2 {
   grid-column: 1;
   grid-row: 2;
-  max-width: 80%;
+  max-width: 90%;
   justify-self: center;
   align-self: center;
 
@@ -80,7 +79,7 @@
   grid-column: 2;
   grid-row: 2;
   max-height: 100%;
-  max-width: 90%;
+  max-width: 95%;
   transition: all 0.5s ease-in-out;
   transition-delay: 0.5s;
   opacity: 0;
@@ -123,7 +122,7 @@
     grid-column: 1;
     grid-row: 3;
     padding: 2em 0;
-    max-width: 90%;
+    max-width: 100%;
     transform: translateX(500px);
   }
 

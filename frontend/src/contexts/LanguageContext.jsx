@@ -1,5 +1,5 @@
 import { createContext, useState, useEffect } from "react";
-import PropTypes from "prop-types"; // Tuodaan PropTypes
+import PropTypes from "prop-types";
 
 const LanguageContext = createContext();
 

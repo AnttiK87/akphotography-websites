@@ -1,8 +1,8 @@
 .notification {
-  position: fixed; /* Kiinnittää elementin näkymään aina */
+  position: fixed;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%); /* Siirtää sen tarkasti keskelle */
+  transform: translate(-50%, -50%);
   background: lightgrey;
   color: white;
   font-size: 20px;
@@ -10,13 +10,13 @@
   border-radius: 5px;
   padding: 10px;
   width: 90%;
-  max-width: 400px; /* Rajoittaa leveyden */
+  max-width: 400px;
   text-align: center;
   display: flex;
   justify-content: center;
   align-items: center;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Lisää varjon */
-  z-index: 9999; /* Asettaa kaiken päälle */
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  z-index: 9999;
 }
 
 .success {

@@ -1,10 +1,7 @@
-//reducer for blogs
-//depedencies
 import { createSlice } from "@reduxjs/toolkit";
 import userService from "../services/users";
 import { showMessage } from "./messageReducer";
 
-//create slice
 const userSlice = createSlice({
   name: "user",
   initialState: {
@@ -39,7 +36,6 @@ const userSlice = createSlice({
   },
 });
 
-//exports
 export const {
   setUsername,
   setPassword,
@@ -51,15 +47,12 @@ export const {
   setFirstLogin,
 } = userSlice.actions;
 
-//get user by id
 export const getUser = (id) => {
   return async (dispatch) => {
     try {
       const user = await userService.getUserById(id);
-      //console.log(users)
       dispatch(setSelectedUser(user));
     } catch (error) {
-      // handle possible error and show error message
       dispatch(
         showMessage(
           {
@@ -73,7 +66,6 @@ export const getUser = (id) => {
   };
 };
 
-// Creating new user and setting it to the state with error handling
 export const modifyUser = (content) => {
   return async (dispatch) => {
     try {
@@ -90,7 +82,6 @@ export const modifyUser = (content) => {
         )
       );
     } catch (error) {
-      // handle possible error and show error message
       dispatch(
         showMessage(
           {
@@ -105,7 +96,6 @@ export const modifyUser = (content) => {
 };
 
 export const changePassword = (content) => {
-  console.log("tries to modify password with data:", JSON.stringify(content));
   return async (dispatch) => {
     try {
       const updatedUser = await userService.changePassword(content);
@@ -121,7 +111,6 @@ export const changePassword = (content) => {
         )
       );
     } catch (error) {
-      // handle possible error and show error message
       dispatch(
         showMessage(
           {
@@ -136,7 +125,6 @@ export const changePassword = (content) => {
 };
 
 export const updateUserInfo = (content) => {
-  console.log("tries to modify password with data:", JSON.stringify(content));
   return async (dispatch) => {
     try {
       const updatedUser = await userService.updateInfo(content);
@@ -152,7 +140,6 @@ export const updateUserInfo = (content) => {
         )
       );
     } catch (error) {
-      // handle possible error and show error message
       dispatch(
         showMessage(
           {
@@ -166,5 +153,4 @@ export const updateUserInfo = (content) => {
   };
 };
 
-//export
 export default userSlice.reducer;

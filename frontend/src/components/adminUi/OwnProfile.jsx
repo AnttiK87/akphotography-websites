@@ -18,7 +18,7 @@ import "./OwnProfile.css";
 
 const OwnProfile = () => {
   const { user } = useNotLoggedin();
-  //console.log("user in own profile: ", user);
+
   const dispatch = useDispatch();
   const keywordsFromStore = useSelector((state) => state.keywords.keywords);
 

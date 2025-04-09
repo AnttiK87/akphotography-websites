@@ -64,8 +64,7 @@ const ContactForm = () => {
     };
 
     try {
-      const sentMail = await contactFormService.sendMail(formData);
-      console.log(JSON.stringify(sentMail));
+      await contactFormService.sendMail(formData);
       dispatch(
         showMessage(
           {

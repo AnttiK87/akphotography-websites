@@ -67,7 +67,6 @@ p {
 
 .smallColumn {
   gap: 1rem;
-  padding-right: 0.5em;
 }
 
 .social {
@@ -91,27 +90,24 @@ p {
   opacity: 1;
 }
 
-/* Pseudo-elementti, joka luo viivan */
 .social-link::after {
-  content: ""; /* Pseudo-elementin sisällöksi ei tarvitse mitään */
+  content: "";
   position: absolute;
-  bottom: 0; /* Asetetaan viiva linkin alareunaan */
+  bottom: 0;
   left: 0;
-  width: 0; /* Aluksi viiva on piilossa */
-  height: 2px; /* Viivan korkeus */
-  background-color: #00202c; /* Viivan väri */
-  transition: width 0.4s ease-out; /* Liukuminen vasemmalta oikealle */
+  width: 0;
+  height: 2px;
+  background-color: #00202c;
+  transition: width 0.4s ease-out;
 }
 
-/* Animaatio hover-tilassa */
 .social-link:hover::after {
-  width: 100%; /* Viiva laajenee täyteen leveyteen, kun linkkiä viedään päälle */
+  width: 100%;
 }
 
-/* Media query pienille näytöille (esim. mobiililaitteet) */
 @media (max-width: 1500px) {
   .footerH1 {
-    font-size: 6em; /* Pienempi fonttikoko pienille näytöille */
+    font-size: 6em;
   }
 }
 
@@ -121,7 +117,6 @@ p {
   }
 }
 
-/* Media query todella pienille näytöille (esim. puhelimet) */
 @media (max-width: 750px) {
   .footerH1 {
     font-size: 2.2em;
@@ -139,6 +134,7 @@ p {
   }
 
   .smallColumn {
+    padding-top: 1rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -154,9 +150,14 @@ p {
   }
   .footerDiv {
     margin-left: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
   }
 
   .footer {
     padding-right: 0;
+    height: 80vh;
   }
 }

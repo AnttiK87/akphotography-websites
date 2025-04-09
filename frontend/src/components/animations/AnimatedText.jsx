@@ -33,13 +33,13 @@ const AnimatedText = ({
   useEffect(() => {
     const show = () => {
       setTimeout(() => {
-        animations.start("show"); // Animaation aloitus viiveellä
+        animations.start("show");
         if (setTextIsAnimated) {
           setTimeout(() => {
             setTextIsAnimated(true);
           }, 3000);
         }
-      }, 200); // Viiveen kesto millisekunteina (esim. 500 ms = 0.5 sekuntia)
+      }, 200);
     };
 
     show();

@@ -17,8 +17,6 @@ import "./OwnProfile.css";
 const EditPicture = ({ show, setShow, keyword }) => {
   const dispatch = useDispatch();
 
-  console.log("this is keyword edited", JSON.stringify(keyword?.keyword));
-
   const [keywordText, setKeywordText] = useState("");
 
   useEffect(() => {
@@ -35,8 +33,6 @@ const EditPicture = ({ show, setShow, keyword }) => {
     event.preventDefault();
     const keywordId = keyword.id;
 
-    //console.log(`id: ${pictureId}`);
-
     if (!keywordId) {
       console.error("No keykword found!");
       return;
@@ -44,13 +40,10 @@ const EditPicture = ({ show, setShow, keyword }) => {
 
     const keywordValue = event.target.elements?.keywordEdit?.value;
 
-    //console.log(`newkeywords: ${newKeywordsSet}`);
-
     const formData = {
       keyword: keywordValue,
     };
 
-    //console.log(`formdata: ${JSON.stringify(formData)}`);
     dispatch(editKeyword({ keywordId, formData }));
     handleClose();
   };

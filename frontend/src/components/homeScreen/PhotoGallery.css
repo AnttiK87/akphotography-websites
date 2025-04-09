@@ -21,7 +21,7 @@
 }
 
 .textGallery {
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   width: 80%;
   margin: 0 auto;
   margin-bottom: 2vh;
@@ -95,7 +95,7 @@
   transition: all 0.5s ease-in-out;
   padding: 1rem;
   display: inline-flex;
-  flex-direction: column; /* Asettaa kuvan ja tekstin päällekkäin */
+  flex-direction: column;
   align-items: center;
   width: fit-content;
 }
@@ -227,7 +227,8 @@
 
 @media (max-width: 500px) {
   .galleryContainer {
-    grid-template-columns: 85%;
+    margin-top: 3em;
+    grid-template-columns: 90%;
   }
 }
 

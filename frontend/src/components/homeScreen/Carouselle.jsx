@@ -9,10 +9,8 @@ import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { initializeCategoryLatest } from "../../reducers/pictureReducer";
 
-//import { useLocation } from "react-router-dom";
-
 import useLightBox from "../../hooks/useLightBox";
-// import Swiper and modules styles
+
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
@@ -22,11 +20,8 @@ import "./Carouselle.css";
 const Carouselle = ({ category }) => {
   const location = useLocation();
   const dispatch = useDispatch();
-  //const location = useLocation();
 
   const { openLightBox, setCategory } = useLightBox();
-
-  //console.log(`path: ${location.pathname.replace(/\/\d+$/, "")}`);
 
   useEffect(() => {
     dispatch(initializeCategoryLatest(category));
@@ -76,7 +71,7 @@ const Carouselle = ({ category }) => {
                     }}
                     className="clickArea"
                   />
-                  <img className="carouselleImg" src={picture.url} />
+                  <img className="carouselleImg" src={picture.urlThumbnail} />
                 </div>
               </div>
             </SwiperSlide>

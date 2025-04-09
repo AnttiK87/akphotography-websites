@@ -19,10 +19,11 @@
 }
 
 .textWelcome {
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   hyphens: auto;
   word-wrap: break-word;
   overflow-wrap: break-word;
+  text-align: justify;
 }
 
 @media (max-width: 1500px) {
@@ -70,7 +71,7 @@
   width: 100%;
   height: 100%;
   grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: 30% 70%;
+  grid-template-rows: 25% 75%;
 }
 
 .element1 {
@@ -113,7 +114,7 @@
 .element4 {
   grid-column: 2 / span 2;
   grid-row: 2;
-  width: 70%;
+  width: 75%;
   height: fit-content;
   align-self: start;
   justify-self: center;

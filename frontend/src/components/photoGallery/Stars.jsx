@@ -14,11 +14,17 @@ import RatingInfo from "./RatingInfo";
 
 import "./Stars.css";
 
-const StarIcons = ({ id }) => {
+const StarIcons = ({ id, isMobile }) => {
+  useEffect(() => {
+    document.querySelectorAll(".star").forEach((star) => {
+      star.addEventListener("touchend", () => {
+        star.classList.remove("hover");
+      });
+    });
+  }, []);
+
   const dispatch = useDispatch();
   const ratings = useSelector((state) => state.ratings.ratings);
-
-  //console.log(`avg ratings: ${averageRating}`);
 
   const [show, setShow] = useState(false);
   const [ratingsLenght, setRatingsLenght] = useState(ratings.length);
@@ -55,7 +61,6 @@ const StarIcons = ({ id }) => {
     setRatingsLenght(ratings.length);
   }, [ratings, currentUserRating]);
 
-  // Päivitetään rating aina, kun id muuttuu
   useEffect(() => {
     if (savedRating) {
       setCurrentUserRating(savedRating);
@@ -68,7 +73,6 @@ const StarIcons = ({ id }) => {
     addRating(updatedRating, id);
   };
 
-  //Function for adding ratings to db
   const addRating = (rating, id) => {
     const userId = getUserId();
 
@@ -102,9 +106,9 @@ const StarIcons = ({ id }) => {
         {Array.from({ length: 5 }, (_, i) => 5 - i).map((i) => (
           <span
             key={i}
-            className={`star ${avgRating - i >= 0 ? "rated" : ""}  ${
-              avgRating - i < 0 && avgRating - i > -1 ? "half" : ""
-            }`}
+            className={`star ${isMobile ? "mobile" : ""} ${
+              avgRating - i >= 0 ? "rated" : ""
+            }  ${avgRating - i < 0 && avgRating - i > -1 ? "half" : ""}`}
             onClick={() => handleSettingRating(currentUserRating, i, id)}
           ></span>
         ))}
@@ -123,6 +127,7 @@ const StarIcons = ({ id }) => {
 
 StarIcons.propTypes = {
   id: PropTypes.number.isRequired,
+  isMobile: PropTypes.bool.isRequired,
 };
 
 export default StarIcons;

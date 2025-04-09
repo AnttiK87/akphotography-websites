@@ -14,6 +14,7 @@
   min-width: 100% !important;
   padding: 0;
   margin: 0;
+  height: 20vh;
 }
 
 .navbar-nav {
@@ -204,6 +205,12 @@
   display: none;
 }
 
+@media (max-height: 500px) {
+  .navBar {
+    height: 120px !important;
+  }
+}
+
 @media (max-width: 990px) {
   .logoAK {
     margin-left: 0;
@@ -228,6 +235,7 @@
     position: relative;
     display: flex;
     z-index: 2;
+    height: 15vh;
   }
 
   .navBarSmall {
@@ -318,7 +326,6 @@
     opacity: 1 !important;
   }
 
-  /* Kun piilotetaan näkyvyyden sijaan */
   .dropSmall.collapsed,
   .dropSmallLang.collapsed {
     right: -110%;

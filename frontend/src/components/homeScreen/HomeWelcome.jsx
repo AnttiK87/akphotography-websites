@@ -27,20 +27,33 @@ const HomeWelcome = () => {
         ikkuna intohimoni maailmaan. Pääset mukaan tarkastelemaan hetkiä, jotka
         olen saanut vangittua kamerani linssin läpi. Olen koonnut tänne
         valikoiman kuvia, jotka ovat mielestäni onnistuneita, merkityksellisiä
-        ja mieluisia. Toivon, että ne herättävät myös sinussa samanlaista iloa,
-        ihastusta ja kunnioitusta luontoa kohtaan kuin minussa. Mukava, että
-        piipahdit – sukella rauhassa mukaan luonnon kauneuteen!
+        ja mieluisia. Jokainen kuva on syntynyt luonnon helmassa – joskus pitkän
+        odotuksen ja hiljaisen tarkkailun tuloksena, toisinaan taas nopean
+        reaktion ja onnellisen sattuman seurauksena. Luontokuvaus on minulle
+        tapa rauhoittua, oppia ja ehkäpä olla osa jotakin suurempaa. Minulle
+        tärkeimmät kuvat eivät aina synny dramaattisista maisemista tai
+        harvinaisista lajeista, vaan pienistä ja arkisista hetkistä, jotka
+        kertovat jotain olennaista myös oman lähiluontomme kauneudesta. Toivon,
+        että kuvani herättävät myös sinussa samanlaista iloa, ihastusta ja
+        kunnioitusta luontoa kohtaan kuin minussa. Mukava, että piipahdit –
+        sukella rauhassa mukaan luonnon kauneuteen!
       </p>
     ) : (
       <p lang="en" className="textWelcome">
         A passionate nature photography enthusiast from Leppävirta, Finland.
-        This site offers a small window into my world of inspiration. You&#39;ll
-        get a chance to witness moments I&#39;ve captured through the lens of my
-        camera. I&#39;ve carefully curated a selection of images that I find
-        meaningful, successful, and dear to me. I hope they spark in you the
-        same joy, admiration, and respect for nature as they do in me. I&#39;m
-        glad you stopped by – take your time and immerse yourself in the beauty
-        of nature!
+        This website is a small window into the world of my passion. Here you’ll
+        find moments I’ve captured through the lens of my camera – a selection
+        of images that I feel are successful, meaningful, and dear to me. Each
+        photo has been born in the heart of nature – sometimes after long waits
+        and quiet observation, other times thanks to quick reactions and happy
+        coincidences. For me, nature photography is a way to slow down, to
+        learn, and perhaps to be part of something greater. The images that
+        matter most to me don’t always come from dramatic landscapes or rare
+        species, but from small, everyday moments that reflect the beauty of the
+        nature close to home. I hope my photos awaken in you the same kind of
+        joy, wonder, and respect for nature that they bring to me. Thanks for
+        stopping by – take your time and dive into the beauty of the natural
+        world!
       </p>
     );
 

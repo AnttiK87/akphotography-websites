@@ -17,8 +17,6 @@ const AdminReplies = ({ pictureId, commentId, handleReplyComment }) => {
 
   const replies = useSelector((state) => state.replies.replies);
 
-  //console.log(`commentID: ${pictureId} replies: ${JSON.stringify(replies)}`);
-
   const deleteReply = ({ reply, userId }) => {
     if (window.confirm(`Do you really want to delete this reply?`)) {
       dispatch(remove({ reply, userId }));
@@ -55,8 +53,6 @@ const AdminReplyItem = ({
   deleteReply,
   handleReplyComment,
 }) => {
-  //console.log(`reply info in reply item; ${JSON.stringify(reply)}`);
-
   const childReplies = replies.filter((r) => r.parentReplyId === reply.id);
 
   const UsernameReplied =
@@ -71,7 +67,6 @@ const AdminReplyItem = ({
 
   return (
     <div className="RepliesEP">
-      {/* Pääreply */}
       <div className="EditPictureComment replyEP">
         <div>
           <div>

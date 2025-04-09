@@ -16,7 +16,6 @@ import "./GalleryByCategory.css";
 
 const GalleryByCategory = () => {
   const { index, category } = useParams();
-  //console.log(`category in gallery: ${category}`);
   const {
     openLightBox,
     closeLightBox,
@@ -38,13 +37,11 @@ const GalleryByCategory = () => {
       !lightBoxOpen &&
       !isLightBoxOpening.current
     ) {
-      //console.log("tries open by paramindex");
       isLightBoxOpening.current = true;
       openLightBox(index);
     }
 
     if (!index && currentIndex === undefined) {
-      //console.log("tries close by paramindex");
       isLightBoxOpening.current = false;
       closeLightBox();
     }
@@ -52,8 +49,6 @@ const GalleryByCategory = () => {
 
   const { language } = useLanguage();
   const { isVisible, startAnim, elementRef } = useAnimationLauncher(0);
-
-  //console.log(`category: ${category}`);
 
   const TextByCategory = {
     monthly: {

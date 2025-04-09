@@ -81,8 +81,9 @@
   }
 
   .wholeScreenContact1 {
-    height: auto;
     justify-content: center;
+    padding-bottom: 3em;
+    height: 85vh;
   }
 
   .imgContainerContact {
@@ -102,5 +103,6 @@
 @media (max-height: 790px) {
   .wholeScreenContact1 {
     height: auto;
+    padding: 5em;
   }
 }

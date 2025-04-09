@@ -28,6 +28,10 @@ Picture.init(
         },
       },
     },
+    urlThumbnail: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
     height: {
       type: DataTypes.INTEGER,
       allowNull: false,

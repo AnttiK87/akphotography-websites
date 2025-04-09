@@ -15,9 +15,8 @@ const DropMenuSmall = ({
   languageSelect,
 }) => {
   const { language, setLanguage } = useLanguage();
-  //console.log(className);
+
   var classToUse = className === "dropSmall" ? ".dropSmall" : ".dropSmallLang";
-  //console.log(classToUse);
 
   const enableScroll = () => {
     document.body.classList.remove("no-scroll");
@@ -57,8 +56,9 @@ const DropMenuSmall = ({
               className="menuText menuLink"
               onClick={() => {
                 if (languageSelect) {
-                  //console.log("you called me");
                   setLanguage(item.value);
+                  closeAllMenus();
+                  enableScroll();
                 }
               }}
             >

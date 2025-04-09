@@ -1,5 +1,3 @@
-//reducer for comments of the blogs
-//depebdencies
 import { createSlice } from "@reduxjs/toolkit";
 import keywordService from "../services/keywords";
 import { showMessage } from "./messageReducer";
@@ -9,7 +7,6 @@ const initialState = {
   keywords: [],
 };
 
-//create slice
 const keywordSlice = createSlice({
   name: "keyword",
   initialState,
@@ -34,14 +31,12 @@ const keywordSlice = createSlice({
 export const { setKeywords, updateKeyword, deleteKeyword } =
   keywordSlice.actions;
 
-// Setting data to current state with error handling
 export const initializeKeywords = () => {
   return async (dispatch) => {
     try {
       const keywords = await keywordService.getAll();
       dispatch(setKeywords(keywords));
     } catch (error) {
-      // handle possible error and show error message
       dispatch(
         showMessage(
           {
@@ -58,9 +53,7 @@ export const initializeKeywords = () => {
 export const editKeyword = (content) => {
   return async (dispatch) => {
     try {
-      //console.log("this update indeed happens");
       const updatedKeyword = await keywordService.update(content);
-      //console.log(`updated picture: ${JSON.stringify(updatedPicture)}`);
       dispatch(updateKeyword(updatedKeyword));
 
       dispatch(
@@ -143,5 +136,4 @@ export const removeKw = (content) => {
   };
 };
 
-//export
 export default keywordSlice.reducer;

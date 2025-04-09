@@ -9,10 +9,10 @@
 }
 
 .FirstLoginForm {
-  position: fixed; /* Kiinnittää elementin näkymään aina */
+  position: fixed;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%); /* Siirtää sen tarkasti keskelle */
+  transform: translate(-50%, -50%);
   background: #00433c;
   font-size: 1em;
   color: white;
@@ -20,12 +20,12 @@
   border-radius: 10px;
   padding: 2em;
   width: 90vw;
-  max-width: 550px; /* Rajoittaa leveyden */
+  max-width: 550px;
   text-align: start;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: start;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Lisää varjon */
-  z-index: 9981; /* Asettaa kaiken päälle */
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  z-index: 9981;
 }

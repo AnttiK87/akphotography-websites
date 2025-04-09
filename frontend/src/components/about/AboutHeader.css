@@ -82,6 +82,8 @@
 
   .wholeScreenAbout1 {
     justify-content: center;
+    padding-bottom: 8em;
+    height: 85vh;
   }
 
   .imgContainer {
@@ -101,5 +103,6 @@
 @media (max-height: 790px) {
   .wholeScreenAbout1 {
     height: auto;
+    padding: 5em;
   }
 }

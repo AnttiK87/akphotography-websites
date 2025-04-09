@@ -1,4 +1,3 @@
-//component for rendering form for logging in
 //dependencies
 import PropTypes from "prop-types";
 import { useDispatch } from "react-redux";
@@ -57,7 +56,6 @@ const EditUserInfo = ({ show, setShow, user }) => {
     return null;
   }
 
-  // rendering the form
   return (
     <div id="closeModal" className="editOverlay" onClick={handleOverlayClose}>
       <div id="modal" className="editKW">
@@ -84,7 +82,7 @@ const EditUserInfo = ({ show, setShow, user }) => {
                   className="form__field commentUsername"
                   id="name"
                   name="name"
-                  value={name} // Käytetään tilamuuttujaa
+                  value={name}
                   onChange={(e) => {
                     setName(e.target.value);
                   }}
@@ -102,7 +100,7 @@ const EditUserInfo = ({ show, setShow, user }) => {
                   className="form__field commentUsername"
                   id="username"
                   name="username"
-                  value={username} // Käytetään tilamuuttujaa
+                  value={username}
                   onChange={(e) => {
                     setUsername(e.target.value);
                   }}
@@ -120,7 +118,7 @@ const EditUserInfo = ({ show, setShow, user }) => {
                   className="form__field commentUsername"
                   id="email"
                   name="email"
-                  value={email} // Käytetään tilamuuttujaa
+                  value={email}
                   onChange={(e) => {
                     setEmail(e.target.value);
                   }}

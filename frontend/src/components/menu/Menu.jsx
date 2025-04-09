@@ -128,26 +128,28 @@ const Menu = () => {
   };
 
   const closeAllMenus = () => {
-    const menu = document.querySelectorAll(".navBarSmall");
-    const subMenu = document.querySelectorAll(".dropSmall, .dropSmallLang");
+    try {
+      const menu = document.querySelectorAll(".navBarSmall");
+      const subMenu = document.querySelectorAll(".dropSmall, .dropSmallLang");
 
-    menu.forEach((element) => {
-      element.classList.remove("show");
-      element.classList.add("collapsed");
-      setIsMenuOpen(false);
-      menu.style.transition = "none";
-    });
-    if (subMenu) {
+      menu.forEach((element) => {
+        element.classList.remove("show");
+        element.classList.add("collapsed");
+        setIsMenuOpen(false);
+        element.style.transition = "none";
+      });
+
       subMenu.forEach((element) => {
         element.classList.remove("show");
         element.classList.add("collapsed");
         setIsDropdownOpen(false);
-        subMenu.style.transition = "none";
+        element.style.transition = "none";
       });
+    } catch (error) {
+      console.error("Error in closeAllMenus:", error);
     }
   };
 
-  //closes hamburger menu if orientation changes causes to menu view change between normal navbar and hamburger menu
   window.addEventListener("resize", () => {
     const navBarSmall = document.querySelector(".navBarSmall");
     const subMenu = document.querySelectorAll(".dropSmall, .dropSmallLang");
@@ -167,7 +169,6 @@ const Menu = () => {
         });
       }
 
-      // Palauta transition pienen viiveen jälkeen
       setTimeout(() => {
         navBarSmall.style.transition = "";
         subMenu.forEach((element) => {
@@ -362,6 +363,7 @@ const Menu = () => {
           isDropdownOpen={isDropdownOpen}
           setIsDropdownOpen={setIsDropdownOpen}
           languageSelect={true}
+          closeAllMenus={closeAllMenus}
         />
       </div>
     </>
