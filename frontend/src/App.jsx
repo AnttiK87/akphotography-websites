@@ -1,4 +1,7 @@
+import { useEffect } from "react";
+
 import { Routes, Route, useLocation } from "react-router-dom";
+import { useLanguage } from "./hooks/useLanguage";
 
 import "./App.css";
 
@@ -19,6 +22,16 @@ import Notification from "./components/adminUi/Notification";
 import FirstLogin from "./components/adminUi/FirstLogin";
 
 function App() {
+  const { language } = useLanguage();
+
+  useEffect(() => {
+    if (language === "fin") {
+      document.documentElement.lang = "fi";
+    } else {
+      document.documentElement.lang = "en";
+    }
+  }, [language]);
+
   const location = useLocation();
   const adminUi =
     location.pathname === "/admin" ||

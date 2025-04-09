@@ -1,4 +1,4 @@
-const { DataTypes, fn } = require('sequelize')
+const { DataTypes, fn } = require('sequelize');
 
 module.exports = {
   up: async ({ context: queryInterface }) => {
@@ -34,14 +34,13 @@ module.exports = {
         allowNull: false,
         defaultValue: fn('NOW'),
       },
-    })
+    });
 
     await queryInterface.addColumn('comments', 'reply_id', {
       type: DataTypes.INTEGER,
       allowNull: true,
-    })
+    });
 
-    // Lisätään ulkoinen avain -rajoite
     await queryInterface.addConstraint('comments', {
       fields: ['reply_id'],
       type: 'foreign key',
@@ -51,12 +50,12 @@ module.exports = {
         field: 'id',
       },
       onDelete: 'CASCADE',
-    })
+    });
 
     await queryInterface.addColumn('replies', 'comment_id', {
       type: DataTypes.INTEGER,
       allowNull: true,
-    })
+    });
 
     await queryInterface.addConstraint('replies', {
       fields: ['comment_id'],
@@ -67,14 +66,14 @@ module.exports = {
         field: 'id',
       },
       onDelete: 'CASCADE',
-    })
+    });
   },
 
   down: async ({ context: queryInterface }) => {
-    await queryInterface.removeConstraint('comments', 'fk_reply_id')
-    await queryInterface.removeColumn('comments', 'reply_id')
-    await queryInterface.removeConstraint('replies', 'fk_reply_comment_id')
-    await queryInterface.removeColumn('replies', 'comment_id')
-    await queryInterface.dropTable('replies')
+    await queryInterface.removeConstraint('comments', 'fk_reply_id');
+    await queryInterface.removeColumn('comments', 'reply_id');
+    await queryInterface.removeConstraint('replies', 'fk_reply_comment_id');
+    await queryInterface.removeColumn('replies', 'comment_id');
+    await queryInterface.dropTable('replies');
   },
-}
+};

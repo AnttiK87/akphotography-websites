@@ -105,18 +105,6 @@ const LightBox = () => {
     }
   }, [isLoading, picturesByCategory, validIndex]);
 
-  useEffect(() => {
-    if (
-      isError ||
-      picturesByCategory.length < validIndex ||
-      !picturesByCategory.length
-    ) {
-      setTimeout(() => {
-        //closeLightBox();
-      }, 1500);
-    }
-  }, [isError, /*closeLightBox,*/ picturesByCategory, validIndex]);
-
   const { isFullScreen, enterFullscreen, exitFullscreen } = useFullScreen(
     isMobile,
     isLightBoxOpen
@@ -191,11 +179,14 @@ const LightBox = () => {
 
     if (isFullScreen) {
       exitFullscreen();
-    } else if (zoomed > 1) {
+    }
+    if (zoomed > 1) {
       handleZoomOut();
-    } else if (isActive) {
+    }
+    if (isActive) {
       stopTimer();
-    } else if (openItem) {
+    }
+    if (openItem) {
       toggleItem(openItem);
     }
   }, [
@@ -225,7 +216,7 @@ const LightBox = () => {
           exitFullscreen();
         } else if (show) {
           setShow(false);
-        } else {
+        } else if (isLightBoxOpen) {
           handleExit();
         }
       }
@@ -270,6 +261,18 @@ const LightBox = () => {
     openItem,
     handleExit,
   ]);
+
+  useEffect(() => {
+    if (
+      isError ||
+      picturesByCategory.length < validIndex ||
+      !picturesByCategory.length
+    ) {
+      setTimeout(() => {
+        handleExit();
+      }, 1500);
+    }
+  }, [isError, handleExit, picturesByCategory, validIndex]);
 
   if (!isLightBoxOpen) {
     return null;

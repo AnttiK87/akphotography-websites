@@ -1,5 +1,5 @@
-const { Model, DataTypes } = require('sequelize')
-const { sequelize } = require('../utils/db')
+const { Model, DataTypes } = require('sequelize');
+const { sequelize } = require('../utils/db');
 
 class PictureKeyword extends Model {}
 
@@ -28,6 +28,6 @@ PictureKeyword.init(
     underscored: true,
     modelName: 'pictureKeyword',
   },
-)
+);
 
-module.exports = PictureKeyword
+module.exports = PictureKeyword;

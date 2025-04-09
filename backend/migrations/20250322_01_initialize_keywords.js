@@ -1,4 +1,4 @@
-const { DataTypes } = require('sequelize')
+const { DataTypes } = require('sequelize');
 
 module.exports = {
   up: async ({ context: queryInterface }) => {
@@ -12,7 +12,7 @@ module.exports = {
         type: DataTypes.STRING,
         allowNull: false,
       },
-    })
+    });
 
     await queryInterface.createTable('picture_keywords', {
       picture_id: {
@@ -35,11 +35,11 @@ module.exports = {
         onDelete: 'CASCADE',
         primaryKey: true,
       },
-    })
+    });
   },
 
   down: async ({ context: queryInterface }) => {
-    await queryInterface.dropTable('picture_keywords')
-    await queryInterface.dropTable('keywords')
+    await queryInterface.dropTable('picture_keywords');
+    await queryInterface.dropTable('keywords');
   },
-}
+};

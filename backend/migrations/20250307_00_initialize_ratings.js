@@ -1,4 +1,4 @@
-const { DataTypes, fn } = require('sequelize')
+const { DataTypes, fn } = require('sequelize');
 
 module.exports = {
   up: async ({ context: queryInterface }) => {
@@ -26,14 +26,13 @@ module.exports = {
         allowNull: false,
         defaultValue: fn('NOW'),
       },
-    })
+    });
 
     await queryInterface.addColumn('pictures', 'rating_id', {
       type: DataTypes.INTEGER,
       allowNull: true,
-    })
+    });
 
-    // Lisätään ulkoinen avain -rajoite
     await queryInterface.addConstraint('pictures', {
       fields: ['rating_id'],
       type: 'foreign key',
@@ -43,12 +42,12 @@ module.exports = {
         field: 'id',
       },
       onDelete: 'CASCADE',
-    })
+    });
 
     await queryInterface.addColumn('ratings', 'picture_id', {
       type: DataTypes.INTEGER,
       allowNull: true,
-    })
+    });
 
     await queryInterface.addConstraint('ratings', {
       fields: ['picture_id'],
@@ -59,16 +58,16 @@ module.exports = {
         field: 'id',
       },
       onDelete: 'CASCADE',
-    })
+    });
   },
 
   down: async ({ context: queryInterface }) => {
-    await queryInterface.removeConstraint('pictures', 'fk_rating_id')
-    await queryInterface.removeColumn('pictures', 'rating_id')
-    await queryInterface.removeConstraint('ratings', 'fk_picture_id')
-    await queryInterface.removeColumn('ratings', 'picture_id')
-    await queryInterface.dropTable('ratings')
-    await queryInterface.removeConstraint('pictures', 'fk_comment_id')
-    await queryInterface.removeColumn('pictures', 'comment_id')
+    await queryInterface.removeConstraint('pictures', 'fk_rating_id');
+    await queryInterface.removeColumn('pictures', 'rating_id');
+    await queryInterface.removeConstraint('ratings', 'fk_picture_id');
+    await queryInterface.removeColumn('ratings', 'picture_id');
+    await queryInterface.dropTable('ratings');
+    await queryInterface.removeConstraint('pictures', 'fk_comment_id');
+    await queryInterface.removeColumn('pictures', 'comment_id');
   },
-}
+};

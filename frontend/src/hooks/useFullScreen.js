@@ -28,8 +28,8 @@ const useFullScreen = (isMobile, isLightBoxOpen) => {
       } else if (document.msExitFullscreen) {
         document.msExitFullscreen();
       }
-      setIsFullScreen(false);
     }
+    setIsFullScreen(false);
   };
 
   useEffect(() => {

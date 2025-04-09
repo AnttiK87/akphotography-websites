@@ -1,5 +1,5 @@
-const { Model, DataTypes } = require("sequelize");
-const { sequelize } = require("../utils/db");
+const { Model, DataTypes } = require('sequelize');
+const { sequelize } = require('../utils/db');
 
 class Sessions extends Model {}
 
@@ -13,20 +13,20 @@ Sessions.init(
     activeToken: {
       type: DataTypes.STRING,
       allowNull: false,
-      field: "active_token",
+      field: 'active_token',
     },
     userId: {
       type: DataTypes.INTEGER,
       allowNull: false,
       unique: true,
-      field: "user_id",
+      field: 'user_id',
     },
   },
   {
     sequelize,
     timestamps: false,
-    modelName: "sessions",
-  }
+    modelName: 'sessions',
+  },
 );
 
 module.exports = Sessions;

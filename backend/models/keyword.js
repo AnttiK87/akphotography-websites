@@ -1,5 +1,5 @@
-const { sequelize } = require('../utils/db')
-const { Model, DataTypes } = require('sequelize')
+const { sequelize } = require('../utils/db');
+const { Model, DataTypes } = require('sequelize');
 
 class Keyword extends Model {}
 
@@ -21,6 +21,6 @@ Keyword.init(
     underscored: true,
     modelName: 'keyword',
   },
-)
+);
 
-module.exports = Keyword
+module.exports = Keyword;

@@ -14,7 +14,6 @@
   min-width: 100% !important;
   padding: 0;
   margin: 0;
-  height: 20vh;
 }
 
 .navbar-nav {
@@ -209,6 +208,19 @@
   .navBar {
     height: 120px !important;
   }
+
+  .navBarSmall.show {
+    transform: translatey(115px) !important;
+  }
+
+  .dropVisible.visible {
+    padding-bottom: 0 !important;
+  }
+
+  .navBarSmall.show {
+    padding-bottom: 8em;
+    height: 75vh;
+  }
 }
 
 @media (max-width: 990px) {
@@ -252,10 +264,11 @@
   }
 
   .navBarSmall.show {
-    transform: translatey(120px);
+    transform: translatey(13vh);
     background-color: #00433c;
     opacity: 1;
-    min-height: 90vh;
+    height: 90vh;
+    overflow-y: auto;
   }
 
   .custom-dropdown {
@@ -303,7 +316,8 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100vh;
+    height: 100%;
+    padding-bottom: 5em;
   }
 
   .dropSmall,

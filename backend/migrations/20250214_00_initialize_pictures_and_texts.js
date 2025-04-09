@@ -1,4 +1,4 @@
-const { DataTypes, fn } = require('sequelize')
+const { DataTypes, fn } = require('sequelize');
 
 module.exports = {
   up: async ({ context: queryInterface }) => {
@@ -37,7 +37,7 @@ module.exports = {
         allowNull: false,
         defaultValue: fn('NOW'),
       },
-    })
+    });
     await queryInterface.createTable('texts', {
       id: {
         type: DataTypes.INTEGER,
@@ -62,14 +62,13 @@ module.exports = {
         allowNull: false,
         defaultValue: fn('NOW'),
       },
-    })
-    // Lisätään 'text_id' column 'pictures' -tauluun ja määritetään ulkoinen avain
+    });
+
     await queryInterface.addColumn('pictures', 'text_id', {
       type: DataTypes.INTEGER,
       allowNull: true,
-    })
+    });
 
-    // Lisätään ulkoinen avain -rajoite
     await queryInterface.addConstraint('pictures', {
       fields: ['text_id'],
       type: 'foreign key',
@@ -79,12 +78,12 @@ module.exports = {
         field: 'id',
       },
       onDelete: 'CASCADE',
-    })
+    });
 
     await queryInterface.addColumn('texts', 'picture_id', {
       type: DataTypes.INTEGER,
       allowNull: true,
-    })
+    });
 
     await queryInterface.addConstraint('texts', {
       fields: ['picture_id'],
@@ -95,16 +94,16 @@ module.exports = {
         field: 'id',
       },
       onDelete: 'CASCADE',
-    })
+    });
   },
 
   down: async ({ context: queryInterface }) => {
-    await queryInterface.removeConstraint('pictures', 'fk_text_id')
-    await queryInterface.removeColumn('pictures', 'text_id')
-    await queryInterface.removeConstraint('texts', 'fk_picture_id')
-    await queryInterface.removeColumn('texts', 'picture_id')
-    await queryInterface.dropTable('pictures')
-    await queryInterface.dropTable('texts')
-    await queryInterface.dropTable('ratings')
+    await queryInterface.removeConstraint('pictures', 'fk_text_id');
+    await queryInterface.removeColumn('pictures', 'text_id');
+    await queryInterface.removeConstraint('texts', 'fk_picture_id');
+    await queryInterface.removeColumn('texts', 'picture_id');
+    await queryInterface.dropTable('pictures');
+    await queryInterface.dropTable('texts');
+    await queryInterface.dropTable('ratings');
   },
-}
+};
