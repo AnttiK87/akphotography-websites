@@ -15,14 +15,6 @@ import RatingInfo from "./RatingInfo";
 import "./Stars.css";
 
 const StarIcons = ({ id, isMobile }) => {
-  useEffect(() => {
-    document.querySelectorAll(".star").forEach((star) => {
-      star.addEventListener("touchend", () => {
-        star.classList.remove("hover");
-      });
-    });
-  }, []);
-
   const dispatch = useDispatch();
   const ratings = useSelector((state) => state.ratings.ratings);
 

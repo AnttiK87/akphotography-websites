@@ -31,6 +31,14 @@
   color: gold;
 }
 
+.mobile.star.rated:hover::before,
+.mobile.star:hover::before,
+.mobile.star:hover ~ .mobile.star::before {
+  content: "\f006";
+  font-family: "Font Awesome 6 Free";
+  font-weight: 400;
+}
+
 .star.rated::before {
   content: "\f005";
   font-family: "Font Awesome 6 Free";

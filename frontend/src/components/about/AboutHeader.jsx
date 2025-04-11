@@ -24,12 +24,14 @@ const AboutHeader = () => {
         printCount={15}
         isVisible={true}
       />
-      <div className="imgContainer">
-        <img
-          src={`../../../images/homepage/me.jpg`}
-          alt="Background Image"
-          className="background-image-about"
-        />
+      <div className="ImageAndAnimationCont">
+        <div className="maskImgAbout">
+          <img
+            src={`../../../images/homepage/me2.jpg`}
+            alt="Background Image"
+            className="background-image-about"
+          />
+        </div>
       </div>
       {textIsAnimated ? (
         <p className={"animated-text inline-block"}>

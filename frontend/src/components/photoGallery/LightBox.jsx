@@ -263,16 +263,22 @@ const LightBox = () => {
   ]);
 
   useEffect(() => {
-    if (
-      isError ||
-      picturesByCategory.length < validIndex ||
-      !picturesByCategory.length
-    ) {
+    if (!isLoading && picturesByCategory.length > 0) {
+      const nextImage = new Image();
+      nextImage.src = picturesByCategory[nextPictureIndex]?.srcFullRes;
+
+      const prevImage = new Image();
+      prevImage.src = picturesByCategory[prevPictureIndex]?.srcFullRes;
+    }
+  }, [picturesByCategory, nextPictureIndex, prevPictureIndex, isLoading]);
+
+  useEffect(() => {
+    if (!isLoading && (isError || picturesByCategory.length < validIndex)) {
       setTimeout(() => {
         handleExit();
       }, 1500);
     }
-  }, [isError, handleExit, picturesByCategory, validIndex]);
+  }, [isError, handleExit, picturesByCategory, validIndex, isLoading]);
 
   if (!isLightBoxOpen) {
     return null;
@@ -325,7 +331,6 @@ const LightBox = () => {
           handleNextPicture={handleNextPicture}
           setvalidIndex={setvalidIndex}
           handleExit={handleExit}
-          isMobile={isMobile}
         />
         <div className="lightBoxContainer">
           <div>

@@ -33,14 +33,10 @@ const useFullScreen = (isMobile, isLightBoxOpen) => {
   };
 
   useEffect(() => {
-    if (isMobile && isLightBoxOpen) {
-      enterFullscreen();
-    }
-
     if (!isLightBoxOpen) {
       exitFullscreen();
     }
-  }, [isMobile, isLightBoxOpen, enterFullscreen]);
+  }, [isLightBoxOpen]);
 
   return { isFullScreen, enterFullscreen, exitFullscreen };
 };

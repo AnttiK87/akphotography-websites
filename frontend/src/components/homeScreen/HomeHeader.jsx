@@ -43,12 +43,14 @@ const HomeHeader = () => {
         printCount={15}
         isVisible={true}
       />
-      <div className="maskImg">
-        <img
-          src={`../../../images/homeBackground/background${currentImageIndex}.jpg`}
-          alt="Background Image"
-          className="background-image"
-        />
+      <div className="ImageAndAnimationCont">
+        <div className="maskImg">
+          <img
+            src={`../../../images/homeBackground/background${currentImageIndex}.jpg`}
+            alt="Background Image"
+            className="background-image"
+          />
+        </div>
       </div>
       {textIsAnimated ? (
         <p className={"animated-text inline-block"}>
