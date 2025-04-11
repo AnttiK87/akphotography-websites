@@ -30,7 +30,6 @@ const TopButtons = ({
   nextPictureIndex,
   handleNextPicture,
   handleExit,
-  isMobile,
 }) => {
   useEffect(() => {
     let timer;
@@ -109,7 +108,7 @@ const TopButtons = ({
             />
           </div>
         </div>
-        <div className={`fullscreen-btn ${isMobile ? "disabled" : ""}`}>
+        <div className={`fullscreen-btn`}>
           {isFullScreen ? (
             <FontAwesomeIcon
               onClick={() => exitFullscreen()}
@@ -151,7 +150,6 @@ TopButtons.propTypes = {
   nextPictureIndex: PropTypes.number.isRequired,
   handleNextPicture: PropTypes.func.isRequired,
   handleExit: PropTypes.func.isRequired,
-  isMobile: PropTypes.bool,
 };
 
 export default TopButtons;

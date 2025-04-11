@@ -1,6 +1,6 @@
 import { useLanguage } from "../../hooks/useLanguage";
 import { useEffect, useRef } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 import useAnimationLauncher from "../../hooks/useAnimationLauncher";
 import useLightBox from "../../hooks/useLightBox";
@@ -16,6 +16,8 @@ import "./GalleryByCategory.css";
 
 const GalleryByCategory = () => {
   const { index, category } = useParams();
+  const navigate = useNavigate();
+
   const {
     openLightBox,
     closeLightBox,
@@ -85,8 +87,14 @@ const GalleryByCategory = () => {
 
   const categorysTextData = TextByCategory[category];
 
+  useEffect(() => {
+    if (!categorysTextData) {
+      navigate("/404", { replace: true });
+    }
+  }, [categorysTextData, navigate]);
+
   if (!categorysTextData) {
-    return <p>Category not found.</p>;
+    return null;
   }
 
   const headerPhotoOfMonth = (

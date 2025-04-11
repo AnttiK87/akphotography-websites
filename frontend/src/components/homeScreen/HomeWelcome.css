@@ -27,6 +27,7 @@
   overflow-wrap: break-word;
   text-align: start;
   margin: 0;
+  background-color: #f8f7f5ca;
 }
 
 @media (max-width: 1500px) {
@@ -156,11 +157,39 @@
   .wholeScreen2 {
     height: auto;
   }
+  .element4,
+  .element3 {
+    margin-left: 3em;
+  }
+
+  .element4 {
+    margin-bottom: 7em;
+  }
+
+  .grid-container {
+    padding-top: 0;
+  }
+
+  .me {
+    right: -5vw;
+    bottom: -3vw;
+  }
+}
+@media (max-width: 1150px) {
+  .me {
+    right: -5vw;
+    bottom: 10vw;
+  }
 }
 
 @media (max-width: 990px) {
   .wholeScreen2 {
     height: auto;
+  }
+
+  .element4,
+  .element3 {
+    margin-left: 0;
   }
 
   .grid-container {

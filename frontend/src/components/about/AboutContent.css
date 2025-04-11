@@ -17,11 +17,11 @@
 
 @media (max-width: 1500px) {
   .headerAbout {
-    font-size: 7vw;
+    font-size: 3.5em;
     background-color: #f8f7f5c1;
     width: 80%;
     align-self: center;
-    margin: 2em auto;
+    margin: 1em auto;
     margin-bottom: 0;
   }
 
@@ -29,6 +29,13 @@
     font-size: 1rem;
     margin: 0;
     background-color: #f8f7f5c1;
+  }
+}
+
+@media (max-width: 900px) {
+  .headerAbout {
+    margin: 2em auto 0 auto;
+    font-size: 1.5em;
   }
 }
 
@@ -110,7 +117,7 @@
   object-fit: contain;
 }
 
-@media (max-width: 990px) {
+@media (max-width: 1300px) {
   .wholeScreenAbout {
     height: auto;
   }

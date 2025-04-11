@@ -24,12 +24,14 @@ const ContactHeader = () => {
         printCount={10}
         isVisible={true}
       />
-      <div className="imgContainerContact">
-        <img
-          src={`../../../images/homeBackground/background2.jpg`}
-          alt="Background Image"
-          className="background-image-contact"
-        />
+      <div className="ImageAndAnimationCont">
+        <div className="maskImgContact">
+          <img
+            src={`../../../images/homeBackground/background2.jpg`}
+            alt="Background Image"
+            className="background-image-contact"
+          />
+        </div>
       </div>
       {textIsAnimated ? (
         <p className={"animated-text-contact inline-block"}>

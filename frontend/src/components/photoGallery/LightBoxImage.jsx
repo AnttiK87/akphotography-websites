@@ -52,10 +52,10 @@ const LightboxImage = ({
 
     const currentTime = new Date().getTime();
     if (currentTime - lastTap < 300) {
-      if (zoomed > 1) {
-        handleZoomOut(zoomed, 1);
-      } else {
+      if (zoomed < 2.5 && zoomed >= 1) {
         handleZoomIn(zoomed);
+      } else {
+        handleZoomOut(zoomed, 1);
       }
     }
     setLastTap(currentTime);
@@ -152,7 +152,7 @@ const LightboxImage = ({
         overflow: isMobile ? "auto" : "hidden",
         cursor: zoomed > 1 ? "grab" : "zoom-in",
       }}
-      onClick={zoomed < 1.1 ? () => handleZoomIn(zoomed) : null}
+      onClick={!isMobile && zoomed < 1.1 ? () => handleZoomIn(zoomed) : null}
       onDoubleClick={
         zoomed < 2.5 && zoomed > 1
           ? () => handleZoomIn(zoomed)
