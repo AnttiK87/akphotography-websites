@@ -12,6 +12,7 @@ import toesRight from "../../assets/toes-right-white.png";
 const HomeHeader = () => {
   const { language } = useLanguage();
   const [textIsAnimated, setTextIsAnimated] = useState(false);
+  const [isImageReady, setIsImageReady] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(
     Math.floor(Math.random() * 8) + 1
   );
@@ -35,6 +36,14 @@ const HomeHeader = () => {
     };
   }, [duration]);
 
+  useEffect(() => {
+    const image = new Image();
+    image.src = `../../../images/homeBackground/background${currentImageIndex}.jpg`;
+    image.onload = () => {
+      setIsImageReady(true);
+    };
+  }, [currentImageIndex]);
+
   return (
     <div className="wholeScreen">
       <FootPrints
@@ -44,40 +53,43 @@ const HomeHeader = () => {
         isVisible={true}
       />
       <div className="ImageAndAnimationCont">
-        <div className="maskImg">
+        <div className={`maskImgHome ${isImageReady ? "ready" : ""}`}>
           <img
             src={`../../../images/homeBackground/background${currentImageIndex}.jpg`}
             alt="Background Image"
-            className="background-image"
+            className={`background-image ${isImageReady ? "ready" : ""}`}
           />
         </div>
+        {textIsAnimated ? (
+          <p className={"animated-text inline-block"}>
+            {textToHeader.map((line, lineIndex) => (
+              <span className="block" key={`${line}-${lineIndex}`}>
+                {line.split(" ").map((word, wordIndex, wordArray) => (
+                  <span className="inline-block" key={`${word}-${wordIndex}`}>
+                    {word.split("").map((char, charIndex) => (
+                      <span
+                        key={`${char}-${charIndex}`}
+                        className="inline-block"
+                      >
+                        {char}
+                      </span>
+                    ))}
+                    {wordIndex < wordArray.length - 1 && (
+                      <span className="inline-block">&nbsp;</span>
+                    )}
+                  </span>
+                ))}
+              </span>
+            ))}
+          </p>
+        ) : (
+          <AnimatedText
+            textToAnimate={headerText}
+            classNames="animated-text"
+            setTextIsAnimated={setTextIsAnimated}
+          />
+        )}
       </div>
-      {textIsAnimated ? (
-        <p className={"animated-text inline-block"}>
-          {textToHeader.map((line, lineIndex) => (
-            <span className="block" key={`${line}-${lineIndex}`}>
-              {line.split(" ").map((word, wordIndex, wordArray) => (
-                <span className="inline-block" key={`${word}-${wordIndex}`}>
-                  {word.split("").map((char, charIndex) => (
-                    <span key={`${char}-${charIndex}`} className="inline-block">
-                      {char}
-                    </span>
-                  ))}
-                  {wordIndex < wordArray.length - 1 && (
-                    <span className="inline-block">&nbsp;</span>
-                  )}
-                </span>
-              ))}
-            </span>
-          ))}
-        </p>
-      ) : (
-        <AnimatedText
-          textToAnimate={headerText}
-          classNames="animated-text"
-          setTextIsAnimated={setTextIsAnimated}
-        />
-      )}
     </div>
   );
 };

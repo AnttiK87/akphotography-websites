@@ -11,7 +11,7 @@
   height: 100%;
   top: -1.5em;
   left: 40px;
-  gap: 3rem;
+  gap: 2em;
   transform: rotate(-5deg);
 }
 
@@ -38,8 +38,13 @@
 }
 
 @media (max-width: 990px) {
+  .footprint {
+    width: 35px;
+    height: 35px;
+  }
+
   .printsDiv {
-    left: 0px;
+    left: 5px;
     transform: rotate(-3deg);
   }
 }

@@ -1,79 +1,78 @@
-.swiper {
-  width: 100%;
-  height: 100%;
-  margin: 0 3px;
+.slider-container {
+  width: 90%;
+  height: auto;
 }
 
-.clickArea {
-  position: absolute;
-  height: 100%;
-  width: 85%;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  cursor: pointer;
+.slick-slider {
+  max-width: 100%;
+  max-height: 100%;
 }
 
-.swiper-slide {
-  text-align: center;
-  font-size: 18px;
-  background: transparent;
+.slick-dots li {
+  margin: 0;
+}
+
+@media (max-width: 990px) {
+  .slider-container {
+    width: 100%;
+  }
+
+  .slick-slider {
+    max-width: 110%;
+  }
+
+  .slider-container {
+    width: 100vw;
+    height: auto;
+  }
+}
+
+.slick-initialized .slick-slide {
   display: flex;
   justify-content: center;
-  flex-direction: column;
-  align-items: center;
+  min-height: 500px;
+  max-width: 100%;
+  align-content: center;
+  flex-wrap: wrap;
 }
 
-.swiper-slide img {
-  display: block;
-  object-fit: contain;
-  user-select: none;
-}
-
-.swiper-button-prev {
-  color: #00796d;
-}
-
-.swiper-button-next {
-  color: #00796d;
-}
-
-.carouselle {
-  display: grid;
-  max-height: 100% !important;
-  max-width: fit-content !important;
-  grid-template-rows: 100%;
-}
-
-.carouTextAndImg {
-  display: inline-block;
-  grid-column: 1;
-  grid-row: 1;
-  max-height: 100%;
-  width: fit-content;
-  position: relative;
-  padding: 0 1px;
-}
-
-.carouselleText {
-  position: absolute;
-  bottom: 0;
-  flex-direction: column;
-  align-self: end;
-  justify-self: center;
-  color: white;
-  background-color: rgba(86, 86, 86, 0.7);
-  width: 100%;
-}
-
-.carouselleH1 {
-  margin: 0;
-  justify-self: center;
+@media (max-width: 900px) {
+  .slick-initialized .slick-slide {
+    display: flex;
+    justify-content: center;
+    min-height: 250px;
+    max-width: 100%;
+    align-content: center;
+    flex-wrap: wrap;
+  }
 }
 
 .carouselleImg {
-  justify-self: center;
-  width: 100%;
-  max-width: fit-content;
-  height: 100% !important;
+  cursor: pointer;
+  max-height: 500px;
+  max-width: 100%;
+}
+
+@media (max-width: 900px) {
+  .carouselleImg {
+    max-height: 250px;
+    overflow: hidden;
+  }
+}
+
+.slick-next:before {
+  content: "→";
+  color: #00433c;
+}
+
+.slick-prev:before {
+  content: "←";
+  color: #00433c;
+}
+
+@media (max-width: 990px) {
+  .slick-prev:before,
+  .slick-next:before {
+    display: none;
+  }
 }

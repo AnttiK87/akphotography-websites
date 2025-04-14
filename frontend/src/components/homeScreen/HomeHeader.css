@@ -1,131 +1,120 @@
 .wholeScreen {
   position: relative;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  height: 75vh;
+  width: 100%;
   background-color: #00433c;
+  display: grid;
   overflow: hidden;
-}
-
-.inline-block {
-  display: inline-block;
 }
 
 .ImageAndAnimationCont {
-  min-height: 70%;
-}
-
-.animated-text {
-  font-size: 5.5vw;
-  margin-bottom: 4vw;
-  color: white;
-  font-family: "Nova Round", sans-serif;
-  transform: scaleY(1.5);
-  z-index: 1;
-}
-
-.maskImg {
   display: flex;
-  max-height: 100%;
-  position: relative;
-  -webkit-mask-image: url("../../assets/film.png");
-  mask-image: url("../../assets/film.png");
-  mask-repeat: no-repeat;
-  mask-size: 75% 160%;
-  mask-position: center;
-  opacity: 0;
-  animation: fadeInMask 1s ease-in-out forwards;
-  animation-delay: 0.2s;
-  overflow: hidden;
-  top: 4vw;
+  flex-wrap: wrap;
   justify-content: center;
+  align-content: center;
+  grid-row: 1;
+  grid-column: 1;
+  min-height: calc(100vh - 200px);
+  max-height: calc(100vh - 200px);
+  object-fit: contain;
 }
 
-@keyframes fadeInMask {
-  from {
-    opacity: 0;
-    transform: rotate(-15deg);
-    scale: 0;
-  }
-  to {
-    opacity: 1;
-    transform: rotate(5deg);
-    scale: 1;
+@media (max-width: 990px) {
+  .ImageAndAnimationCont {
+    min-height: calc(100vh - 100px);
   }
 }
-
-.background-image {
-  height: 80%;
-  max-width: 80%;
-  object-fit: cover;
-  opacity: 1;
-  animation: fadeInPicture 1s ease-in-out forwards;
-  animation-delay: 0.2s;
-  align-self: center;
-  transform: rotate(-40deg);
+.maskImgHome,
+.maskImgAbout,
+.maskImgContact {
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  max-height: 80%;
+  max-width: 95%;
+  aspect-ratio: 16 / 9;
+  object-fit: contain;
+  top: 2em;
+  position: relative;
+  transform: rotate(-15deg);
+  transition: all 1s ease-in-out;
 }
 
-@keyframes fadeInPicture {
-  from {
-    transform: rotate(-40deg);
-  }
-  to {
-    transform: rotate(-5deg);
-  }
+.maskImgHome.ready,
+.maskImgAbout.ready,
+.maskImgContact.ready {
+  transform: rotate(3deg);
 }
 
-@media (max-width: 1570px) {
-  .animated-text {
-    font-size: 6vw;
-    line-height: 0.8em;
-    padding-bottom: 0.5em;
-  }
+.maskImgHome {
+  -webkit-mask-image: url(/src/assets/film.png);
+  mask-image: url(/src/assets/film.png);
 }
 
-@media (max-width: 1400px) {
-  .animated-text {
-    font-size: 11vw;
-    line-height: 0.8em;
-    top: 80vw;
-  }
-
-  .wholeScreen {
-    height: auto;
-    justify-content: flex-start;
-    min-height: 88vh;
-    padding-bottom: 3em;
-  }
-
-  .maskImg {
-    mask-size: 90% 130%;
-    margin-top: 2em;
-  }
-
-  .background-image {
-    height: 120%;
-    max-width: 120%;
-    object-fit: cover;
-  }
+.maskImgContact {
+  -webkit-mask-image: url(/src/assets/mail.png);
+  mask-image: url(/src/assets/mail.png);
 }
 
-@media (max-width: 1100px) {
-  .maskImg {
-    mask-size: 90% 130%;
+.maskImgAbout {
+  -webkit-mask-image: url(/src/assets/camera.png);
+  mask-image: url(/src/assets/camera.png);
+}
+
+@media (max-width: 990px) {
+  .maskImgHome,
+  .maskImgAbout,
+  .maskImgContact {
+    top: 0em;
   }
 }
 
 @media (max-width: 500px) {
-  .wholeScreen {
-    padding-bottom: 8em;
-    min-height: 85vh;
-    max-height: 85vh !important;
-    justify-content: center;
+  .maskImgHome,
+  .maskImgAbout,
+  .maskImgContact {
+    top: -3em;
   }
+}
 
+.background-image {
+  scale: 0;
+  max-height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+  transform: rotate(-10deg);
+  transition: all 1s ease-in-out;
+  opacity: 0;
+}
+
+.background-image.ready {
+  transform: rotate(-3deg);
+  opacity: 1;
+  scale: 1;
+}
+
+.animated-text {
+  font-size: 6vw;
+  color: white;
+  font-family: "Nova Round", sans-serif;
+  transform: scaleY(1.5);
+  z-index: 1;
+  position: relative;
+  bottom: 1em;
+  height: 0.8em;
+  width: 100%;
+}
+
+@media (max-width: 990px) {
   .animated-text {
-    font-size: 11vw;
-    top: 110vw;
+    font-size: 6vw;
+    bottom: 1em;
+  }
+}
+
+@media (max-width: 500px) {
+  .animated-text {
+    font-size: 6.5vw;
+    bottom: 3em;
   }
 }

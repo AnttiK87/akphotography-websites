@@ -3,13 +3,12 @@
 import { Link } from "react-router-dom";
 import useLogout from "../../hooks/useLogout";
 import { Navbar, Nav } from "react-bootstrap";
-import { useSelector } from "react-redux";
 
 import "./AdminMenu.css";
 
 const AdminMenu = () => {
   //get user state
-  const user = useSelector((state) => state.user.user);
+  const user = window.localStorage.getItem("loggedAdminUser");
 
   // get handleLogout
   const { handleLogout } = useLogout();
