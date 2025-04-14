@@ -1,5 +1,4 @@
 import axios from "axios";
-import picturesService from "../services/pictures";
 
 const baseUrlLogin = "/api/login";
 const baseUrlLogout = "/api/logout";
@@ -9,11 +8,9 @@ const login = async (credentials) => {
   return response.data;
 };
 
-const logout = async () => {
-  const token = picturesService.getToken();
-
+const logout = async (token) => {
   const config = {
-    headers: { Authorization: token },
+    headers: { Authorization: `Bearer ${token}` },
   };
 
   const response = await axios.delete(baseUrlLogout, config);

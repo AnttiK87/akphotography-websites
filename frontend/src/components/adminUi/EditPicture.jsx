@@ -88,7 +88,7 @@ const EditPicture = ({ show, setShow, picture }) => {
       setType(picture.type);
       setTextFi(picture.text?.textFi);
       setTextEn(picture.text?.textEn);
-      const YearMonth = picture?.month_year;
+      const YearMonth = picture?.monthYear;
       setKeywordArray(
         Array.from(picture?.keywords.map((keyword) => String(keyword?.keyword)))
       );
@@ -112,7 +112,7 @@ const EditPicture = ({ show, setShow, picture }) => {
     setType(picture.type);
     setTextFi(picture.text?.textFi || "");
     setTextEn(picture.text?.textEn || "");
-    const YearMonth = picture?.month_year;
+    const YearMonth = picture?.monthYear;
     setYear(Number(YearMonth?.toString().slice(0, 4)) || "");
     setMonth(Number(YearMonth?.toString().slice(-2)) || "");
     setKeywordArray(
@@ -180,13 +180,6 @@ const EditPicture = ({ show, setShow, picture }) => {
     handleClose();
   };
 
-  const handleOverlayClose = (event) => {
-    if (event.target.id === "closeModal") {
-      clear();
-      setShow(false);
-    }
-  };
-
   const handleClose = () => {
     clear();
     setShow(false);
@@ -216,12 +209,32 @@ const EditPicture = ({ show, setShow, picture }) => {
     setReply(true);
   };
 
+  const [pressedInside, setPressedInside] = useState(false);
+
+  const handleMouseDown = (event) => {
+    if (event.target.id === "closeModal") {
+      setPressedInside(true);
+    }
+  };
+
+  const handleMouseUp = () => {
+    if (pressedInside) {
+      handleClose();
+    }
+    setPressedInside(false);
+  };
+
   if (!show) {
     return null;
   }
 
   return (
-    <div id="closeModal" className="editOverlay" onClick={handleOverlayClose}>
+    <div
+      id="closeModal"
+      className="editOverlay"
+      onMouseDown={handleMouseDown}
+      onMouseUp={handleMouseUp}
+    >
       <div id="modal" className="editPictureContainer">
         <div className="editPicture">
           <div className="mainHeaderEP">
@@ -453,7 +466,7 @@ const EditPicture = ({ show, setShow, picture }) => {
                   <div className="EditPictureComment">
                     <div>{index + 1}. </div>
                     <div>
-                      <div>
+                      <div className="commentText">
                         Username: <b>{comment.username}</b> added comment:{" "}
                         <b>{comment.comment}</b>
                       </div>

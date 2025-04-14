@@ -9,8 +9,9 @@ const useLogout = () => {
   const navigate = useNavigate();
 
   const handleLogout = async () => {
+    const user = JSON.parse(window.localStorage.getItem("loggedAdminUser"));
     try {
-      await loginService.logout();
+      await loginService.logout(user.token);
       window.localStorage.clear("loggedAdminUser");
 
       dispatch(clearUser());

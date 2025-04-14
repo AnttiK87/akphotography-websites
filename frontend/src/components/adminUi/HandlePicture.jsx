@@ -24,6 +24,8 @@ import StarRating from "./StarsAdmin.jsx";
 import useNotLoggedin from "../../hooks/useNotLoggedin.js";
 import NotLoggedin from "./NotLoggedin.jsx";
 
+import { formatMonthYear } from "../../utils/dateUtils.js";
+
 import "./HandlePicture.css";
 
 const HandlePictures = () => {
@@ -236,7 +238,7 @@ const HandlePictures = () => {
                   <td className="vertical-center typeHP">{picture.type}</td>
                   {selectedType === "monthly" ? (
                     <td className="vertical-center monthlyHP">
-                      {picture.month_year}
+                      {formatMonthYear(picture.monthYear, "eng")}
                     </td>
                   ) : null}
                   <td className="vertical-center keywordsHP">

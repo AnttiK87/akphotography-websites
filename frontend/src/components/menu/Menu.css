@@ -20,6 +20,7 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
+  height: 200px;
   padding: 0;
   margin: 0;
 }
@@ -205,12 +206,12 @@
 }
 
 @media (max-height: 500px) {
-  .navBar {
-    height: 120px !important;
+  .navbar-nav {
+    height: fit-content;
   }
 
   .navBarSmall.show {
-    transform: translatey(115px) !important;
+    transform: translatey(100px) !important;
   }
 
   .dropVisible.visible {
@@ -234,6 +235,8 @@
 
   .logoSmallScreen {
     display: block;
+    max-height: 100px;
+    object-fit: contain;
   }
   .links {
     flex-direction: column;
@@ -247,7 +250,7 @@
     position: relative;
     display: flex;
     z-index: 2;
-    height: 15vh;
+    height: 100px;
   }
 
   .navBarSmall {

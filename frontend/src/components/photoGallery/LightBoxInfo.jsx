@@ -45,8 +45,10 @@ const LightBoxInfo = ({
             />
           </div>
           <div className="metadataContainer">
-            <ImageMetadata src={picture.srcFullRes} />
-            <AdditionalInfo picture={picture} />
+            <div className="scrollableContainer">
+              <ImageMetadata src={picture.srcFullRes} />
+              <AdditionalInfo picture={picture} />
+            </div>
           </div>
           <div className="commentsContainer">
             <Comments

@@ -33,7 +33,7 @@ const AdditionalInfo = ({ picture }) => {
               ))
             ) : (
               <div className="keywordTextLB">
-                {language === "fin" ? "Ei avainsanoja" : "No keywords"}{" "}
+                <b> {language === "fin" ? "Ei avainsanoja" : "No keywords"} </b>
               </div>
             )}
           </div>

@@ -1,30 +1,37 @@
 import PropTypes from "prop-types";
 
 import { useLocation } from "react-router-dom";
+import { useLanguage } from "../../hooks/useLanguage";
 
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination } from "swiper/modules";
+import Slider from "react-slick";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { initializeCategoryLatest } from "../../reducers/pictureReducer";
 
 import useLightBox from "../../hooks/useLightBox";
 
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 import "./Carouselle.css";
 
 const Carouselle = ({ category }) => {
+  const { language } = useLanguage();
   const location = useLocation();
   const dispatch = useDispatch();
 
   const { openLightBox, setCategory } = useLightBox();
+  const [isLoading, setIsLoading] = useState(true);
+  const [isError, setIsError] = useState(false);
 
   useEffect(() => {
-    dispatch(initializeCategoryLatest(category));
+    dispatch(initializeCategoryLatest(category))
+      .then(() => setIsLoading(false))
+      .catch(() => {
+        setIsLoading(false);
+        setIsError(true);
+      });
   }, [dispatch, category]);
 
   const latestPictures = useSelector(
@@ -50,35 +57,52 @@ const Carouselle = ({ category }) => {
     }
   };
 
+  var settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    fade: true,
+  };
+
+  if (isError) {
+    return (
+      <div>
+        {language === "fin"
+          ? "Virhe ladattaessa kuvia"
+          : "Error loading pictures"}
+      </div>
+    );
+  }
+
+  if (isLoading) {
+    return <div>{language === "fin" ? "Ladataan..." : "Loading..."}</div>;
+  }
+
   return (
-    <>
-      <Swiper
-        navigation={true}
-        pagination={true}
-        modules={[Pagination, Navigation]}
-        className="mySwiper"
-      >
-        {latestPictures.length === 0 ? (
-          <SwiperSlide>No added Photos in this category</SwiperSlide>
-        ) : (
+    <div className="slider-container">
+      <Slider {...settings}>
+        {latestPictures && latestPictures.length > 0 ? (
           latestPictures.map((picture, index) => (
-            <SwiperSlide key={picture.id}>
-              <div className="carouselle">
-                <div className="carouTextAndImg">
-                  <div
-                    onClick={() => {
-                      handleOpenLightbox(index);
-                    }}
-                    className="clickArea"
-                  />
-                  <img className="carouselleImg" src={picture.urlThumbnail} />
-                </div>
-              </div>
-            </SwiperSlide>
+            <div key={index}>
+              <img
+                className="carouselleImg"
+                src={picture.urlThumbnail}
+                alt={`picture id: ${picture.id}`}
+                onClick={() => handleOpenLightbox(index)}
+              />
+            </div>
           ))
+        ) : (
+          <div>
+            {language === "fin"
+              ? "Kategoriassa ei kuvia"
+              : "No Pictures in this category"}
+          </div>
         )}
-      </Swiper>
-    </>
+      </Slider>
+    </div>
   );
 };
 

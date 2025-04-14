@@ -70,11 +70,11 @@ const AdminReplyItem = ({
       <div className="EditPictureComment replyEP">
         <div>
           <div>
-            <div>
+            <div className="commentText">
               Reply to users: <b>{UsernameReplied}</b> comment:{" "}
               <b>{replyReplied}</b>
             </div>
-            <div>
+            <div className="commentText">
               by user: <b>{reply.adminReply ? "ADMIN USER" : reply.username}</b>{" "}
               with comment: <b>{reply.reply}</b>
             </div>

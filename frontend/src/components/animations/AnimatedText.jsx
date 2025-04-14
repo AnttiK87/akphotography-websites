@@ -14,7 +14,7 @@ const animationSpecs = {
     opacity: 0.9,
     transform: "translateY(0)",
     transition: {
-      duration: 0.1,
+      duration: 0.2,
     },
   },
 };

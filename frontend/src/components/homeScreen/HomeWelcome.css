@@ -190,6 +190,7 @@
   .element4,
   .element3 {
     margin-left: 0;
+    margin-bottom: 0;
   }
 
   .grid-container {
@@ -203,7 +204,7 @@
 
   .me {
     right: -5vw;
-    bottom: -3vw;
+    bottom: -6vw;
   }
 
   .element1 {
