@@ -182,6 +182,7 @@ const LightboxImage = ({
           cursor: zoomed > 1 ? "grab" : "zoom-in",
         }}
         className="lightBoxImg"
+        loading="eager"
         src={src}
         alt={alt}
       />

@@ -1,6 +1,5 @@
 /*text styling*/
 .containerGalleryText {
-  min-height: 20vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -8,7 +7,7 @@
 
 .headerGallery {
   font-family: "Nova Round", sans-serif;
-  font-size: 5vw;
+  font-size: 4.5em;
   color: #00433c;
   transform: scaleY(1.1);
   width: 80%;
@@ -38,13 +37,12 @@
 }
 
 .textContent {
-  font-size: 1.2rem;
+  font-size: 1rem;
   hyphens: auto;
   word-wrap: break-word;
   overflow-wrap: break-word;
   color: white;
   margin: 0;
-  padding: 2vh;
   position: absolute;
   text-align: center;
   justify-self: center;
@@ -59,7 +57,7 @@
 .textImg {
   display: inline-block;
   font-size: 2em;
-  padding-top: 1rem;
+  padding-top: 0.5rem;
   margin: 0 !important;
   font-family: "Nova Round", sans-serif;
   color: #00433c;
@@ -71,19 +69,37 @@
   }
 
   .headerGallery {
-    font-size: 7vw;
+    font-size: 1.9em;
   }
 
   .textGallery {
     font-size: 1.1rem;
   }
+
+  .textImg {
+    font-size: 1.5em;
+  }
+}
+
+@media (orientation: portrait) {
+  .containerGalleryText {
+    min-height: 25vh;
+    flex-direction: column;
+    justify-content: end;
+  }
 }
 
 @media (max-width: 500px) {
   .containerGalleryText {
-    margin-top: 3em;
+    margin-top: 2em;
     flex-direction: column;
     justify-content: end;
+  }
+}
+
+@media (max-height: 800px) {
+  .textImg {
+    font-size: 1.5em;
   }
 }
 
@@ -133,10 +149,12 @@
 
 .galleryContainer {
   display: grid;
-  height: 70vh;
-  grid-template-rows: 85%;
+  height: 80vh;
+  grid-template-rows: 80%;
   justify-content: center;
   align-content: center;
+  top: -6vh;
+  position: relative;
 }
 
 .nature,
@@ -214,9 +232,9 @@
   .galleryContainer {
     grid-template-columns: 65%;
     justify-items: center;
-    height: auto;
-    max-height: 70vh;
+    max-height: fit-content;
     align-content: start;
+    top: 0;
   }
 
   .imgGallery {
@@ -226,8 +244,19 @@
 
 @media (max-width: 500px) {
   .galleryContainer {
-    margin-top: 0;
-    grid-template-columns: 90%;
+    grid-template-columns: 65%;
+    justify-items: center;
+    max-height: fit-content;
+    align-content: start;
+  }
+}
+
+@media (orientation: portrait) {
+  .galleryContainer {
+    grid-template-columns: 85%;
+    justify-items: center;
+    max-height: fit-content;
+    align-content: start;
   }
 }
 

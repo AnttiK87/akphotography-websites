@@ -1,9 +1,11 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 
 import { Routes, Route, useLocation } from "react-router-dom";
 import { useLanguage } from "./hooks/useLanguage";
 
 import "./App.css";
+
+import LoadingScreen from "./components/animations/LoadingScreen";
 
 import Footer from "./components/footer/Footer";
 import Menu from "./components/menu/Menu";
@@ -23,6 +25,18 @@ import FirstLogin from "./components/adminUi/FirstLogin";
 
 function App() {
   const { language } = useLanguage();
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    const handleLoad = () => setIsLoaded(true);
+
+    if (document.readyState === "complete") {
+      handleLoad();
+    } else {
+      window.addEventListener("load", handleLoad);
+      return () => window.removeEventListener("load", handleLoad);
+    }
+  }, []);
 
   useEffect(() => {
     if (language === "fin") {
@@ -53,6 +67,10 @@ function App() {
         </Routes>
       </>
     );
+  }
+
+  if (!isLoaded) {
+    return <LoadingScreen />;
   }
 
   return (

@@ -38,6 +38,7 @@ const AboutHeader = () => {
           <img
             src={`../../../images/homepage/me2.jpg`}
             alt="Background Image"
+            loading="eager"
             className={`background-image ${isImageReady ? "ready" : ""}`}
           />
         </div>

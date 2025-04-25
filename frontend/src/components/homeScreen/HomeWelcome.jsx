@@ -52,8 +52,7 @@ const HomeWelcome = () => {
         species, but from small, everyday moments that reflect the beauty of the
         nature close to home. I hope my photos awaken in you the same kind of
         joy, wonder, and respect for nature that they bring to me. Thanks for
-        stopping by – take your time and dive into the beauty of the natural
-        world!
+        stopping by – take your time and dive into the beauty of the nature!
       </p>
     );
 

@@ -1,0 +1,34 @@
+.loading-screen {
+  height: 100vh;
+  width: 100vw;
+  position: fixed;
+  inset: 0;
+  background: #00433c;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  z-index: 9999;
+}
+
+.loading-text {
+  color: #ffffff;
+  font-family: "Nova Round", sans-serif;
+  font-size: 1.2em;
+}
+
+.loading-screen .spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #ffffff;
+  border-top-color: #333;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 10px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

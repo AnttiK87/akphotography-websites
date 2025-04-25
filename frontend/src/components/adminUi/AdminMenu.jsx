@@ -38,7 +38,7 @@ const AdminMenu = () => {
         aria-controls="responsive-navbar-nav"
       />
       <Navbar.Collapse className="navAM" id="responsive-navbar-nav">
-        <Nav className="nav-container mr-auto">
+        <Nav className="nav-container nav-container-am mr-auto">
           <Nav.Link href="#" as="span">
             <Link className="TextAM">
               <h3 className="AdminLogin">
