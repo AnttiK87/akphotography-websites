@@ -128,15 +128,19 @@ const Menu = () => {
   };
 
   const closeAllMenus = () => {
-    try {
-      const menu = document.querySelectorAll(".navBarSmall");
-      const subMenu = document.querySelectorAll(".dropSmall, .dropSmallLang");
+    const menu = document.querySelectorAll(".navBarSmall");
+    const subMenu = document.querySelectorAll(".dropSmall, .dropSmallLang");
 
+    setTimeout(() => {
       menu.forEach((element) => {
         element.classList.remove("show");
         element.classList.add("collapsed");
         setIsMenuOpen(false);
         element.style.transition = "none";
+
+        setTimeout(() => {
+          element.style.transition = "";
+        }, 10);
       });
 
       subMenu.forEach((element) => {
@@ -144,10 +148,12 @@ const Menu = () => {
         element.classList.add("collapsed");
         setIsDropdownOpen(false);
         element.style.transition = "none";
+
+        setTimeout(() => {
+          element.style.transition = "";
+        }, 10);
       });
-    } catch (error) {
-      console.error("Error in closeAllMenus:", error);
-    }
+    }, 25);
   };
 
   window.addEventListener("resize", () => {
@@ -155,26 +161,7 @@ const Menu = () => {
     const subMenu = document.querySelectorAll(".dropSmall, .dropSmallLang");
 
     if (window.innerWidth <= 990) {
-      navBarSmall.classList.remove("show");
-      navBarSmall.classList.add("collapsed");
-      setIsMenuOpen(false);
-      navBarSmall.style.transition = "none";
-
-      if (subMenu) {
-        subMenu.forEach((element) => {
-          element.classList.remove("show");
-          element.classList.add("collapsed");
-          setIsDropdownOpen(false);
-          element.style.transition = "none";
-        });
-      }
-
-      setTimeout(() => {
-        navBarSmall.style.transition = "";
-        subMenu.forEach((element) => {
-          element.style.transition = "";
-        });
-      }, 10);
+      closeAllMenus();
     }
     if (window.innerWidth > 990) {
       navBarSmall.style.transition = "none";

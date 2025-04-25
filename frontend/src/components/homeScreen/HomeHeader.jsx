@@ -57,6 +57,7 @@ const HomeHeader = () => {
           <img
             src={`../../../images/homeBackground/background${currentImageIndex}.jpg`}
             alt="Background Image"
+            loading="eager"
             className={`background-image ${isImageReady ? "ready" : ""}`}
           />
         </div>

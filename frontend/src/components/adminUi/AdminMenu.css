@@ -52,6 +52,10 @@
   padding-right: 3em;
 }
 
+.nav-container-am {
+  height: auto;
+}
+
 .navbar-toggler-AM {
   color: white;
   height: 60px;

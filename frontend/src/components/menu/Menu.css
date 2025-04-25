@@ -215,7 +215,9 @@
   }
 
   .dropVisible.visible {
-    padding-bottom: 0 !important;
+    overflow-y: auto !important;
+    justify-content: start !important;
+    padding: 5em 0 !important;
   }
 
   .navBarSmall.show {
@@ -250,7 +252,7 @@
     position: relative;
     display: flex;
     z-index: 2;
-    height: 100px;
+    height: 120px;
   }
 
   .navBarSmall {
@@ -267,7 +269,7 @@
   }
 
   .navBarSmall.show {
-    transform: translatey(13vh);
+    transform: translatey(119px);
     background-color: #00433c;
     opacity: 1;
     height: 90vh;

@@ -134,17 +134,20 @@
   }
 }
 
-.prints2 {
-  right: 40px;
-  transform: rotate(175deg);
+.printsGallery2 {
+  right: 36px;
+  transform: rotate(176deg);
   left: initial;
+  top: -6px;
+  height: auto;
 }
 
 @media (max-width: 990px) {
-  .prints2 {
+  .printsGallery2 {
+    right: 6px;
     transform: rotate(178deg);
-    right: 5px;
     left: initial;
-    gap: 3rem;
+    top: -6px;
+    height: auto;
   }
 }

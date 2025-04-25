@@ -38,6 +38,7 @@ const ContactHeader = () => {
           <img
             src={`../../../images/homeBackground/background2.jpg`}
             alt="Background Image"
+            loading="eager"
             className={`background-image ${isImageReady ? "ready" : ""}`}
           />
         </div>

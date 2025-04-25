@@ -121,7 +121,7 @@ const GalleryByCategory = () => {
           toesRight={toesRight}
           printCount={19}
           isVisible={isVisible}
-          className={"prints2"}
+          className={"printsGallery2"}
         />
 
         <div className="grid-containerPoM">
@@ -135,9 +135,9 @@ const GalleryByCategory = () => {
             <Carouselle category={category} />
           </div>
         </div>
-      </div>
-      <div className="galleryDiv">
-        <Gallery category={category} />
+        <div className="galleryDiv">
+          <Gallery category={category} />
+        </div>
       </div>
     </div>
   );

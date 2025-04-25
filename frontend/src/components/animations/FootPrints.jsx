@@ -38,6 +38,7 @@ const FootPrints = ({
           <img
             src={i % 2 === 0 ? toesLeft : toesRight}
             alt={`Footprint ${i}`}
+            loading="eager"
           />
         </div>
       ))}

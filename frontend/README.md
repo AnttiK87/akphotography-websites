@@ -19,9 +19,9 @@ react-router-dom library provides fuctionality for navigating through the pages.
 
 Some are own production and other are from fortawesome iconlibrary
 
-# homepages carousell
+# homepages and gallerypages carousell
 
-Carousell at the home page is created by using swiperjs library.
+Carousell at the home page is created by using react-slick library.
 
 # homepages header textanimation
 
