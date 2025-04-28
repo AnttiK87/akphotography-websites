@@ -8,7 +8,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFacebook, faInstagram } from "@fortawesome/free-brands-svg-icons";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 
-import "/node_modules/flag-icons/css/flag-icons.min.css";
 import "./Menu.css";
 
 import DropMenu from "./DropMenu";
@@ -16,6 +15,8 @@ import DropMenuSmall from "./DropMenuSmall";
 
 import birdWhite from "../../assets/bird-white.png";
 import leaf from "../../assets/leaf.png";
+import fiFlag from "../../assets/fi.svg";
+import gbFlag from "../../assets/gb.svg";
 
 const Menu = () => {
   const { language } = useLanguage();
@@ -23,7 +24,7 @@ const Menu = () => {
   const languageTitle =
     language === "fin" ? (
       <em>
-        <span className="fi fi-fi" /> Suomi{" "}
+        <img src={fiFlag} alt="fi flag" width="25" /> Suomi{" "}
         <FontAwesomeIcon
           className="menuText menuLink iconDropdown"
           icon={faChevronDown}
@@ -31,7 +32,7 @@ const Menu = () => {
       </em>
     ) : (
       <em>
-        <span className="fi fi-gb" /> English{" "}
+        <img src={gbFlag} alt="gb flag" width="25" /> English{" "}
         <FontAwesomeIcon
           className="menuText menuLink iconDropdown"
           icon={faChevronDown}
@@ -43,7 +44,7 @@ const Menu = () => {
     {
       label: (
         <em>
-          <span className="fi fi-fi" />
+          <img src={fiFlag} alt="fi flag" width="25" />
           {"  "}
           Suomi
         </em>
@@ -53,7 +54,7 @@ const Menu = () => {
     {
       label: (
         <em>
-          <span className="fi fi-gb" />
+          <img src={gbFlag} alt="gb flag" width="25" />
           {"  "}
           English
         </em>

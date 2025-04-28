@@ -336,7 +336,9 @@ const LightBox = () => {
           <div>
             <FontAwesomeIcon
               onClick={() => handlePrevPicture()}
-              className={`buttonLB buttonBackLB ${isMobile ? "mobile" : ""}`}
+              className={`buttonLB buttonBackLB ${
+                isMobile || isActive ? "mobile" : ""
+              }`}
               icon={faChevronDown}
             />
           </div>
@@ -360,7 +362,9 @@ const LightBox = () => {
           <div>
             <FontAwesomeIcon
               onClick={() => handleNextPicture()}
-              className={`buttonLB buttonNextLB ${isMobile ? "mobile" : ""}`}
+              className={`buttonLB buttonNextLB ${
+                isMobile || isActive ? "mobile" : ""
+              }`}
               icon={faChevronDown}
             />
           </div>

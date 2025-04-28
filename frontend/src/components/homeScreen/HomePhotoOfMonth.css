@@ -4,6 +4,7 @@
   font-size: 5vw;
   color: #00433c;
   transform: scaleY(1.1);
+  margin: 0;
 }
 
 .textPom {
@@ -37,9 +38,25 @@
 .wholeScreenPoM {
   position: relative;
   height: auto;
+  min-height: 100vh;
   background-color: #f8f7f5;
   overflow: hidden;
   padding: 0;
+}
+
+.headerPoM::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 4px;
+  background-color: #00433c;
+  transition: width 0.4s ease-out;
+}
+
+.headerPoM:hover::after {
+  width: 100%;
 }
 
 .grid-containerPoM > div {

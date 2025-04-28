@@ -25,7 +25,11 @@ const DropMenu = ({
   };
 
   const eventHandlers = isTouchDevice()
-    ? { onClick: handleToggleDropdown }
+    ? {
+        onClick: handleToggleDropdown,
+        onMouseEnter: () => setShowDropdown(true),
+        onMouseLeave: () => setShowDropdown(false),
+      }
     : {
         onMouseEnter: () => setShowDropdown(true),
         onMouseLeave: () => setShowDropdown(false),

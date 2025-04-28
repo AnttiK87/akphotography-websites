@@ -52,6 +52,7 @@
   font-weight: 400;
   color: gold;
   position: absolute;
+  top: 1px;
   left: 0;
   width: 50%;
   overflow: hidden;

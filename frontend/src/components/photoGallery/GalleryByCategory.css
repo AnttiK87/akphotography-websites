@@ -1,9 +1,10 @@
 /*font and text styling*/
-.headerPoM {
+.mainHeaderGallery {
   font-family: "Nova Round", sans-serif;
   font-size: 5vw;
   color: #00433c;
   transform: scaleY(1.1);
+  margin-bottom: 0.1em;
 }
 
 .textPom {
@@ -21,13 +22,13 @@
 }
 
 @media (max-width: 990px) {
-  .headerPoM {
+  .headerGallery {
     font-size: 8vw;
   }
 }
 
 @media (max-width: 500px) {
-  .headerPoM {
+  .headerGallery {
     font-size: 8vw;
   }
 }

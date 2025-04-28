@@ -1,5 +1,7 @@
 import "./HomePhotoOfMonth.css";
 
+import { Link } from "react-router-dom";
+
 import { useLanguage } from "../../hooks/useLanguage";
 import useAnimationLauncher from "../../hooks/useAnimationLauncher";
 
@@ -74,7 +76,9 @@ const HomePhotoOfMonth = () => {
       />
       <div className="grid-containerPoM">
         <div className={`elementPoM1 ${startAnim ? "fade-in" : ""}`}>
-          {headerPhotoOfMonth}
+          <Link className="LinkPoM" to="/pictures/monthly">
+            {headerPhotoOfMonth}
+          </Link>
         </div>
         <div className={`elementPoM2 ${startAnim ? "fade-in" : ""}`}>
           {textPhotoOfMonth}

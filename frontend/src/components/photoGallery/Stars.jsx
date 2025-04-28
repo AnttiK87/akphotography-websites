@@ -78,6 +78,7 @@ const StarIcons = ({ id, isMobile }) => {
 
     if (rating === 0) {
       localStorage.removeItem(`rating${id}`);
+      setCurrentUserRating(0);
     } else {
       localStorage.setItem(`rating${id}`, rating);
     }
