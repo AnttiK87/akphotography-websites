@@ -1,9 +1,13 @@
-name: Deploy Backend
+name: Deploy Backend and Frontend to Server
 
 on:
   push:
     branches:
       - main
+
+  pull_request:
+    branches-ignore:
+      - "**"
 
 jobs:
   deploy:
@@ -21,26 +25,37 @@ jobs:
       - name: Build project
         run: cd frontend && npm run build
 
+      - name: Prepare SSH key and known_hosts
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/private_key
+          chmod 600 ~/.ssh/private_key
+          ssh-keyscan akphotography.fi >> ~/.ssh/known_hosts
+
+      - name: Remove old frontend dist folder from server
+        run: |
+          ssh -i ~/.ssh/private_key chgqkclj@akphotography.fi "rm -rf public_html/dist"
+
       - name: Copy backend files to server
         run: |
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > private_key && chmod 600 private_key
-          rsync -avz -e "ssh -i private_key -o StrictHostKeyChecking=no" ./backend/ chgqkclj@akphotography.fi:public_html/
+          rsync -avz -e "ssh -i ~/.ssh/private_key" ./backend/ chgqkclj@akphotography.fi:public_html/
 
       - name: Copy frontend files to server
         run: |
-          rsync -avz -e "ssh -i private_key -o StrictHostKeyChecking=no" ./frontend/dist/ chgqkclj@akphotography.fi:public_html/dist/
+          rsync -avz -e "ssh -i ~/.ssh/private_key" ./frontend/dist/ chgqkclj@akphotography.fi:public_html/dist/
 
       - name: Create .env file on server
         run: |
-          ssh -i private_key -o StrictHostKeyChecking=no chgqkclj@akphotography.fi "echo '${{ secrets.ENV_FILE }}' > public_html/.env && chmod 600 public_html/.env"
+          ssh -i ~/.ssh/private_key chgqkclj@akphotography.fi "echo '${{ secrets.ENV_FILE }}' > public_html/.env && chmod 600 public_html/.env"
 
       - name: Restart Node.js app
         run: |
-          ssh -i private_key -o StrictHostKeyChecking=no chgqkclj@akphotography.fi "cd public_html && pm2 restart index.js || pm2 start index.js"
+          ssh -i ~/.ssh/private_key chgqkclj@akphotography.fi "cd public_html && pm2 restart index.js || pm2 start index.js"
 
       - name: Debug server files
         run: |
-          ssh -i private_key -o StrictHostKeyChecking=no chgqkclj@akphotography.fi "ls -l public_html && ls -l public_html/dist"
+          ssh -i ~/.ssh/private_key chgqkclj@akphotography.fi "ls -l public_html && ls -l public_html/dist"
 
-      - name: Cleanup private key
-        run: rm -f private_key
+      - name: Cleanup SSH key
+        run: |
+          rm -f ~/.ssh/private_key

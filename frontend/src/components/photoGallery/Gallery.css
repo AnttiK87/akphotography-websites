@@ -18,6 +18,7 @@
   align-content: center;
   justify-content: center;
   flex-wrap: wrap;
+  transition: 0.5s ease-in-out opacity;
 }
 
 .galleryImgText:hover {
@@ -33,6 +34,25 @@
 
 .GalleryPhotoHeader {
   font-size: 1.5rem;
+}
+
+.react-photo-album--photo {
+  scale: 1;
+  transition: 0.5s ease-in-out scale;
+  animation: revealPhoto 1.5s ease-in-out;
+}
+
+@keyframes revealPhoto {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.react-photo-album--photo:hover {
+  scale: 1.05;
 }
 
 @media (max-width: 990px) {

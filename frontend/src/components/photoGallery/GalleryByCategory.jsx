@@ -98,7 +98,7 @@ const GalleryByCategory = () => {
   }
 
   const headerPhotoOfMonth = (
-    <h1 className="headerPoM">
+    <h1 className="mainHeaderGallery">
       {language === "fin"
         ? categorysTextData.headerFi
         : categorysTextData.headerEn}
