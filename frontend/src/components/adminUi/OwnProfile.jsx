@@ -151,30 +151,34 @@ const OwnProfile = () => {
           <div className="infoCont">
             <h4>Current admin user&apos;s information:</h4>
             <Table>
-              <tr>
-                <td className="vertical-start">
-                  <b>Name:</b>
-                </td>
-                <td>{user.name}</td>
-              </tr>
-              <tr>
-                <td>
-                  <b>Username:</b>
-                </td>
-                <td>{user.username}</td>
-              </tr>
-              <tr>
-                <td>
-                  <b>Email:</b>
-                </td>
-                <td>{user.email}</td>
-              </tr>
-              <tr>
-                <td>
-                  <b>Last login:</b>
-                </td>
-                <td>{new Date(user.lastLogin).toLocaleString()}</td>
-              </tr>
+              <tbody>
+                <tr className="trOP">
+                  <td className="tdOP">
+                    <b>Name:</b>
+                  </td>
+                  <td className="tdOP">{user.name}</td>
+                </tr>
+                <tr className="trOP">
+                  <td className="tdOP">
+                    <b>Username:</b>
+                  </td>
+                  <td className="tdOP">{user.username}</td>
+                </tr>
+                <tr className="trOP">
+                  <td className="tdOP">
+                    <b>Email:</b>
+                  </td>
+                  <td className="tdOP">{user.email}</td>
+                </tr>
+                <tr className="trOP">
+                  <td className="tdOP">
+                    <b>Last login:</b>
+                  </td>
+                  <td className="tdOP">
+                    {new Date(user.lastLogin).toLocaleString()}
+                  </td>
+                </tr>
+              </tbody>
             </Table>
             <div className="EditButtonsOP">
               <button

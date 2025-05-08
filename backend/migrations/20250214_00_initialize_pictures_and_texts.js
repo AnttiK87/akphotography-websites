@@ -104,6 +104,5 @@ module.exports = {
     await queryInterface.removeColumn('texts', 'picture_id');
     await queryInterface.dropTable('pictures');
     await queryInterface.dropTable('texts');
-    await queryInterface.dropTable('ratings');
   },
 };

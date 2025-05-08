@@ -2,15 +2,20 @@ import { createSlice } from "@reduxjs/toolkit";
 import userService from "../services/users";
 import { showMessage } from "./messageReducer";
 
+const storedUser = localStorage.getItem("loggedAdminUser");
+const parsedUser = storedUser ? JSON.parse(storedUser) : null;
+
+const initialState = {
+  username: parsedUser?.username || "",
+  name: parsedUser?.name || "",
+  password: "",
+  user: parsedUser,
+  firstLogin: parsedUser?.firstLogin || false,
+};
+
 const userSlice = createSlice({
   name: "user",
-  initialState: {
-    username: "",
-    name: "",
-    password: "",
-    user: null,
-    firstLogin: false,
-  },
+  initialState,
   reducers: {
     setUsername(state, action) {
       state.username = action.payload;

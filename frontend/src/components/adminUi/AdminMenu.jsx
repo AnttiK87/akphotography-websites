@@ -3,17 +3,17 @@
 import { Link } from "react-router-dom";
 import useLogout from "../../hooks/useLogout";
 import { Navbar, Nav } from "react-bootstrap";
+import { useSelector } from "react-redux";
 
 import "./AdminMenu.css";
 
 const AdminMenu = () => {
   //get user state
-  const user = window.localStorage.getItem("loggedAdminUser");
-
+  const user = useSelector((state) => state.user.user);
   // get handleLogout
   const { handleLogout } = useLogout();
 
-  //show login and register buttons on navbar if user is not logged in
+  //show this if user is not logged in
   if (!user) {
     return (
       <Navbar className="navbarAM" collapseOnSelect expand="lg">

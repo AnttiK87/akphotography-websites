@@ -49,6 +49,19 @@
   max-width: 90%;
 }
 
+tbody,
+td,
+tfoot,
+th,
+thead,
+tr {
+  border-style: none !important;
+}
+
+.tdOP {
+  padding: 0 !important;
+}
+
 .infoCont {
   text-align: start;
 }

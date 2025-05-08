@@ -51,6 +51,11 @@ const upload = multer({
   },
 });
 
+router.get('/text', async (req, res) => {
+  const text = await Text.findAll({});
+  res.json(text);
+});
+
 router.post(
   '/upload',
   tokenExtractor,
@@ -228,8 +233,8 @@ router.put('/:id', tokenExtractor, pictureFinder, async (req, res) => {
 
   if (!req.picture.text && (req.body?.textFi || req.body?.textEn)) {
     const text = await Text.create({
-      textFi: req.body?.textFi || '',
-      textEn: req.body?.textEn || '',
+      textFi: req.body?.textFi || null,
+      textEn: req.body?.textEn || null,
       pictureId: req.picture.id,
     });
 
@@ -237,9 +242,20 @@ router.put('/:id', tokenExtractor, pictureFinder, async (req, res) => {
   } else if (req.picture.text) {
     const text = await Text.findByPk(req.picture.text.id);
     if (text) {
-      text.textFi = req.body.textFi ?? text.textFi;
-      text.textEn = req.body.textEn ?? text.textEn;
+      text.textFi = req.body.textFi === null ? null : req.body.textFi;
+      text.textEn = req.body.textEn === null ? null : req.body.textEn;
       await text.save();
+    }
+  }
+
+  if (
+    req.picture.text &&
+    req.body?.textFi === null &&
+    req.body?.textEn === null
+  ) {
+    const text = await Text.findByPk(req.picture.text.id);
+    if (text) {
+      await text.destroy();
     }
   }
 
@@ -283,7 +299,11 @@ router.put('/addView/:id', pictureFinder, async (req, res) => {
 
   await req.picture.reload({
     include: [
-      { model: Text, attributes: ['id', 'textFi', 'textEn'] },
+      {
+        model: Text,
+        required: false,
+        attributes: ['id', 'textFi', 'textEn'],
+      },
       {
         model: Keyword,
         attributes: { exclude: 'id' },

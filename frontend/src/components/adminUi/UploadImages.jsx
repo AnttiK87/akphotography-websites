@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 import { createPicture } from "../../reducers/pictureReducer.js";
@@ -14,6 +14,7 @@ import FileUpload from "./FileUpload.jsx";
 
 import useNotLoggedin from "../../hooks/useNotLoggedin.js";
 import NotLoggedin from "./NotLoggedin.jsx";
+import { showMessage } from "../../reducers/messageReducer";
 
 import "./UploadImages.css";
 
@@ -29,13 +30,17 @@ const UploadImages = () => {
   const [textEn, setTextEn] = useState("");
   const [keyword, setKeyword] = useState("");
   const [keywordArray, setKeywordArray] = useState([]);
+  const [addText, setAddText] = useState(false);
 
   useEffect(() => {
     dispatch(initializeKeywords());
   }, [dispatch]);
 
-  const keywords = useSelector((state) =>
-    state.keywords.keywords.map((keyword) => String(keyword.keyword))
+  const rawKeywords = useSelector((state) => state.keywords.keywords);
+
+  const keywords = useMemo(
+    () => rawKeywords.map((keyword) => String(keyword.keyword)),
+    [rawKeywords]
   );
 
   const currentYear = new Date().getFullYear();
@@ -84,10 +89,27 @@ const UploadImages = () => {
     setTextEn("");
     setKeyword("");
     setKeywordArray([]);
+    setAddText(false);
+  };
+
+  const handleHideText = () => {
+    setAddText(false);
+    setTextFi("");
+    setTextEn("");
   };
 
   const addPicture = (event) => {
     event.preventDefault();
+
+    if (!file) {
+      dispatch(
+        showMessage(
+          { text: "You haven't added picture yet!", type: "error" },
+          3
+        )
+      );
+      return;
+    }
 
     const { type } = event.target.elements;
     const image = file;
@@ -124,7 +146,7 @@ const UploadImages = () => {
       <Form onSubmit={addPicture} encType="multipart/form-data">
         <FileUpload setFile={setFile} file={file} />
         <div className="ComboBoxUI">
-          <label>Keywords:</label>
+          <label htmlFor="tags-outlined">Keywords:</label>
           <Autocomplete
             sx={{
               width: 500,
@@ -283,7 +305,7 @@ const UploadImages = () => {
             </div>
           </>
         )}
-        {selectedType != "monthly" && selectedType != "" && (
+        {selectedType != "monthly" && addText && (
           <>
             <h5 className="monthly">Add additional information</h5>
             <div>
@@ -319,9 +341,24 @@ const UploadImages = () => {
           </>
         )}
         <div className="buttonDiv">
-          <Button variant="danger" className="button-primary" onClick={reset}>
+          <Button
+            variant="danger"
+            className="button-primary delButton"
+            onClick={reset}
+          >
             Clear All
           </Button>
+          {selectedType != "monthly" && selectedType != "" && (
+            <Button
+              variant="primary"
+              className="button-primary"
+              onClick={
+                !addText ? () => setAddText(true) : () => handleHideText()
+              }
+            >
+              {!addText ? "Add text" : "Hide text"}
+            </Button>
+          )}
           <Button variant="primary" className="button-primary" type="submit">
             Create
           </Button>

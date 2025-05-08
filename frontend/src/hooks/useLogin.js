@@ -40,10 +40,7 @@ const useLogin = () => {
         hangleFirstLogin(user.firstLogin);
       } else {
         dispatch(
-          showMessage(
-            { text: `Logged in user ${user.name}`, type: "success" },
-            2
-          )
+          showMessage({ text: `Welcome ${user.name}`, type: "success" }, 2)
         );
       }
 

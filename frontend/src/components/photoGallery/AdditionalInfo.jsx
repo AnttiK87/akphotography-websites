@@ -28,7 +28,7 @@ const AdditionalInfo = ({ picture }) => {
             {picture?.keywords?.length > 0 ? (
               picture.keywords.map((keyword, index) => (
                 <div className="keywordTextLB" key={index}>
-                  <b> {keyword.keyword}</b>
+                  <b> #{keyword.keyword}</b>
                 </div>
               ))
             ) : (
