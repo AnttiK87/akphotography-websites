@@ -1,68 +1,104 @@
-# 📸 AK Photography Website – Backend
+# 📸 AK Photography Website – Frontend
 
-This is the backend of the akphotography-websites project. It's built with Node.js and Express, providing a RESTful API for managing photos, keywords, user accounts, and access control. Backend also serves frontends staticfiles.
+This is the frontend of the akphotography-websites project. It's a modern single-page application built with React, aiming to renew a personal photography portfolio and serve as a full-stack learning project (e.g., for Full Stack Open).
 
-## 🔧 Technologies Used
+## ⚛️ Technologies & Libraries
 
-Node.js + Express
+React 18 with Vite for fast development
 
-Sequelize ORM (MySQL)
+React Router DOM – SPA routing
 
-JSON Web Tokens (JWT) for authentication
+Redux + Redux Thunk – State management
 
-Multer & Sharp for image upload and processing
+Axios – HTTP client
 
-Nodemailer for sending emails with data from contact form.
+PropTypes – Prop validation
 
-Umzug with Sequelize for database migrations
+Framer Motion – Animations
+
+React-Bootstrap – UI components
+
+React-Slick – Image carousels
+
+FontAwesome – Icons
+
+EXIFR – Image metadata parsing
 
 ## 🚀 Getting Started
 
-Install dependencies:
-npm install
+1. Install dependencies  
+   npm install
 
-Create a .env file in the root with the following variables:
-PORT=your port
-DB_NAME=your_db
-DB_USER=your_user
-DB_PASS=your_pass
-SECRET=your_jwt_secret
+2. Start development server  
+   npm run dev
 
-Run in development mode:
-npm run dev
+3. Build for production  
+   npm run build
 
-Run in production:
-npm start
+4. Preview production build locally  
+   npm run preview
 
-## 🛠 Available Scripts:
+# 🧩 Notable Features:
 
-npm run dev Start development server using Nodemon
-npm start Start production server
-npm run lint Run ESLint on project files
-npm run build:ui Build frontend and copy it to backend /dist
-npm run build:uiDev Windows version of frontend build & copy
-npm run migration:down Roll back last database migration
-npm run generate-thumbnails-once Generate image thumbnails once for grating thumbnails of photos thhat are already in /uploads/pictures folder.
+## 🔄 State Management with Redux
 
-## 📁 Project Structure (Backend)
+This project utilizes Redux for global state management across the application. The Redux store is configured to handle user authentication, photo metadata, and UI states like lightbox and language preferences. Redux Thunk is used for managing side effects and asynchronous API calls.
 
-/backend  
+Redux slices and reducers are located in the /src/reducers/ directory.
+
+Redux Toolkit simplifies store setup and slice management.
+
+## 🌐 Communication with Backend via Axios
+
+The application communicates with the backend API using Axios for HTTP requests. API calls are abstracted in the /src/services/ directory, where an Axios instance is configured for sending requests and handling responses (including interceptors for handling errors and JWT authentication).
+
+## 🔁 Navigation
+
+Routing is handled with react-router-dom, enabling page navigation without reloads.
+
+## 📍 Navbar
+
+The responsive navigation bar is created using components from react-bootstrap.
+
+## 🖼️ Carousel
+
+Image sliders (e.g., home page and gallery) are implemented with react-slick.
+
+## 🔠 Animated Text
+
+The homepage header animation uses Framer Motion for staggered reveal effects. Inspiration and help came from:
+
+Staggered Text Animations with Framer Motion – Frontend FYI
+
+## 📦 Prop Validation
+
+Props in components are validated using Facebook’s prop-types library to ensure correct usage.
+
+## 🎨 Icons
+
+Icons are a mix of self made assets and Font Awesome icons via the @fortawesome packages.
+
+# 📂 Project Structure (Simplified):
+
+/frontend  
 │  
-├── controllers/ # Route logic  
-├── models/ # Sequelize models  
-├── utils/ # Middlewares, configurations, etc.  
-├── migrations/ # Database migration files  
-├── dist/ # Production-ready frontend build after npm run build:ui  
-├── app.js # Express routes  
-├── index.js # Entry point  
-├── eslint.config.mjs # eslint configuration  
-├── docker-compose.yml # docker configuration for setting dev db  
-└── .env # Environment variables (not committed)  
+├── public/ # Static assets (images)  
+├── src/  
+│ ├── components/ # UI components organized by views (e.g., Navbar, Gallery, etc.)  
+│ ├── assets/ # Icons, images, and other assets  
+│ ├── context/ # Context providers for managing lightbox and language state  
+│ ├── hooks/ # Custom hooks for reusable logic (e.g., useFetch, useAuth)  
+│ ├── utils/ # Utility functions (e.g., date formatting, image resizing)  
+│ ├── reducers/ # Redux reducers and slices for global state management  
+│ ├── services/ # API calls and backend communication (e.g., Axios instance)  
+│ ├── app.jsx # Main routing configuration  
+│ └── main.jsx # Application entry point  
+├── index.html # Main HTML template  
+├── vite.config.js # Vite build configuration  
+└── .eslintrc # ESLint configuration  
 
-## 📬 Author
+# 📬 Author
 
-GitHub: AnttiK87
-
-Project: akphotography-websites
-
-Author: Antti Kortelainen
+GitHub: AnttiK87  
+Project: akphotography-websites  
+Author: Antti Kortelainen  
