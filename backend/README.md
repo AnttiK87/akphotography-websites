@@ -22,11 +22,11 @@ Install dependencies:
 npm install
 
 Create a .env file in the root with the following variables:  
-PORT=your port
-DB_NAME=your_db
-DB_USER=your_user
-DB_PASS=your_pass
-SECRET=your_jwt_secret
+PORT=your port  
+DB_NAME=your_db  
+DB_USER=your_user  
+DB_PASS=your_pass  
+SECRET=your_jwt_secret  
 
 Run in development mode:  
 npm run dev
@@ -36,13 +36,13 @@ npm start
 
 ## 🛠 Available Scripts:
 
-npm run dev Start development server using Nodemon
-npm start Start production server
-npm run lint Run ESLint on project files
-npm run build:ui Build frontend and copy it to backend /dist
-npm run build:uiDev Windows version of frontend build & copy
-npm run migration:down Roll back last database migration
-npm run generate-thumbnails-once Generate image thumbnails once for grating thumbnails of photos thhat are already in /uploads/pictures folder.
+npm run dev Start development server using Nodemon  
+npm start Start production server  
+npm run lint Run ESLint on project files  
+npm run build:ui Build frontend and copy it to backend /dist  
+npm run build:uiDev Windows version of frontend build & copy  
+npm run migration:down Roll back last database migration  
+npm run generate-thumbnails-once Generate image thumbnails once for grating thumbnails of photos thhat are already in /uploads/pictures folder.  
 
 ## 📁 Project Structure (Backend)
 
