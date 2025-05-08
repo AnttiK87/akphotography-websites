@@ -47,27 +47,16 @@ npm run generate-thumbnails-once Generate image thumbnails once for grating thum
 ## 📁 Project Structure (Backend)
 
 /backend
-
 │
-
 ├── controllers/ # Route logic
-
 ├── models/ # Sequelize models
-
 ├── utils/ # Middlewares, configurations, etc.
-
 ├── migrations/ # Database migration files
-
 ├── dist/ # Production-ready frontend build after npm run build:ui
-
 ├── app.js # Express routes
-
 ├── index.js # Entry point
-
 ├── eslint.config.mjs # eslint configuration
-
 ├── docker-compose.yml # docker configuration for setting dev db
-
 └── .env # Environment variables (not committed)
 
 ## 📬 Author
