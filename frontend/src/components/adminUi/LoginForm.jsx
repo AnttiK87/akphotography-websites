@@ -1,4 +1,5 @@
 //dependencies
+import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setUsername, setPassword } from "../../reducers/userReducer.js";
 import useLogin from "../../hooks/useLogin.js";
@@ -6,7 +7,18 @@ import { Form } from "react-bootstrap";
 
 import "./LoginForm.css";
 
+import { useNavigate } from "react-router-dom";
+
 const LoginForm = () => {
+  const user = useSelector((state) => state.user.user);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user) {
+      navigate("/admin/editContent");
+    }
+  }, [user, navigate]);
+
   const dispatch = useDispatch();
 
   const username = useSelector((state) => state.user.username);
@@ -27,6 +39,7 @@ const LoginForm = () => {
           <Form.Group className="form-group">
             <Form.Label htmlFor="username">Username: </Form.Label>
             <Form.Control
+              autoComplete="username"
               id="username"
               data-testid="username"
               className="form__field loginUsername"
@@ -39,6 +52,7 @@ const LoginForm = () => {
           <Form.Group className="form-group">
             <Form.Label htmlFor="password">Password: </Form.Label>
             <Form.Control
+              autoComplete="current-password"
               id="password"
               data-testid="password"
               className="form__field loginPassword"

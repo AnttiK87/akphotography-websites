@@ -59,6 +59,11 @@ User.init(
       allowNull: true,
       defaultValue: null,
     },
+    loginTime: {
+      type: DataTypes.DATE,
+      allowNull: true,
+      defaultValue: null,
+    },
   },
   {
     sequelize,

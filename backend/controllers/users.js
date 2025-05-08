@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const bcrypt = require('bcryptjs');
-const { User } = require('../models');
+const { User, Session } = require('../models');
 const { tokenExtractor } = require('../utils/middleware');
 
 router.get('/', async (req, res) => {
@@ -8,11 +8,25 @@ router.get('/', async (req, res) => {
   res.json(users);
 });
 
-router.put('/update/:id', async (req, res) => {
+router.get('/session', async (req, res) => {
+  const session = await Session.findAll({});
+  res.json(session);
+});
+
+router.put('/updateLastLogin/:id', async (req, res) => {
   const { lastLogin } = req.body;
 
   const user = await User.findByPk(req.params.id);
   user.lastLogin = lastLogin;
+  await user.save();
+  res.json(user);
+});
+
+router.put('/updateLoginTime/:id', async (req, res) => {
+  const { loginTime } = req.body;
+
+  const user = await User.findByPk(req.params.id);
+  user.loginTime = loginTime;
   await user.save();
   res.json(user);
 });
@@ -105,6 +119,7 @@ router.put('/updateFirstLogin', tokenExtractor, async (req, res) => {
     user.passwordHash = passwordHash;
     await user.save();
     await user.update({ lastLogin: new Date() });
+    await user.update({ loginTime: new Date() });
     res.json(user);
   } else {
     res.status(404).end();

@@ -26,7 +26,8 @@ router.post('/', async (request, response) => {
   const firstLogin = user.lastLogin === null ? true : false;
 
   if (user.lastLogin != null) {
-    await user.update({ lastLogin: new Date() });
+    await user.update({ loginTime: new Date() });
+    await user.save();
   }
 
   const userForToken = {

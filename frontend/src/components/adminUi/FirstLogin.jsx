@@ -125,6 +125,7 @@ const FirstLogin = () => {
                 Username
               </label>
               <input
+                autoComplete="username"
                 type="text"
                 className="form__field commentUsername"
                 id="username"
@@ -143,6 +144,7 @@ const FirstLogin = () => {
                 Email
               </label>
               <input
+                autoComplete="email"
                 type="text"
                 className="form__field commentUsername"
                 id="email"
@@ -161,6 +163,7 @@ const FirstLogin = () => {
                 Old password
               </label>
               <input
+                autoComplete="current-password"
                 type="password"
                 className="form__field commentUsername"
                 id="oldPassword"
@@ -179,6 +182,7 @@ const FirstLogin = () => {
                 New password
               </label>
               <input
+                autoComplete="new-password"
                 type="password"
                 className="form__field commentUsername"
                 id="newPassword1"
@@ -197,6 +201,7 @@ const FirstLogin = () => {
                 Confirm new password
               </label>
               <input
+                autoComplete="new-password"
                 type="password"
                 className="form__field commentUsername"
                 id="newPassword2"

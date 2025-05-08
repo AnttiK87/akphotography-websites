@@ -2,7 +2,11 @@ import { useState } from "react";
 import PropTypes from "prop-types";
 import "./FileUpload.css";
 
+import { useDispatch } from "react-redux";
+import { showMessage } from "../../reducers/messageReducer";
+
 const FileUpload = ({ setFile, file }) => {
+  const dispatch = useDispatch();
   const [dragActive, setDragActive] = useState(false);
 
   const handleFileChange = (event) => {
@@ -31,7 +35,20 @@ const FileUpload = ({ setFile, file }) => {
 
     const droppedFile = event.dataTransfer.files[0];
     if (droppedFile) {
-      setFile(droppedFile);
+      const isJpg =
+        droppedFile.type === "image/jpeg" ||
+        droppedFile.name.toLowerCase().endsWith(".jpg");
+
+      if (isJpg) {
+        setFile(droppedFile);
+      } else {
+        dispatch(
+          showMessage(
+            { text: "Only .jpg files are allowed.", type: "error" },
+            3
+          )
+        );
+      }
     }
   };
 
@@ -53,8 +70,10 @@ const FileUpload = ({ setFile, file }) => {
         id="image"
         name="image"
         onChange={handleFileChange}
-        required
-        style={{ display: "none" }}
+        style={{
+          visibility: "hidden",
+          position: "absolute",
+        }}
         accept=".jpg"
       />
       <div

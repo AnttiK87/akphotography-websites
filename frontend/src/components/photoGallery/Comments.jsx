@@ -40,7 +40,13 @@ const Comments = ({
   const comments = useSelector((state) => state.comments.comments);
 
   const deleteComment = async ({ comment, userId }) => {
-    if (window.confirm(`Do you really want to delete this comment?`)) {
+    if (
+      window.confirm(
+        language === "fin"
+          ? "Haluatko varmasti poistaa tämän kommentin?"
+          : "Do you really want to delete this comment?"
+      )
+    ) {
       await dispatch(remove({ comment, userId }));
     }
   };

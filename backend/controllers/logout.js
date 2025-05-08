@@ -14,8 +14,9 @@ router.delete('/', tokenExtractor, async (req, res) => {
 
   if (session) {
     await session.destroy();
+    await user.update({ lastLogin: user.loginTime });
+    res.status(200).json({ message: 'Logged out successfully' });
   }
-  res.status(200).json({ message: 'Logged out successfully' });
 });
 
 module.exports = router;

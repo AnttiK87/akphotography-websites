@@ -382,9 +382,11 @@
 }
 
 .keywordsLB {
-  display: block;
+  display: flex;
   gap: 0.5em;
   margin: 0;
+  width: 100%;
+  flex-wrap: wrap;
 }
 
 .keywordTextLB {
