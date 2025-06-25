@@ -17,10 +17,10 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Install backend dependencies
-        run: cd backend && npm install
+        run: cd backend && npm ci
 
       - name: Install frontend dependencies
-        run: cd frontend && npm install
+        run: cd frontend && npm ci
 
       - name: Build project backend
         run: cd backend && npm run build
@@ -59,9 +59,13 @@ jobs:
         run: |
           ssh -i ~/.ssh/private_key chgqkclj@akphotography.fi "echo '${{ secrets.ENV_FILE }}' > public_html/.env && chmod 600 public_html/.env"
 
+      - name: Copy PM2 ecosystem config
+        run: |
+          rsync -avz -e "ssh -i ~/.ssh/private_key" ./backend/ecosystem.config.js chgqkclj@akphotography.fi:public_html/
+
       - name: Restart Node.js app
         run: |
-          ssh -i ~/.ssh/private_key chgqkclj@akphotography.fi "cd public_html && pm2 restart index.js --env production || pm2 start index.js --env production"
+          ssh -i ~/.ssh/private_key chgqkclj@akphotography.fi "cd public_html && pm2 restart ecosystem.config.js --env production || pm2 start ecosystem.config.js --env production"
 
       - name: Debug server files
         run: |
