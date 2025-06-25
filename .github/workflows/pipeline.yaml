@@ -47,6 +47,10 @@ jobs:
         run: |
           rsync -avz -e "ssh -i ~/.ssh/private_key" ./backend/node_modules/ chgqkclj@akphotography.fi:public_html/node_modules/
 
+      - name: Copy backend package.json to server
+        run: |
+          rsync -avz -e "ssh -i ~/.ssh/private_key" ./backend/packege.json chgqkclj@akphotography.fi:public_html/
+
       - name: Copy frontend files to server
         run: |
           rsync -avz -e "ssh -i ~/.ssh/private_key" ./frontend/dist/ chgqkclj@akphotography.fi:public_html/dist/
@@ -57,7 +61,7 @@ jobs:
 
       - name: Restart Node.js app
         run: |
-          ssh -i ~/.ssh/private_key chgqkclj@akphotography.fi "cd public_html && pm2 restart index.js || pm2 start index.js"
+          ssh -i ~/.ssh/private_key chgqkclj@akphotography.fi "cd public_html && pm2 restart index.js --env production || pm2 start index.js --env production"
 
       - name: Debug server files
         run: |
