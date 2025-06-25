@@ -41,7 +41,6 @@ export const sendCommentNotification = async (
 
   try {
     if (process.env.NODE_ENV != 'development') {
-      logger.info('Sending email notification for new comment');
       await transporter.sendMail(mailOptions);
     }
     logger.info('Email notification sent');

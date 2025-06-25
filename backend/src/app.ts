@@ -23,7 +23,12 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.use('/uploads', express.static(getPath('../', 'uploads')));
+app.use(
+  '/uploads',
+  express.static(
+    getPath(process.env.NODE_ENV === 'production' ? './' : '../', 'uploads'),
+  ),
+);
 
 app.use('/api/pictures', picturesRouter);
 app.use('/api/ratings', ratingsRouter);
