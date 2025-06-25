@@ -1,6 +1,6 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
@@ -27,6 +27,7 @@ import "./LightBox.css";
 const LightBox = () => {
   const location = useLocation();
   const isMobile = useIsMobile();
+  const navigate = useNavigate();
 
   const {
     isLightBoxOpen,
@@ -172,10 +173,15 @@ const LightBox = () => {
   }, [location.pathname, prevPictureIndex, zoomed, handleZoomOut]);
 
   const handleExit = useCallback(() => {
-    const basePath = location.pathname.replace(/\/\d+$/, "");
     closeLightBox();
     setvalidIndex(undefined);
-    window.history.pushState({ lightBox: false }, "", `${basePath}`);
+
+    if (isLightBoxOpen) {
+      // Remove the last part of the URL path to get the base path
+      const parts = location.pathname.split("/").filter(Boolean);
+      const basePath = "/" + parts.slice(0, 2).join("/");
+      navigate(basePath, { replace: true });
+    }
 
     if (isFullScreen) {
       exitFullscreen();
@@ -191,6 +197,7 @@ const LightBox = () => {
     }
   }, [
     location.pathname,
+    isLightBoxOpen,
     closeLightBox,
     setvalidIndex,
     isFullScreen,
@@ -201,6 +208,7 @@ const LightBox = () => {
     stopTimer,
     openItem,
     toggleItem,
+    navigate,
   ]);
 
   useEffect(() => {
@@ -211,40 +219,71 @@ const LightBox = () => {
     };
 
     const handleKeyDown = (event) => {
-      if (event.key === "Escape") {
-        if (isFullScreen) {
-          exitFullscreen();
-        } else if (show) {
-          setShow(false);
-        } else if (isLightBoxOpen) {
-          handleExit();
-        }
+      const key = event.key;
+      const activeTag = document.activeElement?.tagName.toLowerCase();
+      const isTyping = ["input", "textarea", "select", "button"].includes(
+        activeTag
+      );
+
+      if (key === " " && !show && openItem) {
+        event.preventDefault();
       }
-      if (event.key === "ArrowRight") {
-        handleNextPicture();
+
+      if (isTyping) {
+        return;
       }
-      if (event.key === "ArrowLeft") {
-        handlePrevPicture();
-      }
-      if (event.key === "ArrowUp" && openItem === null) {
-        toggleItem(".photoInfoContainer");
-        closeItem;
-      }
-      if (event.key === "ArrowDown" && !show) {
-        closeItem(".photoInfoContainer");
-        closeItem;
-      }
-      if (event.key === " " && !show && openItem === null) {
-        if (isActive) {
-          stopTimer();
-        } else {
-          startTimer();
-        }
+
+      switch (key) {
+        case "Escape":
+          if (isFullScreen) {
+            exitFullscreen();
+          } else if (show) {
+            setShow(false);
+          } else if (isLightBoxOpen) {
+            handleExit();
+          }
+          break;
+
+        case "ArrowRight":
+          handleNextPicture();
+          break;
+
+        case "ArrowLeft":
+          handlePrevPicture();
+          break;
+
+        case "ArrowUp":
+          if (openItem === null) {
+            toggleItem(".photoInfoContainer");
+            closeItem();
+          }
+          break;
+
+        case "ArrowDown":
+          if (!show) {
+            closeItem(".photoInfoContainer");
+            closeItem();
+          }
+          break;
+
+        case " ":
+          if (!show && openItem === null) {
+            isActive ? stopTimer() : startTimer();
+          }
+          break;
+
+        default:
+          break;
       }
     };
 
     document.addEventListener("fullscreenchange", handleFullscreenChange);
     window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("fullscreenchange", handleFullscreenChange);
+      window.removeEventListener("keydown", handleKeyDown);
+    };
   }, [
     isLightBoxOpen,
     closeLightBox,
@@ -272,13 +311,32 @@ const LightBox = () => {
     }
   }, [picturesByCategory, nextPictureIndex, prevPictureIndex, isLoading]);
 
+  const exitTimeoutRef = useRef(null);
+
   useEffect(() => {
-    if (!isLoading && (isError || picturesByCategory.length < validIndex)) {
-      setTimeout(() => {
+    if (
+      !isLoading &&
+      (isError || picturesByCategory.length < validIndex || isNaN(currentIndex))
+    ) {
+      exitTimeoutRef.current = setTimeout(() => {
         handleExit();
       }, 1500);
     }
-  }, [isError, handleExit, picturesByCategory, validIndex, isLoading]);
+
+    return () => {
+      if (exitTimeoutRef.current) {
+        clearTimeout(exitTimeoutRef.current);
+      }
+    };
+  }, [
+    isError,
+    handleExit,
+    picturesByCategory,
+    validIndex,
+    isLoading,
+    currentIndex,
+    exitTimeoutRef,
+  ]);
 
   if (!isLightBoxOpen) {
     return null;

@@ -69,7 +69,7 @@ const CommentForm = ({
       userId: userId,
     };
 
-    dispatch(createComment(formData));
+    dispatch(createComment(formData, language));
 
     reset();
     setShow(false);
@@ -100,7 +100,7 @@ const CommentForm = ({
       adminReply: adminComment ? true : false,
     };
 
-    dispatch(createReply(formData));
+    dispatch(createReply(formData, language));
 
     reset();
     setShow(false);
@@ -129,9 +129,9 @@ const CommentForm = ({
     const formData = { [key]: commentValue, username: usernameValue };
 
     if (key === "comment") {
-      dispatch(editComment({ commentId, userId, formData }));
+      dispatch(editComment({ commentId, userId, formData }, language));
     } else {
-      dispatch(editReply({ commentId, userId, formData }));
+      dispatch(editReply({ commentId, userId, formData }, language));
     }
 
     reset();

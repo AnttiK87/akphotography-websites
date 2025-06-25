@@ -1,6 +1,8 @@
 import { useState, useEffect, useMemo } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+
 import { createPicture } from "../../reducers/pictureReducer.js";
 import { initializeKeywords } from "../../reducers/keywordReducer.js";
 
@@ -21,6 +23,7 @@ import "./UploadImages.css";
 const UploadImages = () => {
   const { user } = useNotLoggedin();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [file, setFile] = useState(null);
   const [selectedType, setSelectedType] = useState("");
@@ -129,7 +132,7 @@ const UploadImages = () => {
       formData.append("textEn", textEn);
     }
 
-    dispatch(createPicture(formData)).then(() => {
+    dispatch(createPicture(formData, navigate)).then(() => {
       dispatch(initializeKeywords());
     });
 

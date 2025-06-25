@@ -11,14 +11,13 @@ import "./FirstLogin.css";
 
 const FirstLogin = () => {
   const { firstLogin, hangleFirstLogin } = useLogin();
-  const { handleLogout } = useLogout();
+  const { handleCancelLogin } = useLogout();
 
   const dispatch = useDispatch();
 
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
-  const [oldPassword, setOldPassword] = useState("");
   const [newPassword1, setNewPassword1] = useState("");
   const [newPassword2, setNewPassword2] = useState("");
 
@@ -26,15 +25,14 @@ const FirstLogin = () => {
     setName("");
     setUsername("");
     setEmail("");
-    setOldPassword("");
     setNewPassword1("");
     setNewPassword2("");
   };
 
   const close = () => {
     reset();
-    handleLogout();
     hangleFirstLogin(false);
+    handleCancelLogin();
   };
 
   const handleUserInfoChange = async (event) => {
@@ -43,7 +41,6 @@ const FirstLogin = () => {
     const nameValue = event.target.elements?.name?.value;
     const usernameValue = event.target.elements?.username?.value;
     const emailValue = event.target.elements?.email?.value;
-    const oldPasswordValue = event.target.elements?.oldPassword?.value;
     const newPasswordValue1 = event.target.elements?.newPassword1?.value;
     const newPasswordValue2 = event.target.elements?.newPassword2?.value;
 
@@ -51,9 +48,8 @@ const FirstLogin = () => {
       name: nameValue,
       username: usernameValue,
       email: emailValue,
-      oldPassword: oldPasswordValue,
-      newPassword1: newPasswordValue1,
-      newPassword2: newPasswordValue2,
+      password: newPasswordValue1,
+      passwordConfirmation: newPasswordValue2,
     };
 
     try {
@@ -73,11 +69,20 @@ const FirstLogin = () => {
       reset();
       hangleFirstLogin(false);
     } catch (error) {
-      close();
+      let errorMessage = "Unknown error occurred.";
+      console.error("Error updating user info:", error);
+
+      if (error.response.data.messages) {
+        errorMessage = error.response.data.messages[0].message;
+      } else if (error.response.data.message) {
+        errorMessage = error.response.data.message;
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
       dispatch(
         showMessage(
           {
-            text: `Failed to change user info ${error.message}`,
+            text: `Failed to change user info ${errorMessage}`,
             type: "error",
           },
           5
@@ -154,25 +159,6 @@ const FirstLogin = () => {
                   setEmail(e.target.value);
                 }}
                 placeholder={"Add email"}
-                required
-              />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="email" className="form__label">
-                Old password
-              </label>
-              <input
-                autoComplete="current-password"
-                type="password"
-                className="form__field commentUsername"
-                id="oldPassword"
-                name="oldPassword"
-                value={oldPassword}
-                onChange={(e) => {
-                  setOldPassword(e.target.value);
-                }}
-                placeholder={"Add old password"}
                 required
               />
             </div>

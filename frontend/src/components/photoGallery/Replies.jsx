@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import PropTypes from "prop-types";
+import { useNavigate } from "react-router-dom";
 
 import { useDispatch, useSelector } from "react-redux";
 
@@ -19,6 +20,7 @@ const Replies = ({
   handleReplyComment,
 }) => {
   const { language } = useLanguage();
+  const navigate = useNavigate();
 
   const userId = getUserId();
   const dispatch = useDispatch();
@@ -30,8 +32,14 @@ const Replies = ({
   const replies = useSelector((state) => state.replies.replies);
 
   const deleteReply = ({ reply, userId }) => {
-    if (window.confirm(`Do you really want to delete this reply?`)) {
-      dispatch(remove({ reply, userId }));
+    if (
+      window.confirm(
+        language === "fin"
+          ? "Haluatko varmasti poistaa tämän vastauksen?"
+          : `Do you really want to delete this reply?`
+      )
+    ) {
+      dispatch(remove({ reply, userId }, navigate, language));
     }
     return;
   };

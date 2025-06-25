@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import Table from "react-bootstrap/Table";
 
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import {
   removePicture,
   initializePicturesAllData,
@@ -37,6 +38,7 @@ const HandlePictures = () => {
   const [isError, setIsError] = useState(false);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     setIsLoading(true);
@@ -104,7 +106,7 @@ const HandlePictures = () => {
 
   const deletePicture = (pictureId) => {
     if (window.confirm(`Do you really want to delete this picture?`)) {
-      dispatch(removePicture(pictureId));
+      dispatch(removePicture(pictureId, navigate));
     }
     return;
   };
@@ -229,12 +231,12 @@ const HandlePictures = () => {
           )}
           {!isLoading && !isError && picturesToShow.length > 0 && (
             <tbody>
-              {sortedPictures.map((picture, index) => (
+              {sortedPictures.map((picture) => (
                 <tr key={picture.id}>
                   <td className="vertical-center">
                     <img className="listItemImg" src={picture.urlThumbnail} />
                   </td>
-                  <td className="vertical-center indexHP">{index + 1}</td>
+                  <td className="vertical-center indexHP">{picture.id}</td>
                   <td className="vertical-center typeHP">{picture.type}</td>
                   {selectedType === "monthly" ? (
                     <td className="vertical-center monthlyHP">

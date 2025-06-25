@@ -7,6 +7,7 @@ const storedUser = localStorage.getItem("loggedAdminUser");
 const parsedUser = storedUser ? JSON.parse(storedUser) : null;
 
 let token = parsedUser ? `Bearer ${parsedUser.token}` : null;
+
 const setToken = (newToken) => {
   token = `Bearer ${newToken}`;
 };

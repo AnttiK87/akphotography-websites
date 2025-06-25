@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import pictureService from "../services/pictures";
 import { showMessage } from "./messageReducer";
-import { clearUser } from "./userReducer.js";
+import { handleError } from "../utils/handleError";
 
 const pictureSlice = createSlice({
   name: "pictures",
@@ -75,15 +75,7 @@ export const initializePicturesAllData = (category) => {
       const pictures = await pictureService.getAllData(category);
       dispatch(setPictures(pictures));
     } catch (error) {
-      dispatch(
-        showMessage(
-          {
-            text: `Failed to load pictures: ${error.message}`,
-            type: "error",
-          },
-          1
-        )
-      );
+      handleError(error, dispatch);
     }
   };
 };
@@ -96,15 +88,7 @@ export const initializeCategoryLatest = (category) => {
       );
       dispatch(setLatestCategoryPictures(latestCategoryPictures));
     } catch (error) {
-      dispatch(
-        showMessage(
-          {
-            text: `Failed to load pictures: ${error.message}`,
-            type: "error",
-          },
-          1
-        )
-      );
+      handleError(error, dispatch);
     }
   };
 };
@@ -130,110 +114,69 @@ export const initializePicturesByCategory = (category) => {
         return;
       }
     } catch (error) {
-      dispatch(
-        showMessage(
-          {
-            text: `Failed to load pictures: ${error.message}`,
-            type: "error",
-          },
-          3
-        )
-      );
+      handleError(error, dispatch);
     }
   };
 };
 
-export const createPicture = (content) => {
+export const createPicture = (content, navigate) => {
   return async (dispatch) => {
     try {
       const newPicture = await pictureService.create(content);
-      dispatch(appendPicture(newPicture));
+      dispatch(appendPicture(newPicture.picture));
       dispatch(
         showMessage(
           {
-            text: `Added a new picture!`,
+            text: newPicture.message,
             type: "success",
           },
           1
         )
       );
     } catch (error) {
-      dispatch(
-        showMessage(
-          {
-            text: `Failed to add picture: ${error.message}`,
-            type: "error",
-          },
-          3
-        )
-      );
+      handleError(error, dispatch, navigate);
     }
   };
 };
 
-export const editPicture = (content) => {
+export const editPicture = (content, navigate) => {
   return async (dispatch) => {
     try {
       const updatedPicture = await pictureService.update(content);
-      dispatch(updatePicture(updatedPicture));
+      dispatch(updatePicture(updatedPicture.picture));
 
       dispatch(
         showMessage(
           {
-            text: `Picture edited!`,
+            text: updatedPicture.message,
             type: "success",
           },
           1
         )
       );
     } catch (error) {
-      if (error.response && error.response.status === 401) {
-        localStorage.removeItem("loggedAdminUser");
-        window.location.href = "/admin";
-        dispatch(clearUser());
-      }
-      dispatch(
-        showMessage(
-          {
-            text: `Failed to edit Picture: ${
-              error.response.data.error || error.response.statusText
-            }`,
-            type: "error",
-          },
-          3
-        )
-      );
+      handleError(error, dispatch, navigate);
     }
   };
 };
 
-export const removePicture = (pictureId) => {
+export const removePicture = (pictureId, navigate) => {
   return async (dispatch) => {
     try {
-      await pictureService.remove(pictureId);
+      const deletedPicture = await pictureService.remove(pictureId);
       dispatch(deletePicture(pictureId));
 
       dispatch(
         showMessage(
           {
-            text: `PictureId: ${pictureId} deleted successfully!`,
+            text: deletedPicture.message,
             type: "success",
           },
           1
         )
       );
     } catch (error) {
-      if (error.response && error.response.status === 401) {
-        localStorage.removeItem("loggedAdminUser");
-        window.location.href = "/admin";
-        dispatch(clearUser());
-      }
-      const errorMessage =
-        error.response && error.response.status === 404
-          ? `Failed to delete the picture: ${error.message}`
-          : `An unexpected error occurred: ${error.message}`;
-
-      dispatch(showMessage({ text: errorMessage, type: "error" }, 3));
+      handleError(error, dispatch, navigate);
 
       if (error.response && error.response.status === 404) {
         dispatch(deletePicture(pictureId));

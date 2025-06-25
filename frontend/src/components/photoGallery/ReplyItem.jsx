@@ -65,27 +65,28 @@ const ReplyItem = ({
                   {timeSince(reply.updatedAt, reply.createdAt, language)}
                 </div>
               </div>
-            </div>
-            <div className="editIconsAndAnswer">
-              {reply.userId === userId && (
-                <div className="EditsIcons">
-                  <FontAwesomeIcon
-                    className="EditIcon"
-                    icon={faPen}
-                    onClick={() => handleEditComment(reply)}
-                  />
-                  <FontAwesomeIcon
-                    className="EditIcon"
-                    icon={faTrash}
-                    onClick={() => deleteReply({ reply, userId })}
-                  />
+
+              <div className="editIconsAndAnswer">
+                {reply.userId === userId && (
+                  <div className="EditsIcons">
+                    <FontAwesomeIcon
+                      className="EditIcon"
+                      icon={faPen}
+                      onClick={() => handleEditComment(reply)}
+                    />
+                    <FontAwesomeIcon
+                      className="EditIcon"
+                      icon={faTrash}
+                      onClick={() => deleteReply({ reply, userId })}
+                    />
+                  </div>
+                )}
+                <div
+                  onClick={() => handleReplyComment(reply)}
+                  className="answerText"
+                >
+                  {language === "fin" ? "Vastaa" : "Reply"}
                 </div>
-              )}
-              <div
-                onClick={() => handleReplyComment(reply)}
-                className="answerText"
-              >
-                {language === "fin" ? "Vastaa" : "Reply"}
               </div>
             </div>
           </div>

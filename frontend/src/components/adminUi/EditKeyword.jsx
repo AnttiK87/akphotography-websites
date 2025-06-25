@@ -4,6 +4,7 @@
 import { useState, useEffect } from "react";
 import { Form } from "react-bootstrap";
 import PropTypes from "prop-types";
+import { useNavigate } from "react-router-dom";
 
 import { useDispatch } from "react-redux";
 import { editKeyword } from "../../reducers/keywordReducer.js";
@@ -16,6 +17,7 @@ import "./OwnProfile.css";
 
 const EditPicture = ({ show, setShow, keyword }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [keywordText, setKeywordText] = useState("");
 
@@ -44,7 +46,7 @@ const EditPicture = ({ show, setShow, keyword }) => {
       keyword: keywordValue,
     };
 
-    dispatch(editKeyword({ keywordId, formData }));
+    dispatch(editKeyword({ keywordId, formData }, navigate));
     handleClose();
   };
 

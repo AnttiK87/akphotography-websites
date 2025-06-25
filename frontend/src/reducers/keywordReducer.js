@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import keywordService from "../services/keywords";
 import { showMessage } from "./messageReducer";
-import { clearUser } from "./userReducer.js";
+import { handleError } from "../utils/handleError";
 
 const initialState = {
   keywords: [],
@@ -50,84 +50,66 @@ export const initializeKeywords = () => {
   };
 };
 
-export const editKeyword = (content) => {
+export const editKeyword = (content, language, navigate) => {
   return async (dispatch) => {
     try {
       const updatedKeyword = await keywordService.update(content);
-      dispatch(updateKeyword(updatedKeyword));
+      dispatch(updateKeyword(updatedKeyword.keyword));
 
       dispatch(
         showMessage(
           {
-            text: `Keyword edited!`,
+            text: `${
+              language === "fin"
+                ? updatedKeyword.messageFi
+                : updatedKeyword.messageEn
+            }`,
             type: "success",
           },
           1
         )
       );
     } catch (error) {
-      if (error.response && error.response.status === 401) {
-        localStorage.removeItem("loggedAdminUser");
-        window.location.href = "/admin";
-        dispatch(clearUser());
+      if (error.response?.status === 400) {
+        dispatch(
+          showMessage(
+            {
+              text:
+                language === "fin"
+                  ? error.response?.data?.messages.fi
+                  : error.response?.data?.messages.en,
+              type: "error",
+            },
+            3
+          )
+        );
+      } else {
+        handleError(error, dispatch, navigate);
       }
-      dispatch(
-        showMessage(
-          {
-            text: `Failed to edit Picture: ${
-              error.response && error.response.status === 401
-                ? `Failed to delete the keyword: ${error.response.data.error}`
-                : `An unexpected error occurred: ${error.message}`
-            }`,
-            type: "error",
-          },
-          3
-        )
-      );
     }
   };
 };
 
-export const removeKw = (content) => {
-  return async (dispatch) => {
+export const removeKw = (content, language) => {
+  return async (dispatch, navigate) => {
     try {
-      await keywordService.remove(content);
+      const deletedKeyword = await keywordService.remove(content);
       dispatch(deleteKeyword(content.keywordId));
 
       dispatch(
         showMessage(
           {
-            text: `Keyword deleted successfully!`,
+            text:
+              language === "fin"
+                ? deletedKeyword.messageFi
+                : deletedKeyword.messageEn,
             type: "success",
           },
           1
         )
       );
     } catch (error) {
-      if (error.response && error.response.status === 401) {
-        localStorage.removeItem("loggedAdminUser");
-        window.location.href = "/admin";
-        dispatch(clearUser());
-      }
-      const errorMessage1 =
-        error.response && error.response.status === 404
-          ? `Failed to delete the keyword: ${error.message}`
-          : `An unexpected error occurred: ${error.message}`;
-
-      const errorMessage2 =
-        error.response && error.response.status === 401
-          ? `Failed to delete the keyword: ${error.response.data.error}`
-          : `An unexpected error occurred: ${error.message}`;
-
-      dispatch(
-        showMessage(
-          {
-            text: errorMessage1 ? errorMessage1 : errorMessage2,
-            type: "error",
-          },
-          2
-        )
-      );
+      handleError(error, dispatch, navigate);
 
       if (error.response && error.response.status === 404) {
         dispatch(deleteKeyword(content));

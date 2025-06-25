@@ -1,0 +1,13 @@
+import { AppError } from '../errors/AppError.js';
+
+const currentYear = new Date().getFullYear();
+
+export const formatMonthYear = (year: number, month: number): number => {
+  if (!year || !month) {
+    throw new AppError({ en: 'Year or month missing' });
+  }
+  if (year < 2020 || year > currentYear || month < 1 || month > 12) {
+    throw new AppError({ en: 'Invalid year or month' });
+  }
+  return Number(year) * 100 + Number(month);
+};
