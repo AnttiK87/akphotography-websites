@@ -31,7 +31,7 @@ const ContactHeader = () => {
         toesLeft={toesLeft}
         toesRight={toesRight}
         printCount={15}
-        isVisible={true}
+        isVisible={isImageReady ? true : false}
       />
       <div className="ImageAndAnimationCont">
         <div className={`maskImgContact ${isImageReady ? "ready" : ""}`}>
@@ -39,6 +39,7 @@ const ContactHeader = () => {
             src={`../../../images/homeBackground/background2.jpg`}
             alt="Background Image"
             loading="eager"
+            onLoad={() => setIsImageReady(true)}
             className={`background-image ${isImageReady ? "ready" : ""}`}
           />
         </div>
@@ -64,13 +65,13 @@ const ContactHeader = () => {
               </span>
             ))}
           </p>
-        ) : (
+        ) : isImageReady ? (
           <AnimatedText
             textToAnimate={headerText}
             classNames="animated-text"
             setTextIsAnimated={setTextIsAnimated}
           />
-        )}
+        ) : null}
       </div>
     </div>
   );
