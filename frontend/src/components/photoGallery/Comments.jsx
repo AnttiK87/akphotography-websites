@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import PropTypes from "prop-types";
+import { useNavigate } from "react-router-dom";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -29,6 +30,7 @@ const Comments = ({
   setCurrentComment,
 }) => {
   const { language } = useLanguage();
+  const navigate = useNavigate();
 
   const userId = getUserId();
   const dispatch = useDispatch();
@@ -47,7 +49,7 @@ const Comments = ({
           : "Do you really want to delete this comment?"
       )
     ) {
-      await dispatch(remove({ comment, userId }));
+      await dispatch(remove({ comment, userId }, navigate, language));
     }
   };
 
@@ -106,27 +108,30 @@ const Comments = ({
                             )}
                           </div>
                         </div>
-                      </div>
-                      <div className="editIconsAndAnswer">
-                        {comment.userId === userId && (
-                          <div className="EditsIcons">
-                            <FontAwesomeIcon
-                              className="EditIcon"
-                              icon={faPen}
-                              onClick={() => handleEditComment(comment)}
-                            />
-                            <FontAwesomeIcon
-                              className="EditIcon"
-                              icon={faTrash}
-                              onClick={() => deleteComment({ comment, userId })}
-                            />
+
+                        <div className="editIconsAndAnswer">
+                          {comment.userId === userId && (
+                            <div className="EditsIcons">
+                              <FontAwesomeIcon
+                                className="EditIcon"
+                                icon={faPen}
+                                onClick={() => handleEditComment(comment)}
+                              />
+                              <FontAwesomeIcon
+                                className="EditIcon"
+                                icon={faTrash}
+                                onClick={() =>
+                                  deleteComment({ comment, userId })
+                                }
+                              />
+                            </div>
+                          )}
+                          <div
+                            onClick={() => handleReplyComment(comment)}
+                            className="answerText"
+                          >
+                            {language === "fin" ? "Vastaa" : "Reply"}
                           </div>
-                        )}
-                        <div
-                          onClick={() => handleReplyComment(comment)}
-                          className="answerText"
-                        >
-                          {language === "fin" ? "Vastaa" : "Reply"}
                         </div>
                       </div>
                     </div>

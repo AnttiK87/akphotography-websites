@@ -474,13 +474,14 @@
     min-width: 80%;
     padding: 1em 0 3em 0;
   }
+
   .CommentTexts {
-    width: 85%;
+    width: 60%;
   }
 
   .IconAndTexts {
-    max-width: 80%;
-    min-width: auto;
+    max-width: 100%;
+    min-width: 100%;
   }
 
   .imgSmallPom {

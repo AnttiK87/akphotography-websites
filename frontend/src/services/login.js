@@ -17,4 +17,16 @@ const logout = async (token) => {
   return response.data;
 };
 
-export default { login, logout };
+const cancelLogin = async (token) => {
+  const config = {
+    headers: { Authorization: `Bearer ${token}` },
+  };
+
+  const response = await axios.delete(
+    `${baseUrlLogout}/cancelFirstLogin`,
+    config
+  );
+  return response.data;
+};
+
+export default { login, logout, cancelLogin };

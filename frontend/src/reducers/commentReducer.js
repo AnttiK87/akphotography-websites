@@ -1,8 +1,8 @@
-//reducer for comments of the blogs
-//depebdencies
 import { createSlice } from "@reduxjs/toolkit";
 import commentService from "../services/comments";
 import { showMessage } from "./messageReducer";
+import { updateReplyAfterCommentUpdate } from "./replyReducer";
+import { handleError } from "../utils/handleError";
 
 const initialState = {
   comments: [],
@@ -20,6 +20,7 @@ const commentSlice = createSlice({
     },
     updateComment(state, action) {
       const updatedComment = action.payload;
+
       state.comments = state.comments.map((comment) =>
         comment.id === updatedComment.id ? updatedComment : comment
       );
@@ -41,104 +42,97 @@ export const initializeComments = (id) => {
       const comments = await commentService.getAll(id);
       dispatch(setComments(comments));
     } catch (error) {
-      dispatch(
-        showMessage(
-          {
-            text: `Failed to load comments: ${error.message}`,
-            type: "error",
-          },
-          2
-        )
-      );
+      handleError(error, dispatch);
     }
   };
 };
 
-export const createComment = (content) => {
+export const createComment = (content, language) => {
   return async (dispatch) => {
     try {
       const newComment = await commentService.create(content);
+      dispatch(appendComment(newComment.comment));
 
-      if (newComment.message === "Comment saved" && newComment.comment.id) {
-        dispatch(appendComment(newComment.comment));
-      }
       dispatch(
         showMessage(
           {
-            text: `${newComment.message}`,
+            text: `${
+              language === "fin" ? newComment.messageFi : newComment.messageEn
+            }`,
             type: "success",
           },
           1
         )
       );
     } catch (error) {
-      dispatch(
-        showMessage(
-          {
-            text: `Failed to add comment: ${error.message}`,
-            type: "error",
-          },
-          2
-        )
-      );
+      handleError(error, dispatch);
     }
   };
 };
 
-export const editComment = (content) => {
+export const editComment = (content, language) => {
   return async (dispatch) => {
     try {
       const updatedComment = await commentService.update(content);
-      dispatch(updateComment(updatedComment));
+      dispatch(updateComment(updatedComment.comment));
+      dispatch(updateReplyAfterCommentUpdate(updatedComment.comment));
 
       dispatch(
         showMessage(
           {
-            text: `Comment edited!`,
+            text:
+              language === "fin"
+                ? updatedComment.messageFi
+                : updatedComment.messageEn,
             type: "success",
           },
           1
         )
       );
     } catch (error) {
-      dispatch(
-        showMessage(
-          {
-            text: `Failed to edit comment: ${error.message}`,
-            type: "error",
-          },
-          2
-        )
-      );
+      if (error.response?.status === 400) {
+        dispatch(
+          showMessage(
+            {
+              text:
+                language === "fin"
+                  ? error.response?.data?.messages.fi
+                  : error.response?.data?.messages.en,
+              type: "error",
+            },
+            3
+          )
+        );
+      } else {
+        handleError(error, dispatch);
+      }
     }
   };
 };
 
-export const remove = (content) => {
+export const remove = (content, navigate, language) => {
   return async (dispatch) => {
     try {
-      await commentService.remove(content);
+      const deletedComment = await commentService.remove(content);
       dispatch(deleteComment(content.comment));
 
       dispatch(
         showMessage(
           {
-            text: `Comment deleted successfully!`,
+            text:
+              language === "fin"
+                ? deletedComment.messageFi
+                : deletedComment.messageEn,
             type: "success",
           },
           1
         )
       );
     } catch (error) {
-      const errorMessage =
-        error.response && error.response.status === 404
-          ? `Failed to delete the comment: ${error.message}`
-          : `An unexpected error occurred: ${error.message}`;
-
-      dispatch(showMessage({ text: errorMessage, type: "error" }, 2));
+      handleError(error, dispatch, navigate);
 
       if (error.response && error.response.status === 404) {
-        dispatch(deleteComment(content));
+        dispatch(deleteComment(content.comment));
       }
     }
   };

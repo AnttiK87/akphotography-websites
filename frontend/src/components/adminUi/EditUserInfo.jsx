@@ -1,7 +1,7 @@
 //dependencies
 import PropTypes from "prop-types";
 import { useDispatch } from "react-redux";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Form } from "react-bootstrap";
 import { updateUserInfo } from "../../reducers/userReducer";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -17,6 +17,12 @@ const EditUserInfo = ({ show, setShow, user }) => {
   const [username, setUsername] = useState(user.username);
   const [email, setEmail] = useState(user.email);
 
+  useEffect(() => {
+    setName(user.name);
+    setUsername(user.username);
+    setEmail(user.email);
+  }, [setShow, user]);
+
   const clear = () => {
     setName("");
     setUsername("");
@@ -25,13 +31,11 @@ const EditUserInfo = ({ show, setShow, user }) => {
 
   const handleOverlayClose = (event) => {
     if (event.target.id === "closeModal") {
-      clear();
       setShow(false);
     }
   };
 
   const handleClose = () => {
-    clear();
     setShow(false);
   };
 

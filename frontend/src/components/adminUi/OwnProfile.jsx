@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+
 import Table from "react-bootstrap/Table";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -6,8 +8,10 @@ import {
   faPen,
   faMagnifyingGlass,
 } from "@fortawesome/free-solid-svg-icons";
+
 import { useDispatch, useSelector } from "react-redux";
 import { initializeKeywords, removeKw } from "../../reducers/keywordReducer.js";
+
 import useNotLoggedin from "../../hooks/useNotLoggedin.js";
 import NotLoggedin from "./NotLoggedin.jsx";
 import EditKeyword from "./EditKeyword.jsx";
@@ -20,6 +24,8 @@ const OwnProfile = () => {
   const { user } = useNotLoggedin();
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const keywordsFromStore = useSelector((state) => state.keywords.keywords);
 
   const [isLoading, setIsLoading] = useState(true);
@@ -59,7 +65,7 @@ const OwnProfile = () => {
 
   const deleteKw = (keywordId) => {
     if (window.confirm("Do you really want to delete this keyword?")) {
-      dispatch(removeKw({ keywordId, userId }));
+      dispatch(removeKw({ keywordId, userId }, navigate));
     }
   };
 

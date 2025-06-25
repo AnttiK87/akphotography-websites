@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import replyService from "../services/replies";
 import { showMessage } from "./messageReducer";
+import { handleError } from "../utils/handleError";
 
 const initialState = {
   replies: [],
@@ -22,6 +23,38 @@ const replySlice = createSlice({
         reply.id === updatedReply.id ? updatedReply : reply
       );
     },
+    updateReplyAfterCommentUpdate(state, action) {
+      const updatedComment = action.payload;
+
+      state.replies = state.replies.map((reply) => {
+        if (reply.commentId === updatedComment.id) {
+          return {
+            ...reply,
+            comment: {
+              username: updatedComment.username,
+              comment: updatedComment.comment,
+            },
+          };
+        }
+        return reply;
+      });
+    },
+    updateChildReplyAfterReplyUpdate(state, action) {
+      const updatedReply = action.payload;
+
+      state.replies = state.replies.map((reply) => {
+        if (reply.parentReplyId === updatedReply.id) {
+          return {
+            ...reply,
+            parentReply: {
+              username: updatedReply.username,
+              reply: updatedReply.reply,
+            },
+          };
+        }
+        return reply;
+      });
+    },
     deleteReply(state, action) {
       state.replies = state.replies.filter(
         (reply) => reply.id !== action.payload.id
@@ -30,8 +63,14 @@ const replySlice = createSlice({
   },
 });
 
-export const { setReplies, appendReply, updateReply, deleteReply } =
-  replySlice.actions;
+export const {
+  setReplies,
+  appendReply,
+  updateReply,
+  updateReplyAfterCommentUpdate,
+  updateChildReplyAfterReplyUpdate,
+  deleteReply,
+} = replySlice.actions;
 
 export const initializeReplies = (pictureId) => {
   return async (dispatch) => {
@@ -39,102 +78,111 @@ export const initializeReplies = (pictureId) => {
       const replies = await replyService.getAll(pictureId);
       dispatch(setReplies(replies));
     } catch (error) {
-      dispatch(
-        showMessage(
-          {
-            text: `Failed to load replies: ${error.message}`,
-            type: "error",
-          },
-          2
-        )
-      );
+      handleError(error, dispatch);
     }
   };
 };
 
-export const createReply = (content) => {
+export const createReply = (content, language) => {
   return async (dispatch) => {
     try {
       const newReply = await replyService.create(content);
 
-      if (newReply.message === "Reply saved" && newReply.reply.id) {
-        dispatch(appendReply(newReply.reply));
-      }
+      dispatch(appendReply(newReply.reply));
 
       dispatch(
         showMessage(
           {
-            text: `${newReply.message}`,
+            text: `${
+              language === "fin" ? newReply.messageFi : newReply.messageEn
+            }`,
             type: "success",
           },
           1
         )
       );
     } catch (error) {
-      dispatch(
-        showMessage(
-          {
-            text: `Failed to add reply: ${error.message}`,
-            type: "error",
-          },
-          2
-        )
-      );
+      if (error.response?.status === 400) {
+        dispatch(
+          showMessage(
+            {
+              text:
+                language === "fin"
+                  ? error.response?.data?.messages.fi
+                  : error.response?.data?.messages.en,
+              type: "error",
+            },
+            3
+          )
+        );
+      } else {
+        handleError(error, dispatch);
+      }
     }
   };
 };
 
-export const editReply = (content) => {
+export const editReply = (content, language) => {
   return async (dispatch) => {
     try {
       const updatedReply = await replyService.update(content);
-      dispatch(updateReply(updatedReply));
+      dispatch(updateReply(updatedReply.reply));
+      dispatch(updateChildReplyAfterReplyUpdate(updatedReply.reply));
 
       dispatch(
         showMessage(
           {
-            text: `Reply edited!`,
+            text:
+              language === "fin"
+                ? updatedReply.messageFi
+                : updatedReply.messageEn,
             type: "success",
           },
           1
         )
       );
     } catch (error) {
-      dispatch(
-        showMessage(
-          {
-            text: `Failed to edit Reply: ${error.message}`,
-            type: "error",
-          },
-          2
-        )
-      );
+      console.error("Error response:", error);
+      if (error.response?.status === 400) {
+        dispatch(
+          showMessage(
+            {
+              text:
+                language === "fin"
+                  ? error.response?.data?.messages.fi
+                  : error.response?.data?.messages.en,
+              type: "error",
+            },
+            3
+          )
+        );
+      } else {
+        handleError(error, dispatch);
+      }
     }
   };
 };
 
-export const remove = (content) => {
+export const remove = (content, navigate, language) => {
   return async (dispatch) => {
     try {
-      await replyService.remove(content);
+      const deletedReply = await replyService.remove(content);
       dispatch(deleteReply(content.reply));
 
       dispatch(
         showMessage(
           {
-            text: `Reply deleted successfully!`,
+            text:
+              language === "fin"
+                ? deletedReply.messageFi
+                : deletedReply.messageEn,
             type: "success",
           },
           1
         )
       );
     } catch (error) {
-      const errorMessage =
-        error.response && error.response.status === 404
-          ? `Failed to delete the reply: ${error.message}`
-          : `An unexpected error occurred: ${error.message}`;
-
-      dispatch(showMessage({ text: errorMessage, type: "error" }, 2));
+      handleError(error, dispatch, navigate);
 
       if (error.response && error.response.status === 404) {
         dispatch(deleteReply(content));

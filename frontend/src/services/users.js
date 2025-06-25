@@ -24,9 +24,8 @@ const updateFirstLogin = async (content) => {
     name: content.name,
     username: content.username,
     email: content.email,
-    oldPassword: content.oldPassword,
-    newPassword1: content.newPassword1,
-    newPassword2: content.newPassword2,
+    password: content.password,
+    passwordConfirmation: content.passwordConfirmation,
   };
 
   const response = await axios.put(
@@ -55,6 +54,7 @@ const changePassword = async (content) => {
     newObject,
     config
   );
+
   return response.data;
 };
 

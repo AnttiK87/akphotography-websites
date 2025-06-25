@@ -115,7 +115,7 @@ ul {
 
 .userAndOrigComment {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   width: 100%;
 }
 
@@ -170,6 +170,7 @@ ul {
   align-items: stretch;
   height: 100%;
   width: 100%;
+  max-width: 100%;
   padding: 0.2em;
 }
 
@@ -177,15 +178,15 @@ ul {
   display: flex;
   flex-direction: row;
   align-items: start;
-  min-width: 90%;
-  max-width: 90%;
+  min-width: 100%;
+  max-width: 100%;
 }
 
 .CommentTexts {
   display: flex;
   flex-direction: column;
   align-items: start;
-  width: 85%;
+  width: 60%;
   text-align: start;
 }
 
@@ -198,7 +199,6 @@ ul {
 
 .commentTextForReply {
   color: rgba(70, 70, 70, 0.759);
-  padding-left: 0.5em;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -223,7 +223,7 @@ ul {
 }
 
 .editIconsAndAnswer {
-  height: auto;
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -234,6 +234,10 @@ ul {
 
 .h5Username {
   margin: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 95%;
 }
 
 .EditsIcons {

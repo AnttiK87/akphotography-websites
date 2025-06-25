@@ -17,7 +17,7 @@ const update = async (content) => {
   const newObject = {
     comment: content.formData.comment,
     username: content.formData.username,
-    referenceUserId: content.userId,
+    userId: content.userId,
   };
 
   const response = await axios.put(

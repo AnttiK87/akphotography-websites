@@ -32,16 +32,14 @@ const AdminReplies = ({ pictureId, commentId, handleReplyComment }) => {
             reply.commentId === commentId && reply.parentReplyId === null
         )
         .map((reply, index) => (
-          <>
-            <AdminReplyItem
-              index={index}
-              key={`replyId-${reply.id}`}
-              reply={reply}
-              replies={replies}
-              deleteReply={deleteReply}
-              handleReplyComment={handleReplyComment}
-            />
-          </>
+          <AdminReplyItem
+            index={index}
+            key={`replyId-${reply.id}`}
+            reply={reply}
+            replies={replies}
+            deleteReply={deleteReply}
+            handleReplyComment={handleReplyComment}
+          />
         ))}
     </div>
   );
@@ -66,7 +64,7 @@ const AdminReplyItem = ({
       : reply.comment.comment;
 
   return (
-    <div className="RepliesEP">
+    <div key={reply.id} className="RepliesEP">
       <div className="EditPictureComment replyEP">
         <div>
           <div>
@@ -125,7 +123,6 @@ const AdminReplyItem = ({
 AdminReplies.propTypes = {
   pictureId: PropTypes.number.isRequired,
   commentId: PropTypes.number.isRequired,
-  handleEditComment: PropTypes.func.isRequired,
   handleReplyComment: PropTypes.func.isRequired,
 };
 

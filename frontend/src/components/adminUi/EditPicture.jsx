@@ -1,6 +1,7 @@
 //dependencies
 import { useState, useEffect, useMemo } from "react";
 import { Form } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -23,6 +24,7 @@ import "./EditPicture.css";
 
 const EditPicture = ({ show, setShow, picture }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [showCommentForm, setShowCommentForm] = useState(false);
   const [reply, setReply] = useState(false);
@@ -103,7 +105,7 @@ const EditPicture = ({ show, setShow, picture }) => {
 
   const deleteComment = (comment) => {
     if (window.confirm(`Do you really want to delete this comment?`)) {
-      dispatch(remove({ comment }));
+      dispatch(remove({ comment }, navigate));
     }
     return;
   };
@@ -176,7 +178,7 @@ const EditPicture = ({ show, setShow, picture }) => {
       year: yearValue,
     };
 
-    dispatch(editPicture({ pictureId, formData }));
+    dispatch(editPicture({ pictureId, formData }, navigate));
     handleClose();
   };
 
@@ -515,6 +517,7 @@ const EditPicture = ({ show, setShow, picture }) => {
                     setReply={setReply}
                     currentComment={currentComment}
                     adminComment={true}
+                    edit={false}
                   />
                 </div>
               ))

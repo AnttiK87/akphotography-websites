@@ -1,33 +1,54 @@
 {
-  "name": "backend",
+  "name": "ak-photography-backend",
   "version": "1.0.0",
   "description": "ak photography website backend",
-  "main": "index.js",
+  "type": "module",
+  "imports": {
+    "#*": "./src/*"
+  },
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js",
-    "lint": "eslint \"./**/*.{js,jsx}\"",
-    "build:uiDev": "@powershell Remove-Item -Recurse -Force dist && cd ../frontend && npm run build && @powershell Copy-Item dist -Recurse ../backend",
-    "build:ui": "rm -rf dist && cd ../frontend && npm run build && cp -r dist/* ../backend/",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "migration:down": "node utils/rollback.js",
-    "generate-thumbnails-once": "node utils/generate-thumbnails.js"
+    "dev": "@powershell Remove-Item -Recurse -Force buildBackend && tsc && cross-env NODE_ENV=development tsx --watch --env-file .env src/index.ts",
+    "start": "cross-env NODE_ENV=production node --env-file .env buildBackend/index.js",
+    "build": "@powershell Remove-Item -Recurse -Force buildBackend && tsc",
+    "build:uiDev": "powershell -Command \"if (Test-Path buildBackend/dist) { Remove-Item -Recurse -Force buildBackend/dist }; cd ../frontend; npm run build; Copy-Item dist -Recurse ../backend/buildBackend/dist\"",
+    "type-check": "tsc --noEmit",
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "rollback:js": "node buildBackend/utils/rollback.js",
+    "migration:down": "npm run build && npm run rollback:js",
+    "generate-thumbnails-once": "ts-node --esm src/utils/generate-thumbnails.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/AnttiK87/akphotography-websites.git"
-  },
-  "keywords": [
-    "website",
-    "backend",
-    "nodejs",
-    "express",
-    "mysql"
-  ],
+  "keywords": [],
   "author": "Antti Kortelainen",
   "license": "UNLICENSED",
+  "devDependencies": {
+    "@eslint/js": "^9.27.0",
+    "@tsconfig/node22": "^22.0.1",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/cors": "^2.8.18",
+    "@types/express": "^5.0.1",
+    "@types/jsonwebtoken": "^9.0.9",
+    "@types/multer": "^1.4.12",
+    "@types/node": "^22.15.17",
+    "@types/nodemailer": "^6.4.17",
+    "@types/sequelize": "^4.28.20",
+    "esbuild": "^0.25.4",
+    "eslint": "^9.27.0",
+    "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-prettier": "^5.4.0",
+    "globals": "^16.2.0",
+    "prettier": "^3.5.3",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.19.4",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.32.1"
+  },
   "dependencies": {
     "@sequelize/mysql": "^7.0.0-alpha.45",
+    "@tsconfig/node-lts": "^22.0.1",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
@@ -39,14 +60,7 @@
     "nodemailer": "^6.10.0",
     "sequelize": "^6.37.5",
     "sharp": "^0.33.5",
-    "umzug": "^3.8.2"
-  },
-  "devDependencies": {
-    "@eslint/js": "^9.13.0",
-    "eslint": "^9.13.0",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-prettier": "^5.2.1",
-    "nodemon": "^3.1.7",
-    "prettier": "3.3.3"
+    "umzug": "^3.8.2",
+    "zod": "^3.25.46"
   }
 }

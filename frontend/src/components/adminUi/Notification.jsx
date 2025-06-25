@@ -13,7 +13,11 @@ const Notification = () => {
   }
 
   const notificationClass =
-    message.type === "success" ? "notification success" : "notification error";
+    message.type === "success"
+      ? "notification success"
+      : message.type === "success"
+      ? "notification warning"
+      : "notification error";
 
   return <div className={notificationClass}>{message.text}</div>;
 };
