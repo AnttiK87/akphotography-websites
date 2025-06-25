@@ -84,21 +84,21 @@ Icons are a mix of self made assets and Font Awesome icons via the @fortawesome 
 │  
 ├── public/ # Static assets (images)  
 ├── src/  
-│ ├── components/ # UI components organized by views (e.g., Navbar, Gallery, etc.)  
+│ ├── components/ # UI components organized by views (e.g., Navbar, Home, Gallery, etc.)  
 │ ├── assets/ # Icons, images, and other assets  
 │ ├── context/ # Context providers for managing lightbox and language state  
-│ ├── hooks/ # Custom hooks for reusable logic (e.g., useFetch, useAuth)  
+│ ├── hooks/ # Custom hooks for reusable logic  
 │ ├── utils/ # Utility functions (e.g., date formatting, image resizing)  
 │ ├── reducers/ # Redux reducers and slices for global state management  
-│ ├── services/ # API calls and backend communication (e.g., Axios instance)  
+│ ├── services/ # API calls and backend communication  
 │ ├── app.jsx # Main routing configuration  
 │ └── main.jsx # Application entry point  
 ├── index.html # Main HTML template  
 ├── vite.config.js # Vite build configuration  
-└── .eslintrc # ESLint configuration  
+└── .eslintrc # ESLint configuration
 
 # 📬 Author
 
 GitHub: AnttiK87  
 Project: akphotography-websites  
-Author: Antti Kortelainen  
+Author: Antti Kortelainen
