@@ -49,7 +49,7 @@ jobs:
 
       - name: Copy backend package.json to server
         run: |
-          rsync -avz -e "ssh -i ~/.ssh/private_key" ./backend/packege.json chgqkclj@akphotography.fi:public_html/
+          rsync -avz -e "ssh -i ~/.ssh/private_key" ./backend/package.json chgqkclj@akphotography.fi:public_html/
 
       - name: Copy frontend files to server
         run: |
