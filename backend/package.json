@@ -9,7 +9,8 @@
   "scripts": {
     "dev": "@powershell Remove-Item -Recurse -Force buildBackend && tsc && cross-env NODE_ENV=development tsx --watch --env-file .env src/index.ts",
     "start": "cross-env NODE_ENV=production node --env-file .env buildBackend/index.js",
-    "build": "@powershell Remove-Item -Recurse -Force buildBackend && tsc",
+    "build": "tsc",
+    "build:beDev": "@powershell Remove-Item -Recurse -Force buildBackend && tsc",
     "build:uiDev": "powershell -Command \"if (Test-Path buildBackend/dist) { Remove-Item -Recurse -Force buildBackend/dist }; cd ../frontend; npm run build; Copy-Item dist -Recurse ../backend/buildBackend/dist\"",
     "type-check": "tsc --noEmit",
     "lint": "eslint .",
