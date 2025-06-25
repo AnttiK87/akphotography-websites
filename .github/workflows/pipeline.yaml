@@ -61,7 +61,7 @@ jobs:
 
       - name: Copy PM2 ecosystem config
         run: |
-          rsync -avz -e "ssh -i ~/.ssh/private_key" ./backend/ecosystem.config.js chgqkclj@akphotography.fi:public_html/
+          rsync -avz -e "ssh -i ~/.ssh/private_key" ./backend/ecosystem.config.cjs chgqkclj@akphotography.fi:public_html/
 
       - name: Restart Node.js app
         run: |
