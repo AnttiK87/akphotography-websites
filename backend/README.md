@@ -70,7 +70,8 @@ npm start
 
 ## 📁 Project Structure (Backend)
 
-````/backend
+```
+/backend
 │
 ├── buildBackend/                 # Compiled backend code
 │   └── dist/                     # Compiled frontend copied into backend
@@ -123,4 +124,7 @@ This command will handle starting the test database, running the tests, and clea
 GitHub: AnttiK87
 Project: akphotography-websites
 Author: Antti Kortelainen
-````
+
+```
+
+```
