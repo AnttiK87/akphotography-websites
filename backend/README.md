@@ -94,8 +94,8 @@ npm start
 ├── tsconfig.json                 # Base TypeScript config
 ├── tsconfig.build.json           # TypeScript config for production build
 ├── .env                          # Environment variables (not committed)
-└── .env.test                     # Test environment variables (not committed)```
-
+└── .env.test                     # Test environment variables (not committed)
+```
 
 ## 🧪 Testing
 
