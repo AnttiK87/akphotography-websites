@@ -26,28 +26,36 @@ npm install
 
 ### Create a .env file in the root with the following variables:
 
-### MySQL
+#### MySQL
 
+```txt
 MYSQL_USER=your_db_username
 MYSQL_ROOT_PASSWORD=your_root_password
 MYSQL_PASSWORD=your_db_password
 MYSQL_DATABASE=your_db_name
 DB_HOST=your_db_host
+```
 
-### Server
+#### Server
 
+```txt
 PORT=your_port
 SECRET=your_jwt_secret
+```
 
-### Email
+#### Email
 
+```txt
 EMAIL_HOST=your_email_host
 EMAIL_USER=your_email_user
 EMAIL_PASS=your_email_password
+```
 
-### Admin
+#### Admin
 
+```txt
 ADMIN_PASSWORD=admin_password_created_on_first_launch
+```
 
 ### Establish the development database with Docker
 
