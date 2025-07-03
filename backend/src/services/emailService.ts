@@ -40,7 +40,10 @@ export const sendCommentNotification = async (
   };
 
   try {
-    if (process.env.NODE_ENV != 'development') {
+    if (
+      process.env.NODE_ENV != 'development' &&
+      process.env.NODE_ENV != 'test'
+    ) {
       await transporter.sendMail(mailOptions);
     }
     logger.info('Email notification sent');
@@ -69,7 +72,7 @@ export const sendContactNotification = async (
     text: `You received a new message from ${name} (${email}):\n\n${message}\n\nReply wanted: ${contactMe ? 'Yes' : 'No'}`,
   };
 
-  if (process.env.NODE_ENV != 'development') {
+  if (process.env.NODE_ENV != 'development' && process.env.NODE_ENV != 'test') {
     await transporter.sendMail(mailOptions);
   }
 };
@@ -79,7 +82,7 @@ export const sendAutoReply = async (
   name: string,
   email: string,
   contactMe?: boolean,
-  language: string = 'en',
+  language: string = 'fin',
 ) => {
   const text =
     language === 'fin'
@@ -98,7 +101,7 @@ export const sendAutoReply = async (
     text,
   };
 
-  if (process.env.NODE_ENV != 'development') {
+  if (process.env.NODE_ENV != 'development' && process.env.NODE_ENV != 'test') {
     await transporter.sendMail(replyOptions);
   }
 };

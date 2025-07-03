@@ -69,7 +69,7 @@ export interface CreatePicture {
   type: 'monthly' | 'birds' | 'nature' | 'landscapes' | 'mammals';
   width: number;
   height: number;
-  uploadFolderThumbnail: string;
+  thumbnailFilename: string;
   filePath: string;
   filename: string;
 }

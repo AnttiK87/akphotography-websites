@@ -21,7 +21,7 @@ router.get('/', async (_req: Request, res: Response) => {
   res.json(keywords);
 });
 
-// PUT /api/keywords
+// PUT /api/keywords/update/:id
 // route for updating the keyword
 // Middlewares used:
 // - keywordFinder: finds the keyword by id
