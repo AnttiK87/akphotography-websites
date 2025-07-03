@@ -108,6 +108,7 @@ router.put(
 // Middlewares used:
 // - tokenExtractor: validates the token and checks if the user is authenticated
 // - validateNewUserInput: validates the new user input
+// - not in use at ui, mainly for testing purposes and for possible future use
 router.post(
   '/addUser',
   tokenExtractor,
@@ -128,7 +129,7 @@ router.post(
     res.json({
       messageEn: 'New user added!',
       messageFi: 'Uusi käyttäjä lisätty!',
-      reply: newUser,
+      user: newUser,
     });
   },
 );
@@ -138,6 +139,7 @@ router.post(
 // Middlewares used:
 // - tokenExtractor: validates the token and checks if the user is authenticated
 // - userFinder: finds the user by id and attaches it to the request object
+// - not in use at ui, mainly for testing purposes and for possible future use
 router.delete(
   '/:id',
   tokenExtractor,

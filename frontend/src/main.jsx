@@ -1,12 +1,13 @@
 import { createRoot } from "react-dom/client";
 import { BrowserRouter as Router } from "react-router-dom";
 import { LanguageProvider } from "./contexts/LanguageContext";
-import { LightBoxProvider } from "./contexts/LightBoxContext.jsx";
+import { LightBoxProvider } from "./contexts/LightBoxContext";
+import { ImageIndexProvider } from "./contexts/ImageIndexContext";
 import { Provider } from "react-redux";
 import store from "./reducers/store";
 import App from "./App.jsx";
 
-import DisableScrollRestoration from "./DisableScrollRestoration.jsx";
+import DisableScrollRestoration from "./DisableScrollRestoration";
 
 import "./index.css";
 
@@ -15,8 +16,10 @@ createRoot(document.getElementById("root")).render(
     <Provider store={store}>
       <Router basename="/">
         <LightBoxProvider>
-          <DisableScrollRestoration />
-          <App />
+          <ImageIndexProvider>
+            <DisableScrollRestoration />
+            <App />
+          </ImageIndexProvider>
         </LightBoxProvider>
       </Router>
     </Provider>

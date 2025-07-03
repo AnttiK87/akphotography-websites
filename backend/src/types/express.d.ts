@@ -31,7 +31,12 @@ declare global {
         width: number;
         height: number;
       };
-      file: Express.Multer.File & { path: string; filename: string };
+      file: Express.Multer.File & {
+        path: string;
+        filename: string;
+        thumbnailFilename: string;
+        thumbnailPath: string;
+      };
     }
   }
 }

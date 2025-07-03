@@ -5,7 +5,13 @@ export const handleError = (error, dispatch, navigate, language = "en") => {
   const status = error.response?.status;
   const data = error.response?.data;
 
+  console.error("Error occurred:", error);
   const getLocalizedMessage = () => {
+    if (Array.isArray(data?.messages)) {
+      return data.messages
+        .map((msg) => `${msg.field}: ${msg.message}`)
+        .join("\n");
+    }
     if (data?.messages) {
       return data.messages[language] || data.messages.en || data.messages.fi;
     }

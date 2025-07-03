@@ -6,8 +6,10 @@ import path from 'path';
 import logger from './logger.js';
 
 // path for highResFiles
-const uploadFolderHightRes = './uploads/pictures/';
-const uploadFolderThumbnail = './uploads/thumbnail/';
+const isTestEnv = process.env.NODE_ENV === 'test';
+const uploadBase = isTestEnv ? './tests/uploads/' : './uploads/';
+const uploadFolderHightRes = path.join(uploadBase, 'pictures');
+const uploadFolderThumbnail = path.join(uploadBase, 'thumbnail');
 
 // if the folders do not exist, create them
 [uploadFolderHightRes, uploadFolderThumbnail].forEach((folder) => {

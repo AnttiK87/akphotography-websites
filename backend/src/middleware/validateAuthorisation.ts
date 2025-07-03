@@ -6,26 +6,25 @@ import { tokenExtractor } from './tokenExtractor.js';
 import Comment from '../models/comment.js';
 import Reply from '../models/reply.js';
 
-export function validateIsAdmin(
+export const validateIsAdmin = (
   req: Request,
   _res: Response,
   next: NextFunction,
-) {
+) => {
   const isAdmin = req.decodedToken;
 
   if (!isAdmin) {
     throw new AppError({ en: 'unauthorized' }, 401);
   }
   next();
-}
+};
 
-export function validateOwner(resourceKey: 'comment' | 'reply') {
+export const validateOwner = (resourceKey: 'comment' | 'reply') => {
   return async (req: Request, _res: Response, next: NextFunction) => {
     const resource: Comment | Reply = req[resourceKey];
     if (!resource) {
       throw new AppError({ en: `Missing resource: ${resourceKey}` }, 400);
     }
-
     if (req.body.userId !== resource.userId) {
       throw new AppError(
         { en: `Unauthorized to update this ${resourceKey}` },
@@ -35,9 +34,9 @@ export function validateOwner(resourceKey: 'comment' | 'reply') {
 
     next();
   };
-}
+};
 
-export function validateOwnerOrAdmin(resourceKey: 'comment' | 'reply') {
+export const validateOwnerOrAdmin = (resourceKey: 'comment' | 'reply') => {
   return async (req: Request, res: Response, next: NextFunction) => {
     const resource = req[resourceKey];
     if (!resource) {
@@ -69,4 +68,4 @@ export function validateOwnerOrAdmin(resourceKey: 'comment' | 'reply') {
     }
     next();
   };
-}
+};
