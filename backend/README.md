@@ -20,11 +20,11 @@ This is the backend of the akphotography-websites project. It's built with Node.
 
 ## 🚀 Getting Started
 
-# Install dependencies:
+### Install dependencies:
 
 npm install
 
-# Create a .env file in the root with the following variables:
+### Create a .env file in the root with the following variables:
 
 MYSQL_USER=your db-username
 MYSQL_ROOT_PASSWORD=your db-root password
@@ -42,15 +42,15 @@ EMAIL_PASS=your email password
 
 ADMIN_PASSWORD=password for admin user generaten on first launch
 
-# Establish the development database with Docker
+### Establish the development database with Docker
 
 docker compose -f docker-compose.yml --env-file .env up -d
 
-# Run in development mode:
+### Run in development mode:
 
 npm run dev
 
-# Run in production:
+### Run in production:
 
 npm run build
 npm start
@@ -70,31 +70,32 @@ npm start
 
 ## 📁 Project Structure (Backend)
 
-/backend
+````/backend
 │
-├── buildBackend/ – Compiled backend code
-│ └── dist/ – Compiled frontend copied into backend
+├── buildBackend/                 # Compiled backend code
+│   └── dist/                     # Compiled frontend copied into backend
 ├── src/
-│ ├── controllers/ – Route logic
-│ ├── errors/ – Custom AppError logic
-│ ├── middleware/ – Middlewares (error handling, auth, etc.)
-│ ├── migrations/ – Sequelize migration files
-│ ├── models/ – Sequelize models
-│ ├── schemas/ – Zod schemas for validation
-│ ├── services/ – Application logic and DB access
-│ ├── types/ – TypeScript type definitions
-│ ├── utils/ – Logger, DB connection, config helpers
-│ ├── app.js – Express app and route setup
-│ └── index.js – Entry point
-├── docker-compose.yml – Docker config for dev database
-├── docker-compose.test.yml – Docker config for test database
-├── ecosystem.config.cjs – PM2 config for production deployment
-├── eslint.config.mjs – ESLint configuration
-├── jest.config.mjs – Jest configuration for testing
-├── tsconfig.json – Base TypeScript config
-├── tsconfig.build.json – TypeScript config for production build
-├── .env – Environment variables (not committed)
-└── .env.test – Test environment variables (not committed)
+│   ├── controllers/              # Route logic
+│   ├── errors/                   # Custom AppError logic
+│   ├── middleware/               # Middlewares (error handling, auth, etc.)
+│   ├── migrations/               # Sequelize migration files
+│   ├── models/                   # Sequelize models
+│   ├── schemas/                  # Zod schemas for validation
+│   ├── services/                 # Application logic and DB access
+│   ├── types/                    # TypeScript type definitions
+│   ├── utils/                    # Logger, DB connection, config helpers
+│   ├── app.js                    # Express app and route setup
+│   └── index.js                  # Entry point
+├── docker-compose.yml            # Docker config for dev database
+├── docker-compose.test.yml       # Docker config for test database
+├── ecosystem.config.cjs          # PM2 config for production deployment
+├── eslint.config.mjs             # ESLint configuration
+├── jest.config.mjs               # Jest configuration for testing
+├── tsconfig.json                 # Base TypeScript config
+├── tsconfig.build.json           # TypeScript config for production build
+├── .env                          # Environment variables (not committed)
+└── .env.test                     # Test environment variables (not committed)```
+
 
 ## 🧪 Testing
 
@@ -102,7 +103,7 @@ This project uses Jest as the testing framework for backend tests.
 
 To run tests, there are several npm scripts defined that help with setting up and tearing down a test database environment using Docker Compose.
 
-# Available test scripts:
+### Available test scripts:
 
 - "test:db:up": Starts the test database containers in the background using Docker Compose with the configuration file docker-compose.test.yml and environment variables from .env.test.
 
@@ -112,13 +113,14 @@ To run tests, there are several npm scripts defined that help with setting up an
 
 - "test": Runs the full test sequence — first brings the test DB up (test:db:up), then runs tests (test:only), and finally tears down the test DB (test:db:down).
 
-# How to run tests manually:
+### How to run tests manually:
 
 npm run test
 This command will handle starting the test database, running the tests, and cleaning up the test database afterward.
 
 ## 📬 Author
 
-GitHub: AnttiK87  
-Project: akphotography-websites  
+GitHub: AnttiK87
+Project: akphotography-websites
 Author: Antti Kortelainen
+````
