@@ -23,7 +23,7 @@ jobs:
         run: echo "${{ secrets.ENV_TEST }}" > backend/.env.test
 
       - name: Run test for backend
-        run: npm run test
+        run: cd backend && npm run test
 
       - name: Install frontend dependencies
         run: cd frontend && npm ci
