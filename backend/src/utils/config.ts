@@ -1,8 +1,10 @@
 // config.ts is used to load environment variables from a .env file and export them as typed constants.
 import dotenv from 'dotenv';
 
+// choose the .env file based on the environment
+const envFile = process.env.NODE_ENV === 'test' ? '.env.test' : '.env';
 // Load environment variables from .env file
-dotenv.config();
+dotenv.config({ path: envFile });
 
 // export typed environment variables
 export const PORT: number = Number(process.env.PORT) || 3000;

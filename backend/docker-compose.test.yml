@@ -1,0 +1,20 @@
+services:
+  mysql_test:
+    image: mysql:latest
+    container_name: mysql_test_container
+    restart: unless-stopped
+    environment:
+      - MYSQL_ROOT_PASSWORD=testpass
+      - MYSQL_USER=testuser
+      - MYSQL_PASSWORD=testpass
+      - MYSQL_DATABASE=test_akphotographyDB
+      - DB_HOST=localhost
+    ports:
+      - '3307:3306'
+    expose:
+      - '3306'
+    volumes:
+      - mysql_test_data:/var/lib/mysql
+
+volumes:
+  mysql_test_data:

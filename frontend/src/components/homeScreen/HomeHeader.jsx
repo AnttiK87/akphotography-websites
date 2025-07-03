@@ -2,6 +2,7 @@ import "./HomeHeader.css";
 
 import { useState, useEffect } from "react";
 import { useLanguage } from "../../hooks/useLanguage";
+import { useImageIndex } from "../../hooks/useImageIndex";
 
 import AnimatedText from "../animations/AnimatedText";
 
@@ -13,9 +14,8 @@ const HomeHeader = () => {
   const { language } = useLanguage();
   const [textIsAnimated, setTextIsAnimated] = useState(false);
   const [isImageReady, setIsImageReady] = useState(false);
-  const [currentImageIndex, setCurrentImageIndex] = useState(
-    Math.floor(Math.random() * 8) + 1
-  );
+  const { currentImageIndex, setCurrentImageIndex } = useImageIndex();
+
   const duration = 10000;
 
   const headerText =
@@ -34,7 +34,7 @@ const HomeHeader = () => {
     return () => {
       clearInterval(interval);
     };
-  }, [duration]);
+  }, [duration, setCurrentImageIndex]);
 
   useEffect(() => {
     const image = new Image();

@@ -7,7 +7,9 @@ This project aims to renew and recreate personal web site with more modern web-d
 The project is organized into two main directories:
 
 /backend:  
-The backend of the application, which serves as the API for the frontend. Built with Node.js, Express, and Sequelize for database interactions.
+The backend of the application, which serves as the API for the frontend.
+Built with Node.js, Express, and Sequelize for database interactions.
+The backend is written in TypeScript to ensure static type safety, improve code quality, and reduce runtime errors.
 
 /frontend:  
 The frontend of the application, built with React and Vite. This serves the user interface for commonusers and andmin user for browsing, uploading, and managing photos.
@@ -41,4 +43,4 @@ More detailed description on own backend and frontend README-files
 
 GitHub: AnttiK87  
 Project: akphotography-websites  
-Author: Antti Kortelainen  
+Author: Antti Kortelainen

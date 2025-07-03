@@ -1,7 +1,5 @@
 import { picIncludeBasic } from '../utils/includeOptions.js';
 
-import { handlePictureResize } from './imageService.js';
-
 import Picture from '../models/picture.js';
 import Text from '../models/text.js';
 
@@ -36,19 +34,16 @@ export const saveText = async (
 };
 
 export const createPicture = async ({
-  filePath,
   filename,
   width,
   height,
   type,
-  uploadFolderThumbnail,
+  thumbnailFilename,
 }: CreatePicture) => {
-  const thumbnail = await handlePictureResize(filePath, uploadFolderThumbnail);
-
   return await Picture.create({
     fileName: filename,
     url: `/uploads/pictures/${filename}`,
-    urlThumbnail: `/uploads/thumbnail/${thumbnail.filename}`,
+    urlThumbnail: `/uploads/thumbnail/${thumbnailFilename}`,
     type,
     width,
     height,

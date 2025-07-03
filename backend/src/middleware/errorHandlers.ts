@@ -7,6 +7,7 @@ import {
 } from 'sequelize';
 import { ZodError } from 'zod';
 import { AppError } from '../errors/AppError.js';
+import { deleteFile } from '../utils/fileUtils.js';
 
 // Middleware for handling unknown endpoints
 // This function is used to catch requests to endpoints that do not exist.
@@ -20,10 +21,18 @@ export const unknownEndpoint = (_req: Request, res: Response): void => {
 // If the error is not recognized, it defaults to a 500 Internal Server Error.
 export const errorHandler = (
   error: unknown,
-  _req: Request,
+  req: Request,
   res: Response,
   next: NextFunction,
 ): void => {
+  if (req.file?.path) {
+    deleteFile(req.file.path);
+  }
+
+  if (req.file?.thumbnailPath) {
+    deleteFile(req.file.thumbnailPath);
+  }
+
   if (error instanceof AppError) {
     res.status(error.statusCode).json({
       status: 'error',
@@ -69,5 +78,6 @@ export const errorHandler = (
       code: 'UNKNOWN_ERROR',
     });
   }
+  console.error('Error:', error);
   next(error);
 };
