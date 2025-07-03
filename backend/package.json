@@ -1,6 +1,6 @@
 {
   "name": "ak-photography-backend",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "ak photography website backend",
   "type": "module",
   "scripts": {
