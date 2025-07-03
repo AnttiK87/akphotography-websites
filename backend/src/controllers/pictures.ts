@@ -1,13 +1,12 @@
 import express, { Request, Response } from 'express';
 
-import { PictureInput } from '../types/types.js';
-
 import { tokenExtractor } from '../middleware/tokenExtractor.js';
 import { pictureFinder } from '../middleware/finders.js';
 import { validatePictureUploadInput } from '../middleware/validateInput.js';
 import { handlePictureUpdates } from '../middleware/validateUpdateInput.js';
+import { createThumbnail } from '../middleware/createThumbnail.js';
 
-import { upload, uploadFolderThumbnail } from '../utils/multerConfig.js';
+import { upload } from '../utils/multerConfig.js';
 import { picIncludeBasic, PicIncludeAll } from '../utils/includeOptions.js';
 import { pictureQueryOptions } from '../utils/queryHelpers.js';
 import { deleteFile } from '../utils/fileUtils.js';
@@ -17,6 +16,8 @@ import { formatMonthYear } from '../utils/formatMonthYear.js';
 import { attachKeywordsToPicture } from '../services/keywordService.js';
 import { createPicture } from '../services/pictureService.js';
 import { saveText } from '../services/pictureService.js';
+
+import { PictureInput } from '../types/types.js';
 
 import Picture from '../models/picture.js';
 
@@ -32,41 +33,35 @@ router.post(
   '/upload',
   tokenExtractor,
   upload.single('image'),
+  createThumbnail,
   validatePictureUploadInput,
-
   async (req: Request<object, object, PictureInput>, res: Response) => {
-    // set data from req.body to variables
     const { type, textFi, textEn, year, month, keywords } = req.body;
 
-    // create thumbnail and save data to db
     const picture = await createPicture({
       filePath: req.file.path,
       filename: req.file.filename,
       width: req.metadata.width,
       height: req.metadata.height,
       type,
-      uploadFolderThumbnail,
+      thumbnailFilename: req.file.thumbnailFilename,
     });
 
-    // handle possible text data
     if (textFi || textEn) {
       const text = await saveText(picture.id, textFi ?? null, textEn ?? null);
       picture.textId = text.id;
     }
 
-    // add month and year data if type is monthly
     if (type === 'monthly' && year && month) {
       picture.monthYear = formatMonthYear(year, month);
     }
 
-    // add keywords
     if (keywords) {
       await attachKeywordsToPicture(picture, keywords);
     }
 
-    // save and return
     await picture.save();
-    res.json({ message: 'New picture added!', picture: picture });
+    res.json({ message: 'New picture added!', picture });
   },
 );
 

@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import { useLanguage } from "./hooks/useLanguage";
 import { useImagePreloader } from "./hooks/useImagePreloader";
+import { useImageIndex } from "../src/hooks/useImageIndex";
 
 import "./App.css";
 
@@ -31,34 +32,16 @@ import leaf from "./assets/leaf.png";
 import toesLeft from "./assets/toes-left-white.png";
 import toesRight from "./assets/toes-right-white.png";
 import film from "./assets/film.png";
-import background1 from "/images/homeBackground/background1.jpg";
-import background2 from "/images/homeBackground/background2.jpg";
-import background3 from "/images/homeBackground/background3.jpg";
-import background4 from "/images/homeBackground/background4.jpg";
-import background5 from "/images/homeBackground/background5.jpg";
-import background6 from "/images/homeBackground/background6.jpg";
-import background7 from "/images/homeBackground/background7.jpg";
-import background8 from "/images/homeBackground/background8.jpg";
 
 function App() {
   const { language } = useLanguage();
   const [isLoaded, setIsLoaded] = useState(false);
+  const { currentImageIndex } = useImageIndex();
 
-  const images = [
-    birdWhite,
-    leaf,
-    toesLeft,
-    toesRight,
-    film,
-    background1,
-    background2,
-    background3,
-    background4,
-    background5,
-    background6,
-    background7,
-    background8,
-  ];
+  const background = new Image();
+  background.src = `../../../images/homeBackground/background${currentImageIndex}.jpg`;
+
+  const images = [birdWhite, leaf, toesLeft, toesRight, film, background];
 
   const imagesLoaded = useImagePreloader(images);
 

@@ -39,11 +39,11 @@ export const validateRatingInput = async (
   next();
 };
 
-export async function validateCommentInput(
+export const validateCommentInput = async (
   req: Request,
   _res: Response,
   next: NextFunction,
-) {
+) => {
   const parsedComment = commentSchema.parse(req.body);
 
   const picture = await Picture.findByPk(parsedComment.pictureId);
@@ -58,7 +58,7 @@ export async function validateCommentInput(
   }
   req.body = parsedComment;
   next();
-}
+};
 
 export const validateReplyInput = async (
   req: Request,
@@ -93,31 +93,31 @@ export const validateReplyInput = async (
   next();
 };
 
-export function validateContactFormInput(
+export const validateContactFormInput = (
   req: Request,
   _res: Response,
   next: NextFunction,
-) {
+) => {
   const parsedFormData = contactFormSchema.parse(req.body);
   req.body = parsedFormData;
   next();
-}
+};
 
-export function validateLoginInput(
+export const validateLoginInput = (
   req: Request,
   _res: Response,
   next: NextFunction,
-) {
+) => {
   const parsedlogin = loginSchema.parse(req.body);
   req.body = parsedlogin;
   next();
-}
+};
 
-export async function validatePictureUploadInput(
+export const validatePictureUploadInput = async (
   req: Request,
   _res: Response,
   next: NextFunction,
-) {
+) => {
   const { type, year, month } = pictureSchema.parse(req.body);
   const parsedPicture = pictureSchema.parse(req.body);
 
@@ -151,9 +151,9 @@ export async function validatePictureUploadInput(
 
   req.body = parsedPicture;
   next();
-}
+};
 
-export const validateNewUserInput = async (
+export const validateNewUserInput = (
   req: Request,
   _res: Response,
   next: NextFunction,
