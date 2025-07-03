@@ -8,3 +8,4 @@ build/
 .prettierignore
 uploads/
 coverage/
+check_service.sh
