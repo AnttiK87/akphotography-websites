@@ -17,7 +17,7 @@
     "rollback:js": "node buildBackend/utils/rollback.js",
     "migration:down": "npm run build && npm run rollback:js",
     "generate-thumbnails-once": "ts-node --esm src/utils/generate-thumbnails.js",
-    "test:db:up": "docker-compose -f docker-compose.test.yml --env-file .env.test up -d",
+    "test:db:up": "docker compose -f docker-compose.test.yml --env-file .env.test up -d",
     "test:db:down": "docker-compose -f docker-compose.test.yml down -v",
     "test:only": "cross-env NODE_ENV=test NODE_OPTIONS=\"--experimental-vm-modules --no-warnings\" jest --detectOpenHandles",
     "test": "npm run test:db:up && npm run test:only && npm run test:db:down"
