@@ -23,7 +23,7 @@ describe('Picture routes', () => {
         urlThumbnail: '/uploads/thumbnail/test-picture1.webp',
         height: 3000,
         width: 2000,
-        type: 'nature',
+        type: 'birds',
         monthYear: null,
         viewCount: 4,
       },
@@ -33,7 +33,7 @@ describe('Picture routes', () => {
         urlThumbnail: '/uploads/thumbnail/test-picture2.webp',
         height: 3000,
         width: 2000,
-        type: 'nature',
+        type: 'landscapes',
         monthYear: null,
         viewCount: 4,
       },
@@ -53,7 +53,7 @@ describe('Picture routes', () => {
         urlThumbnail: '/uploads/thumbnail/test-picture4.webp',
         height: 3000,
         width: 2000,
-        type: 'nature',
+        type: 'mammals',
         monthYear: null,
         viewCount: 4,
       },
@@ -93,14 +93,52 @@ describe('Picture routes', () => {
     expect(res.body.viewCount).toBe(pictures[0].viewCount + 1);
   });
 
-  test('PUT /api/pictures/:id updates picture metadata', async () => {
+  test('PUT /api/pictures/:id adds text to picture', async () => {
+    const updatedPicture = {
+      type: 'birds',
+      textFi: 'testi',
+    };
     const res = await request(app)
       .put(`/api/pictures/${pictures[0].id}`)
       .set('Authorization', `Bearer ${token}`)
-      .send({ type: 'mammals' })
+      .send(updatedPicture)
       .expect(200);
 
-    expect(res.body.picture.type).toBe('mammals');
+    expect(res.body.message).toBe('Picture updated!');
+    expect(res.body.picture.text.textFi).toBe('testi');
+    expect(res.body.picture.text.textEn).toBe(null);
+  });
+
+  test('PUT /api/pictures/:id updates picture to type monthly with month and year', async () => {
+    const res = await request(app)
+      .put(`/api/pictures/${pictures[0].id}`)
+      .set('Authorization', `Bearer ${token}`)
+      .send({ type: 'monthly', month: '01', year: '2025' })
+      .expect(200);
+
+    expect(res.body.picture.type).toBe('monthly');
+  });
+
+  test('PUT /api/pictures/:id update fails without valid token', async () => {
+    const res = await request(app)
+      .put(`/api/pictures/${pictures[0].id}`)
+      .set('Authorization', `Bearer ${token}1`)
+      .send({ type: 'monthly', month: '01', year: '2025' })
+      .expect(401);
+
+    expect(res.body.messages.en).toBe('You are not logged in');
+  });
+
+  test('PUT /api/pictures/:id update to monthly fails without month', async () => {
+    const res = await request(app)
+      .put(`/api/pictures/${pictures[1].id}`)
+      .set('Authorization', `Bearer ${token}`)
+      .send({ type: 'monthly', year: '2025' })
+      .expect(400);
+
+    expect(res.body.messages.en).toBe(
+      'Year and month required for monthly pictures',
+    );
   });
 
   const __filename = fileURLToPath(import.meta.url);
@@ -111,14 +149,18 @@ describe('Picture routes', () => {
     const res = await request(app)
       .post('/api/pictures/upload')
       .set('Authorization', `Bearer ${token}`)
-      .field('type', 'nature')
-      .field('textFi', 'kuvaus')
+      .field('type', 'monthly')
+      .field('month', '01')
+      .field('year', '2025')
+      .field('textFi', 'testi')
+      .field('keywords', 'testi1,testi2,testi3,testi4')
       .attach('image', path.resolve(__dirname, '../fixtures/test-image.jpg'))
       .expect(200);
 
     expect(res.body.message).toBe('New picture added!');
     expect(res.body.picture).toHaveProperty('id');
     testImageId = res.body.picture.id;
+    expect(res.body.picture).toHaveProperty('textId');
   });
 
   test('DELETE /api/pictures/:id deletes picture', async () => {
@@ -128,5 +170,50 @@ describe('Picture routes', () => {
       .expect(200);
 
     expect(res.body.message).toContain(`Picture id: ${testImageId} deleted!`);
+  });
+
+  test('POST /api/pictures/upload fails to upload monthly picture without year', async () => {
+    const res = await request(app)
+      .post('/api/pictures/upload')
+      .set('Authorization', `Bearer ${token}`)
+      .field('type', 'monthly')
+      .field('month', '01')
+      .field('textFi', 'testi')
+      .field('keywords', 'testi1,testi2,testi3,testi4')
+      .attach('image', path.resolve(__dirname, '../fixtures/test-image.jpg'))
+      .expect(400);
+
+    expect(res.body.messages.en).toBe(
+      'Year and month required for monthly pictures',
+    );
+  });
+
+  test('POST /api/pictures/upload fails to upload picture without valid token', async () => {
+    const res = await request(app)
+      .post('/api/pictures/upload')
+      .set('Authorization', `Bearer ${token}1`)
+      .field('type', 'birds')
+      .field('textFi', 'testi')
+      .field('keywords', 'testi1,testi2,testi3,testi4')
+      .attach('image', path.resolve(__dirname, '../fixtures/test-image.jpg'))
+      .expect(401);
+
+    expect(res.body.messages.en).toBe('You are not logged in');
+  });
+
+  test('POST /api/pictures/upload fails with big file size', async () => {
+    const res = await request(app)
+      .post('/api/pictures/upload')
+      .set('Authorization', `Bearer ${token}`)
+      .field('type', 'birds')
+      .field('textFi', 'testi')
+      .field('keywords', 'testi1,testi2,testi3,testi4')
+      .attach(
+        'image',
+        path.resolve(__dirname, '../fixtures/test-image-large-file.jpg'),
+      )
+      .expect(400);
+
+    console.log(res.body);
   });
 });

@@ -28,6 +28,15 @@ export const handlePictureUpdates = async (
     pictureUpdateSchema.parse(req.body);
   const picture: Picture = req.picture;
 
+  if (type === 'monthly') {
+    if (!year || !month) {
+      throw new AppError(
+        { en: 'Year and month required for monthly pictures' },
+        400,
+      );
+    }
+  }
+
   const newMonthYear =
     type === 'monthly' && year && month ? formatMonthYear(year, month) : null;
 
