@@ -4,7 +4,7 @@ import { tokenExtractor } from '../middleware/tokenExtractor.js';
 import { pictureFinder } from '../middleware/finders.js';
 import { validatePictureUploadInput } from '../middleware/validateInput.js';
 import { handlePictureUpdates } from '../middleware/validateUpdateInput.js';
-import { createThumbnail } from '../middleware/createThumbnail.js';
+import { writeFileCreateThumbnail } from '../middleware/createThumbnail.js';
 
 import { upload } from '../utils/multerConfig.js';
 import { picIncludeBasic, PicIncludeAll } from '../utils/includeOptions.js';
@@ -31,9 +31,9 @@ const router = express.Router();
 // - validatePictureUploadInput: validates body input
 router.post(
   '/upload',
-  tokenExtractor,
   upload.single('image'),
-  createThumbnail,
+  tokenExtractor,
+  writeFileCreateThumbnail,
   validatePictureUploadInput,
   async (req: Request<object, object, PictureInput>, res: Response) => {
     const { type, textFi, textEn, year, month, keywords } = req.body;
