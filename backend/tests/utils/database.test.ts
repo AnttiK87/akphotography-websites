@@ -32,7 +32,7 @@ describe('test db connection and correct structure', () => {
     );
     const tableNames = tables.map((row) => Object.values(row)[0]);
     const missing = expectedTables.filter((t) => !tableNames.includes(t));
-    expect(missing).toEqual([]); // eli ei puutu mitään
+    expect(missing).toEqual([]);
   });
 
   test('Table users contains default admin user', async () => {

@@ -1,3 +1,4 @@
+// middleware for writing highres file to hard drive and then generates thubnail out of it.
 import { Request, Response, NextFunction } from 'express';
 import path from 'path';
 import fs from 'fs/promises';
@@ -5,7 +6,37 @@ import fsSync from 'fs';
 
 import { handlePictureResize } from '../services/imageService.js';
 import logger from '../utils/logger.js';
-import { AppError } from '../errors/AppError.js';
+
+//function for creating upload folders if those doesn't exist
+export const ensureFolders = (
+  uploadFolderHighRes: string,
+  uploadFolderThumbnail: string,
+) => {
+  [uploadFolderHighRes, uploadFolderThumbnail].forEach((folder) => {
+    if (!fsSync.existsSync(folder)) {
+      fsSync.mkdirSync(folder, { recursive: true });
+    }
+  });
+};
+
+//function for writing file to hard drive
+export const writeToHardDrive = async (
+  file: Express.Multer.File,
+  uploadFolderHightRes: string,
+) => {
+  if (!file?.path && file?.buffer) {
+    const extension = path.extname(file.originalname) || '.jpg';
+    const filename = `${Date.now()}${extension}`;
+    const filePath = path.join(uploadFolderHightRes, filename);
+
+    await fs.writeFile(filePath, file.buffer);
+
+    file.path = filePath;
+    file.filename = filename;
+
+    logger.info(`Saved file to disk: ${filePath}`);
+  }
+};
 
 export const writeFileCreateThumbnail = async (
   req: Request,
@@ -18,34 +49,18 @@ export const writeFileCreateThumbnail = async (
   const uploadFolderThumbnail = path.join(uploadBase, 'thumbnail');
 
   // create folders if they don't exist
-  [uploadFolderHightRes, uploadFolderThumbnail].forEach((folder) => {
-    if (!fsSync.existsSync(folder)) {
-      fsSync.mkdirSync(folder, { recursive: true });
-    }
-  });
+  ensureFolders(uploadFolderHightRes, uploadFolderThumbnail);
 
-  // Jos tiedostoa ei ole vielä levyllä (esim. multer.memoryStorage())
-  if (!req.file?.path && req.file?.buffer) {
-    const filename = `${Date.now()}`;
-    const filePath = path.join(uploadFolderHightRes, filename);
+  // write file from memory to hard drive
+  await writeToHardDrive(req.file, uploadFolderHightRes);
 
-    await fs.writeFile(filePath, req.file.buffer);
-
-    req.file.path = filePath;
-    req.file.filename = filename;
-
-    logger.info(`Saved file to disk: ${filePath}`);
-  }
-
-  if (!req.file || !req.file.path || !req.file.filename) {
-    throw new AppError({ en: 'Writing file to disc failed!' }, 401);
-  }
-
+  // create and save thumbnail-file
   const thumbnail = await handlePictureResize(
     req.file.path,
     uploadFolderThumbnail,
   );
 
+  // add thubnail data to req.file
   req.file.thumbnailFilename = thumbnail.filename;
   req.file.thumbnailPath = path.join(
     uploadBase,

@@ -29,7 +29,7 @@ describe('POST /api/ratings', () => {
     await models.Picture.destroy({ where: { id: pictureId } });
   });
 
-  test('creates a new rating when none exists', async () => {
+  test('POST /api/ratings creates a new rating when none exists', async () => {
     const res = await request(app)
       .post('/api/ratings')
       .send({ userId, pictureId, rating: 4 });
@@ -39,7 +39,19 @@ describe('POST /api/ratings', () => {
     expect(res.body.rating.rating).toBe(4);
   });
 
-  test('updates existing rating', async () => {
+  test('GET /api/ratings with query returns picture specific ratings', async () => {
+    await Rating.create({ userId, pictureId, rating: 4 });
+    const res = await request(app)
+      .get('/api/ratings')
+      .query({ search: pictureId })
+      .expect(200);
+
+    expect(res.status).toBe(200);
+    expect(res.body).toBeInstanceOf(Array);
+    expect(res.body.length).toBe(1);
+  });
+
+  test('POST /api/ratings updates existing rating', async () => {
     await Rating.create({ userId, pictureId, rating: 3 });
 
     const res = await request(app)
@@ -51,7 +63,7 @@ describe('POST /api/ratings', () => {
     expect(res.body.rating.rating).toBe(5);
   });
 
-  test('deletes existing rating when rating is 0', async () => {
+  test('POST /api/ratings deletes existing rating when rating is 0', async () => {
     const rating = await Rating.create({ userId, pictureId, rating: 2 });
 
     const res = await request(app)
@@ -66,7 +78,7 @@ describe('POST /api/ratings', () => {
     expect(check).toBeNull();
   });
 
-  test('fails when required fields are missing', async () => {
+  test('POST /api/ratings fails when required fields are missing', async () => {
     const res = await request(app)
       .post('/api/ratings')
       .send({ pictureId, rating: 4 }); // Missing userId

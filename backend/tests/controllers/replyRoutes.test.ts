@@ -176,4 +176,42 @@ describe('Comment routes', () => {
 
     expect(res.body.messages.en).toBe('No changes provided');
   });
+
+  test('POST /api/replies admin can create new reply', async () => {
+    const newReply = {
+      reply: 'Test reply',
+      username: 'testuser123',
+      userId: '123',
+      pictureId: pictures[0].id,
+      commentId: comments[0].id,
+      adminReply: true,
+    };
+
+    const res = await request(app)
+      .post('/api/replies')
+      .set('Authorization', `Bearer ${token}`)
+      .send(newReply)
+      .expect(200);
+
+    expect(res.body.reply.reply).toBe('Test reply');
+    expect(res.body.messageEn).toBe('New reply added!');
+  });
+
+  test('POST /api/replies fails to create admin reply with invalid token', async () => {
+    const newReply = {
+      reply: 'Test reply',
+      username: 'testuser123',
+      userId: '123',
+      pictureId: pictures[0].id,
+      commentId: comments[0].id,
+      adminReply: true,
+    };
+
+    const res = await request(app)
+      .post('/api/replies')
+      .send(newReply)
+      .expect(401);
+
+    expect(res.body.messages.en).toBe('Token missing');
+  });
 });

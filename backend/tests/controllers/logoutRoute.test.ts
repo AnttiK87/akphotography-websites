@@ -56,10 +56,25 @@ describe('DELETE /api/logout with correct token', () => {
   });
 });
 
+import models from '../../src/models/index.js';
+const { User } = models;
+
 describe('DELETE /api/logout with invalid token', () => {
-  const fakeSignedToken = jwt.sign({ id: 1 }, 'WRONG_SECRET');
+  let fakeSignedToken: string;
+  let userId: number;
+
   beforeEach(async () => {
-    await setSession(1, fakeSignedToken);
+    const user = await User.findOne({ where: { username: 'admin' } });
+
+    if (!user) {
+      throw new Error('Admin user not found!');
+    }
+
+    userId = user.id;
+
+    fakeSignedToken = jwt.sign({ id: userId }, 'WRONG_SECRET');
+
+    await setSession(userId, fakeSignedToken);
   });
 
   test('should return 401 with invalid token', async () => {

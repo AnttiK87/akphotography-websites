@@ -2,6 +2,7 @@ import request from 'supertest';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
+import { generateTestFiles, cleanupTestFiles } from '../generateTestFiles.js';
 import app from '../../src/app.js';
 import models from '../../src/models/index.js';
 const { Picture } = models;
@@ -11,6 +12,7 @@ describe('Picture routes', () => {
   let pictures: InstanceType<typeof Picture>[];
 
   beforeAll(async () => {
+    await generateTestFiles();
     const res = await request(app)
       .post('/api/login')
       .send({ username: 'admin', password: 'testadmin' });
@@ -50,7 +52,7 @@ describe('Picture routes', () => {
       {
         fileName: 'testi-picture4.jpg',
         url: '/uploads/pictures/test-picture4.jpg',
-        urlThumbnail: '/uploads/thumbnail/test-picture4.webp',
+        urlThumbnail: null,
         height: 3000,
         width: 2000,
         type: 'mammals',
@@ -61,6 +63,7 @@ describe('Picture routes', () => {
   });
 
   afterAll(async () => {
+    await cleanupTestFiles();
     await Picture.destroy({ where: { id: pictures[0].id } });
     await Picture.destroy({ where: { id: pictures[1].id } });
     await Picture.destroy({ where: { id: pictures[2].id } });
@@ -70,6 +73,7 @@ describe('Picture routes', () => {
   test('GET /api/pictures returns basic picture data', async () => {
     const res = await request(app).get('/api/pictures').expect(200);
     expect(res.body).toBeInstanceOf(Array);
+    expect(res.body.length).toBeGreaterThanOrEqual(4);
     expect(res.body[0]).toHaveProperty('id');
     expect(res.body[0]).not.toHaveProperty('textId');
   });
@@ -77,6 +81,7 @@ describe('Picture routes', () => {
   test('GET /api/pictures/allData returns all picture data', async () => {
     const res = await request(app).get('/api/pictures/allData').expect(200);
     expect(res.body).toBeInstanceOf(Array);
+    expect(res.body.length).toBeGreaterThanOrEqual(4);
     expect(res.body[0]).toHaveProperty('keywords');
   });
 
@@ -93,7 +98,7 @@ describe('Picture routes', () => {
     expect(res.body.viewCount).toBe(pictures[0].viewCount + 1);
   });
 
-  test('PUT /api/pictures/:id adds text to picture', async () => {
+  test('PUT /api/pictures/:id adds only other text to picture', async () => {
     const updatedPicture = {
       type: 'birds',
       textFi: 'testi',
@@ -107,6 +112,41 @@ describe('Picture routes', () => {
     expect(res.body.message).toBe('Picture updated!');
     expect(res.body.picture.text.textFi).toBe('testi');
     expect(res.body.picture.text.textEn).toBe(null);
+  });
+
+  test('PUT /api/pictures/:id adds both texts and keywords to picture', async () => {
+    const updatedPicture = {
+      type: 'birds',
+      textFi: 'testi',
+      textEn: 'test',
+      keywords: 'test1,test2,test3,',
+    };
+    const res = await request(app)
+      .put(`/api/pictures/${pictures[3].id}`)
+      .set('Authorization', `Bearer ${token}`)
+      .send(updatedPicture)
+      .expect(200);
+
+    expect(res.body.message).toBe('Picture updated!');
+    expect(res.body.picture.text.textFi).toBe('testi');
+    expect(res.body.picture.text.textEn).toBe('test');
+  });
+
+  test('PUT /api/pictures/:id removes texts from picture', async () => {
+    const updatedPicture = {
+      type: 'birds',
+      textFi: null,
+      textEn: null,
+      keywords: 'test1,test2,test3,',
+    };
+    const res = await request(app)
+      .put(`/api/pictures/${pictures[3].id}`)
+      .set('Authorization', `Bearer ${token}`)
+      .send(updatedPicture)
+      .expect(200);
+
+    expect(res.body.message).toBe('Picture updated!');
+    expect(res.body.picture.text).toBe(null);
   });
 
   test('PUT /api/pictures/:id updates picture to type monthly with month and year', async () => {
@@ -146,6 +186,7 @@ describe('Picture routes', () => {
   let testImageId: number;
 
   test('POST /api/pictures/upload uploads picture with metadata', async () => {
+    const image = path.resolve(__dirname, '../fixtures/test-img.jpg');
     const res = await request(app)
       .post('/api/pictures/upload')
       .set('Authorization', `Bearer ${token}`)
@@ -154,13 +195,67 @@ describe('Picture routes', () => {
       .field('year', '2025')
       .field('textFi', 'testi')
       .field('keywords', 'testi1,testi2,testi3,testi4')
-      .attach('image', path.resolve(__dirname, '../fixtures/test-image.jpg'))
+      .attach('image', image)
       .expect(200);
 
     expect(res.body.message).toBe('New picture added!');
     expect(res.body.picture).toHaveProperty('id');
     testImageId = res.body.picture.id;
     expect(res.body.picture).toHaveProperty('textId');
+  });
+
+  test('POST /api/pictures/upload uploads picture with texts', async () => {
+    const image = path.resolve(__dirname, '../fixtures/test-img.jpg');
+    const res = await request(app)
+      .post('/api/pictures/upload')
+      .set('Authorization', `Bearer ${token}`)
+      .field('type', 'monthly')
+      .field('month', '01')
+      .field('year', '2025')
+      .field('textFi', 'testi')
+      .field('textEn', 'test')
+      .field('keywords', 'testi1,testi2,testi3,testi4')
+      .attach('image', image)
+      .expect(200);
+
+    expect(res.body.message).toBe('New picture added!');
+    expect(res.body.picture).toHaveProperty('id');
+    testImageId = res.body.picture.id;
+    expect(res.body.picture).toHaveProperty('textId');
+  });
+
+  test('POST /api/pictures/upload uploads picture with texts', async () => {
+    const image = path.resolve(__dirname, '../fixtures/test-img.jpg');
+    const res = await request(app)
+      .post('/api/pictures/upload')
+      .set('Authorization', `Bearer ${token}`)
+      .field('type', 'monthly')
+      .field('month', '01')
+      .field('year', '2025')
+      .field('textEn', 'test')
+      .field('keywords', 'testi1,testi2,testi3,testi4')
+      .attach('image', image)
+      .expect(200);
+
+    expect(res.body.message).toBe('New picture added!');
+    expect(res.body.picture).toHaveProperty('id');
+    testImageId = res.body.picture.id;
+    expect(res.body.picture).toHaveProperty('textId');
+  });
+
+  test('POST /api/pictures/upload uploads picture without texts and keywords', async () => {
+    const image = path.resolve(__dirname, '../fixtures/test-img.jpg');
+    const res = await request(app)
+      .post('/api/pictures/upload')
+      .set('Authorization', `Bearer ${token}`)
+      .field('type', 'birds')
+      .attach('image', image)
+      .expect(200);
+
+    expect(res.body.message).toBe('New picture added!');
+    expect(res.body.picture).toHaveProperty('id');
+    expect(res.body.picture.type).toBe('birds');
+    expect(res.body.picture.textId).toBe(undefined);
   });
 
   test('DELETE /api/pictures/:id deletes picture', async () => {
@@ -172,6 +267,17 @@ describe('Picture routes', () => {
     expect(res.body.message).toContain(`Picture id: ${testImageId} deleted!`);
   });
 
+  test('DELETE /api/pictures/:id deletes picture without thubnail', async () => {
+    const res = await request(app)
+      .delete(`/api/pictures/${pictures[3].id}`)
+      .set('Authorization', `Bearer ${token}`)
+      .expect(200);
+
+    expect(res.body.message).toContain(
+      `Picture id: ${pictures[3].id} deleted!`,
+    );
+  });
+
   test('POST /api/pictures/upload fails to upload monthly picture without year', async () => {
     const res = await request(app)
       .post('/api/pictures/upload')
@@ -180,7 +286,7 @@ describe('Picture routes', () => {
       .field('month', '01')
       .field('textFi', 'testi')
       .field('keywords', 'testi1,testi2,testi3,testi4')
-      .attach('image', path.resolve(__dirname, '../fixtures/test-image.jpg'))
+      .attach('image', path.resolve(__dirname, '../fixtures/test-img.jpg'))
       .expect(400);
 
     expect(res.body.messages.en).toBe(
@@ -195,25 +301,91 @@ describe('Picture routes', () => {
       .field('type', 'birds')
       .field('textFi', 'testi')
       .field('keywords', 'testi1,testi2,testi3,testi4')
-      .attach('image', path.resolve(__dirname, '../fixtures/test-image.jpg'))
+      .attach('image', path.resolve(__dirname, '../fixtures/test-img.jpg'))
       .expect(401);
 
     expect(res.body.messages.en).toBe('You are not logged in');
   });
 
-  test('POST /api/pictures/upload fails with big file size', async () => {
+  test('POST /api/pictures/upload fails to upload large file', async () => {
     const res = await request(app)
       .post('/api/pictures/upload')
       .set('Authorization', `Bearer ${token}`)
-      .field('type', 'birds')
+      .field('type', 'monthly')
+      .field('month', '02')
+      .field('year', '2025')
       .field('textFi', 'testi')
       .field('keywords', 'testi1,testi2,testi3,testi4')
       .attach(
         'image',
-        path.resolve(__dirname, '../fixtures/test-image-large-file.jpg'),
+        path.resolve(__dirname, '../fixtures/test-large-img.jpg'),
       )
       .expect(400);
 
-    console.log(res.body);
+    expect(res.body.messages.en).toBe('File too large, max file size 6MB');
+  });
+
+  test('POST /api/pictures/upload fails to upload wrong format', async () => {
+    const res = await request(app)
+      .post('/api/pictures/upload')
+      .set('Authorization', `Bearer ${token}`)
+      .field('type', 'monthly')
+      .field('month', '02')
+      .field('year', '2025')
+      .field('textFi', 'testi')
+      .field('keywords', 'testi1,testi2,testi3,testi4')
+      .attach(
+        'image',
+        path.resolve(__dirname, '../fixtures/test-text-file.txt'),
+      )
+      .expect(400);
+
+    expect(res.body.messages.en).toBe(
+      'File missing or invalid file type! Only .jpg files are allowed!',
+    );
+  });
+
+  test('POST /api/pictures/upload fails to upload multiple files', async () => {
+    await request(app)
+      .post('/api/pictures/upload')
+      .set('Authorization', `Bearer ${token}`)
+      .field('type', 'monthly')
+      .field('month', '02')
+      .field('year', '2025')
+      .field('textFi', 'testi')
+      .field('keywords', 'testi1,testi2,testi3,testi4')
+      .attach(
+        'image',
+        path.resolve(__dirname, '../fixtures/test-text-file.txt'),
+      )
+      .attach(
+        'image',
+        path.resolve(__dirname, '../fixtures/test-text-file.txt'),
+      )
+      .then((res) => {
+        expect(res.status).toBe(400);
+        expect(res.body.messages.en).toBe(
+          'Too many files! Only one file at a time!',
+        );
+      })
+      .catch((err) => {
+        expect(err.code).toBe('ECONNRESET');
+      });
+  });
+
+  test('POST /api/pictures/upload fails without file', async () => {
+    const res = await request(app)
+      .post('/api/pictures/upload')
+      .set('Authorization', `Bearer ${token}`)
+      .field('type', 'monthly')
+      .field('month', '02')
+      .field('year', '2025')
+      .field('textFi', 'testi')
+      .field('keywords', 'testi1,testi2,testi3,testi4')
+      .expect(400);
+
+    expect(res.body.messages.en).toBe(
+      'File missing or invalid file type! Only .jpg files are allowed!',
+    );
   });
 });

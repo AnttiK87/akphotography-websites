@@ -5,8 +5,8 @@ import { pictureFinder } from '../middleware/finders.js';
 import { validatePictureUploadInput } from '../middleware/validateInput.js';
 import { handlePictureUpdates } from '../middleware/validateUpdateInput.js';
 import { writeFileCreateThumbnail } from '../middleware/createThumbnail.js';
+import { handleUpload } from '../middleware/uploadMiddleware.js';
 
-import { upload } from '../utils/multerConfig.js';
 import { picIncludeBasic, PicIncludeAll } from '../utils/includeOptions.js';
 import { pictureQueryOptions } from '../utils/queryHelpers.js';
 import { deleteFile } from '../utils/fileUtils.js';
@@ -31,7 +31,7 @@ const router = express.Router();
 // - validatePictureUploadInput: validates body input
 router.post(
   '/upload',
-  upload.single('image'),
+  handleUpload,
   tokenExtractor,
   writeFileCreateThumbnail,
   validatePictureUploadInput,
@@ -171,7 +171,9 @@ router.delete(
     const thumbnailPath = getPath(picture.urlThumbnail || '');
 
     deleteFile(filePath);
-    deleteFile(thumbnailPath);
+    if (picture.urlThumbnail != null) {
+      deleteFile(thumbnailPath);
+    }
 
     await picture.destroy();
     res

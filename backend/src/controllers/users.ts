@@ -19,14 +19,9 @@ import {
 } from '../types/types.js';
 
 import models from '../models/index.js';
-const { User, Session } = models;
+const { User } = models;
 
 const router = express.Router();
-
-router.get('/session', async (_req: Request, res: Response) => {
-  const users = await Session.findAll({});
-  res.json(users);
-});
 
 // GET /api/users
 //route for getting all users
