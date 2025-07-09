@@ -43,11 +43,6 @@ export const verifyToken = async (
 
   try {
     const decoded = jwt.verify(token, SECRET) as DecodedToken;
-
-    if (!decoded || typeof decoded !== 'object' || !decoded.id) {
-      throw new AppError({ en: 'Invalid token' }, 401);
-    }
-
     return decoded;
   } catch (error) {
     const err = error as JsonWebTokenError;
@@ -56,7 +51,6 @@ export const verifyToken = async (
       await Sessions.destroy({ where: { activeToken: token } });
       throw new AppError({ en: 'Token expired' }, 401);
     }
-
     throw new AppError({ en: 'Invalid token' }, 401);
   }
 };

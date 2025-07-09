@@ -39,6 +39,16 @@ describe('POST /api/ratings', () => {
     expect(res.body.rating.rating).toBe(4);
   });
 
+  test('POST /api/ratings fails to add a new rating with invalid picture id', async () => {
+    const res = await request(app)
+      .post('/api/ratings')
+      .send({ userId, pictureId: 555, rating: 4 });
+
+    expect(res.status).toBe(404);
+    expect(res.body.messages.en).toBe('Picture not found');
+    expect(res.body.messages.fi).toBe('Kuvaa ei löydy');
+  });
+
   test('GET /api/ratings with query returns picture specific ratings', async () => {
     await Rating.create({ userId, pictureId, rating: 4 });
     const res = await request(app)

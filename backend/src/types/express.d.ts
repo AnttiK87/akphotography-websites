@@ -33,6 +33,7 @@ declare global {
         thumbnailFilename: string;
         thumbnailPath: string;
       };
+      fileValidationError?: string;
     }
   }
 }

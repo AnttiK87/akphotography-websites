@@ -79,6 +79,50 @@ describe('Comment routes', () => {
     expect(res.body.messageEn).toBe('New reply added!');
   });
 
+  test('POST /api/replies creating new reply fails with invalid picture id', async () => {
+    const newReply = {
+      reply: 'Test reply',
+      username: 'testuser123',
+      userId: '123',
+      pictureId: 555,
+      commentId: comments[0].id,
+      adminReply: false,
+    };
+
+    const res = await request(app)
+      .post('/api/replies')
+      .send(newReply)
+      .expect(404);
+
+    expect(res.status).toBe(404);
+    expect(res.body.messages.en).toBe('Picture related to reply not found');
+    expect(res.body.messages.fi).toBe('Vastaukseen liittyvä kuvaa ei löydy');
+  });
+
+  test('POST /api/replies creating new reply fails with invalid comment id', async () => {
+    const newReply = {
+      reply: 'Test reply',
+      username: 'testuser123',
+      userId: '123',
+      pictureId: pictures[0].id,
+      commentId: 555,
+      adminReply: false,
+    };
+
+    const res = await request(app)
+      .post('/api/replies')
+      .send(newReply)
+      .expect(404);
+
+    expect(res.status).toBe(404);
+    expect(res.body.messages.en).toBe(
+      'Comment you are trying to reply not found',
+    );
+    expect(res.body.messages.fi).toBe(
+      'Kommenttia johon yrität vastata ei löydy',
+    );
+  });
+
   test('PUT /api/replies/:id updates reply', async () => {
     const reply = await Reply.create({
       reply: 'Test reply to update',
@@ -100,6 +144,29 @@ describe('Comment routes', () => {
       .expect(200);
 
     expect(res.body.reply.reply).toBe('Updated reply');
+  });
+
+  test('PUT /api/replies/:id updates username', async () => {
+    const reply = await Reply.create({
+      reply: 'Test reply to update',
+      username: 'testuser123',
+      userId: '123',
+      pictureId: pictures[1].id,
+      commentId: comments[1].id,
+      adminReply: false,
+    });
+
+    const res = await request(app)
+      .put(`/api/replies/${reply.id}`)
+      .send({
+        reply: 'Test reply to update',
+        username: 'testuser124',
+        userId: '123',
+        commentId: comments[1].id,
+      })
+      .expect(200);
+
+    expect(res.body.reply.username).toBe('testuser124');
   });
 
   test('GET /api/replies with query returns picture specific comments', async () => {
@@ -132,6 +199,40 @@ describe('Comment routes', () => {
 
     const deleted = await Reply.findByPk(reply.id);
     expect(deleted).toBeNull();
+  });
+
+  test('DELETE /api/replies/:id invalid token prevents comment delete', async () => {
+    const reply = await Reply.create({
+      reply: 'Test reply to delete',
+      username: 'testuser123',
+      userId: '123',
+      pictureId: pictures[1].id,
+      commentId: comments[1].id,
+    });
+
+    const res = await request(app)
+      .delete(`/api/replies/${reply.id}`)
+      .set('Authorization', `Bearer ${token}1`)
+      .expect(401);
+
+    expect(res.body.messages.en).toBe('You are not logged in');
+  });
+
+  test('DELETE /api/replies/:id missing token prevents comment delete', async () => {
+    const reply = await Reply.create({
+      reply: 'Test reply to delete',
+      username: 'testuser123',
+      userId: '123',
+      pictureId: pictures[1].id,
+      commentId: comments[1].id,
+    });
+
+    const res = await request(app)
+      .delete(`/api/replies/${reply.id}`)
+      .set('Authorization', '')
+      .expect(401);
+
+    expect(res.body.messages.en).toBe('Authorization bearer not found');
   });
 
   test('PUT /api/replies/:id fails with invalid userId', async () => {
