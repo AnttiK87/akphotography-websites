@@ -49,19 +49,19 @@ export const errorHandler = (
       })),
     });
     return;
+  } else if (error instanceof UniqueConstraintError) {
+    res.status(409).json({
+      status: 'error',
+      error: 'Username must be unique',
+      code: 'USERNAME_TAKEN',
+    });
+    return;
   } else if (error instanceof ValidationError) {
     const messages = error.errors.map((err) => err.message);
     res.status(400).json({
       status: 'error',
       error: 'Validation error',
       messages,
-    });
-    return;
-  } else if (error instanceof UniqueConstraintError) {
-    res.status(409).json({
-      status: 'error',
-      error: 'Username must be unique',
-      code: 'USERNAME_TAKEN',
     });
     return;
   } else if (error instanceof DatabaseError) {

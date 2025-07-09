@@ -4,7 +4,6 @@ import sharp from 'sharp';
 
 import { AppError } from '../errors/AppError.js';
 import { getPictureById } from '../services/pictureService.js';
-import { UserInput } from '../types/types.js';
 
 import Picture from '../models/picture.js';
 import Comment from '../models/comment.js';
@@ -121,12 +120,13 @@ export const validatePictureUploadInput = async (
   const { type, year, month } = pictureSchema.parse(req.body);
   const parsedPicture = pictureSchema.parse(req.body);
 
-  if (!req.file || !req.file.path) {
-    throw new AppError({ en: 'File was not uploaded!' }, 400);
-  }
-
-  if (!type) {
-    throw new AppError({ en: 'Missing required field: type' }, 400);
+  if (
+    !req.file ||
+    !req.file.path ||
+    !req.file.filename ||
+    !req.file.thumbnailFilename
+  ) {
+    throw new AppError({ en: 'File info missing!' }, 400);
   }
 
   const metadata = await sharp(req.file.path).metadata();
@@ -160,19 +160,6 @@ export const validateNewUserInput = (
 ) => {
   const parsedNewUser = userInputSchema.parse(req.body);
   req.body = parsedNewUser;
-  next();
-};
-
-export const validateNewUserPassword = async (
-  req: Request<object, object, UserInput>,
-  _res: Response,
-  next: NextFunction,
-) => {
-  const { password } = newUserPasswordSchema.parse(req.body);
-
-  const passwordHash = await bcrypt.hash(password, 10);
-  req.passwordHash = passwordHash;
-
   next();
 };
 

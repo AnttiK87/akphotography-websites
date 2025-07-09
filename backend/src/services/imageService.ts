@@ -2,7 +2,7 @@ import path from 'path';
 import sharp from 'sharp';
 
 // Define the interface for the resized picture
-interface ResizedPicture {
+export interface ResizedPicture {
   filename: string;
 }
 

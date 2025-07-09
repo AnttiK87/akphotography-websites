@@ -1,20 +1,30 @@
 import { Request, Response, NextFunction } from 'express';
 
 import { AppError } from '../errors/AppError.js';
-import { tokenExtractor } from './tokenExtractor.js';
+import { verifyToken } from './tokenExtractor.js';
+import { getUserById } from '../services/userService.js';
 
 import Comment from '../models/comment.js';
 import Reply from '../models/reply.js';
 
-export const validateIsAdmin = (
+export const validateIsAdmin = async (
   req: Request,
   _res: Response,
   next: NextFunction,
 ) => {
-  const isAdmin = req.decodedToken;
+  const token = req.decodedToken;
+  if (!token) {
+    throw new AppError({ en: 'Token missing!' }, 401);
+  }
 
-  if (!isAdmin) {
-    throw new AppError({ en: 'unauthorized' }, 401);
+  const user = await getUserById(token.id);
+  if (!user) {
+    throw new AppError({ en: 'User not found' }, 401);
+  }
+  req.user = user;
+
+  if (req.user.role != 'admin') {
+    throw new AppError({ en: 'Unauthorized!' }, 401);
   }
   next();
 };
@@ -37,7 +47,7 @@ export const validateOwner = (resourceKey: 'comment' | 'reply') => {
 };
 
 export const validateOwnerOrAdmin = (resourceKey: 'comment' | 'reply') => {
-  return async (req: Request, res: Response, next: NextFunction) => {
+  return async (req: Request, _res: Response, next: NextFunction) => {
     const resource = req[resourceKey];
     if (!resource) {
       throw new AppError({ en: `Missing resource: ${resourceKey}` }, 400);
@@ -45,27 +55,36 @@ export const validateOwnerOrAdmin = (resourceKey: 'comment' | 'reply') => {
 
     const isOwner = req.body.userId === resource.userId;
 
-    // Check if user is not the owner of the comment.
     if (!isOwner) {
-      //In this case uses the tokenExtractor middleware to check if the user is admin.
-      tokenExtractor(req, res, async (err) => {
-        if (err) {
-          next(err);
-          return;
-        }
-        // throw error if user is not authorized.
-        const isAdmin = req.decodedToken;
-        if (!isOwner && !isAdmin) {
-          throw new AppError(
-            {
-              fi: 'Et voi poistaa tätä kommenttia',
-              en: 'Unauthorized to delete this comment',
-            },
-            401,
-          );
-        }
-      });
+      const authorization = req.get('authorization');
+      if (!authorization) {
+        throw new AppError({ en: 'Authorization bearer not found' }, 401);
+      }
+
+      const decoded = await verifyToken(authorization);
+      if (!decoded) {
+        throw new AppError({ en: 'Token missing!' }, 401);
+      }
+
+      const user = await getUserById(decoded.id);
+      if (!user) {
+        throw new AppError({ en: 'User not found' }, 401);
+      }
+
+      const isAdmin = user.role === 'admin';
+      if (!isOwner && !isAdmin) {
+        throw new AppError(
+          {
+            fi: 'Et voi poistaa tätä kommenttia',
+            en: 'Unauthorized to delete this comment',
+          },
+          401,
+        );
+      }
+
+      next();
+    } else {
+      next();
     }
-    next();
   };
 };

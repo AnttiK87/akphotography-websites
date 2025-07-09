@@ -7,8 +7,12 @@ const storage = multer.memoryStorage();
 const upload = multer({
   storage,
   limits: { fileSize: 6 * 1024 * 1024 }, // 6MB
-  fileFilter: (_req, file, cb) => {
-    cb(null, file.mimetype == 'image/jpeg');
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype !== 'image/jpeg') {
+      req.fileValidationError = 'goes wrong on the mimetype';
+      return cb(null, false);
+    }
+    cb(null, true);
   },
 });
 

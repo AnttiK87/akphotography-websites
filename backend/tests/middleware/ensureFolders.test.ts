@@ -25,7 +25,7 @@ describe('ensureFolders', () => {
   it('does not call mkdirSync if folder exist', () => {
     fs.existsSync.mockReturnValue(true);
 
-    ensureFolders('highres', 'thumb');
+    ensureFolders('tests/uploads/highres', 'tests/uploads/thumb');
 
     expect(fs.existsSync).toHaveBeenCalledTimes(2);
     expect(fs.mkdirSync).not.toHaveBeenCalled();
@@ -34,10 +34,14 @@ describe('ensureFolders', () => {
   it('does call mkdirSync if folder does not exist', () => {
     fs.existsSync.mockReturnValue(false);
 
-    ensureFolders('highres', 'thumb');
+    ensureFolders('tests/uploads/highres', 'tests/uploads/thumb');
 
     expect(fs.mkdirSync).toHaveBeenCalledTimes(2);
-    expect(fs.mkdirSync).toHaveBeenCalledWith('highres', { recursive: true });
-    expect(fs.mkdirSync).toHaveBeenCalledWith('thumb', { recursive: true });
+    expect(fs.mkdirSync).toHaveBeenCalledWith('tests/uploads/highres', {
+      recursive: true,
+    });
+    expect(fs.mkdirSync).toHaveBeenCalledWith('tests/uploads/thumb', {
+      recursive: true,
+    });
   });
 });

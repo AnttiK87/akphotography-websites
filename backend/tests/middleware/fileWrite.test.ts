@@ -9,7 +9,6 @@ describe('writeToHardDrive integration test', () => {
   const __filename = fileURLToPath(import.meta.url);
   const __dirname = path.dirname(__filename);
   const uploadFolder = path.join(__dirname, 'tmp_upload_test');
-  const originalEnv = process.env.NODE_ENV;
 
   beforeAll(async () => {
     await fs.mkdir(uploadFolder, { recursive: true });
@@ -21,12 +20,11 @@ describe('writeToHardDrive integration test', () => {
       await fs.unlink(path.join(uploadFolder, file));
     }
     await fs.rmdir(uploadFolder);
-    process.env.NODE_ENV = originalEnv;
   });
 
   it('writes file buffer to disk and updates file object', async () => {
     const mockFile = {
-      originalname: 'test-image.png',
+      originalname: 'test-image',
       buffer: Buffer.from('fake-image-data'),
       path: undefined,
       filename: undefined,
@@ -42,6 +40,7 @@ describe('writeToHardDrive integration test', () => {
 
     expect(mockFile.path).toBeDefined();
     expect(mockFile.filename).toBeDefined();
+    expect(mockFile.filename.endsWith('.jpg')).toBe(true);
 
     const writtenBuffer = await fs.readFile(mockFile.path);
     expect(writtenBuffer.equals(mockFile.buffer)).toBe(true);

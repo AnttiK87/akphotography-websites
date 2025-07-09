@@ -1,7 +1,9 @@
 import { upload } from '../utils/multerConfig.js';
+import { AppError } from '../errors/AppError.js';
 import { Request, Response, NextFunction } from 'express';
+import multer from 'multer';
 
-const uploadSingleImage = upload.single('image');
+export const uploadSingleImage = upload.single('image');
 
 export const handleUpload = (
   req: Request,
@@ -9,37 +11,27 @@ export const handleUpload = (
   next: NextFunction,
 ) => {
   uploadSingleImage(req, res, (err) => {
-    if (err) {
+    if (err instanceof multer.MulterError) {
       if (err.code === 'LIMIT_FILE_SIZE') {
-        res
-          .status(400)
-          .json({ messages: { en: 'File too large, max file size 6MB' } });
-        return;
+        return next(
+          new AppError({ en: 'File too large, max file size 6MB' }, 400),
+        );
       }
-
       if (err.code === 'LIMIT_UNEXPECTED_FILE') {
-        res.status(400).json({
-          messages: { en: 'Too many files! Only one file at a time!' },
-        });
-        return;
+        return next(
+          new AppError({ en: 'Too many files! Only one file at a time!' }, 400),
+        );
       }
+    }
 
-      if (err instanceof Error) {
-        res.status(400).json({ message: err.message });
-        return;
-      }
-
-      return next(err);
+    if (!req.file && req.fileValidationError === 'goes wrong on the mimetype') {
+      return next(new AppError({ en: 'Only .jpg files are allowed!' }, 400));
     }
 
     if (!req.file) {
-      res.status(400).json({
-        messages: {
-          en: 'File missing or invalid file type! Only .jpg files are allowed!',
-        },
-      });
-      return;
+      return next(new AppError({ en: 'File missing or invalid!' }, 400));
     }
+
     next();
   });
 };
