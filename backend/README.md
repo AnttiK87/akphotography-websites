@@ -16,6 +16,8 @@ This is the backend of the akphotography-websites project. It's built with Node.
 
 - Umzug with Sequelize for database migrations
 
+- eslint & prettier for code formating and quality check
+
 - Jest for automated testing
 
 ## 🚀 Getting Started
@@ -125,13 +127,15 @@ To run tests, there are several npm scripts defined that help with setting up an
 
 - "test:db:down": Stops and removes the test database containers and associated volumes.
 
-- "test:only": Runs Jest tests only, with environment variable NODE_ENV=test and special Node options for proper Jest behavior.
+- "test:unit1": Runs specific set of Jest tests without jest.setup -file.
 
-- "test": Runs the full test sequence — first brings the test DB up (test:db:up), then runs tests (test:only), and finally tears down the test DB (test:db:down).
+- "test:unit1": Runs specific set of Jest tests that uses jest.setup-file.
+
+- "test:all": Runs the full test sequence — first brings the test DB up (test:db:up), then runs all tests, and finally tears down the test DB (test:db:down).
 
 ### How to run tests manually:
 
-npm run test
+npm run test:all
 This command will handle starting the test database, running the tests, and cleaning up the test database afterward.
 
 ## 📬 Author

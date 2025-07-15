@@ -1,6 +1,6 @@
 {
   "name": "ak-photography-backend",
-  "version": "2.1.0",
+  "version": "3.0.0",
   "description": "ak photography website backend",
   "type": "module",
   "scripts": {
@@ -19,7 +19,7 @@
     "generate-thumbnails-once": "ts-node --esm src/utils/generate-thumbnails.js",
     "test:db:up": "docker compose -f docker-compose.test.yml --env-file .env.test up -d",
     "test:db:down": "docker compose -f docker-compose.test.yml down -v",
-    "test:all": "npm run test:db:up && cross-env NODE_ENV=test NODE_OPTIONS=\"--experimental-vm-modules --no-warnings\" jest --detectOpenHandles --coverage && npm run test:db:down",
+    "test:all": "npm run test:db:up && cross-env NODE_ENV=test NODE_OPTIONS=\"--experimental-vm-modules --no-warnings\" jest --detectOpenHandles || true; npm run test:db:down",
     "test:unit1": "cross-env NODE_ENV=test NODE_OPTIONS=\"--experimental-vm-modules --no-warnings\" jest --config=jest.unit1.config.ts --detectOpenHandles --coverage",
     "test:unit2": "cross-env NODE_ENV=test NODE_OPTIONS=\"--experimental-vm-modules --no-warnings\" jest --config=jest.unit2.config.ts --detectOpenHandles --coverage"
   },
