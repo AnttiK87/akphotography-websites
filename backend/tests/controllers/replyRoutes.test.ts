@@ -51,6 +51,41 @@ describe('Comment routes', () => {
         pictureId: pictures[1].id,
       },
     ]);
+
+    await Reply.bulkCreate([
+      {
+        reply: 'Test reply1',
+        username: 'testuser123',
+        userId: '123',
+        pictureId: pictures[1].id,
+        commentId: comments[1].id,
+        adminReply: false,
+      },
+      {
+        reply: 'Test reply2',
+        username: 'testuser123',
+        userId: '123',
+        pictureId: pictures[1].id,
+        commentId: comments[1].id,
+        adminReply: false,
+      },
+      {
+        reply: 'Test reply3',
+        username: 'testuser123',
+        userId: '123',
+        pictureId: pictures[1].id,
+        commentId: comments[1].id,
+        adminReply: false,
+      },
+      {
+        reply: 'Test reply4',
+        username: 'testuser123',
+        userId: '123',
+        pictureId: pictures[1].id,
+        commentId: comments[1].id,
+        adminReply: false,
+      },
+    ]);
   });
 
   afterAll(async () => {
@@ -169,7 +204,7 @@ describe('Comment routes', () => {
     expect(res.body.reply.username).toBe('testuser124');
   });
 
-  test('GET /api/replies with query returns picture specific comments', async () => {
+  test('GET /api/replies with query returns picture specific replies', async () => {
     const res = await request(app)
       .get('/api/replies')
       .query({ search: pictures[0].id })
@@ -179,6 +214,14 @@ describe('Comment routes', () => {
     expect(res.body).toBeInstanceOf(Array);
     expect(res.body.length).toBe(1);
     expect(res.body[0]).toHaveProperty('reply', 'Test reply');
+  });
+
+  test('GET /api/replies without query returns all replies', async () => {
+    const res = await request(app).get('/api/replies').expect(200);
+
+    expect(res.status).toBe(200);
+    expect(res.body).toBeInstanceOf(Array);
+    expect(res.body.length).toBeGreaterThanOrEqual(5);
   });
 
   test('DELETE /api/replies/:id logged in admin can delete comment', async () => {

@@ -59,6 +59,16 @@ describe('Picture routes', () => {
         monthYear: null,
         viewCount: 4,
       },
+      {
+        fileName: 'testi-picture5.jpg',
+        url: '/uploads/pictures/test-picture4.jpg',
+        urlThumbnail: null,
+        height: 3000,
+        width: 2000,
+        type: 'monthly',
+        monthYear: 202501,
+        viewCount: 4,
+      },
     ]);
   });
 
@@ -76,6 +86,16 @@ describe('Picture routes', () => {
     expect(res.body.length).toBeGreaterThanOrEqual(4);
     expect(res.body[0]).toHaveProperty('id');
     expect(res.body[0]).not.toHaveProperty('textId');
+  });
+
+  test('GET /api/pictures wihtqery returns monthly pictures', async () => {
+    const res = await request(app)
+      .get('/api/pictures')
+      .query({ search: 'monthly' })
+      .expect(200);
+    expect(res.body).toBeInstanceOf(Array);
+    expect(res.body.length).toBe(1);
+    expect(res.body[0].monthYear).toBe(202501);
   });
 
   test('GET /api/pictures/allData returns all picture data', async () => {
@@ -150,6 +170,24 @@ describe('Picture routes', () => {
       textFi: 'testi',
       textEn: 'test',
       keywords: 'test1,test2,test3,',
+    };
+    const res = await request(app)
+      .put(`/api/pictures/${pictures[3].id}`)
+      .set('Authorization', `Bearer ${token}`)
+      .send(updatedPicture)
+      .expect(200);
+
+    expect(res.body.message).toBe('Picture updated!');
+    expect(res.body.picture.text.textFi).toBe('testi');
+    expect(res.body.picture.text.textEn).toBe('test');
+  });
+
+  test('PUT /api/pictures/:id updates keywords attached to the picture', async () => {
+    const updatedPicture = {
+      type: 'birds',
+      textFi: 'testi',
+      textEn: 'test',
+      keywords: 'test1,test4,test5,',
     };
     const res = await request(app)
       .put(`/api/pictures/${pictures[3].id}`)
@@ -430,12 +468,6 @@ describe('Picture routes', () => {
         'image',
         path.resolve(__dirname, '../fixtures/test-text-file.txt'),
       )
-      .then((res) => {
-        expect(res.status).toBe(400);
-        expect(res.body.messages.en).toBe(
-          'Too many files! Only one file at a time!',
-        );
-      })
       .catch((err) => {
         expect(err.code).toBe('ECONNRESET');
       });

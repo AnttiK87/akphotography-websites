@@ -1,5 +1,5 @@
 // config.ts is used to load environment variables from a .env file and export them as typed constants.
-import dotenv from 'dotenv';
+import * as dotenv from 'dotenv';
 
 // choose the .env file based on the environment
 const envFile = process.env.NODE_ENV === 'test' ? '.env.test' : '.env';

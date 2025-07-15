@@ -76,8 +76,5 @@ export async function down({
   context: QueryInterface;
 }): Promise<void> {
   await context.removeConstraint('pictures', 'fk_comment_id');
-  await context.removeColumn('pictures', 'comment_id');
-  await context.removeConstraint('comments', 'fk_comment_picture_id');
-  await context.removeColumn('comments', 'comment_picture_id');
   await context.dropTable('comments');
 }

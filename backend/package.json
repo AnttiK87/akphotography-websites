@@ -14,13 +14,14 @@
     "lint:fix": "eslint --fix .",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "rollback:js": "node buildBackend/utils/rollback.js",
-    "migration:down": "npm run build && npm run rollback:js",
+    "migration:down:prod": "node utils/rollback.js",
+    "migration:down:dev": "cross-env NODE_ENV=development tsx src/utils/rollback.ts",
     "generate-thumbnails-once": "ts-node --esm src/utils/generate-thumbnails.js",
     "test:db:up": "docker compose -f docker-compose.test.yml --env-file .env.test up -d",
     "test:db:down": "docker compose -f docker-compose.test.yml down -v",
-    "test:only": "cross-env NODE_ENV=test NODE_OPTIONS=\"--experimental-vm-modules --no-warnings\" jest --detectOpenHandles --coverage",
-    "test": "npm run test:db:up && npm run test:only && npm run test:db:down"
+    "test:all": "npm run test:db:up && cross-env NODE_ENV=test NODE_OPTIONS=\"--experimental-vm-modules --no-warnings\" jest --detectOpenHandles --coverage && npm run test:db:down",
+    "test:unit1": "cross-env NODE_ENV=test NODE_OPTIONS=\"--experimental-vm-modules --no-warnings\" jest --config=jest.unit1.config.ts --detectOpenHandles --coverage",
+    "test:unit2": "cross-env NODE_ENV=test NODE_OPTIONS=\"--experimental-vm-modules --no-warnings\" jest --config=jest.unit2.config.ts --detectOpenHandles --coverage"
   },
   "keywords": [],
   "author": "Antti Kortelainen",

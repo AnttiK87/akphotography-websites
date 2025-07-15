@@ -17,11 +17,6 @@ export const handleUpload = (
           new AppError({ en: 'File too large, max file size 6MB' }, 400),
         );
       }
-      if (err.code === 'LIMIT_UNEXPECTED_FILE') {
-        return next(
-          new AppError({ en: 'Too many files! Only one file at a time!' }, 400),
-        );
-      }
     }
 
     if (!req.file && req.fileValidationError === 'goes wrong on the mimetype') {

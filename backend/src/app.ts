@@ -43,13 +43,13 @@ app.use('/api/logout', logoutRouter);
 await connectToDatabase();
 await createDefaultUser();
 
-app.use(unknownEndpoint);
-app.use(errorHandler);
-
 app.use(express.static(getPath('dist')));
 
-app.get('*', (_req, res) => {
+app.get(/^\/(?!api).*/, (_req, res) => {
   res.sendFile(getPath('dist', 'index.html'));
 });
+
+app.use(unknownEndpoint);
+app.use(errorHandler);
 
 export default app;

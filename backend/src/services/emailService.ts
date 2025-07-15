@@ -1,4 +1,4 @@
-import nodemailer from 'nodemailer';
+import * as nodemailer from 'nodemailer';
 import dotenv from 'dotenv';
 import logger from '../utils/logger.js';
 
@@ -47,12 +47,10 @@ export const sendCommentNotification = async (
       await transporter.sendMail(mailOptions);
     }
     logger.info('Email notification sent');
-  } catch (error) {
-    if (error instanceof Error) {
-      logger.error('Failed to send email notification: ', error.message);
-    } else {
-      logger.error('Failed to send email notification');
-    }
+  } catch (error: unknown) {
+    const errorMessage =
+      error instanceof Error ? error.message : 'Unknown error';
+    logger.error('Failed to send email notification:', errorMessage);
   }
 };
 
@@ -72,8 +70,18 @@ export const sendContactNotification = async (
     text: `You received a new message from ${name} (${email}):\n\n${message}\n\nReply wanted: ${contactMe ? 'Yes' : 'No'}`,
   };
 
-  if (process.env.NODE_ENV != 'development' && process.env.NODE_ENV != 'test') {
-    await transporter.sendMail(mailOptions);
+  try {
+    if (
+      process.env.NODE_ENV != 'development' &&
+      process.env.NODE_ENV != 'test'
+    ) {
+      await transporter.sendMail(mailOptions);
+    }
+    logger.info('Email notification sent');
+  } catch (error: unknown) {
+    const errorMessage =
+      error instanceof Error ? error.message : 'Unknown error';
+    logger.error('Failed to send email notification:', errorMessage);
   }
 };
 
@@ -100,8 +108,17 @@ export const sendAutoReply = async (
       language === 'fin' ? 'Kiitos viestistäsi' : 'Thank you for your message!',
     text,
   };
-
-  if (process.env.NODE_ENV != 'development' && process.env.NODE_ENV != 'test') {
-    await transporter.sendMail(replyOptions);
+  try {
+    if (
+      process.env.NODE_ENV != 'development' &&
+      process.env.NODE_ENV != 'test'
+    ) {
+      await transporter.sendMail(replyOptions);
+    }
+    logger.info('Email notification sent');
+  } catch (error: unknown) {
+    const errorMessage =
+      error instanceof Error ? error.message : 'Unknown error';
+    logger.error('Failed to send email notification:', errorMessage);
   }
 };
