@@ -71,12 +71,12 @@ describe('getMigrationGlob', () => {
     process.env.NODE_ENV = originalEnv;
   });
 
-  it('returns migration glob when files exist', async () => {
+  test('returns migration glob when files exist', async () => {
     const glob = await getMigrationGlob();
     expect(glob).toBe('src/migrations/*.ts');
   });
 
-  it('throws if no migration files found in production', async () => {
+  test('throws if no migration files found in production', async () => {
     process.env.NODE_ENV = 'production';
     await expect(getMigrationGlob()).rejects.toThrow(
       'No migration files found at path: migrations/*.js',

@@ -30,7 +30,7 @@ afterAll(async () => {
 });
 
 describe('Migration fails', () => {
-  it('throws error and calls logger error with broken migration', async () => {
+  test('throws error and calls logger error with broken migration', async () => {
     mockGetMigrationGlob.mockResolvedValueOnce(
       'tests/mockMigration/migration/broken-migration.ts' as never,
     );
@@ -47,7 +47,7 @@ describe('Migration fails', () => {
     );
   }, 20500);
 
-  it('fails to roll back if all migrations already rolled back', async () => {
+  test('fails to roll back if all migrations already rolled back', async () => {
     mockGetMigrationGlob.mockResolvedValueOnce(
       'tests/mockMigration/migration/*.ts' as never,
     );
@@ -60,7 +60,7 @@ describe('Migration fails', () => {
     );
   });
 
-  it('throws error and calls logger error with broken rollback', async () => {
+  test('throws error and calls logger error with broken rollback', async () => {
     mockGetMigrationGlob.mockResolvedValueOnce(
       'tests/mockMigration/rollback/*.ts' as never,
     );
@@ -82,7 +82,7 @@ describe('Migration fails', () => {
     );
   }, 20000);
 
-  it('Rollsback succesfully', async () => {
+  test('Rollsback succesfully', async () => {
     mockGetMigrationGlob.mockResolvedValueOnce(
       'tests/mockMigration/migration/working-migration.ts' as never,
     );
@@ -112,7 +112,7 @@ const createMockQueryInterface = (): QueryInterface => {
 };
 
 describe('migrationConf.resolve', () => {
-  it('throws if path is undefined', () => {
+  test('throws if path is undefined', () => {
     const mockContext = createMockQueryInterface();
 
     expect(() =>
@@ -120,7 +120,7 @@ describe('migrationConf.resolve', () => {
     ).toThrow('Migration path is undefined');
   });
 
-  it('throws if path is null', () => {
+  test('throws if path is null', () => {
     const mockContext = createMockQueryInterface();
 
     expect(() =>

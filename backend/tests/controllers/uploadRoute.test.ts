@@ -8,7 +8,6 @@ describe('GET /uploads/:filename', () => {
   const originalEnv = process.env.NODE_ENV;
 
   beforeAll(() => {
-    // Luo dummy-tiedosto testiksi
     if (!fs.existsSync('src/uploads/'))
       fs.mkdirSync('src/uploads/', { recursive: true });
     fs.writeFileSync(testImagePath1, 'dummy content');
@@ -29,7 +28,7 @@ describe('GET /uploads/:filename', () => {
     fs.rmdirSync('uploads/test/');
   });
 
-  it('should serve file from uploads in prod env', async () => {
+  test('should serve file from uploads in prod env', async () => {
     process.env.NODE_ENV = 'production';
     const { default: app } = await import(
       `../../src/app.js?prod=${Date.now()}`
@@ -42,7 +41,7 @@ describe('GET /uploads/:filename', () => {
     expect(Buffer.compare(res.body, expectedBuffer)).toBe(0);
   });
 
-  it('should serve file from uploads in test env', async () => {
+  test('should serve file from uploads in test env', async () => {
     process.env.NODE_ENV = 'test';
     const { default: app } = await import(
       `../../src/app.js?test=${Date.now()}`

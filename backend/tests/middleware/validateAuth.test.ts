@@ -44,7 +44,7 @@ beforeEach(() => {
 });
 
 describe('validateIsAdmin middleware', () => {
-  it('throws AppError if token is missing', async () => {
+  test('throws AppError if token is missing', async () => {
     (getUserById as jest.Mock).mockResolvedValueOnce(fakeUser as never);
 
     const req = {} as TestRequest;
@@ -57,7 +57,7 @@ describe('validateIsAdmin middleware', () => {
     await expect(validateIsAdmin(req, res, next)).rejects.toThrow(AppError);
   });
 
-  it('throws AppError if user is not found', async () => {
+  test('throws AppError if user is not found', async () => {
     (getUserById as jest.Mock).mockResolvedValueOnce(null as never);
     const req = {
       decodedToken: {
@@ -76,7 +76,7 @@ describe('validateIsAdmin middleware', () => {
     await expect(validateIsAdmin(req, res, next)).rejects.toThrow(AppError);
   });
 
-  it('throws AppError if user is not admin', async () => {
+  test('throws AppError if user is not admin', async () => {
     (getUserById as jest.Mock).mockResolvedValueOnce(fakeUser as never);
     const req = {
       decodedToken: {
@@ -95,7 +95,7 @@ describe('validateIsAdmin middleware', () => {
     await expect(validateIsAdmin(req, res, next)).rejects.toThrow(AppError);
   });
 
-  it('calls next and attaches user when user is admin', async () => {
+  test('calls next and attaches user when user is admin', async () => {
     (getUserById as jest.Mock).mockResolvedValueOnce(fakeUserAdmin as never);
 
     const req = {
@@ -121,7 +121,7 @@ describe('validateOwner middleware', () => {
     jest.resetAllMocks();
   });
 
-  it('throws AppError if resource is missing', async () => {
+  test('throws AppError if resource is missing', async () => {
     const req = {} as TestRequest;
     const res = {} as Response;
     const next = jest.fn();
@@ -136,7 +136,7 @@ describe('validateOwner middleware', () => {
     }
   });
 
-  it('throws AppError if user is not owner', async () => {
+  test('throws AppError if user is not owner', async () => {
     const req = {
       body: { userId: 2 },
       comment: { userId: 1 },
@@ -154,7 +154,7 @@ describe('validateOwner middleware', () => {
     }
   });
 
-  it('calls next when user is owner', async () => {
+  test('calls next when user is owner', async () => {
     (getUserById as jest.Mock).mockResolvedValueOnce(fakeUserAdmin as never);
 
     const req = {
@@ -175,7 +175,7 @@ describe('validateOwnerOrAdmin middleware', () => {
     jest.resetAllMocks();
   });
 
-  it('throws AppError if resource is missing', async () => {
+  test('throws AppError if resource is missing', async () => {
     const req = {} as TestRequest;
     const res = {} as Response;
     const next = jest.fn();
@@ -190,7 +190,7 @@ describe('validateOwnerOrAdmin middleware', () => {
     }
   });
 
-  it('throws AppError if token is missing', async () => {
+  test('throws AppError if token is missing', async () => {
     (getUserById as jest.Mock).mockResolvedValueOnce(fakeUser as never);
     (verifyToken as jest.Mock).mockResolvedValueOnce(null as never);
 
@@ -212,7 +212,7 @@ describe('validateOwnerOrAdmin middleware', () => {
     }
   });
 
-  it('throws AppError if user is not found', async () => {
+  test('throws AppError if user is not found', async () => {
     (getUserById as jest.Mock).mockResolvedValueOnce(null as never);
     (verifyToken as jest.Mock).mockResolvedValueOnce({
       id: 123,
@@ -236,7 +236,7 @@ describe('validateOwnerOrAdmin middleware', () => {
     }
   });
 
-  it('throws AppError if user is not owner or admin', async () => {
+  test('throws AppError if user is not owner or admin', async () => {
     (getUserById as jest.Mock).mockResolvedValueOnce(fakeUser as never);
     (verifyToken as jest.Mock).mockResolvedValueOnce({
       id: 123,
@@ -259,7 +259,7 @@ describe('validateOwnerOrAdmin middleware', () => {
     }
   });
 
-  it('calls next when user is owner', async () => {
+  test('calls next when user is owner', async () => {
     const req = {
       body: { userId: 1 },
       comment: { userId: 1 },
@@ -272,7 +272,7 @@ describe('validateOwnerOrAdmin middleware', () => {
     expect(next).toHaveBeenCalled();
   });
 
-  it('calls next when user is admin', async () => {
+  test('calls next when user is admin', async () => {
     (getUserById as jest.Mock).mockResolvedValueOnce(fakeUserAdmin as never);
     (verifyToken as jest.Mock).mockResolvedValueOnce({
       id: 124,

@@ -22,7 +22,7 @@ describe('writeToHardDrive integration test', () => {
     await fs.rmdir(uploadFolder);
   });
 
-  it('writes file buffer to disk and updates file object', async () => {
+  test('writes file buffer to disk and updates file object', async () => {
     const mockFile = {
       originalname: 'test-image',
       buffer: Buffer.from('fake-image-data'),
@@ -46,7 +46,7 @@ describe('writeToHardDrive integration test', () => {
     expect(writtenBuffer.equals(mockFile.buffer)).toBe(true);
   });
 
-  it('does nothing if file.path already exists', async () => {
+  test('does nothing if file.path already exists', async () => {
     const mockFile = {
       originalname: 'existing.jpg',
       buffer: Buffer.from('data'),

@@ -3,7 +3,7 @@ import { attachKeywordsToPicture } from '../../src/services/keywordService.js';
 import Picture from '../../src/models/picture.js';
 
 describe('keywordService', () => {
-  it('attachKeywordsToPicture returns early keywords were not provided', async () => {
+  test('attachKeywordsToPicture returns early keywords were not provided', async () => {
     const mockSetKeywords = jest.fn();
 
     const picture = {

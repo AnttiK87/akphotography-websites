@@ -8,7 +8,6 @@ jest.unstable_mockModule('nodemailer', () => ({
   })),
 }));
 
-// Mock logger
 const mockLogger = {
   info: jest.fn(),
   error: jest.fn(),
@@ -27,7 +26,7 @@ beforeEach(() => {
 });
 
 describe('emailService', () => {
-  it('sendCommentNotification calls nodemailer, in production enviroment', async () => {
+  test('sendCommentNotification calls nodemailer, in production enviroment', async () => {
     process.env.NODE_ENV = 'production';
     await sendCommentNotification('testUser1', 1, 'test comment');
 
@@ -36,7 +35,7 @@ describe('emailService', () => {
     expect(mockLogger.info).toHaveBeenCalledWith('Email notification sent');
   });
 
-  it('sendCommentNotification calls error logger if nodemailer returns error', async () => {
+  test('sendCommentNotification calls error logger if nodemailer returns error', async () => {
     const error = new Error('SMTP connection failed');
     mockSendMail.mockRejectedValue(error as never);
 
@@ -51,7 +50,7 @@ describe('emailService', () => {
     );
   });
 
-  it('sendCommentNotification calls error logger if nodemailer returns unknown error', async () => {
+  test('sendCommentNotification calls error logger if nodemailer returns unknown error', async () => {
     const unknownError: unknown = 'some error';
     mockSendMail.mockRejectedValue(unknownError as never);
 
@@ -66,7 +65,7 @@ describe('emailService', () => {
     );
   });
 
-  it('sendContactNotification calls nodemailer, in production enviroment', async () => {
+  test('sendContactNotification calls nodemailer, in production enviroment', async () => {
     process.env.NODE_ENV = 'production';
     await sendContactNotification(
       'testUser1',
@@ -80,7 +79,7 @@ describe('emailService', () => {
     expect(mockLogger.info).toHaveBeenCalledWith('Email notification sent');
   });
 
-  it('sendContactNotification calls error logger if nodemailer returns error', async () => {
+  test('sendContactNotification calls error logger if nodemailer returns error', async () => {
     const error = new Error('SMTP connection failed');
     mockSendMail.mockRejectedValue(error as never);
 
@@ -100,7 +99,7 @@ describe('emailService', () => {
     );
   });
 
-  it('sendContactNotification calls error logger if nodemailer returns unknown error', async () => {
+  test('sendContactNotification calls error logger if nodemailer returns unknown error', async () => {
     const unknownError: unknown = 'some error';
     mockSendMail.mockRejectedValue(unknownError as never);
 
@@ -120,7 +119,7 @@ describe('emailService', () => {
     );
   });
 
-  it('sendAutoReply calls sendmail, in production enviroment with finnish text parameter', async () => {
+  test('sendAutoReply calls sendmail, in production enviroment with finnish text parameter', async () => {
     process.env.NODE_ENV = 'production';
     await sendAutoReply('testUser1', 'test@email.com', true, 'fin');
 
@@ -135,7 +134,7 @@ describe('emailService', () => {
     expect(mockLogger.info).toHaveBeenCalledWith('Email notification sent');
   });
 
-  it('sendAutoReply calls sendmail, in production enviroment with english text parameter', async () => {
+  test('sendAutoReply calls sendmail, in production enviroment with english text parameter', async () => {
     process.env.NODE_ENV = 'production';
     await sendAutoReply('testUser1', 'test@email.com', true, 'eng');
 
@@ -148,7 +147,7 @@ describe('emailService', () => {
     );
   });
 
-  it('sendAutoReply calls error logger if nodemailer returns error', async () => {
+  test('sendAutoReply calls error logger if nodemailer returns error', async () => {
     const error = new Error('SMTP connection failed');
     mockSendMail.mockRejectedValue(error as never);
 
@@ -167,7 +166,7 @@ describe('emailService', () => {
     );
   });
 
-  it('sendAutoReply calls error logger if nodemailer returns unknown error', async () => {
+  test('sendAutoReply calls error logger if nodemailer returns unknown error', async () => {
     const unknownError: unknown = 'some error';
     mockSendMail.mockRejectedValue(unknownError as never);
 

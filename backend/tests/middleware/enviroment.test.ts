@@ -25,7 +25,7 @@ const { writeFileCreateThumbnail } = await import(
 );
 
 describe('writeFileCreateThumbnail', () => {
-  it('should use test eviroment variables and add thumbnail info to req.file and call next', async () => {
+  test('should use test eviroment variables and add thumbnail info to req.file and call next', async () => {
     const mockFile = {
       originalname: 'test.jpg',
       buffer: Buffer.from('image data'),
@@ -48,7 +48,7 @@ describe('writeFileCreateThumbnail', () => {
     expect(next).toHaveBeenCalled();
   });
 
-  it('should use test eviroment variables and add thumbnail info to req.file and call next', async () => {
+  test('should use test eviroment variables and add thumbnail info to req.file and call next', async () => {
     const mockFile = {
       originalname: 'test.jpg',
       buffer: Buffer.from('image data'),

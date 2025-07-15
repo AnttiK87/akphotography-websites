@@ -38,7 +38,7 @@ describe('errorhandler middleware', () => {
     });
   });
 
-  it('should handle unknown errors with 500 response', () => {
+  test('should handle unknown errors with 500 response', () => {
     const req = {} as Request;
     const res = {
       status: jest.fn().mockReturnThis(),

@@ -22,7 +22,7 @@ interface TestRequest extends Request {
 }
 
 describe('validatePictureUploadInput middleware', () => {
-  it('throws AppError if req.file is missing', async () => {
+  test('throws AppError if req.file is missing', async () => {
     const req = { body: { type: 'birds' } } as TestRequest;
     const res = {} as Response;
     const next = jest.fn();
@@ -35,7 +35,7 @@ describe('validatePictureUploadInput middleware', () => {
     );
   });
 
-  it('throws AppError if metadata is missing', async () => {
+  test('throws AppError if metadata is missing', async () => {
     mockMetadata.mockResolvedValueOnce(null as never);
     const req = {
       body: { type: 'birds' },

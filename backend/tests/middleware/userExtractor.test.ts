@@ -20,7 +20,7 @@ const { userExtractor } = await import('../../src/middleware/userExtractor.js');
 const { getUserById } = await import('../../src/services/userService.js');
 
 describe('userExtractor middleware', () => {
-  it('throws AppError if token is missing', async () => {
+  test('throws AppError if token is missing', async () => {
     (getUserById as jest.Mock).mockResolvedValueOnce(fakeUser as never);
 
     const req = {} as TestRequest;
@@ -33,7 +33,7 @@ describe('userExtractor middleware', () => {
     );
   });
 
-  it('throws AppError if user is not found', async () => {
+  test('throws AppError if user is not found', async () => {
     (getUserById as jest.Mock).mockResolvedValueOnce(null as never);
 
     const req = {
@@ -54,7 +54,7 @@ describe('userExtractor middleware', () => {
     );
   });
 
-  it('calls next and attaches user when user is found', async () => {
+  test('calls next and attaches user when user is found', async () => {
     (getUserById as jest.Mock).mockResolvedValueOnce(fakeUser as never);
 
     const req = {

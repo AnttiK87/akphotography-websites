@@ -22,7 +22,7 @@ describe('ensureFolders', () => {
     fs.mkdirSync.mockReset();
   });
 
-  it('does not call mkdirSync if folder exist', () => {
+  test('does not call mkdirSync if folder exist', () => {
     fs.existsSync.mockReturnValue(true);
 
     ensureFolders('tests/uploads/highres', 'tests/uploads/thumb');
@@ -31,7 +31,7 @@ describe('ensureFolders', () => {
     expect(fs.mkdirSync).not.toHaveBeenCalled();
   });
 
-  it('does call mkdirSync if folder does not exist', () => {
+  test('does call mkdirSync if folder does not exist', () => {
     fs.existsSync.mockReturnValue(false);
 
     ensureFolders('tests/uploads/highres', 'tests/uploads/thumb');

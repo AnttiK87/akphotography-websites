@@ -11,20 +11,8 @@ import {
   MYSQL_USER,
   MYSQL_PASSWORD,
   DB_HOST,
+  DB_PORT,
 } from './config.js';
-
-const isTestEnv = process.env.NODE_ENV === 'test';
-const port = isTestEnv ? 3307 : 3306;
-/*logger.info(
-  'mysql_database:',
-  MYSQL_DATABASE,
-  'mysql_user:',
-  MYSQL_USER,
-  'db_host:',
-  DB_HOST,
-  'port:',
-  String(port),
-);*/
 
 export const sequelize: Sequelize = new Sequelize(
   MYSQL_DATABASE,
@@ -33,7 +21,7 @@ export const sequelize: Sequelize = new Sequelize(
   {
     host: DB_HOST,
     dialect: 'mysql',
-    port: port, // Use different port for test environment
+    port: DB_PORT,
     logging: false,
   },
 );
@@ -65,7 +53,7 @@ export const migrationConf = {
   },
   context: sequelize.getQueryInterface(),
   storage: new SequelizeStorage({ sequelize, tableName: 'migrations' }),
-  logger: process.env.NODE_ENV === 'test' ? undefined : console,
+  logger: console,
 };
 
 export const runMigrations = async (): Promise<void> => {

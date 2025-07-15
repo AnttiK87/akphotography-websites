@@ -1,5 +1,5 @@
 import { jest } from '@jest/globals';
-// Mock logger
+
 const mockLogger = {
   info: jest.fn(),
   error: jest.fn(),
@@ -20,7 +20,7 @@ beforeEach(() => {
 });
 
 describe('sessionService', () => {
-  it('returns logger info if session not found', async () => {
+  test('returns logger info if session not found', async () => {
     process.env.NODE_ENV = 'production';
     await deleteSessionByUserId(555);
 

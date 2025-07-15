@@ -34,7 +34,7 @@ describe('formatMonthYear', () => {
 
   test('fails if month is in future of current year', () => {
     const currentYear = new Date().getFullYear();
-    const nextMonth = new Date().getMonth() + 2; // getMonth is 0-based
+    const nextMonth = new Date().getMonth() + 2;
     if (nextMonth <= 12) {
       expect(() => formatMonthYear(currentYear, nextMonth)).toThrow(
         'Invalid month',

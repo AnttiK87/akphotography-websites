@@ -23,7 +23,7 @@ afterAll(async () => {
 });
 
 describe('migrationConf.resolve', () => {
-  it('runMigration non-Error instances logged correctly', async () => {
+  test('runMigration non-Error instances logged correctly', async () => {
     jest.unstable_mockModule('umzug', () => {
       return {
         __esModule: true,
@@ -75,7 +75,7 @@ describe('migrationConf.resolve', () => {
     );
   });
 
-  it('rollbackMigration handles undefined result from umzug', async () => {
+  test('rollbackMigration handles undefined result from umzug', async () => {
     jest.unstable_mockModule('umzug', () => ({
       __esModule: true,
       Umzug: jest.fn().mockImplementation(() => ({
@@ -93,7 +93,7 @@ describe('migrationConf.resolve', () => {
     expect(mockLogger.error).toHaveBeenCalledWith('Migration undefined.');
   });
 
-  it('rollbackMigration handles undefined result from umzug', async () => {
+  test('rollbackMigration handles undefined result from umzug', async () => {
     jest.unstable_mockModule('umzug', () => ({
       __esModule: true,
       Umzug: jest.fn().mockImplementation(() => ({
