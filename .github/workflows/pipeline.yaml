@@ -69,7 +69,7 @@ jobs:
 
       - name: Create .env file on server
         run: |
-          ssh -i ~/.ssh/private_key chgqkclj@akphotography.fi "echo '${{ secrets.ENV_FILE }}' > apps/myapp/.env && chmod 600 apps/ak_photography_backend/.env"
+          ssh -i ~/.ssh/private_key chgqkclj@akphotography.fi "echo '${{ secrets.ENV_FILE }}' > apps/ak_photography_backend/.env && chmod 600 apps/ak_photography_backend/.env"
 
       - name: Copy PM2 ecosystem config
         run: |
