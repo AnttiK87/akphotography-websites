@@ -5,8 +5,6 @@ node_modules
 dist/
 apps/
 build/
-.prettierrc
-.prettierignore
 uploads/
 coverage/
 check_service.sh
