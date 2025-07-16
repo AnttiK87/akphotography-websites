@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 import * as nodemailer from 'nodemailer';
-=======
-import nodemailer from 'nodemailer';
->>>>>>> origin/main
 import dotenv from 'dotenv';
 import logger from '../utils/logger.js';
 
