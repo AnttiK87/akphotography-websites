@@ -3,17 +3,19 @@ import fs from 'fs';
 import path from 'path';
 
 describe('GET /uploads/:filename', () => {
-  const testImagePath1 = path.resolve('src/uploads/test-image.jpg');
-  const testImagePath2 = path.resolve('uploads/test/test-image.jpg');
+  const testImagePath1 = path.resolve(
+    '../public_html/uploads/test/test-image.jpg',
+  );
+  const testImagePath2 = path.resolve('tests/uploads/test/test-image.jpg');
   const originalEnv = process.env.NODE_ENV;
 
   beforeAll(() => {
-    if (!fs.existsSync('src/uploads/'))
-      fs.mkdirSync('src/uploads/', { recursive: true });
+    if (!fs.existsSync('../public_html/uploads/test/'))
+      fs.mkdirSync('../public_html/uploads/test/', { recursive: true });
     fs.writeFileSync(testImagePath1, 'dummy content');
 
-    if (!fs.existsSync('uploads/test/'))
-      fs.mkdirSync('uploads/test/', { recursive: true });
+    if (!fs.existsSync('tests/uploads/test/'))
+      fs.mkdirSync('tests/uploads/test/', { recursive: true });
     fs.writeFileSync(testImagePath2, 'dummy content');
   });
 
@@ -24,8 +26,8 @@ describe('GET /uploads/:filename', () => {
   afterAll(() => {
     fs.unlinkSync(testImagePath1);
     fs.unlinkSync(testImagePath2);
-    fs.rmdirSync('src/uploads/');
-    fs.rmdirSync('uploads/test/');
+    fs.rmdirSync('../public_html/', { recursive: true });
+    fs.rmdirSync('tests/uploads/test/');
   });
 
   test('should serve file from uploads in prod env', async () => {
@@ -33,7 +35,7 @@ describe('GET /uploads/:filename', () => {
     const { default: app } = await import(
       `../../src/app.js?prod=${Date.now()}`
     );
-    const res = await request(app).get('/uploads/test-image.jpg');
+    const res = await request(app).get('/uploads/test/test-image.jpg');
     const expectedBuffer = fs.readFileSync(testImagePath1);
 
     expect(res.status).toBe(200);

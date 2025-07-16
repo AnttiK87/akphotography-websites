@@ -65,7 +65,7 @@ describe('writeFileCreateThumbnail', () => {
 
     expect(req.file.thumbnailFilename).toBe('thumb.jpg');
     expect(req.file.thumbnailPath).toBe(
-      path.join('./uploads/', 'thumbnail', 'thumb.jpg'),
+      path.join('public_html/uploads/', 'thumbnail', 'thumb.jpg'),
     );
 
     expect(next).toHaveBeenCalled();

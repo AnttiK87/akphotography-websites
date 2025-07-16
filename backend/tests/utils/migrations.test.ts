@@ -79,7 +79,7 @@ describe('getMigrationGlob', () => {
   test('throws if no migration files found in production', async () => {
     process.env.NODE_ENV = 'production';
     await expect(getMigrationGlob()).rejects.toThrow(
-      'No migration files found at path: migrations/*.js',
+      'No migration files found at path: apps/ak_photography_backend/migrations/*.js',
     );
   });
 });

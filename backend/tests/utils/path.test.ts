@@ -18,8 +18,8 @@ describe('getPath', () => {
   test('returns path with normal root when NODE_ENV is production', () => {
     process.env.NODE_ENV = 'production';
 
-    const result = getPath('some', 'path');
+    const result = getPath('some', '/public_html/uploads');
 
-    expect(result).toContain('backend\\src\\some\\path');
+    expect(result).toContain('some\\public_html\\uploads');
   });
 });
