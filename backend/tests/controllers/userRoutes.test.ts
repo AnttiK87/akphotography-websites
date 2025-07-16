@@ -1,6 +1,5 @@
 import request from 'supertest';
 import app from '../../src/app.js';
-
 import models from '../../src/models/index.js';
 const { User } = models;
 

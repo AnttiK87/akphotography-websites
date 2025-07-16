@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import * as nodemailer from 'nodemailer';
+=======
+import nodemailer from 'nodemailer';
+>>>>>>> origin/main
 import dotenv from 'dotenv';
 import logger from '../utils/logger.js';
 
@@ -47,10 +51,19 @@ export const sendCommentNotification = async (
       await transporter.sendMail(mailOptions);
     }
     logger.info('Email notification sent');
+<<<<<<< HEAD
   } catch (error: unknown) {
     const errorMessage =
       error instanceof Error ? error.message : 'Unknown error';
     logger.error('Failed to send email notification:', errorMessage);
+=======
+  } catch (error) {
+    if (error instanceof Error) {
+      logger.error('Failed to send email notification: ', error.message);
+    } else {
+      logger.error('Failed to send email notification');
+    }
+>>>>>>> origin/main
   }
 };
 
@@ -70,6 +83,7 @@ export const sendContactNotification = async (
     text: `You received a new message from ${name} (${email}):\n\n${message}\n\nReply wanted: ${contactMe ? 'Yes' : 'No'}`,
   };
 
+<<<<<<< HEAD
   try {
     if (
       process.env.NODE_ENV != 'development' &&
@@ -82,6 +96,10 @@ export const sendContactNotification = async (
     const errorMessage =
       error instanceof Error ? error.message : 'Unknown error';
     logger.error('Failed to send email notification:', errorMessage);
+=======
+  if (process.env.NODE_ENV != 'development' && process.env.NODE_ENV != 'test') {
+    await transporter.sendMail(mailOptions);
+>>>>>>> origin/main
   }
 };
 
@@ -108,6 +126,7 @@ export const sendAutoReply = async (
       language === 'fin' ? 'Kiitos viestistäsi' : 'Thank you for your message!',
     text,
   };
+<<<<<<< HEAD
   try {
     if (
       process.env.NODE_ENV != 'development' &&
@@ -120,5 +139,10 @@ export const sendAutoReply = async (
     const errorMessage =
       error instanceof Error ? error.message : 'Unknown error';
     logger.error('Failed to send email notification:', errorMessage);
+=======
+
+  if (process.env.NODE_ENV != 'development' && process.env.NODE_ENV != 'test') {
+    await transporter.sendMail(replyOptions);
+>>>>>>> origin/main
   }
 };
