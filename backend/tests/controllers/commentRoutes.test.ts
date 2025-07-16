@@ -59,6 +59,24 @@ describe('Comment routes', () => {
     expect(res.body.comment.comment).toBe('Test comment');
   });
 
+  test('POST /api/comments creating new comment fails with invalid picture id', async () => {
+    const newComment = {
+      comment: 'Test comment',
+      username: 'testuser123',
+      userId: '123',
+      pictureId: 555,
+    };
+
+    const res = await request(app)
+      .post('/api/comments')
+      .send(newComment)
+      .expect(404);
+
+    expect(res.status).toBe(404);
+    expect(res.body.messages.en).toBe('Picture related to comment not found');
+    expect(res.body.messages.fi).toBe('Kommenttiin liittyvää kuvaa ei löydy');
+  });
+
   test('PUT /api/comments/:id updates comment', async () => {
     const comment = await Comment.create({
       comment: 'Test comment to update',
@@ -77,6 +95,62 @@ describe('Comment routes', () => {
       .expect(200);
 
     expect(res.body.comment.comment).toBe('Updated comment');
+    expect(res.body.comment.username).toBe('testuser123');
+  });
+
+  test('PUT /api/comments/:id updates username', async () => {
+    const comment = await Comment.create({
+      comment: 'Test comment to update',
+      username: 'testuser123',
+      userId: '123',
+      pictureId: pictures[1].id,
+    });
+
+    const res = await request(app)
+      .put(`/api/comments/${comment.id}`)
+      .send({
+        comment: 'Test comment to update',
+        username: 'testuser124',
+        userId: '123',
+      })
+      .expect(200);
+
+    expect(res.body.comment.comment).toBe('Test comment to update');
+    expect(res.body.comment.username).toBe('testuser124');
+  });
+
+  test('PUT /api/comments/:id updatefails if changes were not provided', async () => {
+    const comment = await Comment.create({
+      comment: 'Test comment to update',
+      username: 'testuser123',
+      userId: '123',
+      pictureId: pictures[1].id,
+    });
+
+    const res = await request(app)
+      .put(`/api/comments/${comment.id}`)
+      .send({
+        comment: 'Test comment to update',
+        username: 'testuser123',
+        userId: '123',
+      })
+      .expect(400);
+
+    expect(res.body.messages.fi).toBe('Et muuttanut tietoja');
+    expect(res.body.messages.en).toBe('No changes provided');
+  });
+
+  test('PUT /api/comments/:id fails to update comment that does not exist', async () => {
+    const res = await request(app)
+      .put('/api/comments/500')
+      .send({
+        comment: 'Updated comment',
+        username: 'testuser123',
+        userId: '123',
+      })
+      .expect(404);
+
+    expect(res.body.messages.en).toBe('Comment not found');
   });
 
   test('GET /api/comments with query returns picture specific comments', async () => {
@@ -89,6 +163,15 @@ describe('Comment routes', () => {
     expect(res.body).toBeInstanceOf(Array);
     expect(res.body.length).toBe(1);
     expect(res.body[0]).toHaveProperty('comment', 'Test comment');
+  });
+
+  test('GET /api/comment fails with wrong endpoint', async () => {
+    const res = await request(app)
+      .get('/api/comment')
+      .query({ search: pictures[0].id })
+      .expect(404);
+
+    expect(res.body.error).toBe('unknown endpoint');
   });
 
   test('DELETE /api/comments/:id logged in admin can delete comment', async () => {

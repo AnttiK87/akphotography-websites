@@ -1,11 +1,13 @@
 # dotenv environment variables file
 node_modules
 .env
+.env.test
 dist/
-buildBackend/
+apps/
 build/
 .prettierrc
 .prettierignore
 uploads/
 coverage/
 check_service.sh
+public_html/

@@ -6,10 +6,13 @@ const { Keyword } = models;
 type Picture = InstanceType<typeof models.Picture>;
 type Keyword = InstanceType<typeof models.Keyword>;
 
+<<<<<<< HEAD
+=======
 export const getKeywordById = async (id: string) => {
   return Keyword.findByPk(id);
 };
 
+>>>>>>> origin/main
 export const getKeywordWithPictures = async () => {
   return Keyword.findAll({
     include: keywordInclude,
@@ -72,7 +75,11 @@ export const attachKeywordsToPicture = async (
   if (keywordsToRemove.length > 0) {
     await Promise.all(
       keywordsToRemove.map((keyword) => picture.removeKeyword(keyword)),
+<<<<<<< HEAD
+    ); //tämä
+=======
     );
+>>>>>>> origin/main
   }
 
   // add new/updated keywords to the picture

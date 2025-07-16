@@ -1,5 +1,6 @@
 import request from 'supertest';
 import app from '../../src/app.js';
+import { SECRET } from '../../src/utils/config.js';
 
 import jwt from 'jsonwebtoken';
 import { setSession } from '../../src/services/sessionService.js';
@@ -56,10 +57,25 @@ describe('DELETE /api/logout with correct token', () => {
   });
 });
 
+import models from '../../src/models/index.js';
+const { User } = models;
+
 describe('DELETE /api/logout with invalid token', () => {
-  const fakeSignedToken = jwt.sign({ id: 1 }, 'WRONG_SECRET');
+  let fakeSignedToken: string;
+  let userId: number;
+
   beforeEach(async () => {
-    await setSession(1, fakeSignedToken);
+    const user = await User.findOne({ where: { username: 'admin' } });
+
+    if (!user) {
+      throw new Error('Admin user not found!');
+    }
+
+    userId = user.id;
+
+    fakeSignedToken = jwt.sign({ id: userId }, 'WRONG_SECRET');
+
+    await setSession(userId, fakeSignedToken);
   });
 
   test('should return 401 with invalid token', async () => {
@@ -69,5 +85,35 @@ describe('DELETE /api/logout with invalid token', () => {
 
     expect(res.status).toBe(401);
     expect(res.body.messages.en).toBe('Invalid token');
+  });
+});
+
+describe('verifyToken - TokenExpiredError', () => {
+  let expiredToken: string;
+  let userId: number;
+
+  beforeEach(async () => {
+    const user = await User.findOne({ where: { username: 'admin' } });
+
+    if (!user) {
+      throw new Error('Admin user not found!');
+    }
+
+    userId = user.id;
+
+    expiredToken = jwt.sign({ id: userId }, SECRET, {
+      expiresIn: -10,
+    });
+
+    await setSession(userId, expiredToken);
+  });
+
+  test('should throw AppError with "Token expired"', async () => {
+    const res = await request(app)
+      .delete('/api/logout')
+      .set('Authorization', `Bearer ${expiredToken}`);
+
+    expect(res.status).toBe(401);
+    expect(res.body.messages.en).toBe('Token expired');
   });
 });

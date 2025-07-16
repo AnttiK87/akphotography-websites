@@ -23,12 +23,11 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.use(
-  '/uploads',
-  express.static(
-    getPath(process.env.NODE_ENV === 'production' ? './' : '../', 'uploads'),
-  ),
-);
+const isProduction = process.env.NODE_ENV === 'production';
+const uploadsPath = isProduction ? 'public_html/uploads' : '/uploads';
+const distPath = isProduction ? 'public_html/dist' : '/dist';
+
+app.use('/uploads', express.static(getPath(uploadsPath)));
 
 app.use('/api/pictures', picturesRouter);
 app.use('/api/ratings', ratingsRouter);
@@ -43,10 +42,10 @@ app.use('/api/logout', logoutRouter);
 await connectToDatabase();
 await createDefaultUser();
 
-app.use(express.static(getPath('dist')));
+app.use(express.static(getPath(distPath)));
 
-app.get('*', (_req, res) => {
-  res.sendFile(getPath('dist', 'index.html'));
+app.get(/^\/(?!api).*/, (_req, res) => {
+  res.sendFile(getPath(distPath, 'index.html'));
 });
 
 app.use(unknownEndpoint);

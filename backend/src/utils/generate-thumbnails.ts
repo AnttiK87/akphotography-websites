@@ -14,8 +14,13 @@ import Picture from '../models/picture.js';
 import { sequelize } from './db.js';
 
 //upload folders
-const uploadFolderHighRes = './uploads/pictures/';
-const uploadFolderThumbnail = './uploads/thumbnail/';
+const isProduction = process.env.NODE_ENV === 'production';
+const uploadFolderHighRes = isProduction
+  ? './public_html/uploads/pictures/'
+  : './uploads/pictures/';
+const uploadFolderThumbnail = isProduction
+  ? './public_html/uploads/thumbnail/'
+  : './uploads/thumbnail/';
 
 // Function to generate a thumbnail for a given image file
 const generateThumbnail = async (

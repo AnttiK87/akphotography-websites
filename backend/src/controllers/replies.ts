@@ -1,4 +1,4 @@
-import express, { Request, Response } from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 
 import { replyFinder } from '../middleware/finders.js';
 import { validateReplyInput } from '../middleware/validateInput.js';
@@ -17,6 +17,7 @@ import { getReplyById } from '../services/replyService.js';
 import { ReplyInput } from '../types/types.js';
 
 import models from '../models/index.js';
+import { verifyToken } from '../middleware/tokenExtractor.js';
 const { Reply } = models;
 
 const router = express.Router();
@@ -40,7 +41,11 @@ router.get('/', async (req: Request, res: Response) => {
 router.post(
   '/',
   validateReplyInput,
-  async (req: Request<object, object, ReplyInput>, res: Response) => {
+  async (
+    req: Request<object, object, ReplyInput>,
+    res: Response,
+    next: NextFunction,
+  ) => {
     const {
       reply,
       username,
@@ -50,6 +55,15 @@ router.post(
       parentReplyId,
       adminReply,
     } = req.body;
+
+    if (adminReply) {
+      try {
+        const authorization = req.get('authorization');
+        await verifyToken(authorization || '');
+      } catch (error) {
+        next(error);
+      }
+    }
 
     const newReply = await Reply.create({
       reply,

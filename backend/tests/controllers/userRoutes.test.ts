@@ -15,19 +15,29 @@ describe('User routes', () => {
   });
 
   afterAll(async () => {
-    await User.destroy({ where: { username: 'newuser123' } });
-    await request(app)
-      .put('/api/users/updateInfo')
-      .set('Authorization', `Bearer ${token}`)
-      .send({
-        name: 'Administrator',
-        username: 'admin',
-        email: 'admin@example.com',
-      })
-      .expect(200);
     await request(app)
       .delete('/api/logout')
       .set('Authorization', `Bearer ${token}`);
+    await User.destroy({ where: {} });
+  });
+
+  test('PUT /api/users/updateFirstLogin updates user info at first login', async () => {
+    const newUser = {
+      name: 'Test User 1',
+      username: 'newuser1',
+      email: 'new1@example.com',
+      password: 'secUr3passw*rd',
+      passwordConfirmation: 'secUr3passw*rd',
+    };
+
+    const res = await request(app)
+      .put('/api/users/updateFirstLogin')
+      .set('Authorization', `Bearer ${token}`)
+      .send(newUser)
+      .expect(200);
+
+    expect(res.body.username).toBe('newuser1');
+    expect(res.body.name).toBe('Test User 1');
   });
 
   test('GET /api/users returns all users', async () => {
@@ -39,11 +49,11 @@ describe('User routes', () => {
 
   test('POST /api/users/addUser creates user', async () => {
     const newUser = {
-      name: 'Test User',
-      username: 'newuser123',
+      name: 'Test User 2',
+      username: 'newuser2',
       password: 'secUr3passw*rd',
       passwordConfirmation: 'secUr3passw*rd',
-      email: 'new@example.com',
+      email: 'new2@example.com',
       role: 'user',
     };
 
@@ -53,7 +63,26 @@ describe('User routes', () => {
       .send(newUser)
       .expect(200);
 
-    expect(res.body.user.username).toBe('newuser123');
+    expect(res.body.user.username).toBe('newuser2');
+  });
+
+  test('POST /api/users/addUser fails to create dublicate user', async () => {
+    const newUser = {
+      name: 'Test User 2',
+      username: 'newuser2',
+      password: 'secUr3passw*rd',
+      passwordConfirmation: 'secUr3passw*rd',
+      email: 'new2@example.com',
+      role: 'user',
+    };
+
+    const res = await request(app)
+      .post('/api/users/addUser')
+      .set('Authorization', `Bearer ${token}`)
+      .send(newUser)
+      .expect(409);
+
+    expect(res.body.error).toBe('Username must be unique');
   });
 
   test('PUT /api/users/updateInfo updates user info', async () => {
@@ -68,6 +97,76 @@ describe('User routes', () => {
       .expect(200);
 
     expect(res.body.user.name).toBe('Updated Name');
+  });
+
+  test('PUT /api/users/updateInfo updatefailf in no changes were provided', async () => {
+    const res = await request(app)
+      .put('/api/users/updateInfo')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        name: 'Updated Name',
+        username: 'admin',
+        email: 'admin@example.com',
+      })
+      .expect(400);
+
+    expect(res.body.messages.fi).toBe('Et muuttanut tietoja');
+    expect(res.body.messages.en).toBe('No changes provided');
+  });
+
+  test('PUT /api/users/updateInfo fails to updates user info with too short name', async () => {
+    const res = await request(app)
+      .put('/api/users/updateInfo')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        name: 'Up',
+        username: 'admin',
+        email: 'admin@example.com',
+      })
+      .expect(400);
+
+    expect(res.body.error).toBe('Validation error');
+  });
+
+  test('PUT /api/users/updateInfo fails to updates user info without name', async () => {
+    const res = await request(app)
+      .put('/api/users/updateInfo')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        username: 'admin',
+        email: 'admin@example.com',
+      })
+      .expect(400);
+
+    expect(res.body.error).toBe('Validation error');
+  });
+
+  test('PUT /api/users/changePassword updates user password', async () => {
+    const res = await request(app)
+      .put('/api/users/changePassword')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        newPassword1: 'secUr3passw*rd2',
+        newPassword2: 'secUr3passw*rd2',
+        oldPassword: 'secUr3passw*rd',
+      })
+      .expect(200);
+
+    expect(res.body.message).toBe('Password changed');
+  });
+
+  test('PUT /api/users/changePassword fails to update user password with wrong old password', async () => {
+    const res = await request(app)
+      .put('/api/users/changePassword')
+      .set('Authorization', `Bearer ${token}`)
+      .send({
+        newPassword1: 'secUr3passw*rd',
+        newPassword2: 'secUr3passw*rd',
+        oldPassword: 'secUr3passw*rd',
+      })
+      .expect(401);
+
+    expect(res.body.messages.en).toBe('Invalid old password');
   });
 
   test('DELETE /api/users/:id deletes user', async () => {

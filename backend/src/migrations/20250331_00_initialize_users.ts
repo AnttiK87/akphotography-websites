@@ -56,6 +56,7 @@ export async function down({
 }: {
   context: QueryInterface;
 }): Promise<void> {
-  await context.dropTable('users');
+  await context.removeConstraint('sessions', 'sessions_ibfk_1');
   await context.dropTable('sessions');
+  await context.dropTable('users');
 }

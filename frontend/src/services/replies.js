@@ -9,7 +9,15 @@ const getAll = async (pictureId) => {
 };
 
 const create = async (newObject) => {
-  const response = await axios.post(`${baseUrl}`, newObject);
+  let config;
+  if (newObject.adminReply) {
+    const token = picturesService.getToken();
+    config = {
+      headers: { Authorization: token },
+    };
+  }
+
+  const response = await axios.post(`${baseUrl}`, newObject, config);
   return response.data;
 };
 

@@ -9,6 +9,8 @@ describe('Keyword routes', () => {
   let picture: InstanceType<typeof Picture>;
 
   beforeAll(async () => {
+    await Keyword.destroy({ where: {} });
+
     const res = await request(app)
       .post('/api/login')
       .send({ username: 'admin', password: 'testadmin' });
@@ -47,6 +49,34 @@ describe('Keyword routes', () => {
     await Picture.destroy({ where: { id: picture.id } });
   });
 
+  test('GET /api/keywords query returns keywords', async () => {
+    await attachKeywordsToPicture(picture, [
+      'test',
+      'updateThisKeyword',
+      'deleteThisKeyword',
+    ]);
+
+    const res = await request(app).get('/api/keywords');
+
+    expect(res.status).toBe(200);
+    expect(res.body).toBeInstanceOf(Array);
+
+    const keywords = res.body.map((kw: { keyword: string }) => kw.keyword);
+    expect(keywords).toEqual(
+      expect.arrayContaining([
+        'test',
+        'updateThisKeyword',
+        'deleteThisKeyword',
+      ]),
+    );
+
+    res.body.forEach((kw: { keyword: string; pictures: { id: number }[] }) => {
+      expect(kw.pictures[0]).toEqual(
+        expect.objectContaining({ id: picture.id }),
+      );
+    });
+  });
+
   test('created picture has attaches keywords', async () => {
     const keywords = await picture.getKeywords();
 
@@ -71,28 +101,6 @@ describe('Keyword routes', () => {
       .expect(200);
 
     expect(res.body.messageEn).toBe('Keyword edited!');
-  });
-
-  test('GET /api/keywords query returns keywords', async () => {
-    const res = await request(app).get('/api/keywords');
-
-    expect(res.status).toBe(200);
-    expect(res.body).toBeInstanceOf(Array);
-
-    const keywords = res.body.map((kw: { keyword: string }) => kw.keyword);
-    expect(keywords).toEqual(
-      expect.arrayContaining([
-        'test',
-        'keywordWasUpdated',
-        'deleteThisKeyword',
-      ]),
-    );
-
-    res.body.forEach((kw: { keyword: string; pictures: { id: number }[] }) => {
-      expect(kw.pictures[0]).toEqual(
-        expect.objectContaining({ id: picture.id }),
-      );
-    });
   });
 
   test('DELETE /api/keywords/:id logged in admin can delete keyword', async () => {

@@ -1,6 +1,9 @@
 import { Sequelize, QueryInterface } from 'sequelize';
 import { Umzug, SequelizeStorage } from 'umzug';
+import path from 'path';
 import { pathToFileURL } from 'url';
+
+import { getMigrationGlob } from './migrationGlob.js';
 import logger from './logger.js';
 
 import {
@@ -8,20 +11,8 @@ import {
   MYSQL_USER,
   MYSQL_PASSWORD,
   DB_HOST,
+  DB_PORT,
 } from './config.js';
-
-const isTestEnv = process.env.NODE_ENV === 'test';
-const port = isTestEnv ? 3307 : 3306;
-logger.info(
-  'mysql_database:',
-  MYSQL_DATABASE,
-  'mysql_user:',
-  MYSQL_USER,
-  'db_host:',
-  DB_HOST,
-  'port:',
-  String(port),
-);
 
 export const sequelize: Sequelize = new Sequelize(
   MYSQL_DATABASE,
@@ -30,37 +21,35 @@ export const sequelize: Sequelize = new Sequelize(
   {
     host: DB_HOST,
     dialect: 'mysql',
-    port: port, // Use different port for test environment
+    port: DB_PORT,
     logging: false,
   },
 );
 
-const isDevEnv = process.env.NODE_ENV === 'development';
-const glob = isTestEnv || isDevEnv ? 'src/migrations/*.ts' : 'migrations/*.js';
+export const migrationResolve = ({
+  path: filePath,
+  context,
+}: {
+  path?: string;
+  context: QueryInterface;
+}) => {
+  if (!filePath) {
+    throw new Error('Migration path is undefined');
+  }
 
-import path from 'path';
+  const migrationPromise = import(pathToFileURL(filePath).href);
 
-const migrationConf = {
+  return {
+    name: path.basename(filePath),
+    up: async () => (await migrationPromise).up({ context }),
+    down: async () => (await migrationPromise).down({ context }),
+  };
+};
+
+export const migrationConf = {
   migrations: {
-    glob: glob,
-    resolve: ({
-      path: filePath,
-      context,
-    }: {
-      path?: string;
-      context: QueryInterface;
-    }) => {
-      if (!filePath) {
-        throw new Error('Migration path is undefined');
-      }
-      // Use dynamic import for loading migration modules
-      const migrationPromise = import(pathToFileURL(filePath).href);
-      return {
-        name: path.basename(filePath),
-        up: async () => (await migrationPromise).up({ context }),
-        down: async () => (await migrationPromise).down({ context }),
-      };
-    },
+    glob: await getMigrationGlob(),
+    resolve: migrationResolve,
   },
   context: sequelize.getQueryInterface(),
   storage: new SequelizeStorage({ sequelize, tableName: 'migrations' }),
@@ -72,7 +61,9 @@ export const runMigrations = async (): Promise<void> => {
     const migrator = new Umzug(migrationConf);
     const migrations = await migrator.up();
 
-    if (migrations.length === 0) {
+    if (migrations === undefined) {
+      logger.error('Migration undefined.');
+    } else if (migrations.length === 0) {
       logger.info('No new migrations to run. Database schema is up to date.');
     } else {
       logger.info(
@@ -93,15 +84,14 @@ export const rollbackMigration = async (): Promise<void> => {
     await sequelize.authenticate();
     const migrator = new Umzug(migrationConf);
     const migration = await migrator.down();
-
-    if (!migration) {
+    if (migration === undefined) {
+      logger.error('Migration undefined.');
+    } else if (migration.length === 0) {
       logger.info(
         'No migration was rolled back. Database is at base state or already at previous step.',
       );
-    } else if (Array.isArray(migration)) {
-      logger.info(
-        `Rolled back migrations: ${migration.map((m) => m.name).join(', ')}`,
-      );
+    } else {
+      logger.info(`Rolled back migration: ${migration[0].name}`);
     }
   } catch (error) {
     logger.error(
