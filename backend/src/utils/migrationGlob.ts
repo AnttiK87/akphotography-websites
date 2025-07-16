@@ -1,5 +1,6 @@
 // src/utils/migrationGlob.ts
 import fg from 'fast-glob';
+import { getPath } from './pathUtils.js';
 import { AppError } from '../errors/AppError.js';
 
 // check if the migration folder has migration files
@@ -8,8 +9,8 @@ export const getMigrationGlob = async (): Promise<string> => {
   const env = process.env.NODE_ENV;
   const pattern =
     env === 'test' || env === 'development'
-      ? 'src/migrations/*.ts'
-      : 'apps/ak_photography_backend/migrations/*.js';
+      ? getPath('src', 'migrations', '*.ts')
+      : getPath('apps', 'ak_photography_backend', 'migrations', '*.js');
 
   const files = await fg(pattern, { onlyFiles: true });
 
