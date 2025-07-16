@@ -2,7 +2,7 @@ module.exports = {
   apps: [
     {
       name: 'AK-photography-websites-backend',
-      script: 'apps/ak_photography_backend/index.js',
+      script: 'index.js',
       instances: 1,
       autorestart: true,
       watch: false,
