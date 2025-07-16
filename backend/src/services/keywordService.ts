@@ -68,11 +68,7 @@ export const attachKeywordsToPicture = async (
   if (keywordsToRemove.length > 0) {
     await Promise.all(
       keywordsToRemove.map((keyword) => picture.removeKeyword(keyword)),
-<<<<<<< HEAD
     ); //tämä
-=======
-    );
->>>>>>> origin/main
   }
 
   // add new/updated keywords to the picture
