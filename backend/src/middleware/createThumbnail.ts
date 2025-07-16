@@ -44,7 +44,7 @@ export const writeFileCreateThumbnail = async (
   next: NextFunction,
 ) => {
   const isTestEnv = process.env.NODE_ENV === 'test';
-  const uploadBase = isTestEnv ? './tests/uploads/' : './uploads/';
+  const uploadBase = isTestEnv ? './tests/uploads/' : './public_html/uploads/';
   const uploadFolderHightRes = path.join(uploadBase, 'pictures');
   const uploadFolderThumbnail = path.join(uploadBase, 'thumbnail');
 

@@ -53,15 +53,15 @@ jobs:
 
       - name: Copy backend files to server
         run: |
-          rsync -avz -e "ssh -i ~/.ssh/private_key" ./backend/buildBackend/ chgqkclj@akphotography.fi:public_html/
+          rsync -avz -e "ssh -i ~/.ssh/private_key" ./backend/apps/ak_photography_backend/ chgqkclj@akphotography.fi:apps/ak_photography_backend/
 
       - name: Copy backend node_modules
         run: |
-          rsync -avz -e "ssh -i ~/.ssh/private_key" ./backend/node_modules/ chgqkclj@akphotography.fi:public_html/node_modules/
+          rsync -avz -e "ssh -i ~/.ssh/private_key" ./backend/node_modules/ chgqkclj@akphotography.fi:apps/ak_photography_backend/node_modules/
 
       - name: Copy backend package.json to server
         run: |
-          rsync -avz -e "ssh -i ~/.ssh/private_key" ./backend/package.json chgqkclj@akphotography.fi:public_html/
+          rsync -avz -e "ssh -i ~/.ssh/private_key" ./backend/package.json chgqkclj@akphotography.fi:apps/ak_photography_backend/
 
       - name: Copy frontend files to server
         run: |
@@ -69,19 +69,15 @@ jobs:
 
       - name: Create .env file on server
         run: |
-          ssh -i ~/.ssh/private_key chgqkclj@akphotography.fi "echo '${{ secrets.ENV_FILE }}' > public_html/.env && chmod 600 public_html/.env"
+          ssh -i ~/.ssh/private_key chgqkclj@akphotography.fi "echo '${{ secrets.ENV_FILE }}' > apps/myapp/.env && chmod 600 apps/ak_photography_backend/.env"
 
       - name: Copy PM2 ecosystem config
         run: |
-          rsync -avz -e "ssh -i ~/.ssh/private_key" ./backend/ecosystem.config.cjs chgqkclj@akphotography.fi:public_html/
+          rsync -avz -e "ssh -i ~/.ssh/private_key" ./backend/ecosystem.config.cjs chgqkclj@akphotography.fi:apps/ak_photography_backend/
 
       - name: Restart Node.js app
         run: |
-          ssh -i ~/.ssh/private_key chgqkclj@akphotography.fi "cd public_html && pm2 restart ecosystem.config.cjs --env production || pm2 start ecosystem.config.cjs --env production"
-
-      - name: Debug server files
-        run: |
-          ssh -i ~/.ssh/private_key chgqkclj@akphotography.fi "ls -l public_html && ls -l public_html/dist"
+          ssh -i ~/.ssh/private_key chgqkclj@akphotography.fi "cd apps/ak_photography_backend && pm2 restart ecosystem.config.cjs --env production || pm2 start ecosystem.config.cjs --env production"
 
       - name: Create tag
         id: create_tag

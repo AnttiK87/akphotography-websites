@@ -9,7 +9,7 @@ export const getMigrationGlob = async (): Promise<string> => {
   const pattern =
     env === 'test' || env === 'development'
       ? 'src/migrations/*.ts'
-      : 'migrations/*.js';
+      : 'apps/ak_photography_backend/migrations/*.js';
 
   const files = await fg(pattern, { onlyFiles: true });
 
