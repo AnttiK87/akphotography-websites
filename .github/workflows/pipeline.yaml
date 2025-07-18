@@ -155,10 +155,12 @@ jobs:
           git checkout "$PREVIOUS_TAG"
 
           cd backend && npm ci && npm run build
-          cd frontend && npm ci && npm run build
+          cd ../frontend && npm ci && npm run build
 
-          rsync -avz -e "ssh -i ~/.ssh/private_key" ./backend/apps/ak_photography_backend/ chgqkclj@akphotography.fi:apps/ak_photography_backend/
-          rsync -avz -e "ssh -i ~/.ssh/private_key" ./frontend/dist/ chgqkclj@akphotography.fi:public_html/dist/
+          cd ../backend
+          rsync -avz -e "ssh -i ~/.ssh/private_key" ./apps/ak_photography_backend/ chgqkclj@akphotography.fi:apps/ak_photography_backend/
+          cd ../frontend 
+          rsync -avz -e "ssh -i ~/.ssh/private_key" ./dist/ chgqkclj@akphotography.fi:public_html/dist/
 
           ssh -i ~/.ssh/private_key chgqkclj@akphotography.fi "cd apps/ak_photography_backend && pm2 restart ecosystem.config.cjs --env production"
 
