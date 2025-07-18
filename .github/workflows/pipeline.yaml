@@ -42,7 +42,7 @@ jobs:
 
       - name: Remove old frontend dist folder from server
         run: |
-          ssh -i ~/.ssh/private_key chgqkclj@akphotography.fi "rm -rf public_html/dist"
+          ssh -i ~/.ssh/private_key chgqkclj@akphotography.fi 'if [ -d "public_html/dist" ]; then rm -rf public_html/dist; fi'
 
       - name: Copy backend files to server
         run: |
