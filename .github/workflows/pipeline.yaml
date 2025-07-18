@@ -157,6 +157,9 @@ jobs:
           cd backend && npm ci && npm run build
           cd ../frontend && npm ci && npm run build
 
+          ls -la
+          ls -la backend
+          ls -la frontend
           cd ../backend
           rsync -avz -e "ssh -i ~/.ssh/private_key" apps/ak_photography_backend/ chgqkclj@akphotography.fi:apps/ak_photography_backend/
           cd ../frontend 
