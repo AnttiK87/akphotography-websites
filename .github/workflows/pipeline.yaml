@@ -31,7 +31,7 @@ jobs:
         run: cd backend && npm run test:all
 
       - name: Install frontend dependencies
-        run: cd fronte && npm ci
+        run: cd frontend && npm ci
 
       - name: Run linter for frontend
         run: cd frontend && npm run lint
@@ -59,7 +59,7 @@ jobs:
 
       - name: Copy backend files to server
         run: |
-          rsync -avz -e "ssh -i ~/.ssh/private_key" ./backend/apps/ak_photography_backend/ chgqkclj@akphotography.fi:app/ak_photography_backend/
+          rsync -avz -e "ssh -i ~/.ssh/private_key" ./backend/apps/ak_photography_bac/ chgqkclj@akphotography.fi:app/ak_photography_backend/
 
       - name: Copy backend node_modules
         run: |
