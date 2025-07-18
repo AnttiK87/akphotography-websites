@@ -10,6 +10,7 @@ The project is organized into two main directories:
 The backend of the application, which serves as the API for the frontend.
 Built with Node.js, Express, and Sequelize for database interactions.
 The backend is written in TypeScript to ensure static type safety, improve code quality, and reduce runtime errors.
+Test for the backend are carried out by using jest test framework
 
 /frontend:  
 The frontend of the application, built with React and Vite. This serves the user interface for commonusers and andmin user for browsing, uploading, and managing photos.
@@ -23,7 +24,7 @@ The GitHub Actions workflow automates the following steps:
 
 Build the Frontend: The frontend is built using Vite.
 
-Build the Backend: The backend is built and prepared for deployment.
+Build the Backend: The backend is tested, built and prepared for deployment.
 
 Deploy to Web Hosting Server: The application is deployed directly to the web hosting server.
 
@@ -33,7 +34,7 @@ This deployment pipeline ensures that updates to the project are automatically p
 
 Frontend: React, Redux, Axios, Vite
 
-Backend: Node.js, Express, Sequelize (MySQL), JWT, Multer, Sharp, Nodemailer
+Backend: Node.js, Express, Sequelize (MySQL), JWT, Multer, Sharp, Nodemailer, Jest
 
 Other: Docker (for development environment), ESLint/Prettier (for code quality)
 
