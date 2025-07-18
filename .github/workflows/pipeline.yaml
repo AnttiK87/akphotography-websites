@@ -12,6 +12,8 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    outputs:
+      deployment_started: ${{ steps.set_deployment_started.outputs.deployment_started }}
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -29,7 +31,7 @@ jobs:
         run: cd backend && npm run test:all
 
       - name: Install frontend dependencies
-        run: cd frontend && npm ci
+        run: cd fronte && npm ci
 
       - name: Run linter for frontend
         run: cd frontend && npm run lint
@@ -39,6 +41,10 @@ jobs:
 
       - name: Build project frontend
         run: cd frontend && npm run build
+
+      - name: Mark deployment started
+        id: set_deployment_started
+        run: echo "deployment_started=true" >> $GITHUB_OUTPUT
 
       - name: Prepare SSH key and known_hosts for deploy
         run: |
@@ -117,7 +123,7 @@ jobs:
 
   rollback:
     needs: deploy
-    if: failure() && needs.deploy.result == 'failure'
+    if: failure() && needs.deploy.outputs.deployment_started == 'true'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
@@ -136,7 +142,7 @@ jobs:
         run: |
           echo "Rolling back..."
           git fetch --tags
-          PREVIOUS_TAG=$(git tag --sort=-creatordate | grep '^v' | sed -n 2p)
+          PREVIOUS_TAG=$(git tag --sort=-creatordate | grep '^v' | sed -n 1p)
 
           if [ -z "$PREVIOUS_TAG" ]; then
             echo "No previous tag found — cannot rollback."
