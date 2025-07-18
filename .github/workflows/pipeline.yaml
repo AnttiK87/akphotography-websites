@@ -59,7 +59,7 @@ jobs:
 
       - name: Copy backend files to server
         run: |
-          rsync -avz -e "ssh -i ~/.ssh/private_key" ./backend/apps/ak_photography_backend/ chgqkclj@akphotography.fi:app/ak_photography_backend/
+          rsync -avz -e "ssh -i ~/.ssh/private_key" ./backend/apps/ak_photography_backend/ chgqkclj@akphotography.fi:apps/ak_photography_backend/
 
       - name: Copy backend node_modules
         run: |
