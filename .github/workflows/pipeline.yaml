@@ -10,7 +10,7 @@ on:
       - "**"
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
@@ -39,68 +39,6 @@ jobs:
 
       - name: Build project frontend
         run: cd frontend && npm run build
-
-      - name: Save backend build
-        uses: actions/upload-artifact@v4
-        with:
-          name: backend-build
-          path: backend/apps/ak_photography_backend
-
-      - name: Save backend node_modules
-        uses: actions/upload-artifact@v4
-        with:
-          name: backend-node_modules
-          path: backend/node_modules
-
-      - name: Save backend package.json
-        uses: actions/upload-artifact@v4
-        with:
-          name: backend-package-json
-          path: backend/package.json
-
-      - name: Save frontend build
-        uses: actions/upload-artifact@v4
-        with:
-          name: frontend-build
-          path: frontend/dist
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
-
-      - name: Download backend build
-        uses: actions/download-artifact@v4
-        with:
-          name: backend-build
-          path: backend/apps/ak_photography_backend
-
-      - name: Download backend node_modules
-        uses: actions/download-artifact@v4
-        with:
-          name: backend-node_modules
-          path: backend/node_modules
-
-      - name: Download backend package.json
-        uses: actions/download-artifact@v4
-        with:
-          name: backend-package-json
-          path: backend/package.json
-
-      - name: Download frontend build
-        uses: actions/download-artifact@v4
-        with:
-          name: frontend-build
-          path: frontend/dist
-
-      - name: Prepare SSH key and known_hosts for deploy
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/private_key
-          chmod 600 ~/.ssh/private_key
-          ssh-keyscan akphotography.fi >> ~/.ssh/known_hosts
 
       - name: Remove old frontend dist folder from server
         run: |
