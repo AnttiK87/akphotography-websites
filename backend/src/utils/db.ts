@@ -59,6 +59,7 @@ export const migrationConf = {
 export const runMigrations = async (): Promise<void> => {
   try {
     const migrator = new Umzug(migrationConf);
+
     const migrations = await migrator.up();
 
     if (migrations === undefined) {

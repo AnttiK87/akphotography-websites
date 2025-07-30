@@ -61,6 +61,9 @@ router.post(
     }
 
     await picture.save();
+    await picture.reload({
+      include: PicIncludeAll,
+    });
     res.json({ message: 'New picture added!', picture });
   },
 );
@@ -82,6 +85,7 @@ router.put(
     await req.picture.reload({
       include: PicIncludeAll,
     });
+
     res.json({ message: 'Picture updated!', picture: req.picture });
   },
 );
@@ -90,7 +94,6 @@ router.put(
 // route for getting all pictures with all data
 router.get('/allData', async (req: Request, res: Response) => {
   const { where, order } = pictureQueryOptions(req.query);
-
   // fetching all pictures from db
   // extended with data from tables Text, Keyword, Comment, Reply and Rating
   const pictures = await Picture.findAll({
@@ -99,7 +102,6 @@ router.get('/allData', async (req: Request, res: Response) => {
     where,
     order,
   });
-
   res.json(pictures);
 });
 
@@ -166,9 +168,11 @@ router.delete(
   pictureFinder,
   async (req: Request, res: Response) => {
     const picture: Picture = req.picture;
+    const isDevEnv = process.env.NODE_ENV === 'development';
+    const pathExtension = isDevEnv ? 'backend/public_html/' : 'public_html/';
 
-    const filePath = getPath(picture.url);
-    const thumbnailPath = getPath(picture.urlThumbnail || '');
+    const filePath = getPath(pathExtension, picture.url);
+    const thumbnailPath = getPath(pathExtension, picture.urlThumbnail || '');
 
     deleteFile(filePath);
     if (picture.urlThumbnail != null) {

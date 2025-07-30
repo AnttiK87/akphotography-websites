@@ -114,7 +114,7 @@ export const handleRatingChange = async (
   if (existing) {
     if (rating === 0) {
       await existing.destroy();
-      res.status(200).json({ message: 'Rating deleted', id: existing.id });
+      res.status(200).json({ message: 'Rating deleted', rating: existing });
       return;
     } else {
       const updated = await existing.update({ rating });
