@@ -349,7 +349,7 @@ describe('Picture routes', () => {
     expect(res.body.message).toBe('New picture added!');
     expect(res.body.picture).toHaveProperty('id');
     expect(res.body.picture.type).toBe('birds');
-    expect(res.body.picture.textId).toBe(undefined);
+    expect(res.body.picture.textId).toBe(null);
   });
 
   test('DELETE /api/pictures/:id deletes picture', async () => {

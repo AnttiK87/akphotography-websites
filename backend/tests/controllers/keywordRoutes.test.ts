@@ -93,7 +93,7 @@ describe('Keyword routes', () => {
     const keywords = await picture.getKeywords();
 
     const res = await request(app)
-      .put(`/api/keywords/update/${keywords[1].id}`)
+      .put(`/api/keywords/update/${keywords[2].id}`)
       .set('Authorization', `Bearer ${token}`)
       .send({
         keyword: 'keywordWasUpdated',
@@ -107,7 +107,7 @@ describe('Keyword routes', () => {
     const keywords = await picture.getKeywords();
 
     const res = await request(app)
-      .delete(`/api/keywords/${keywords[2].id}`)
+      .delete(`/api/keywords/${keywords[0].id}`)
       .set('Authorization', `Bearer ${token}`)
       .expect(200);
 
