@@ -469,7 +469,7 @@ describe('Picture routes', () => {
         path.resolve(__dirname, '../fixtures/test-text-file.txt'),
       )
       .catch((err) => {
-        console.log('error: ', err);
+        console.warn('error: ', err);
         expect(err.code).toBe(undefined);
       });
   });
