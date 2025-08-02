@@ -24,12 +24,17 @@ app.use(cors());
 app.use(express.json());
 
 const isProduction = process.env.NODE_ENV === 'production';
+const isTest = process.env.NODE_ENV === 'test';
 const uploadsPath = isProduction
   ? 'public_html/uploads'
-  : 'backend/public_html/uploads';
+  : isTest
+    ? 'uploads'
+    : 'backend/public_html/uploads';
 const distPath = isProduction
   ? 'public_html/dist'
-  : 'backend/public_html//dist';
+  : isTest
+    ? '../public_html/dist'
+    : 'backend/public_html/dist';
 
 app.use('/uploads', express.static(getPath(uploadsPath)));
 

@@ -46,8 +46,8 @@ router.put(
   async (req: Request<object, object, passwordChangeInput>, res: Response) => {
     const updatedUser = await req.user.save();
     res.status(200).json({
-      messageEn: 'User info edited!',
-      messageFi: 'Käyttäjän tietoja muokattu!',
+      messageFi: 'Salasana vaihdettu!',
+      messageEn: 'Password changed!',
       user: {
         id: updatedUser.id,
         name: updatedUser.name,
