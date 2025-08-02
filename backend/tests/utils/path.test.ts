@@ -24,7 +24,7 @@ describe('getPath', () => {
     const result = getPath('some', '/public_html/uploads');
 
     expect(path.normalize(result)).toContain(
-      path.normalize('some/public_html/some/uploads'),
+      path.normalize('some/public_html/uploads'),
     );
   });
 });
