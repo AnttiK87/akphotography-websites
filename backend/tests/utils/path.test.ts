@@ -1,4 +1,5 @@
 import { getPath } from '../../src/utils/pathUtils.js';
+import path from 'path';
 
 describe('getPath', () => {
   const originalEnv = process.env.NODE_ENV;
@@ -12,7 +13,9 @@ describe('getPath', () => {
 
     const result = getPath('some', 'path');
 
-    expect(result).toContain('backend\\tests\\some\\path');
+    expect(path.normalize(result)).toContain(
+      path.normalize('backend/tests/some/path'),
+    );
   });
 
   test('returns path with normal root when NODE_ENV is production', () => {
@@ -20,6 +23,8 @@ describe('getPath', () => {
 
     const result = getPath('some', '/public_html/uploads');
 
-    expect(result).toContain('some\\public_html\\uploads');
+    expect(path.normalize(result)).toContain(
+      path.normalize('some/public_html/some/uploads'),
+    );
   });
 });

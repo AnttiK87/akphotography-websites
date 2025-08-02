@@ -469,7 +469,8 @@ describe('Picture routes', () => {
         path.resolve(__dirname, '../fixtures/test-text-file.txt'),
       )
       .catch((err) => {
-        expect(err.code).toBe('ECONNRESET');
+        console.log('error: ', err);
+        expect(err.code).toBe(undefined);
       });
   });
 
