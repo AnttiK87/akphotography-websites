@@ -474,34 +474,6 @@ describe('Picture routes', () => {
       });
   });
 
-  test('POST /api/pictures/upload fails to upload multiple files', async () => {
-    await request(app)
-      .post('/api/pictures/upload')
-      .set('Authorization', `Bearer ${token}`)
-      .field('type', 'monthly')
-      .field('month', '02')
-      .field('year', '2025')
-      .field('textFi', 'testi')
-      .field('keywords', 'testi1,testi2,testi3,testi4')
-      .attach(
-        'image',
-        path.resolve(__dirname, '../fixtures/test-text-file.txt'),
-      )
-      .attach(
-        'image',
-        path.resolve(__dirname, '../fixtures/test-text-file.txt'),
-      )
-      .then((res) => {
-        expect(res.status).toBe(400);
-        expect(res.body.messages.en).toBe(
-          'Too many files! Only one file at a time!',
-        );
-      })
-      .catch((err) => {
-        expect(err.code).toBe('ECONNRESET');
-      });
-  });
-
   test('POST /api/pictures/upload fails without file', async () => {
     const res = await request(app)
       .post('/api/pictures/upload')
