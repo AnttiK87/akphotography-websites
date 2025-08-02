@@ -65,6 +65,8 @@
 .lightBoxImgContainer.mobile {
   max-width: 100% !important;
   max-height: 100% !important;
+  touch-action: none;
+  -ms-touch-action: none;
 }
 
 .lightBoxImg {

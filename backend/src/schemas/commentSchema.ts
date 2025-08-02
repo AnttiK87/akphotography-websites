@@ -27,5 +27,4 @@ export const replyUpdateSchema = z.object({
   username: z.string(),
   reply: z.string(),
   userId: z.string(),
-  commentId: z.number(),
 });

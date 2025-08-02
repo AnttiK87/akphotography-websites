@@ -48,7 +48,8 @@ export const handlePictureUpdates = async (
 
   const typeChanged = picture.type !== type;
   const monthYearChanged = picture.monthYear !== newMonthYear;
-  const keywordsChanged = keywords !== null;
+
+  const keywordsChanged = keywords != null;
 
   const noChanges =
     !textChanged && !typeChanged && !monthYearChanged && !keywordsChanged;
@@ -114,7 +115,7 @@ export const handleRatingChange = async (
   if (existing) {
     if (rating === 0) {
       await existing.destroy();
-      res.status(200).json({ message: 'Rating deleted', id: existing.id });
+      res.status(200).json({ message: 'Rating deleted', rating: existing });
       return;
     } else {
       const updated = await existing.update({ rating });

@@ -16,9 +16,8 @@ import { getReplyById } from '../services/replyService.js';
 
 import { ReplyInput } from '../types/types.js';
 
-import models from '../models/index.js';
+import Reply from '../models/reply.js';
 import { verifyToken } from '../middleware/tokenExtractor.js';
-const { Reply } = models;
 
 const router = express.Router();
 
@@ -101,11 +100,15 @@ router.put(
   validateOwner('reply'),
   replyChangeHandler,
   async (req: Request<object, object, ReplyInput>, res: Response) => {
+    const updatedReply: Reply = req.reply;
+    await updatedReply.save();
     await req.reply.save();
+
+    const replyWithComment = await getReplyById(updatedReply.id);
     res.json({
       messageEn: 'Reply updated!',
       messageFi: 'Vastaus päivitetty!',
-      reply: req.reply,
+      reply: replyWithComment,
     });
   },
 );

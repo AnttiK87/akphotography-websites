@@ -35,6 +35,7 @@ export const verifyToken = async (
   }
 
   const token = authorization.substring(7);
+
   const session = await getSessionByToken(token);
 
   if (!session) {

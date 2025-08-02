@@ -31,6 +31,7 @@ router.post(
 
     res.status(200).send({
       token,
+      id: user.id,
       username: user.username,
       name: user.name,
       email: user.email,

@@ -59,8 +59,9 @@ ul {
 }
 
 .commentButtons {
-  gap: 1em;
   margin: 1em 0;
+  display: flex;
+  justify-content: flex-end;
 }
 
 .form__group.input {

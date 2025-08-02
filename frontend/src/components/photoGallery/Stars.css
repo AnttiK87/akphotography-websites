@@ -22,21 +22,25 @@
   font-weight: 400;
 }
 
-.star.rated:hover::before,
-.star:hover::before,
-.star:hover ~ .star::before {
+.desktop.star.rated:hover::before,
+.desktop.star:hover::before,
+.desktop.star:hover ~ .desktop.star::before {
   content: "\f005";
   font-family: "Font Awesome 6 Free";
   font-weight: 900;
   color: gold;
 }
 
-.mobile.star.rated:hover::before,
-.mobile.star:hover::before,
-.mobile.star:hover ~ .mobile.star::before {
+.mobile.star.rated::before,
+.mobile.star::before,
+.mobile.star ~ .mobile.star::before {
   content: "\f006";
   font-family: "Font Awesome 6 Free";
   font-weight: 400;
+}
+
+.mobile.star {
+  color: white;
 }
 
 .star.rated::before {

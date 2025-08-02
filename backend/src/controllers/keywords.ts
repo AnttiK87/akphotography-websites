@@ -1,4 +1,5 @@
 import express, { Request, Response } from 'express';
+import { Op } from 'sequelize';
 
 import { KeywordInput } from '../types/types.js';
 import Keyword from '../models/keyword.js';
@@ -34,6 +35,35 @@ router.put(
   validateIsAdmin,
   async (req: Request<object, object, KeywordInput>, res: Response) => {
     const keyword: Keyword = req.keyword;
+    const newKeywordValue = req.body.keyword.trim();
+
+    // check if keyword already exist with new value
+    const existingKeyword = await Keyword.findOne({
+      where: {
+        keyword: newKeywordValue,
+        id: { [Op.ne]: keyword.id },
+      },
+    });
+
+    if (existingKeyword) {
+      // transfer picture relations from edited key word to existing keyword
+      const pictures = await keyword.getPictures();
+      await existingKeyword.addPictures(pictures);
+
+      // delete duplicate keyword
+      await keyword.destroy();
+
+      // return combined keyword
+      const updatedKeyword = await reloadKeywordWithPictures(existingKeyword);
+
+      res.json({
+        messageEn: 'Keyword merged with existing!',
+        messageFi: 'Avainsana yhdistetty olemassa olevaan!',
+        keyword: updatedKeyword,
+      });
+      return;
+    }
+
     // save updated keyword
     keyword.keyword = req.body.keyword;
     await keyword.save();
