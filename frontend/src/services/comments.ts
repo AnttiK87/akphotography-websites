@@ -10,7 +10,6 @@ import type {
 } from "../types/commentTypes";
 
 const baseUrl: string = "/api/comments";
-const token: string | undefined = loginService.getToken();
 
 const getAll = async (id: number): Promise<Comment[]> => {
   const response = await axios.get<Comment[]>(`${baseUrl}?search=${id}`);
@@ -39,6 +38,7 @@ const update = async (content: UpdateComment): Promise<CommentResponse> => {
 const remove = async (
   content: DeleteComment
 ): Promise<DeleteResponseDualLang> => {
+  const token: string | undefined = loginService.getToken();
   const config = token
     ? {
         headers: { Authorization: token },

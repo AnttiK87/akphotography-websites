@@ -66,6 +66,9 @@ export const editKeyword = (
   return async (dispatch: AppDispatch) => {
     try {
       const updatedKeyword = await keywordService.update(content);
+      if (updatedKeyword.keyword.id != content.keywordId) {
+        dispatch(deleteKeyword(content));
+      }
       dispatch(updateKeyword(updatedKeyword.keyword));
 
       dispatch(

@@ -31,7 +31,7 @@ import "./HandlePicture.css";
 
 import type { Category } from "../../types/types.js";
 import type { PictureDetails } from "../../types/pictureTypes.js";
-import { typeCheck } from "../../utils/isValidType.js";
+import { categoryCheck } from "../../utils/isValidType.js";
 
 const HandlePictures = () => {
   const { user } = useNotLoggedin();
@@ -142,7 +142,13 @@ const HandlePictures = () => {
                 name="type"
                 required
                 value={selectedType}
-                onChange={(e) => setSelectedType(typeCheck(e.target.value))}
+                onChange={(e) =>
+                  setSelectedType(
+                    categoryCheck(
+                      e.target.value === "" ? undefined : e.target.value
+                    )
+                  )
+                }
               >
                 <option value="">All</option>
                 <option value="nature">Nature</option>

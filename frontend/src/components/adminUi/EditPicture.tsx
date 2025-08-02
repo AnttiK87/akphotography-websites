@@ -201,7 +201,7 @@ const EditPicture = ({ show, setShow, picture }: EditPictureProps) => {
         : (form.elements.namedItem("textEn") as HTMLInputElement)?.value;
 
     const newKeywordsSet = areKeywordsEqual(keywordArray, initialKeywords)
-      ? []
+      ? null
       : keywordArray;
 
     const formData = {

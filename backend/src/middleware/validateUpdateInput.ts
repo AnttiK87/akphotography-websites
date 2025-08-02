@@ -48,7 +48,8 @@ export const handlePictureUpdates = async (
 
   const typeChanged = picture.type !== type;
   const monthYearChanged = picture.monthYear !== newMonthYear;
-  const keywordsChanged = keywords !== null;
+
+  const keywordsChanged = keywords != null;
 
   const noChanges =
     !textChanged && !typeChanged && !monthYearChanged && !keywordsChanged;
