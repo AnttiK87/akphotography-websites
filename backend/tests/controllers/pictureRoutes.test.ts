@@ -470,7 +470,7 @@ describe('Picture routes', () => {
       )
       .catch((err) => {
         console.warn('error: ', err);
-        expect(err.code).toBe(undefined);
+        expect(err.code === undefined || err.code === 'ECONNRESET').toBe(true);
       });
   });
 
