@@ -87,6 +87,10 @@ export const handlePictureUpdates = async (
   // Type
   if (typeChanged) {
     picture.type = type;
+    const maxOrder: number = await Picture.max('order', {
+      where: { type: type },
+    });
+    picture.order = maxOrder + 1;
   }
 
   // MonthYear

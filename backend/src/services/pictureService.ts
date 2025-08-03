@@ -39,6 +39,7 @@ export const createPicture = async ({
   height,
   type,
   thumbnailFilename,
+  order,
 }: CreatePicture) => {
   return await Picture.create({
     fileName: filename,
@@ -47,5 +48,6 @@ export const createPicture = async ({
     type,
     width,
     height,
+    order,
   });
 };

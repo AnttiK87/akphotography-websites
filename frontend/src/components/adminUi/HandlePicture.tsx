@@ -21,6 +21,7 @@ import {
 
 import EditPicture from "./EditPicture.js";
 import StarRating from "./StarsAdmin.js";
+import OrderChange from "./OrderChange.js";
 
 import useNotLoggedin from "../../hooks/useNotLoggedin.js";
 import NotLoggedin from "./NotLoggedin.js";
@@ -110,6 +111,16 @@ const HandlePictures = () => {
     }
   });
 
+  const showOrder = selectedType !== undefined && selectedType !== "monthly";
+  const maxOrder =
+    selectedType != undefined && sortedPictures.length != 0
+      ? Math.max(
+          ...sortedPictures
+            .filter((pic) => pic.type === selectedType && pic.order !== null)
+            .map((pic) => pic.order as number)
+        )
+      : null;
+
   const deletePicture = (pictureId: number) => {
     if (window.confirm(`Do you really want to delete this picture?`)) {
       dispatch(removePicture(pictureId, navigate));
@@ -173,6 +184,7 @@ const HandlePictures = () => {
         <Table className="tableHP" responsive="lg" striped>
           <thead>
             <tr>
+              {showOrder && <th className="pictureHP">Order</th>}
               <th className="pictureHP">Picture</th>
               <th className="indexHP">#</th>
               <th
@@ -245,6 +257,11 @@ const HandlePictures = () => {
             <tbody>
               {sortedPictures.map((picture) => (
                 <tr key={picture.id}>
+                  {showOrder && (
+                    <td className="vertical-center indexHP">
+                      <OrderChange picture={picture} maxOrder={maxOrder} />
+                    </td>
+                  )}
                   <td className="vertical-center">
                     <img className="listItemImg" src={picture.urlThumbnail} />
                   </td>

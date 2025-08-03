@@ -18,6 +18,7 @@ export const pictureQueryOptions = (
   } else {
     order = [
       ['type', 'DESC'],
+      ['order', 'DESC'],
       ['uploadedAt', 'DESC'],
     ];
   }

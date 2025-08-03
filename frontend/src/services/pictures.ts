@@ -8,10 +8,10 @@ import type {
   UpdatePicture,
   UpdatePictureResponse,
   PicturesAddViewResponse,
+  PictureOrder,
 } from "../types/pictureTypes";
 
 const baseUrl = "/api/pictures/";
-const token: string | undefined = loginService.getToken();
 
 const getAllData = async (
   category: Category
@@ -83,6 +83,32 @@ const update = async (
   return response.data;
 };
 
+const moveUp = async (pictureId: number): Promise<PictureOrder> => {
+  const token = loginService.getToken();
+  const config = {
+    headers: { Authorization: token },
+  };
+  const response = await axios.put<PictureOrder>(
+    `${baseUrl}orderUp/${pictureId}`,
+    {},
+    config
+  );
+  return response.data;
+};
+
+const moveDown = async (pictureId: number): Promise<PictureOrder> => {
+  const token = loginService.getToken();
+  const config = {
+    headers: { Authorization: token },
+  };
+  const response = await axios.put<PictureOrder>(
+    `${baseUrl}orderDown/${pictureId}`,
+    {},
+    config
+  );
+  return response.data;
+};
+
 const addView = async (pictureId: number): Promise<PicturesAddViewResponse> => {
   const response = await axios.put<PicturesAddViewResponse>(
     `${baseUrl}addView/${pictureId}`
@@ -91,6 +117,7 @@ const addView = async (pictureId: number): Promise<PicturesAddViewResponse> => {
 };
 
 const remove = async (pictureId: number): Promise<DeleteResponse> => {
+  const token = loginService.getToken();
   const config = {
     headers: { Authorization: token },
   };
@@ -109,4 +136,6 @@ export default {
   getPicturesByCategory,
   getCategoryLatest,
   addView,
+  moveUp,
+  moveDown,
 };

@@ -29,6 +29,7 @@ class Picture extends Model<
   declare textId: number | null;
   declare viewCount: CreationOptional<number>;
   declare keywords?: Keyword[];
+  declare order: CreationOptional<number>;
 
   // Assosiations
   declare getKeywords: HasManyGetAssociationsMixin<Keyword>;
@@ -97,6 +98,11 @@ Picture.init(
       onDelete: 'CASCADE',
     },
     viewCount: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      defaultValue: 0,
+    },
+    order: {
       type: DataTypes.INTEGER,
       allowNull: true,
       defaultValue: 0,

@@ -13,6 +13,7 @@ import type {
   PictureDetails,
   PicturesBasic,
   UpdatePicture,
+  PictureOrder,
 } from "../types/pictureTypes";
 
 const initialState: PictureState = {
@@ -59,6 +60,20 @@ const pictureSlice = createSlice({
         picture.id === updatedPicture.id ? updatedPicture : picture
       );
     },
+    editOrder(state, action: PayloadAction<PictureOrder>) {
+      const updatedPicture1 = action.payload.picture1;
+      const updatedPicture2 = action.payload.picture2;
+      state.allPictures = state.allPictures
+        .map((picture) =>
+          picture.id === updatedPicture1.id ? updatedPicture1 : picture
+        )
+        .map((picture) =>
+          updatedPicture2 && picture.id === updatedPicture2.id
+            ? updatedPicture2
+            : picture
+        )
+        .sort((a, b) => b.order - a.order);
+    },
     deletePicture(state, action: PayloadAction<number>) {
       state.allPictures = state.allPictures.filter(
         (picture) => picture.id !== action.payload
@@ -80,6 +95,7 @@ export const {
   setLandscapes,
   setLatestCategoryPictures,
   updatePicture,
+  editOrder,
   deletePicture,
 } = pictureSlice.actions;
 
@@ -205,6 +221,56 @@ export const removePicture = (
       if (error.response && error.response.status === 404) {
         dispatch(deletePicture(pictureId));
       }
+    }
+  };
+};
+
+export const movePictureUp = (
+  pictureId: number,
+  navigate: NavigateFunction
+) => {
+  return async (dispatch: AppDispatch) => {
+    try {
+      const pictureMovedUp = await pictureService.moveUp(pictureId);
+      dispatch(editOrder(pictureMovedUp));
+
+      dispatch(
+        showMessage(
+          {
+            text: pictureMovedUp.message,
+            type: "success",
+          },
+          1
+        )
+      );
+    } catch (err: unknown) {
+      const error = err as AxiosError;
+      handleError(error, dispatch, navigate);
+    }
+  };
+};
+
+export const movePictureDown = (
+  pictureId: number,
+  navigate: NavigateFunction
+) => {
+  return async (dispatch: AppDispatch) => {
+    try {
+      const pictureMovedDown = await pictureService.moveDown(pictureId);
+      dispatch(editOrder(pictureMovedDown));
+
+      dispatch(
+        showMessage(
+          {
+            text: pictureMovedDown.message,
+            type: "success",
+          },
+          1
+        )
+      );
+    } catch (err: unknown) {
+      const error = err as AxiosError;
+      handleError(error, dispatch, navigate);
     }
   };
 };

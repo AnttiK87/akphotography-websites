@@ -28,23 +28,4 @@ export default defineConfig({
       },
     },
   },
-  build: {
-    rollupOptions: {
-      output: {
-        manualChunks(id) {
-          if (id.includes("node_modules")) {
-            if (id.includes("@mui")) return "mui";
-            if (id.includes("fontawesome")) return "fontawesome";
-            if (id.includes("react-slick") || id.includes("slick-carousel"))
-              return "slick";
-            if (id.includes("react-photo-album")) return "photoalbum";
-            if (id.includes("framer-motion")) return "motion";
-            if (id.includes("redux") || id.includes("@reduxjs")) return "redux";
-            if (id.includes("react")) return "react";
-            return "vendor";
-          }
-        },
-      },
-    },
-  },
 });
