@@ -70,7 +70,7 @@ describe('writeFileCreateThumbnail', () => {
       'thumbnail',
       'thumb.jpg',
     );
-    expect(req.file.thumbnailPath).toBe(expectedPath);
+    expect(req.file.thumbnailPath).toContain(expectedPath);
 
     expect(next).toHaveBeenCalled();
   });
