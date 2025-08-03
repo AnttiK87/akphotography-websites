@@ -3,6 +3,7 @@ import { Request, Response, NextFunction } from 'express';
 import path from 'path';
 import fs from 'fs/promises';
 import fsSync from 'fs';
+import { getPath } from '../utils/pathUtils.js';
 
 import { handlePictureResize } from '../services/imageService.js';
 import logger from '../utils/logger.js';
@@ -44,9 +45,14 @@ export const writeFileCreateThumbnail = async (
   next: NextFunction,
 ) => {
   const isTestEnv = process.env.NODE_ENV === 'test';
-  const uploadBase = isTestEnv ? './tests/uploads/' : './public_html/uploads/';
-  const uploadFolderHightRes = path.join(uploadBase, 'pictures');
-  const uploadFolderThumbnail = path.join(uploadBase, 'thumbnail');
+  const isDevEnv = process.env.NODE_ENV === 'development';
+  const uploadBase = isTestEnv
+    ? './tests/uploads/'
+    : isDevEnv
+      ? '/backend/public_html/uploads/'
+      : '/public_html/uploads/';
+  const uploadFolderHightRes = getPath(uploadBase, 'pictures');
+  const uploadFolderThumbnail = getPath(uploadBase, 'thumbnail');
 
   // create folders if they don't exist
   ensureFolders(uploadFolderHightRes, uploadFolderThumbnail);

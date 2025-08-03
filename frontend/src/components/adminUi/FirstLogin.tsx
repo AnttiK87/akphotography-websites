@@ -44,20 +44,11 @@ const FirstLogin = () => {
   ) => {
     event.preventDefault();
 
-    const form = event.currentTarget;
-    const nameValue = (form.elements.namedItem("name") as HTMLInputElement)
-      ?.value;
-    const usernameValue = (
-      form.elements.namedItem("username") as HTMLInputElement
-    )?.value;
-    const emailValue = (form.elements.namedItem("email") as HTMLInputElement)
-      ?.value;
-    const newPasswordValue1 = (
-      form.elements.namedItem("newpassword1") as HTMLInputElement
-    )?.value;
-    const newPasswordValue2 = (
-      form.elements.namedItem("newpassword2") as HTMLInputElement
-    )?.value;
+    const nameValue = name;
+    const usernameValue = username;
+    const emailValue = email;
+    const newPasswordValue1 = newPassword1;
+    const newPasswordValue2 = newPassword2;
 
     const formData = {
       name: nameValue,
