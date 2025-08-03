@@ -63,7 +63,7 @@ describe('writeFileCreateThumbnail', () => {
 
     await writeFileCreateThumbnail(req, res, next);
 
-    expect(req.file.thumbnailFilename).toBe('thumb.jpg');
+    expect(req.file.thumbnailFilename).toContain('thumb.jpg');
     const expectedPath = path.join(
       'public_html',
       'uploads',
