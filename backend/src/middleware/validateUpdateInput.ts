@@ -86,11 +86,27 @@ export const handlePictureUpdates = async (
 
   // Type
   if (typeChanged) {
+    const oldType = picture.type;
     picture.type = type;
+
     const maxOrder: number = await Picture.max('order', {
       where: { type: type },
     });
-    picture.order = maxOrder + 1;
+
+    picture.order = (maxOrder || 0) + 1;
+
+    await picture.save();
+    const oldTypePictures = await Picture.findAll({
+      where: { type: oldType },
+      order: [['order', 'ASC']],
+    });
+
+    for (let i = 0; i < oldTypePictures.length; i++) {
+      if (oldTypePictures[i].order !== i + 1) {
+        oldTypePictures[i].order = i + 1;
+        await oldTypePictures[i].save();
+      }
+    }
   }
 
   // MonthYear

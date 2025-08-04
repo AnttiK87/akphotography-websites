@@ -45,7 +45,7 @@ router.post(
         where: { type: type },
       });
 
-      order = maxOrder;
+      order = maxOrder + 1;
     }
 
     const picture = await createPicture({
@@ -180,27 +180,38 @@ router.put(
   async (req: Request, res: Response) => {
     const picture: Picture = req.picture;
 
+    if (picture.type === 'monthly') {
+      res.status(400).json({
+        error: 'Change month and year if you want to reorder monthly pictures!',
+      });
+      return;
+    }
+
     const transaction = await sequelize.transaction();
     let newOrder: number;
-    if (picture.order === null) {
+
+    if (picture.order === null || picture.order === 0) {
       const maxOrder: number = await Picture.max('order', {
         where: { type: picture.type },
         transaction,
       });
 
       newOrder = (maxOrder ?? 0) + 1;
+
       picture.order = newOrder;
-      await picture.save({ transaction });
+
+      await picture.save();
 
       const updatedPicture = await Picture.findByPk(picture.id, {
         include: picIncludeBasic,
       });
 
       res.json({
-        picture: updatedPicture,
-        pictureBefore: null,
+        picture1: updatedPicture,
+        picture2: null,
         message: 'Order updated!',
       });
+      return;
     } else {
       newOrder = picture.order + 1;
     }
@@ -222,7 +233,8 @@ router.put(
     picture.order = newOrder;
     await picture.save({ transaction });
 
-    pictureBefore.order = pictureBefore.order - 1;
+    pictureBefore.order =
+      pictureBefore.order != null ? pictureBefore.order - 1 : null;
     await pictureBefore.save({ transaction });
 
     await transaction.commit();
@@ -253,6 +265,13 @@ router.put(
   pictureFinder,
   async (req: Request, res: Response) => {
     const picture: Picture = req.picture;
+
+    if (picture.type === 'monthly') {
+      res.status(400).json({
+        error: 'Change month and year if you want to reorder monthly pictures!',
+      });
+      return;
+    }
 
     const transaction = await sequelize.transaction();
 
@@ -297,7 +316,8 @@ router.put(
     picture.order = newOrder;
     await picture.save({ transaction });
 
-    pictureAfter.order = pictureAfter.order + 1;
+    pictureAfter.order =
+      pictureAfter.order != null ? pictureAfter.order + 1 : null;
     await pictureAfter.save({ transaction });
 
     await transaction.commit();
