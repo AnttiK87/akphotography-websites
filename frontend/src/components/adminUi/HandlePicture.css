@@ -29,10 +29,6 @@
   min-width: fit-content !important;
 }
 
-.HandleEditIcons {
-  padding: 0 0.5em;
-}
-
 .HandleEditIcon {
   cursor: pointer;
   padding: 0 0.75em;
@@ -96,6 +92,28 @@
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
   z-index: 900;
+}
+
+.category-header {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  padding: 0.5em 1em 0.5em 2.5em;
+  color: white;
+}
+
+.header-style {
+  background-color: #00433c !important;
+  color: white;
+}
+
+.orderIcon {
+  padding: 0 0.1em;
+  cursor: pointer;
+}
+
+.orderIcon:hover {
+  color: rgb(90, 90, 90);
 }
 
 @media (max-width: 990px) {

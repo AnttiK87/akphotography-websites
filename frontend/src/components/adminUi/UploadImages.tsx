@@ -235,10 +235,10 @@ const UploadImages = () => {
             <option value={""} disabled>
               Select type
             </option>
-            <option value="nature">Nature</option>
             <option value="birds">Birds</option>
             <option value="landscapes">Landscapes</option>
             <option value="mammals">Mammals</option>
+            <option value="nature">Nature</option>
             <option value="monthly">Monthly Picture</option>
           </select>
         </div>

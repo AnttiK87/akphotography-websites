@@ -34,9 +34,15 @@ type EditPictureProps = {
   show: boolean;
   setShow: (value: boolean) => void;
   picture: PictureDetails;
+  setTypeUpdated: (value: boolean) => void;
 };
 
-const EditPicture = ({ show, setShow, picture }: EditPictureProps) => {
+const EditPicture = ({
+  show,
+  setShow,
+  picture,
+  setTypeUpdated,
+}: EditPictureProps) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { setCurrentComment } = useLightBox();
@@ -164,7 +170,7 @@ const EditPicture = ({ show, setShow, picture }: EditPictureProps) => {
     );
   };
 
-  const handleEditPicture = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleEditPicture = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const pictureId = picture.id;
 
@@ -213,7 +219,10 @@ const EditPicture = ({ show, setShow, picture }: EditPictureProps) => {
       year: yearValue,
     };
 
-    dispatch(editPicture({ pictureId, formData }, navigate));
+    await dispatch(editPicture({ pictureId, formData }, navigate));
+    if (picture.type != typeValue) {
+      setTypeUpdated(true);
+    }
     handleClose();
   };
 
@@ -319,10 +328,10 @@ const EditPicture = ({ show, setShow, picture }: EditPictureProps) => {
                   <option value={undefined} disabled>
                     Select type
                   </option>
-                  <option value="nature">Nature</option>
                   <option value="birds">Birds</option>
                   <option value="landscapes">Landscapes</option>
                   <option value="mammals">Mammals</option>
+                  <option value="nature">Nature</option>
                   <option value="monthly">Monthly Picture</option>
                 </select>
               </div>

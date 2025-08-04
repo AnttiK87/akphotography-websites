@@ -14,7 +14,7 @@ import type {
 const baseUrl = "/api/pictures/";
 
 const getAllData = async (
-  category: Category
+  category: Category | undefined
 ): Promise<PictureAllDataResponse> => {
   const urlExtension =
     category != undefined ? `/allData/?search=${category}` : "/allData/";

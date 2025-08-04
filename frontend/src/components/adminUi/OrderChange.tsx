@@ -35,21 +35,21 @@ const OrderChange = ({ picture, maxOrder }: OrderChangeProps) => {
     <>
       {picture.order === 0 && (
         <FontAwesomeIcon
-          className="HandleEditIcon"
+          className="orderIcon"
           icon={faArrowCircleUp}
           onClick={() => orderUp(picture.id)}
         />
       )}
       {picture.order != maxOrder && (
         <FontAwesomeIcon
-          className="HandleEditIcon"
+          className="orderIcon"
           icon={faArrowCircleUp}
           onClick={() => orderUp(picture.id)}
         />
       )}
       {picture.order && picture.order !== 1 && (
         <FontAwesomeIcon
-          className="HandleEditIcon"
+          className="orderIcon"
           icon={faArrowCircleDown}
           onClick={() => orderDown(picture.id)}
         />

@@ -32,6 +32,15 @@ const pictureSlice = createSlice({
   reducers: {
     setPictures(state, action: PayloadAction<PictureDetails[]>) {
       state.allPictures = action.payload;
+      state.allPictures = state.allPictures.sort((a, b) => {
+        if (a.type === "monthly" && b.type !== "monthly") return 1;
+        if (b.type === "monthly" && a.type !== "monthly") return -1;
+
+        if (a.type < b.type) return -1;
+        if (a.type > b.type) return 1;
+
+        return (b.order ?? 0) - (a.order ?? 0);
+      });
     },
     setMonthly(state, action: PayloadAction<PicturesBasic[]>) {
       state.monthly = action.payload;
@@ -56,9 +65,19 @@ const pictureSlice = createSlice({
     },
     updatePicture(state, action: PayloadAction<PictureDetails>) {
       const updatedPicture = action.payload;
-      state.allPictures = state.allPictures.map((picture) =>
-        picture.id === updatedPicture.id ? updatedPicture : picture
-      );
+      state.allPictures = state.allPictures
+        .map((picture) =>
+          picture.id === updatedPicture.id ? updatedPicture : picture
+        )
+        .sort((a, b) => {
+          if (a.type === "monthly" && b.type !== "monthly") return 1;
+          if (b.type === "monthly" && a.type !== "monthly") return -1;
+
+          if (a.type < b.type) return -1;
+          if (a.type > b.type) return 1;
+
+          return (b.order ?? 0) - (a.order ?? 0);
+        });
     },
     editOrder(state, action: PayloadAction<PictureOrder>) {
       const updatedPicture1 = action.payload.picture1;
@@ -99,10 +118,10 @@ export const {
   deletePicture,
 } = pictureSlice.actions;
 
-export const initializePicturesAllData = (category: Category) => {
+export const initializePicturesAllData = () => {
   return async (dispatch: AppDispatch) => {
     try {
-      const pictures = await pictureService.getAllData(category);
+      const pictures = await pictureService.getAllData(undefined);
       dispatch(setPictures(pictures));
     } catch (err: unknown) {
       const error = err as AxiosError;
@@ -233,16 +252,6 @@ export const movePictureUp = (
     try {
       const pictureMovedUp = await pictureService.moveUp(pictureId);
       dispatch(editOrder(pictureMovedUp));
-
-      dispatch(
-        showMessage(
-          {
-            text: pictureMovedUp.message,
-            type: "success",
-          },
-          1
-        )
-      );
     } catch (err: unknown) {
       const error = err as AxiosError;
       handleError(error, dispatch, navigate);
@@ -258,16 +267,6 @@ export const movePictureDown = (
     try {
       const pictureMovedDown = await pictureService.moveDown(pictureId);
       dispatch(editOrder(pictureMovedDown));
-
-      dispatch(
-        showMessage(
-          {
-            text: pictureMovedDown.message,
-            type: "success",
-          },
-          1
-        )
-      );
     } catch (err: unknown) {
       const error = err as AxiosError;
       handleError(error, dispatch, navigate);
