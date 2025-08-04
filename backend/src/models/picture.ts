@@ -29,7 +29,7 @@ class Picture extends Model<
   declare textId: number | null;
   declare viewCount: CreationOptional<number>;
   declare keywords?: Keyword[];
-  declare order: CreationOptional<number>;
+  declare order: CreationOptional<number | null>;
 
   // Assosiations
   declare getKeywords: HasManyGetAssociationsMixin<Keyword>;
@@ -105,7 +105,7 @@ Picture.init(
     order: {
       type: DataTypes.INTEGER,
       allowNull: true,
-      defaultValue: 0,
+      defaultValue: null,
     },
   },
   {

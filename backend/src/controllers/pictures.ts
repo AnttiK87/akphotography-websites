@@ -39,9 +39,14 @@ router.post(
   async (req: Request<object, object, PictureInput>, res: Response) => {
     const { type, textFi, textEn, year, month, keywords } = req.body;
 
-    const maxOrder: number = await Picture.max('order', {
-      where: { type: type },
-    });
+    let order: number | null = null;
+    if (type != 'monthly') {
+      const maxOrder: number = await Picture.max('order', {
+        where: { type: type },
+      });
+
+      order = maxOrder;
+    }
 
     const picture = await createPicture({
       filePath: req.file.path,
@@ -50,7 +55,7 @@ router.post(
       height: req.metadata.height,
       type,
       thumbnailFilename: req.file.thumbnailFilename,
-      order: maxOrder + 1,
+      order: order,
     });
 
     if (textFi || textEn) {

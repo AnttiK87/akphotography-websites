@@ -8,7 +8,7 @@ export async function up({
   await context.addColumn('pictures', 'order', {
     type: DataTypes.INTEGER,
     allowNull: false,
-    defaultValue: 0,
+    defaultValue: null,
   });
 }
 

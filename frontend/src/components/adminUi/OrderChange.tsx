@@ -30,8 +30,16 @@ const OrderChange = ({ picture, maxOrder }: OrderChangeProps) => {
   const orderDown = (pictureId: number) => {
     dispatch(movePictureDown(pictureId, navigate));
   };
+
   return (
     <>
+      {picture.order === 0 && (
+        <FontAwesomeIcon
+          className="HandleEditIcon"
+          icon={faArrowCircleUp}
+          onClick={() => orderUp(picture.id)}
+        />
+      )}
       {picture.order != maxOrder && (
         <FontAwesomeIcon
           className="HandleEditIcon"
@@ -46,7 +54,6 @@ const OrderChange = ({ picture, maxOrder }: OrderChangeProps) => {
           onClick={() => orderDown(picture.id)}
         />
       )}
-      order: {picture.order}
     </>
   );
 };
