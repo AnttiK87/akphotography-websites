@@ -31,6 +31,7 @@ export interface GalleryPicture {
   title?: string;
   keywords: PictureKeyword[];
   description?: string;
+  order: number;
 }
 
 interface PictureText {
@@ -71,7 +72,14 @@ export interface PictureDetails {
   keywords: PictureKeyword[];
   ratings: PictureRating[];
   comments: PictureComment[];
+  order: number;
 }
+
+export type PictureOrder = {
+  message: string;
+  picture1: PictureDetails;
+  picture2: null | PictureDetails;
+};
 
 export type PicturesBasic = Omit<PictureDetails, "comments">;
 
