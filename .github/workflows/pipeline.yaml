@@ -19,32 +19,43 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install backend dependencies
-        run: cd backend && npm ci
+        run: |
+          cd backend && npm ci
 
       - name: Run linter for backend
-        run: cd backend && npm run lint
+        run: |
+          cd backend && npm run lint
 
       - name: Create .env.test file
-        run: echo "${{ secrets.ENV_TEST }}" > backend/.env.test
+        run: |
+          echo "${{ secrets.ENV_TEST }}" > backend/.env.test
 
       - name: Run test for backend
-        run: cd backend && npm run test:all
+        run: |
+          cd backend
+          npm run test:all
+        continue-on-error: false
 
       - name: Install frontend dependencies
-        run: cd frontend && npm ci
+        run: |
+          cd frontend && npm ci
 
       - name: Run linter for frontend
-        run: cd frontend && npm run lint
+        run: |
+          cd frontend && npm run lint
 
       - name: Build project backend
-        run: cd backend && npm run build
+        run: |
+          cd backend && npm run build
 
       - name: Build project frontend
-        run: cd frontend && npm run build
+        run: |
+          cd frontend && npm run build
 
       - name: Mark deployment started
         id: set_deployment_started
-        run: echo "deployment_started=true" >> $GITHUB_OUTPUT
+        run: |
+          echo "deployment_started=true" >> $GITHUB_OUTPUT
 
       - name: Prepare SSH key and known_hosts for deploy
         run: |

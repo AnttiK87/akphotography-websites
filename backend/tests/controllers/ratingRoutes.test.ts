@@ -82,7 +82,7 @@ describe('POST /api/ratings', () => {
 
     expect(res.status).toBe(200);
     expect(res.body.message).toBe('Rating deleted');
-    expect(res.body.id).toBe(rating.id);
+    expect(res.body.rating.id).toBe(rating.id);
 
     const check = await Rating.findByPk(rating.id);
     expect(check).toBeNull();

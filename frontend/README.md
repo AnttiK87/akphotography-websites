@@ -12,8 +12,6 @@ Redux + Redux Thunk – State management
 
 Axios – HTTP client
 
-PropTypes – Prop validation
-
 Framer Motion – Animations
 
 React-Bootstrap – UI components

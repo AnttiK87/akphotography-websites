@@ -12,7 +12,8 @@ export const setSession = async (userId: number, token: string) => {
 };
 
 export const getSessionByToken = async (token: string) => {
-  return await Sessions.findOne({ where: { activeToken: token } });
+  const session = await Sessions.findOne({ where: { activeToken: token } });
+  return session;
 };
 
 export const deleteSessionByUserId = async (userId: number) => {

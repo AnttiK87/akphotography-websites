@@ -36,8 +36,8 @@ describe('User routes', () => {
       .send(newUser)
       .expect(200);
 
-    expect(res.body.username).toBe('newuser1');
-    expect(res.body.name).toBe('Test User 1');
+    expect(res.body.user.username).toBe('newuser1');
+    expect(res.body.user.name).toBe('Test User 1');
   });
 
   test('GET /api/users returns all users', async () => {
@@ -152,7 +152,7 @@ describe('User routes', () => {
       })
       .expect(200);
 
-    expect(res.body.message).toBe('Password changed');
+    expect(res.body.messageEn).toBe('Password changed!');
   });
 
   test('PUT /api/users/changePassword fails to update user password with wrong old password', async () => {

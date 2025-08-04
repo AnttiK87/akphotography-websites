@@ -10,7 +10,6 @@
 
 .OverlayRI.comment {
   z-index: 9990 !important;
-  background-color: transparent;
 }
 
 .ratingInfo {
@@ -37,6 +36,9 @@
 
 .ratingInfo.comment {
   z-index: 9991;
+  justify-content: start;
+  overflow-y: auto;
+  max-height: 90vh;
 }
 
 .ratingInfoText1 {

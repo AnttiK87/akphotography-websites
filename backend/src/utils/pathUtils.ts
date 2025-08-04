@@ -9,5 +9,6 @@ export const getPath = (...paths: string[]): string => {
   const rootDir = isTestEnv
     ? path.resolve(__dirname, '../../tests')
     : path.resolve(__dirname, '../../../');
-  return path.join(rootDir, ...paths);
+  const pathToRetur = path.join(rootDir, ...paths);
+  return pathToRetur;
 };

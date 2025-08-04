@@ -13,7 +13,7 @@ The backend is written in TypeScript to ensure static type safety, improve code 
 Test for the backend are carried out by using jest test framework
 
 /frontend:  
-The frontend of the application, built with React and Vite. This serves the user interface for commonusers and andmin user for browsing, uploading, and managing photos.
+The frontend of the application, built with React and Vite. This serves the user interface for commonusers and andmin user for browsing, uploading, and managing photos. Alsp the frontend is written in TypeScript to ensure static type safety, improve code quality, and reduce runtime errors.
 
 ## Automation and Deployment
 

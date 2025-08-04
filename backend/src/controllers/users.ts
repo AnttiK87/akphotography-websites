@@ -26,7 +26,9 @@ const router = express.Router();
 // GET /api/users
 //route for getting all users
 router.get('/', async (_req: Request, res: Response) => {
-  const users = await User.findAll({});
+  const users = await User.findAll({
+    attributes: { exclude: ['passwordHash'] },
+  });
   res.json(users);
 });
 
@@ -43,7 +45,17 @@ router.put(
   validatePasswordChange,
   async (req: Request<object, object, passwordChangeInput>, res: Response) => {
     const updatedUser = await req.user.save();
-    res.status(200).json({ message: 'Password changed', user: updatedUser });
+    res.status(200).json({
+      messageFi: 'Salasana vaihdettu!',
+      messageEn: 'Password changed!',
+      user: {
+        id: updatedUser.id,
+        name: updatedUser.name,
+        username: updatedUser.username,
+        email: updatedUser.email,
+        role: updatedUser.role,
+      },
+    });
   },
 );
 
@@ -64,7 +76,13 @@ router.put(
     res.json({
       messageEn: 'User info edited!',
       messageFi: 'Käyttäjän tietoja muokattu!',
-      user: updatedUser,
+      user: {
+        id: updatedUser.id,
+        name: updatedUser.name,
+        username: updatedUser.username,
+        email: updatedUser.email,
+        role: updatedUser.role,
+      },
     });
   },
 );
@@ -93,8 +111,19 @@ router.put(
     user.lastLogin = new Date();
     user.loginTime = new Date();
 
-    await user.save();
-    res.json(user);
+    const updatedUser = await user.save();
+
+    res.json({
+      messageEn: 'User info edited!',
+      messageFi: 'Käyttäjän tietoja muokattu!',
+      user: {
+        id: updatedUser.id,
+        name: updatedUser.name,
+        username: updatedUser.username,
+        email: updatedUser.email,
+        role: updatedUser.role,
+      },
+    });
   },
 );
 
@@ -124,7 +153,13 @@ router.post(
     res.json({
       messageEn: 'New user added!',
       messageFi: 'Uusi käyttäjä lisätty!',
-      user: newUser,
+      user: {
+        id: newUser.id,
+        name: newUser.name,
+        username: newUser.username,
+        email: newUser.email,
+        role: newUser.role,
+      },
     });
   },
 );

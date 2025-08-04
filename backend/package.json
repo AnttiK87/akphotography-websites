@@ -15,12 +15,13 @@
     "format:check": "prettier --check .",
     "migration:down:prod": "node utils/rollback.js",
     "migration:down:dev": "cross-env NODE_ENV=development tsx src/utils/rollback.ts",
+    "migration:down:test": "cross-env NODE_ENV=test tsx src/utils/rollback.ts",
     "generate-thumbnails-once": "ts-node --esm src/utils/generate-thumbnails.js",
     "test:db:up": "docker compose -f docker-compose.test.yml --env-file .env.test up -d",
     "test:db:down": "docker compose -f docker-compose.test.yml down -v",
-    "test:all": "npm run test:db:up && cross-env NODE_ENV=test NODE_OPTIONS=\"--experimental-vm-modules --no-warnings\" jest --detectOpenHandles || true; npm run test:db:down",
-    "test:unit1": "cross-env NODE_ENV=test NODE_OPTIONS=\"--experimental-vm-modules --no-warnings\" jest --config=jest.unit1.config.ts --detectOpenHandles --coverage",
-    "test:unit2": "cross-env NODE_ENV=test NODE_OPTIONS=\"--experimental-vm-modules --no-warnings\" jest --config=jest.unit2.config.ts --detectOpenHandles --coverage"
+    "test:all": "npm run test:db:up && cross-env NODE_ENV=test NODE_OPTIONS=\"--experimental-vm-modules --no-warnings\" jest --detectOpenHandles && npm run test:db:down",
+    "test:unit1": "cross-env NODE_ENV=test NODE_OPTIONS=\"--experimental-vm-modules --no-warnings\" jest --config=jest.unit1.config.ts --detectOpenHandles",
+    "test:unit2": "cross-env NODE_ENV=test NODE_OPTIONS=\"--experimental-vm-modules --no-warnings\" jest --config=jest.unit2.config.ts --detectOpenHandles"
   },
   "keywords": [],
   "author": "Antti Kortelainen",
