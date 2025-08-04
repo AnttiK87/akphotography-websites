@@ -7,8 +7,8 @@ export async function up({
 }): Promise<void> {
   await context.addColumn('pictures', 'order', {
     type: DataTypes.INTEGER,
-    allowNull: false,
-    defaultValue: 0,
+    allowNull: true,
+    defaultValue: null,
   });
 }
 

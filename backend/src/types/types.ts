@@ -72,7 +72,7 @@ export interface CreatePicture {
   thumbnailFilename: string;
   filePath: string;
   filename: string;
-  order: number;
+  order: number | null;
 }
 
 export interface PictureUpdateInput {
