@@ -8,9 +8,17 @@ import { AppError } from '../errors/AppError.js';
 export const getMigrationGlob = async (): Promise<string> => {
   const env = process.env.NODE_ENV;
   const pattern =
-    env === 'test' || env === 'development'
+    env === 'test'
       ? getPath('src', 'migrations', '*.ts')
-      : getPath('apps', 'ak_photography_backend', 'migrations', '*.js');
+      : env === 'development'
+        ? getPath(
+            'backend',
+            'apps',
+            'ak_photography_backend',
+            'migrations',
+            '*.js',
+          )
+        : getPath('apps', 'ak_photography_backend', 'migrations', '*.js');
 
   const files = await fg(pattern, { onlyFiles: true });
 
