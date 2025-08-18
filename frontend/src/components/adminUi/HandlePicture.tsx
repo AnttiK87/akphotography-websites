@@ -37,6 +37,7 @@ import { capitalize } from "../../utils/capitalize.js";
 
 const HandlePictures = () => {
   const { user } = useNotLoggedin();
+  /*console.log("User in HandlePictures:", user);*/
   const [selectedType, setSelectedType] = useState<Category>(undefined);
   const [show, setShow] = useState(false);
   const [currentPicture, setCurrentPicture] = useState<
@@ -84,7 +85,7 @@ const HandlePictures = () => {
     }
 
     setPicturesToShow(filtered);
-  }, [selectedType, search, allPictures, picturesToShow]);
+  }, [selectedType, search, allPictures]);
 
   useEffect(() => {
     if (show) {
@@ -285,7 +286,7 @@ const HandlePictures = () => {
                         <div className="category-header">
                           <strong>{capitalize(picture.type)}</strong>{" "}
                           <p>
-                            Pictures in category: ({typeCounts[picture.type]})
+                            Pictures in category: {typeCounts[picture.type]}
                           </p>
                         </div>
                       </td>

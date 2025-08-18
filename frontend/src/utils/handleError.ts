@@ -73,8 +73,7 @@ export const handleError = (
     );
     return;
   }
-
-  if (status === 401) {
+  if (status === 401 && data.messages.en === "invalid username or password") {
     localStorage.removeItem("loggedAdminUser");
     dispatch(clearUser());
     dispatch(
@@ -82,8 +81,23 @@ export const handleError = (
         {
           text:
             language === "fin"
-              ? "Istuntosi on vanhentunut. Kirjaudu uudelleen."
-              : "Your session has expired. Please log in again.",
+              ? "Väärä käyttäjätunnus tai salasana."
+              : "Wrong username or password.",
+          type: "error",
+        },
+        3
+      )
+    );
+  } else if (status === 401) {
+    localStorage.removeItem("loggedAdminUser");
+    dispatch(clearUser());
+    dispatch(
+      showMessage(
+        {
+          text:
+            language === "fin"
+              ? "Kirjaudu uudelleen sisään."
+              : "Please log in again.",
           type: "error",
         },
         3

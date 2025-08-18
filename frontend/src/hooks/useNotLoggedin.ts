@@ -1,4 +1,3 @@
-//dependencies
 import { useSelector } from "react-redux";
 import { useAppDispatch } from "./useRedux.js";
 import { useEffect } from "react";
@@ -40,7 +39,7 @@ const useNotLoggedin = () => {
     } else if (!userInStore && parsedUser) {
       dispatch(setLoginUser(parsedUser));
     }
-  }, [parsedUser, userInStore, userInLocalStorage, dispatch, navigate]);
+  });
 
   return { user };
 };

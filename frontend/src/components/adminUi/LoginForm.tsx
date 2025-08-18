@@ -3,13 +3,14 @@ import { useAppDispatch, useAppSelector } from "../../hooks/useRedux.js";
 import { setUsername, setPassword } from "../../reducers/userReducer.js";
 import useLogin from "../../hooks/useLogin.js";
 import { Form } from "react-bootstrap";
+import useNotLoggedin from "../../hooks/useNotLoggedin.js";
 
 import "./LoginForm.css";
 
 import { useNavigate } from "react-router-dom";
 
 const LoginForm = () => {
-  const user = useAppSelector((state) => state.user.user);
+  const { user } = useNotLoggedin();
 
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
