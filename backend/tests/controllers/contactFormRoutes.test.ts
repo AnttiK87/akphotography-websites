@@ -25,6 +25,7 @@ describe('Comment routes', () => {
       email: 'test@example.com',
       message: 'Hello!',
       contactMe: true,
+      language: 'eng',
     };
 
     const res = await request(app)
@@ -42,6 +43,7 @@ describe('Comment routes', () => {
       email: null,
       message: 'Hello!',
       contactMe: true,
+      language: 'eng',
     };
 
     const res = await request(app)
@@ -59,6 +61,7 @@ describe('Comment routes', () => {
       email: 'test@example.com',
       message: null,
       contactMe: true,
+      language: 'eng',
     };
 
     const res = await request(app)
@@ -80,9 +83,12 @@ describe('Comment routes', () => {
     const res = await request(app)
       .post('/api/contact')
       .send(contactData)
-      .expect(200);
+      .expect(400);
 
-    expect(res.body.messageEn).toBe('Message sent successfully!');
+    expect(res.body.messages[0].field).toBe('contactMe');
+    expect(res.body.messages[0].message).toBe('Required');
+    expect(res.body.messages[1].field).toBe('language');
+    expect(res.body.messages[1].message).toBe('Required');
   });
 
   test('POST /api/contact form send with language fin', async () => {
@@ -90,6 +96,8 @@ describe('Comment routes', () => {
       name: 'Test User',
       email: 'test@example.com',
       message: 'Hello!',
+      contactMe: false,
+      language: 'fin',
     };
 
     const res = await request(app)
