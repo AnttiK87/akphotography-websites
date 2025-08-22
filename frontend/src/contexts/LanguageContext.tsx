@@ -9,15 +9,20 @@ interface LanguageContextType {
 
 interface LanguageProviderProps {
   children: ReactNode;
+  initialLanguage?: Language; // <- lisätty prop
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(
   undefined
 );
 
-export const LanguageProvider = ({ children }: LanguageProviderProps) => {
+export const LanguageProvider = ({
+  children,
+  initialLanguage,
+}: LanguageProviderProps) => {
   const [language, setLanguage] = useState<Language>(
-    () => (localStorage.getItem("language") as Language) || "fin"
+    () =>
+      initialLanguage || (localStorage.getItem("language") as Language) || "fin"
   );
 
   useEffect(() => {

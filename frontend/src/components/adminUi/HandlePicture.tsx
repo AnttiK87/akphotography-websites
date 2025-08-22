@@ -37,7 +37,7 @@ import { capitalize } from "../../utils/capitalize.js";
 
 const HandlePictures = () => {
   const { user } = useNotLoggedin();
-  /*console.log("User in HandlePictures:", user);*/
+
   const [selectedType, setSelectedType] = useState<Category>(undefined);
   const [show, setShow] = useState(false);
   const [currentPicture, setCurrentPicture] = useState<

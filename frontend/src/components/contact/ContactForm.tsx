@@ -92,7 +92,9 @@ const ContactForm = () => {
   return (
     <div className="container">
       <form className="contactForm" onSubmit={handleSubmit}>
-        <label className="textLabel">{nameText}</label>
+        <label className="textLabel" htmlFor="name">
+          {nameText}
+        </label>
         <input
           type="text"
           id="name"
@@ -103,7 +105,9 @@ const ContactForm = () => {
           required
         />
 
-        <label className="textLabel">{emailText}</label>
+        <label className="textLabel" htmlFor="email">
+          {emailText}
+        </label>
         <input
           className="email-cf"
           type="email"
@@ -115,7 +119,9 @@ const ContactForm = () => {
           required
         />
 
-        <label className="textLabel">{messageText}</label>
+        <label className="textLabel" htmlFor="message">
+          {messageText}
+        </label>
         <textarea
           id="message"
           name="message"
@@ -125,7 +131,9 @@ const ContactForm = () => {
           required
         ></textarea>
 
-        <label className="textLabel">{contactMeText}</label>
+        <label className="textLabel" htmlFor="contactMe">
+          {contactMeText}
+        </label>
         <input
           type="checkbox"
           id="contactMe"
