@@ -2,20 +2,40 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import sitemap from "vite-plugin-sitemap";
 
-const categories = ["mammals", "landscapes", "nature", "birds"];
-const galleryRoutes = categories.flatMap((category) => [
-  `/pictures/${category}`,
-]);
+const galleryRoutes = [
+  "/info",
+  "/contact",
+  "/pictures/monthly",
+  "/pictures/mammals",
+  "/pictures/landscapes",
+  "/pictures/nature",
+  "/pictures/birds",
+];
+
+const dynamicRoutes = galleryRoutes.map((route) => route);
 
 export default defineConfig({
   plugins: [
     react(),
     sitemap({
       hostname: "https://www.akphotography.fi",
-      routes: ["/", "/info", "/contact", ...galleryRoutes],
-      outDir: "dist",
+      readable: true,
+      dynamicRoutes,
+      changefreq: "weekly",
+      generateRobotsTxt: false,
+      exclude: [
+        "/admin",
+        "/admin/uploadPictures",
+        "/admin/editContent",
+        "/admin/ownProfile",
+      ],
     }),
   ],
+  test: {
+    globals: true,
+    environment: "jsdom",
+    setupFiles: "./src/setupTests.ts",
+  },
   server: {
     proxy: {
       "/api": {

@@ -91,14 +91,40 @@ const pictureSlice = createSlice({
             ? updatedPicture2
             : picture
         )
-        .sort((a, b) => b.order - a.order);
+        .sort((a, b) => {
+          if (a.type === "monthly" && b.type !== "monthly") return 1;
+          if (b.type === "monthly" && a.type !== "monthly") return -1;
+
+          if (a.type < b.type) return -1;
+          if (a.type > b.type) return 1;
+
+          return (b.order ?? 0) - (a.order ?? 0);
+        });
     },
     deletePicture(state, action: PayloadAction<number>) {
+      const deletedId = action.payload;
+
+      const deletedPicture = state.allPictures.find((p) => p.id === deletedId);
+      if (!deletedPicture) return;
+
       state.allPictures = state.allPictures.filter(
-        (picture) => picture.id !== action.payload
+        (picture) => picture.id !== deletedId
       );
+
+      state.allPictures
+        .filter(
+          (p) =>
+            p.type === deletedPicture.type &&
+            (p.order ?? 0) > (deletedPicture.order ?? 0)
+        )
+        .forEach((p) => {
+          if (p.order != null) {
+            p.order = p.order - 1;
+          }
+        });
+
       state.latestCategoryPictures = state.latestCategoryPictures.filter(
-        (picture) => picture.id !== action.payload
+        (picture) => picture.id !== deletedId
       );
     },
   },

@@ -62,6 +62,7 @@ const DropMenu = ({
       className={classes}
       title={title}
       id="custom-dropdown"
+      data-testid={`dropdown-menu-${languageSelect ? "language" : "pictures"}`}
       show={showDropdown}
       {...eventHandlers}
     >

@@ -41,25 +41,30 @@ const CommentForm = ({
   const { language } = useLanguage();
   const { currentComment } = useLightBox();
 
-  const [comment, setComment] = useState<string | undefined>(undefined);
-  const [username, setUsername] = useState<string | undefined>(
-    adminComment ? "Antti Kortelainen" : undefined
-  );
-
-  const dispatch = useAppDispatch();
+  const [comment, setComment] = useState<string | undefined>();
+  const [username, setUsername] = useState<string | undefined>();
 
   useEffect(() => {
+    if (!show) return;
+
     if (edit && currentComment) {
-      if ("reply" in currentComment) {
-        setComment(currentComment.reply);
-      } else {
-        setComment(currentComment.comment);
-      }
+      setComment(
+        "reply" in currentComment
+          ? currentComment.reply
+          : currentComment.comment
+      );
       setUsername(currentComment.username);
-      return;
+    } else if (adminComment) {
+      setUsername("Antti Kortelainen");
+      setComment(undefined);
+    } else {
+      setComment(undefined);
+      setUsername(undefined);
     }
-    setUsername(adminComment ? "Antti Kortelainen" : "");
-  }, [show, edit, currentComment, adminComment]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [show]);
+
+  const dispatch = useAppDispatch();
 
   const reset = () => {
     setComment(undefined);
@@ -87,7 +92,6 @@ const CommentForm = ({
 
     dispatch(createComment(formData, language));
 
-    reset();
     setShow(false);
   };
 
@@ -123,7 +127,6 @@ const CommentForm = ({
 
     dispatch(createReply(formData, language));
 
-    reset();
     setShow(false);
   };
 
@@ -164,13 +167,10 @@ const CommentForm = ({
       };
       dispatch(editReply({ commentId, userId, formData }, language));
     }
-
-    reset();
   };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
     if (edit) {
       handleEditComment(event);
       handleClose();
@@ -246,7 +246,7 @@ const CommentForm = ({
                 className="form__field commentUsername"
                 id="username"
                 name="username"
-                value={username}
+                value={username === undefined ? "" : username}
                 onChange={(event) => setUsername(event.target.value)}
                 placeholder={
                   language === "fin" ? "Anna nimimerkki" : "Add username"
@@ -267,7 +267,7 @@ const CommentForm = ({
                 className="form__field commentTextArea"
                 id="comment"
                 name="comment"
-                value={comment}
+                value={comment === undefined ? "" : comment}
                 onChange={(event) => setComment(event.target.value)}
                 placeholder={
                   reply
