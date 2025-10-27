@@ -204,6 +204,7 @@ const HandlePictures = () => {
               {showOrder && <th className="pictureHP">Order</th>}
               <th className="pictureHP">Picture</th>
               <th className="indexHP">#</th>
+              <th className="indexHP">ord.</th>
               <th
                 className="clikkableOP typeHP"
                 onClick={() => setOrder("type")}
@@ -302,6 +303,7 @@ const HandlePictures = () => {
                       <img className="listItemImg" src={picture.urlThumbnail} />
                     </td>
                     <td className="vertical-center indexHP">{picture.id}</td>
+                    <td className="vertical-center indexHP">{picture.order}</td>
                     <td className="vertical-center typeHP">{picture.type}</td>
                     {selectedType === "monthly" ? (
                       <td className="vertical-center monthlyHP">

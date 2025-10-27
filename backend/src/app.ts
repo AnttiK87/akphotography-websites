@@ -57,6 +57,10 @@ app.get(/^\/(?!api).*/, (_req, res) => {
   res.sendFile(getPath(distPath, 'index.html'));
 });
 
+app.get('/sitemap.xml', (_req, res) => {
+  res.sendFile(getPath(distPath, 'sitemap.xml'));
+});
+
 app.use(unknownEndpoint);
 app.use(errorHandler);
 

@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express';
 import { sequelize } from '../utils/db.js';
+import { Op } from 'sequelize';
 
 import { tokenExtractor } from '../middleware/tokenExtractor.js';
 import { pictureFinder } from '../middleware/finders.js';
@@ -213,44 +214,44 @@ router.put(
       });
       return;
     } else {
-      newOrder = picture.order + 1;
+      const pictureBefore = await Picture.findOne({
+        where: {
+          type: picture.type,
+          order: { [Op.gt]: picture.order },
+        },
+        order: [['order', 'ASC']],
+        transaction,
+      });
+
+      if (!pictureBefore) {
+        await transaction.rollback();
+        res.status(400).json({ error: 'This is already first picture' });
+        return;
+      }
+
+      newOrder = pictureBefore.order || 1;
+      picture.order = newOrder;
+      await picture.save({ transaction });
+
+      pictureBefore.order =
+        pictureBefore.order != null ? pictureBefore.order - 1 : null;
+      await pictureBefore.save({ transaction });
+
+      await transaction.commit();
+
+      const updatedPicture = await Picture.findByPk(picture.id, {
+        include: picIncludeBasic,
+      });
+      const updatedPictureBefore = await Picture.findByPk(pictureBefore.id, {
+        include: picIncludeBasic,
+      });
+
+      res.json({
+        picture1: updatedPicture,
+        picture2: updatedPictureBefore,
+        message: 'Order updated!',
+      });
     }
-
-    const pictureBefore = await Picture.findOne({
-      where: {
-        type: picture.type,
-        order: newOrder,
-      },
-      transaction,
-    });
-
-    if (!pictureBefore) {
-      await transaction.rollback();
-      res.status(400).json({ error: 'This is already first picture' });
-      return;
-    }
-
-    picture.order = newOrder;
-    await picture.save({ transaction });
-
-    pictureBefore.order =
-      pictureBefore.order != null ? pictureBefore.order - 1 : null;
-    await pictureBefore.save({ transaction });
-
-    await transaction.commit();
-
-    const updatedPicture = await Picture.findByPk(picture.id, {
-      include: picIncludeBasic,
-    });
-    const updatedPictureBefore = await Picture.findByPk(pictureBefore.id, {
-      include: picIncludeBasic,
-    });
-
-    res.json({
-      picture1: updatedPicture,
-      picture2: updatedPictureBefore,
-      message: 'Order updated!',
-    });
   },
 );
 
@@ -296,44 +297,45 @@ router.put(
         message: 'Order updated!',
       });
     } else {
-      newOrder = picture.order - 1;
+      const pictureAfter = await Picture.findOne({
+        where: {
+          type: picture.type,
+          order: { [Op.lt]: picture.order },
+        },
+        order: [['order', 'DESC']],
+        transaction,
+      });
+
+      if (!pictureAfter) {
+        await transaction.rollback();
+        res.status(400).json({ error: 'This is already last picture' });
+        return;
+      }
+
+      newOrder = pictureAfter.order || 1;
+
+      picture.order = newOrder;
+      await picture.save({ transaction });
+
+      pictureAfter.order =
+        pictureAfter.order != null ? pictureAfter.order + 1 : null;
+      await pictureAfter.save({ transaction });
+
+      await transaction.commit();
+
+      const updatedPicture = await Picture.findByPk(picture.id, {
+        include: picIncludeBasic,
+      });
+      const updatedPictureAfter = await Picture.findByPk(pictureAfter.id, {
+        include: picIncludeBasic,
+      });
+
+      res.json({
+        picture1: updatedPicture,
+        picture2: updatedPictureAfter,
+        message: 'Order updated!',
+      });
     }
-
-    const pictureAfter = await Picture.findOne({
-      where: {
-        type: picture.type,
-        order: newOrder,
-      },
-      transaction,
-    });
-
-    if (!pictureAfter) {
-      await transaction.rollback();
-      res.status(400).json({ error: 'This is already last picture' });
-      return;
-    }
-
-    picture.order = newOrder;
-    await picture.save({ transaction });
-
-    pictureAfter.order =
-      pictureAfter.order != null ? pictureAfter.order + 1 : null;
-    await pictureAfter.save({ transaction });
-
-    await transaction.commit();
-
-    const updatedPicture = await Picture.findByPk(picture.id, {
-      include: picIncludeBasic,
-    });
-    const updatedPictureAfter = await Picture.findByPk(pictureAfter.id, {
-      include: picIncludeBasic,
-    });
-
-    res.json({
-      picture1: updatedPicture,
-      picture2: updatedPictureAfter,
-      message: 'Order updated!',
-    });
   },
 );
 
@@ -366,6 +368,26 @@ router.delete(
         message: `Picture id: ${picture.id} deleted!`,
       })
       .end();
+
+    if (picture.order) {
+      const picturesAfter = await Picture.findAll({
+        where: {
+          type: picture.type,
+          order: { [Op.gt]: picture.order },
+        },
+        order: [['order', 'ASC']],
+      });
+
+      if (picturesAfter.length > 0) {
+        let currentOrder = picture.order;
+        await Promise.all(
+          picturesAfter.map((pic) => {
+            pic.order = currentOrder++;
+            return pic.save();
+          }),
+        );
+      }
+    }
   },
 );
 

@@ -102,11 +102,29 @@ const pictureSlice = createSlice({
         });
     },
     deletePicture(state, action: PayloadAction<number>) {
+      const deletedId = action.payload;
+
+      const deletedPicture = state.allPictures.find((p) => p.id === deletedId);
+      if (!deletedPicture) return;
+
       state.allPictures = state.allPictures.filter(
-        (picture) => picture.id !== action.payload
+        (picture) => picture.id !== deletedId
       );
+
+      state.allPictures
+        .filter(
+          (p) =>
+            p.type === deletedPicture.type &&
+            (p.order ?? 0) > (deletedPicture.order ?? 0)
+        )
+        .forEach((p) => {
+          if (p.order != null) {
+            p.order = p.order - 1;
+          }
+        });
+
       state.latestCategoryPictures = state.latestCategoryPictures.filter(
-        (picture) => picture.id !== action.payload
+        (picture) => picture.id !== deletedId
       );
     },
   },
