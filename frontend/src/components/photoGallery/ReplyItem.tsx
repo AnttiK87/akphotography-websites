@@ -41,7 +41,7 @@ const ReplyItem = ({
   const UsernameReplied =
     reply.parentReply != undefined
       ? reply.parentReply.username
-      : reply.username;
+      : reply.comment.username;
 
   const replyReplied =
     reply.parentReply != undefined
