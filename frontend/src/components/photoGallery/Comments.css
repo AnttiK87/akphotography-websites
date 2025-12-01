@@ -264,6 +264,7 @@ ul {
   object-fit: cover;
   border-radius: 30px;
   margin-right: 0.5em;
+  border: #00433c 2px solid;
 }
 
 @media (max-width: 1100px) {

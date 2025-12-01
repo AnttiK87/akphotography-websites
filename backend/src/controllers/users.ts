@@ -174,12 +174,14 @@ router.put(
   },
 );
 
-// PUT /api/users/updateInfo
-// route for changing user info
+// PUT /api/users/changeProfPic
+// route for changing users profile picture
 // Middlewares used:
+// - handleUpload: handles the file upload
 // - tokenExtractor: validates the token and checks if the user is authenticated
 // - userExtractor: extracts the user from the token
-// - handleUserInfoChange: handles the updated user info
+// - createNewProfPic: saves and resizes uploaded profile picture to server
+// - handleProfPictureChange: updates new profile picture path to user info
 router.put(
   '/changeProfPic',
   handleUpload,

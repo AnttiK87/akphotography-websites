@@ -1,9 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faTrash,
-  faCircleUser,
-  faPen,
-} from "@fortawesome/free-solid-svg-icons";
+import { faTrash, faPen } from "@fortawesome/free-solid-svg-icons";
 
 import { timeSince } from "../../utils/timeSince";
 
@@ -68,7 +64,11 @@ const ReplyItem = ({
                   alt="adminPhoto"
                 />
               ) : (
-                <FontAwesomeIcon className="iconUser" icon={faCircleUser} />
+                <img
+                  className="adminUserImg"
+                  src="/images/about/profile-picture.jpg"
+                  alt="userIcon"
+                />
               )}
               <div className="CommentTexts">
                 <div className="userAndOrigComment">

@@ -169,8 +169,8 @@ router.put(
   },
 );
 
-// PUT /api/pictures/ordeUp/:id
-// route for changind order upwards
+// PUT /api/pictures/r
+// route for changing order upwards
 // middlewares used:
 // - tokenExtractor: extracts the token from the request header
 // - pictureFinder: finds the picture by id and attaches it to the request object
@@ -255,8 +255,8 @@ router.put(
   },
 );
 
-// PUT /api/pictures/ordeDown/:id
-// route for changind order downwards
+// PUT /api/pictures/orderDown/:id
+// route for changing order downwards
 // middlewares used:
 // - tokenExtractor: extracts the token from the request header
 // - pictureFinder: finds the picture by id and attaches it to the request object

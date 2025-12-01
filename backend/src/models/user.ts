@@ -88,6 +88,7 @@ User.init(
     profilePicture: {
       type: DataTypes.STRING,
       allowNull: false,
+      defaultValue: '/images/about/profile-picture.jpg',
       validate: {
         notEmpty: {
           msg: 'Name cannot be empty',

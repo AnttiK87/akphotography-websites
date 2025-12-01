@@ -5,6 +5,7 @@ import fs from 'fs/promises';
 import fsSync from 'fs';
 import sharp from 'sharp';
 import { getPath } from '../utils/pathUtils.js';
+import { AppError } from '../errors/AppError.js';
 
 import { handlePictureResize } from '../services/imageService.js';
 import logger from '../utils/logger.js';
@@ -26,12 +27,40 @@ export const writeToHardDrive = async (
   file: Express.Multer.File,
   uploadFolderHightRes: string,
 ) => {
-  if (!file?.path && file?.buffer) {
+  if (file?.buffer) {
+    const metadata = await sharp(file.buffer).metadata();
+    const { width, height } = metadata;
+
     const extension = path.extname(file.originalname) || '.jpg';
     const filename = `${Date.now()}${extension}`;
     const filePath = path.join(uploadFolderHightRes, filename);
 
-    await fs.writeFile(filePath, file.buffer);
+    if (!width || !height) {
+      await fs.writeFile(filePath, file.buffer);
+      file.path = filePath;
+      file.filename = filename;
+
+      logger.info(`Saved file to disk: ${filePath}`);
+      return;
+    }
+
+    const shortEdge = Math.min(width, height);
+
+    if (shortEdge < 2000) {
+      throw new AppError(
+        {
+          en: 'Picture is too small, min size for the shortest edge is 2000px',
+        },
+        400,
+      );
+    }
+
+    const scale = 2000 / shortEdge;
+
+    const resizeWidth = Math.round(width * scale);
+    const resizeHeight = Math.round(height * scale);
+
+    await sharp(file.buffer).resize(resizeWidth, resizeHeight).toFile(filePath);
 
     file.path = filePath;
     file.filename = filename;

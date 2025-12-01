@@ -176,6 +176,7 @@ describe('User routes', () => {
       passwordHash: 'hash',
       email: 'del@example.com',
       role: 'user',
+      profilePicture: '/images/about/profile-picture.jpg',
     });
 
     await request(app)

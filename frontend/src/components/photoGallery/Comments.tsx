@@ -2,11 +2,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faTrash,
-  faCircleUser,
-  faPen,
-} from "@fortawesome/free-solid-svg-icons";
+import { faTrash, faPen } from "@fortawesome/free-solid-svg-icons";
 
 import { useAppDispatch, useAppSelector } from "../../hooks/useRedux.js";
 
@@ -106,9 +102,10 @@ const Comments = ({
                   <div className="commentLi">
                     <div className="containerUsername">
                       <div className="IconAndTexts">
-                        <FontAwesomeIcon
-                          className="iconUser"
-                          icon={faCircleUser}
+                        <img
+                          className="adminUserImg"
+                          src="/images/about/profile-picture.jpg"
+                          alt="userIcon"
                         />
                         <div className="CommentTexts">
                           <h5 className="h5Username">{comment.username}</h5>
