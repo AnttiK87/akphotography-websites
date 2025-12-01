@@ -30,6 +30,7 @@ export type Reply = {
   createdAt: string;
   updatedAt: string;
   comment: ReplyCommentInfo;
+  profilePicture?: string;
 };
 
 export type ReplyAllData = Reply & {

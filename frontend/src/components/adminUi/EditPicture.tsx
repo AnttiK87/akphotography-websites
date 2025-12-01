@@ -9,6 +9,7 @@ import { editPicture } from "../../reducers/pictureReducer.js";
 import { initializeComments, remove } from "../../reducers/commentReducer.js";
 import { initializeKeywords } from "../../reducers/keywordReducer.js";
 import { handleOverlayClose } from "../../utils/closeOverlay.js";
+import useNotLoggedin from "../../hooks/useNotLoggedin.js";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faXmark } from "@fortawesome/free-solid-svg-icons";
@@ -46,6 +47,10 @@ const EditPicture = ({
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { setCurrentComment } = useLightBox();
+
+  const { user } = useNotLoggedin();
+
+  const profilePicture = user && user.profilePicture;
 
   const [showCommentForm, setShowCommentForm] = useState(false);
   const [reply, setReply] = useState(false);
@@ -550,6 +555,7 @@ const EditPicture = ({
                     setReply={setReply}
                     adminComment={true}
                     edit={false}
+                    profilePicture={profilePicture}
                   />
                 </div>
               ))

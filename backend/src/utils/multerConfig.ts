@@ -3,12 +3,13 @@
 import multer from 'multer';
 
 const storage = multer.memoryStorage();
+const allowed = ['image/jpeg', 'image/webp'];
 
 const upload = multer({
   storage,
   limits: { fileSize: 6 * 1024 * 1024 }, // 6MB
   fileFilter: (req, file, cb) => {
-    if (file.mimetype !== 'image/jpeg') {
+    if (!allowed.includes(file.mimetype)) {
       req.fileValidationError = 'goes wrong on the mimetype';
       return cb(null, false);
     }

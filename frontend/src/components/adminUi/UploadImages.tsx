@@ -30,6 +30,7 @@ const UploadImages = () => {
   const navigate = useNavigate();
 
   const [file, setFile] = useState<File | undefined>(undefined);
+  const [preview, setPreview] = useState<string | undefined>(undefined);
   const [selectedType, setSelectedType] = useState<Type | "">("");
   const [textFi, setTextFi] = useState<string | undefined>(undefined);
   const [textEn, setTextEn] = useState<string | undefined>(undefined);
@@ -94,6 +95,7 @@ const UploadImages = () => {
     setYear(undefined);
     setTextFi(undefined);
     setTextEn(undefined);
+    setPreview(undefined);
     setKeyword("");
     setKeywordArray([]);
     setAddText(false);
@@ -165,7 +167,13 @@ const UploadImages = () => {
     <div className="marginAddImage">
       <h3>Add new picture</h3>
       <Form onSubmit={addPicture} encType="multipart/form-data">
-        <FileUpload setFile={setFile} file={file} />
+        <FileUpload setFile={setFile} file={file} setPreview={setPreview} />
+        {preview && (
+          <div className="preview">
+            Preview:
+            <img className="preview-img" src={preview} alt="Preview" />
+          </div>
+        )}
         <div className="ComboBoxUI">
           <label htmlFor="tags-outlined">Keywords:</label>
           <Autocomplete

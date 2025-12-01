@@ -20,6 +20,7 @@ class Reply extends Model<
   declare commentId: number;
   declare parentReplyId: CreationOptional<number>;
   declare adminReply: CreationOptional<boolean>;
+  declare profilePicture: CreationOptional<string>;
 }
 
 Reply.init(
@@ -56,6 +57,11 @@ Reply.init(
     adminReply: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
+    },
+    profilePicture: {
+      type: DataTypes.STRING,
+      defaultValue: false,
+      allowNull: true,
     },
   },
   {

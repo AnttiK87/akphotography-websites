@@ -8,9 +8,10 @@ import { showMessage } from "../../reducers/messageReducer";
 type FileUploadProps = {
   setFile: (file: File) => void;
   file: File | undefined;
+  setPreview: (url: string) => void;
 };
 
-const FileUpload = ({ setFile, file }: FileUploadProps) => {
+const FileUpload = ({ setFile, file, setPreview }: FileUploadProps) => {
   const dispatch = useAppDispatch();
   const [dragActive, setDragActive] = useState(false);
 
@@ -18,6 +19,8 @@ const FileUpload = ({ setFile, file }: FileUploadProps) => {
     const selectedFile = event.target.files?.[0];
     if (selectedFile) {
       setFile(selectedFile);
+      const url = URL.createObjectURL(selectedFile);
+      setPreview(url);
     }
   };
 
@@ -46,6 +49,8 @@ const FileUpload = ({ setFile, file }: FileUploadProps) => {
 
       if (isJpg) {
         setFile(droppedFile);
+        const url = URL.createObjectURL(droppedFile);
+        setPreview(url);
       } else {
         dispatch(
           showMessage(

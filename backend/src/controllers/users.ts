@@ -3,7 +3,13 @@ import bcrypt from 'bcryptjs';
 
 import { tokenExtractor } from '../middleware/tokenExtractor.js';
 import { userExtractor } from '../middleware/userExtractor.js';
-import { handleUserInfoChange } from '../middleware/validateUpdateInput.js';
+import { handleUpload } from '../middleware/uploadMiddleware.js';
+import { createNewProfPic } from '../middleware/createThumbnail.js';
+
+import {
+  handleUserInfoChange,
+  handleProfPictureChange,
+} from '../middleware/validateUpdateInput.js';
 import { userFinder } from '../middleware/finders.js';
 import {
   validatePasswordChange,
@@ -31,6 +37,47 @@ router.get('/', async (_req: Request, res: Response) => {
   });
   res.json(users);
 });
+
+// POST /api/users/addUser
+// route for adding a new user
+// Middlewares used:
+// - tokenExtractor: validates the token and checks if the user is authenticated
+// - validateNewUserInput: validates the new user input
+// - not in use at ui, mainly for testing purposes and for possible future use
+router.post(
+  '/addUser',
+  tokenExtractor,
+  userExtractor,
+  validateNewUserInput,
+  async (req: Request<object, object, UserInput>, res: Response) => {
+    const { name, username, password, email, role } = req.body;
+
+    const passwordHash = await bcrypt.hash(password, 10);
+    const profilePicture = '/images/about/profile-picture.jpg';
+
+    const newUser = await User.create({
+      name,
+      username,
+      passwordHash,
+      email,
+      role,
+      profilePicture,
+    });
+
+    res.json({
+      messageEn: 'New user added!',
+      messageFi: 'Uusi käyttäjä lisätty!',
+      user: {
+        id: newUser.id,
+        name: newUser.name,
+        username: newUser.username,
+        email: newUser.email,
+        role: newUser.role,
+        profilePicture: newUser.profilePicture,
+      },
+    });
+  },
+);
 
 // PUT /api/users/changePassword
 // route for users passwordchange
@@ -127,39 +174,26 @@ router.put(
   },
 );
 
-// POST /api/users/addUser
-// route for adding a new user
+// PUT /api/users/updateInfo
+// route for changing user info
 // Middlewares used:
 // - tokenExtractor: validates the token and checks if the user is authenticated
-// - validateNewUserInput: validates the new user input
-// - not in use at ui, mainly for testing purposes and for possible future use
-router.post(
-  '/addUser',
+// - userExtractor: extracts the user from the token
+// - handleUserInfoChange: handles the updated user info
+router.put(
+  '/changeProfPic',
+  handleUpload,
   tokenExtractor,
-  validateNewUserInput,
-  async (req: Request<object, object, UserInput>, res: Response) => {
-    const { name, username, password, email, role } = req.body;
-
-    const passwordHash = await bcrypt.hash(password, 10);
-
-    const newUser = await User.create({
-      name,
-      username,
-      passwordHash,
-      email,
-      role,
-    });
+  userExtractor,
+  createNewProfPic,
+  handleProfPictureChange,
+  async (req: Request<object, object, UserInfoUpdateInput>, res: Response) => {
+    const updatedUser = await req.user.save();
 
     res.json({
-      messageEn: 'New user added!',
-      messageFi: 'Uusi käyttäjä lisätty!',
-      user: {
-        id: newUser.id,
-        name: newUser.name,
-        username: newUser.username,
-        email: newUser.email,
-        role: newUser.role,
-      },
+      messageEn: 'Profile picture changed!',
+      messageFi: 'Profiilikuva vaihdettu!',
+      newProfPic: updatedUser.profilePicture,
     });
   },
 );

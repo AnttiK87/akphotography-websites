@@ -58,7 +58,13 @@ const ReplyItem = ({
               {reply.adminReply === true ? (
                 <img
                   className="adminUserImg"
-                  src="/images/about/me2.jpg"
+                  src={
+                    reply.profilePicture === undefined ||
+                    reply.profilePicture === null ||
+                    reply.profilePicture === "0"
+                      ? "/images/about/profile-picture.jpg"
+                      : reply.profilePicture
+                  }
                   alt="adminPhoto"
                 />
               ) : (

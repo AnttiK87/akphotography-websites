@@ -3,6 +3,7 @@ import { Request, Response, NextFunction } from 'express';
 import path from 'path';
 import fs from 'fs/promises';
 import fsSync from 'fs';
+import sharp from 'sharp';
 import { getPath } from '../utils/pathUtils.js';
 
 import { handlePictureResize } from '../services/imageService.js';
@@ -66,7 +67,7 @@ export const writeFileCreateThumbnail = async (
     uploadFolderThumbnail,
   );
 
-  // add thubnail data to req.file
+  // add thumbnail data to req.file
   req.file.thumbnailFilename = thumbnail.filename;
   req.file.thumbnailPath = path.join(
     uploadBase,
@@ -74,6 +75,54 @@ export const writeFileCreateThumbnail = async (
     thumbnail.filename,
   );
   logger.info(`Created thumbnail: ${req.file.thumbnailPath}`);
+
+  next();
+};
+
+export const writeNewProfPic = async (
+  file: Express.Multer.File,
+  username: string,
+  uploadFolderProfPic: string,
+) => {
+  if (file?.buffer) {
+    const extension = '.webp';
+    const filename = `profile-picture-${username}${extension}`;
+    const filePath = path.join(uploadFolderProfPic, filename);
+
+    // Process & save with Sharp
+    await sharp(file.buffer)
+      .resize({ height: 300, width: 300 })
+      .toFile(filePath);
+
+    file.path = filePath;
+    file.filename = filename;
+
+    logger.info(`Saved new profile picture to disk: ${filePath}`);
+  }
+};
+
+export const createNewProfPic = async (
+  req: Request,
+  _res: Response,
+  next: NextFunction,
+) => {
+  const isTestEnv = process.env.NODE_ENV === 'test';
+  const isDevEnv = process.env.NODE_ENV === 'development';
+  const uploadBase = isTestEnv
+    ? './tests/uploads/'
+    : isDevEnv
+      ? '/backend/public_html/uploads/'
+      : '/public_html/uploads/';
+
+  const uploadFolder = getPath(uploadBase, 'profile-pictures');
+
+  // create folders if they don't exist
+  if (!fsSync.existsSync(uploadFolder)) {
+    fsSync.mkdirSync(uploadFolder, { recursive: true });
+  }
+
+  // write file from memory to hard drive
+  await writeNewProfPic(req.file, req.user.username, uploadFolder);
 
   next();
 };

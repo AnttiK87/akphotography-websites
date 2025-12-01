@@ -53,6 +53,7 @@ router.post(
       pictureId,
       parentReplyId,
       adminReply,
+      profilePicture,
     } = req.body;
 
     if (adminReply) {
@@ -72,6 +73,7 @@ router.post(
       pictureId,
       parentReplyId,
       adminReply,
+      profilePicture,
     });
 
     const replyWithComment = await getReplyById(newReply.id);

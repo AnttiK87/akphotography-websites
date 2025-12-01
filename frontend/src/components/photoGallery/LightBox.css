@@ -273,7 +273,7 @@
 
 .textPomContainer {
   height: 100%;
-  width: 35vw;
+  width: 45vw;
   background: #00433c;
   position: absolute;
   left: 0;
@@ -338,6 +338,7 @@
   hyphens: auto;
   word-wrap: break-word;
   overflow-wrap: break-word;
+  white-space: pre-line;
 }
 
 .headerPomLB {
