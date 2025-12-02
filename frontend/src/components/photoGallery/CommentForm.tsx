@@ -26,6 +26,7 @@ type CommentFormProps = {
   reply: boolean;
   setReply: (value: boolean) => void;
   adminComment: boolean;
+  profilePicture?: string;
 };
 
 const CommentForm = ({
@@ -37,6 +38,7 @@ const CommentForm = ({
   reply,
   setReply,
   adminComment,
+  profilePicture,
 }: CommentFormProps) => {
   const { language } = useLanguage();
   const { currentComment } = useLightBox();
@@ -123,6 +125,7 @@ const CommentForm = ({
       pictureId: currentComment.pictureId,
       parentReplyId: parentReply,
       adminReply: adminComment ? true : false,
+      profilePicture: profilePicture ? profilePicture : undefined,
     };
 
     dispatch(createReply(formData, language));

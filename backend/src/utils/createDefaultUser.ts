@@ -14,6 +14,7 @@ export const createDefaultUser = async () => {
       passwordHash,
       email: 'admin@example.com',
       role: 'admin',
+      profilePicture: '/images/about/profile-picture.jpg',
     });
     logger.info('Default admin user created');
   } else {

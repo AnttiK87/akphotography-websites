@@ -15,6 +15,61 @@
   overflow: hidden;
 }
 
+.profilePicture {
+  width: 150px;
+  height: 150px;
+  border-radius: 75px;
+  object-fit: cover;
+  margin-bottom: 1em;
+  user-select: none;
+  pointer-events: none;
+}
+
+.profilePlus {
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: row;
+  align-items: flex-end;
+  user-select: none;
+}
+
+.profilePictureContainer {
+  width: 440px;
+}
+
+.addProfPic {
+  width: 100%;
+}
+
+.cropPreview {
+  height: 250px;
+}
+
+.plusButton {
+  border: none;
+  background: #00433c;
+  color: #ffffff;
+  height: 30px;
+  width: 30px;
+  border-radius: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  position: relative;
+  left: -40px;
+  bottom: 20px;
+  cursor: pointer;
+}
+
+.plusButton:hover {
+  background: #005d54;
+}
+
+.plusButton:active {
+  scale: 0.9;
+}
+
 .group-header {
   border-bottom: 2px solid black;
   text-align: start;

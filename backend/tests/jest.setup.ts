@@ -10,16 +10,19 @@ beforeAll(async () => {
   await createDefaultUser();
 }, 30000);
 
+afterAll(async () => {
+  await sequelize.close();
+});
+
 import fs from 'fs/promises';
 import path from 'path';
 
 const foldersToClean = [
-  path.resolve('tests/uploads/pictures'),
-  path.resolve('tests/uploads/thumbnail'),
+  path.resolve('tests/tests/uploads/pictures'),
+  path.resolve('tests/tests/uploads/thumbnail'),
 ];
 
 afterAll(async () => {
-  // Poista kaikki tiedostot kansioista
   for (const folder of foldersToClean) {
     try {
       const files = await fs.readdir(folder);
@@ -30,7 +33,7 @@ afterAll(async () => {
           const stat = await fs.stat(filePath);
 
           if (stat.isFile()) {
-            await fs.unlink(filePath); // poista tiedosto
+            await fs.unlink(filePath);
           }
         }),
       );
@@ -38,7 +41,4 @@ afterAll(async () => {
       console.error(`Error cleaning folder ${folder}:`, err);
     }
   }
-
-  // Sulje tietokantayhteys
-  await sequelize.close();
 });

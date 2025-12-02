@@ -35,6 +35,7 @@ const initialState: UserState = {
   password: undefined,
   loginUser: undefined,
   user: undefined,
+  profilePicture: parsedUser?.profilePicture || undefined,
 };
 
 const userSlice = createSlice({
@@ -52,6 +53,7 @@ const userSlice = createSlice({
     },
     setLoginUser(state, action: PayloadAction<LoginResponse>) {
       state.loginUser = action.payload;
+      state.profilePicture = action.payload.profilePicture;
     },
     setUser(state, action: PayloadAction<User>) {
       state.user = action.payload;
@@ -73,6 +75,9 @@ const userSlice = createSlice({
         throw new Error("User missing!");
       }
     },
+    updateProfPic(state, action: PayloadAction<string>) {
+      state.profilePicture = action.payload;
+    },
   },
 });
 
@@ -85,6 +90,7 @@ export const {
   clearUser,
   updateUser,
   setFirstLogin,
+  updateProfPic,
 } = userSlice.actions;
 
 export const getUser = (id: number) => {
@@ -153,6 +159,28 @@ export const updateUserInfo = (content: UpdateInfo) => {
         showMessage(
           {
             text: `User information changed!`,
+            type: "success",
+          },
+          5
+        )
+      );
+    } catch (err: unknown) {
+      const error = err as AxiosError;
+      handleError(error, dispatch);
+    }
+  };
+};
+
+export const changeProfPicture = (content: FormData) => {
+  return async (dispatch: AppDispatch) => {
+    try {
+      const profPic = await userService.changeProfPic(content);
+      dispatch(updateProfPic(profPic.newProfPic));
+
+      dispatch(
+        showMessage(
+          {
+            text: `Profile picture changed!`,
             type: "success",
           },
           5

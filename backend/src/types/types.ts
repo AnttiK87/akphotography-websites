@@ -30,6 +30,7 @@ export interface ReplyInput {
   pictureId: number;
   parentReplyId?: number;
   adminReply?: boolean;
+  profilePicture?: string;
 }
 
 export interface ContactFormInput {

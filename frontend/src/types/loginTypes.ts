@@ -11,6 +11,7 @@ export interface LoginResponse {
   email: string;
   lastLogin: string;
   firstLogin: boolean;
+  profilePicture: string;
 }
 
 export interface LogoutResponse {

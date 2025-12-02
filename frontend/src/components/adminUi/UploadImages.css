@@ -66,3 +66,15 @@
 .ComboBoxUI {
   text-align: start;
 }
+
+.preview {
+  margin: 1rem auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.preview-img {
+  height: 300px;
+  width: fit-content;
+}

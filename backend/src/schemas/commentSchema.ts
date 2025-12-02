@@ -21,6 +21,7 @@ export const replySchema = z.object({
   commentId: z.number(),
   adminReply: z.boolean(),
   parentReplyId: z.number().nullable().optional(),
+  profilePicture: z.string().nullable().optional(),
 });
 
 export const replyUpdateSchema = z.object({

@@ -10,6 +10,7 @@ export interface UserState {
   password: string | undefined;
   loginUser: LoginResponse | undefined;
   user: User | undefined;
+  profilePicture: string | undefined;
 }
 
 export type User = {
@@ -20,6 +21,7 @@ export type User = {
   role: string;
   lastLogin: string;
   loginTime: string;
+  profilePicture: string;
 };
 
 export type FirstLogin = {
@@ -54,4 +56,8 @@ export type UserUpdateResponse = {
   messageFi: string;
   messageEn: string;
   user: UpdateUser;
+};
+
+export type changeProfPicResponse = {
+  newProfPic: string;
 };

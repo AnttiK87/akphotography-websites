@@ -174,6 +174,24 @@ export const handleUserInfoChange = (
   next();
 };
 
+// handle and validate user information update
+// returns object with validated and updated info to controller
+export const handleProfPictureChange = (
+  req: Request,
+  _res: Response,
+  next: NextFunction,
+) => {
+  const profilePicture = req.file.filename;
+
+  const changes: Partial<typeof req.user> = {};
+
+  if (profilePicture)
+    changes.profilePicture = '/uploads/profile-pictures/' + profilePicture;
+
+  Object.assign(req.user, changes);
+  next();
+};
+
 export const commentChangeHandler = (
   req: Request,
   _res: Response,

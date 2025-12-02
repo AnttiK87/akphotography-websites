@@ -6,6 +6,7 @@ import type {
   ChangePassword,
   UpdateInfo,
   UserUpdateResponse,
+  changeProfPicResponse,
 } from "../types/userTypes";
 
 const baseUrl = "/api/users";
@@ -88,10 +89,28 @@ const updateInfo = async (content: UpdateInfo): Promise<UserUpdateResponse> => {
   return response.data;
 };
 
+const changeProfPic = async (
+  newObject: FormData
+): Promise<changeProfPicResponse> => {
+  const token = loginService.getToken();
+
+  const config = {
+    headers: { Authorization: token },
+  };
+
+  const response = await axios.put<changeProfPicResponse>(
+    `${baseUrl}/changeProfPic`,
+    newObject,
+    config
+  );
+  return response.data;
+};
+
 export default {
   getAll,
   getUserById,
   updateFirstLogin,
   changePassword,
   updateInfo,
+  changeProfPic,
 };

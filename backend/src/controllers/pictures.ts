@@ -169,8 +169,8 @@ router.put(
   },
 );
 
-// PUT /api/pictures/ordeUp/:id
-// route for changind order upwards
+// PUT /api/pictures/r
+// route for changing order upwards
 // middlewares used:
 // - tokenExtractor: extracts the token from the request header
 // - pictureFinder: finds the picture by id and attaches it to the request object
@@ -179,84 +179,91 @@ router.put(
   tokenExtractor,
   pictureFinder,
   async (req: Request, res: Response) => {
-    const picture: Picture = req.picture;
-
-    if (picture.type === 'monthly') {
-      res.status(400).json({
-        error: 'Change month and year if you want to reorder monthly pictures!',
-      });
-      return;
-    }
-
     const transaction = await sequelize.transaction();
-    let newOrder: number;
+    try {
+      const picture: Picture = req.picture;
 
-    if (picture.order === null || picture.order === 0) {
-      const maxOrder: number = await Picture.max('order', {
-        where: { type: picture.type },
-        transaction,
-      });
-
-      newOrder = (maxOrder ?? 0) + 1;
-
-      picture.order = newOrder;
-
-      await picture.save();
-
-      const updatedPicture = await Picture.findByPk(picture.id, {
-        include: picIncludeBasic,
-      });
-
-      res.json({
-        picture1: updatedPicture,
-        picture2: null,
-        message: 'Order updated!',
-      });
-      return;
-    } else {
-      const pictureBefore = await Picture.findOne({
-        where: {
-          type: picture.type,
-          order: { [Op.gt]: picture.order },
-        },
-        order: [['order', 'ASC']],
-        transaction,
-      });
-
-      if (!pictureBefore) {
+      if (picture.type === 'monthly') {
         await transaction.rollback();
-        res.status(400).json({ error: 'This is already first picture' });
+        res.status(400).json({
+          error:
+            'Change month and year if you want to reorder monthly pictures!',
+        });
         return;
       }
 
-      newOrder = pictureBefore.order || 1;
-      picture.order = newOrder;
-      await picture.save({ transaction });
+      let newOrder: number;
 
-      pictureBefore.order =
-        pictureBefore.order != null ? pictureBefore.order - 1 : null;
-      await pictureBefore.save({ transaction });
+      if (picture.order === null || picture.order === 0) {
+        const maxOrder: number = await Picture.max('order', {
+          where: { type: picture.type },
+          transaction,
+        });
 
-      await transaction.commit();
+        newOrder = (maxOrder ?? 0) + 1;
 
-      const updatedPicture = await Picture.findByPk(picture.id, {
-        include: picIncludeBasic,
-      });
-      const updatedPictureBefore = await Picture.findByPk(pictureBefore.id, {
-        include: picIncludeBasic,
-      });
+        picture.order = newOrder;
 
-      res.json({
-        picture1: updatedPicture,
-        picture2: updatedPictureBefore,
-        message: 'Order updated!',
-      });
+        await picture.save();
+
+        const updatedPicture = await Picture.findByPk(picture.id, {
+          include: picIncludeBasic,
+        });
+
+        res.json({
+          picture1: updatedPicture,
+          picture2: null,
+          message: 'Order updated!',
+        });
+        return;
+      } else {
+        const pictureBefore = await Picture.findOne({
+          where: {
+            type: picture.type,
+            order: { [Op.gt]: picture.order },
+          },
+          order: [['order', 'ASC']],
+          transaction,
+        });
+
+        if (!pictureBefore) {
+          await transaction.rollback();
+          res.status(400).json({ error: 'This is already first picture' });
+          return;
+        }
+
+        newOrder = pictureBefore.order || 1;
+        picture.order = newOrder;
+        await picture.save({ transaction });
+
+        pictureBefore.order =
+          pictureBefore.order != null ? pictureBefore.order - 1 : null;
+        await pictureBefore.save({ transaction });
+
+        await transaction.commit();
+
+        const updatedPicture = await Picture.findByPk(picture.id, {
+          include: picIncludeBasic,
+        });
+        const updatedPictureBefore = await Picture.findByPk(pictureBefore.id, {
+          include: picIncludeBasic,
+        });
+
+        res.json({
+          picture1: updatedPicture,
+          picture2: updatedPictureBefore,
+          message: 'Order updated!',
+        });
+      }
+    } catch (err) {
+      await transaction.rollback();
+      throw err;
     }
   },
 );
 
-// PUT /api/pictures/ordeDown/:id
-// route for changind order downwards
+// PUT /api/pictures/orderDown/:id
+// route for changing order downwards
 // middlewares used:
 // - tokenExtractor: extracts the token from the request header
 // - pictureFinder: finds the picture by id and attaches it to the request object
@@ -265,76 +272,82 @@ router.put(
   tokenExtractor,
   pictureFinder,
   async (req: Request, res: Response) => {
-    const picture: Picture = req.picture;
-
-    if (picture.type === 'monthly') {
-      res.status(400).json({
-        error: 'Change month and year if you want to reorder monthly pictures!',
-      });
-      return;
-    }
-
     const transaction = await sequelize.transaction();
+    try {
+      const picture: Picture = req.picture;
 
-    let newOrder: number;
-    if (picture.order === null) {
-      const maxOrder: number = await Picture.max('order', {
-        where: { type: picture.type },
-        transaction,
-      });
-
-      newOrder = (maxOrder ?? 0) + 1;
-      picture.order = newOrder;
-      await picture.save({ transaction });
-
-      const updatedPicture = await Picture.findByPk(picture.id, {
-        include: picIncludeBasic,
-      });
-
-      res.json({
-        picture1: updatedPicture,
-        picture2: null,
-        message: 'Order updated!',
-      });
-    } else {
-      const pictureAfter = await Picture.findOne({
-        where: {
-          type: picture.type,
-          order: { [Op.lt]: picture.order },
-        },
-        order: [['order', 'DESC']],
-        transaction,
-      });
-
-      if (!pictureAfter) {
+      if (picture.type === 'monthly') {
         await transaction.rollback();
-        res.status(400).json({ error: 'This is already last picture' });
+        res.status(400).json({
+          error:
+            'Change month and year if you want to reorder monthly pictures!',
+        });
         return;
       }
 
-      newOrder = pictureAfter.order || 1;
+      let newOrder: number;
+      if (picture.order === null) {
+        const maxOrder: number = await Picture.max('order', {
+          where: { type: picture.type },
+          transaction,
+        });
 
-      picture.order = newOrder;
-      await picture.save({ transaction });
+        newOrder = (maxOrder ?? 0) + 1;
+        picture.order = newOrder;
+        await picture.save({ transaction });
 
-      pictureAfter.order =
-        pictureAfter.order != null ? pictureAfter.order + 1 : null;
-      await pictureAfter.save({ transaction });
+        const updatedPicture = await Picture.findByPk(picture.id, {
+          include: picIncludeBasic,
+        });
 
-      await transaction.commit();
+        res.json({
+          picture1: updatedPicture,
+          picture2: null,
+          message: 'Order updated!',
+        });
+      } else {
+        const pictureAfter = await Picture.findOne({
+          where: {
+            type: picture.type,
+            order: { [Op.lt]: picture.order },
+          },
+          order: [['order', 'DESC']],
+          transaction,
+        });
 
-      const updatedPicture = await Picture.findByPk(picture.id, {
-        include: picIncludeBasic,
-      });
-      const updatedPictureAfter = await Picture.findByPk(pictureAfter.id, {
-        include: picIncludeBasic,
-      });
+        if (!pictureAfter) {
+          await transaction.rollback();
+          res.status(400).json({ error: 'This is already last picture' });
+          return;
+        }
 
-      res.json({
-        picture1: updatedPicture,
-        picture2: updatedPictureAfter,
-        message: 'Order updated!',
-      });
+        newOrder = pictureAfter.order || 1;
+
+        picture.order = newOrder;
+        await picture.save({ transaction });
+
+        pictureAfter.order =
+          pictureAfter.order != null ? pictureAfter.order + 1 : null;
+        await pictureAfter.save({ transaction });
+
+        await transaction.commit();
+
+        const updatedPicture = await Picture.findByPk(picture.id, {
+          include: picIncludeBasic,
+        });
+        const updatedPictureAfter = await Picture.findByPk(pictureAfter.id, {
+          include: picIncludeBasic,
+        });
+
+        res.json({
+          picture1: updatedPicture,
+          picture2: updatedPictureAfter,
+          message: 'Order updated!',
+        });
+      }
+    } catch (err) {
+      await transaction.rollback();
+      throw err;
     }
   },
 );

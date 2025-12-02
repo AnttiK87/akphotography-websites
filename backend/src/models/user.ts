@@ -17,6 +17,7 @@ class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
   declare role: string;
   declare lastLogin: CreationOptional<Date>;
   declare loginTime: CreationOptional<Date>;
+  declare profilePicture: string;
 }
 
 User.init(
@@ -83,6 +84,16 @@ User.init(
       type: DataTypes.DATE,
       allowNull: true,
       defaultValue: null,
+    },
+    profilePicture: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: '/images/about/profile-picture.jpg',
+      validate: {
+        notEmpty: {
+          msg: 'Name cannot be empty',
+        },
+      },
     },
   },
   {

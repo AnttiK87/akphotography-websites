@@ -14,7 +14,7 @@ export const handleUpload = (
     if (err instanceof multer.MulterError) {
       if (err.code === 'LIMIT_FILE_SIZE') {
         return next(
-          new AppError({ en: 'File too large, max file size 6MB' }, 400),
+          new AppError({ en: 'File too large, max file size 30MB' }, 400),
         );
       }
     }

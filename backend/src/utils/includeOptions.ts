@@ -49,6 +49,7 @@ export const replyInclude = [
       'userId',
       'parentReplyId',
       'commentId',
+      'profilePicture',
     ],
   },
 ];
@@ -68,6 +69,7 @@ export const replyIncludeAll = [
       'userId',
       'parentReplyId',
       'commentId',
+      'profilePicture',
     ],
   },
   {

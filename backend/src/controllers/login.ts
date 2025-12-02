@@ -37,6 +37,7 @@ router.post(
       email: user.email,
       lastLogin: user.lastLogin,
       firstLogin,
+      profilePicture: user.profilePicture,
     });
   },
 );

@@ -8,20 +8,24 @@ import {
   faTrash,
   faPen,
   faMagnifyingGlass,
+  faPlus,
 } from "@fortawesome/free-solid-svg-icons";
 
 import { useAppSelector, useAppDispatch } from "../../hooks/useRedux.js";
 import { initializeKeywords, removeKw } from "../../reducers/keywordReducer.js";
+import { useSelector } from "react-redux";
 
 import useNotLoggedin from "../../hooks/useNotLoggedin.js";
 import NotLoggedin from "./NotLoggedin.js";
 import EditKeyword from "./EditKeyword.js";
 import ChangePassword from "./ChangePassword.js";
 import EditUserInfo from "./EditUserInfo.js";
+import ChangeProfilePicture from "./ChangeProfilePicture.js";
 
 import "./OwnProfile.css";
 
 import type { Keyword } from "../../types/keywordTypes.js";
+import type { RootState } from "../../reducers/store";
 
 const OwnProfile = () => {
   const { user } = useNotLoggedin();
@@ -46,6 +50,13 @@ const OwnProfile = () => {
 
   const [showChangePassword, setShowChangePassword] = useState(false);
   const [showChangeUserInfo, setShowChangeUserInfo] = useState(false);
+
+  const [showChangeProfPic, setShowChangeProfPic] = useState(false);
+  const [version, setVersion] = useState(Date.now());
+
+  const profilePicture = useSelector(
+    (state: RootState) => state.user.profilePicture
+  );
 
   useEffect(() => {
     setIsLoading(true);
@@ -165,7 +176,20 @@ const OwnProfile = () => {
         <h3>{user.name} own profile</h3>
         <div className="InfoAndKeywords">
           <div className="infoCont">
-            <h4>Current admin user&apos;s information:</h4>
+            <h4>User information:</h4>
+            <div key={version} className="profilePlus">
+              <img
+                className="profilePicture"
+                src={`${profilePicture}?t=${version}`}
+                alt="profile picture"
+              />
+              <div
+                className="plusButton"
+                onClick={() => setShowChangeProfPic(true)}
+              >
+                <FontAwesomeIcon icon={faPlus} />
+              </div>
+            </div>
             <Table>
               <tbody>
                 <tr className="trOP">
@@ -275,6 +299,11 @@ const OwnProfile = () => {
           user={userData}
         />
       )}
+      <ChangeProfilePicture
+        show={showChangeProfPic}
+        setShow={setShowChangeProfPic}
+        setVersion={setVersion}
+      />
     </>
   );
 };
