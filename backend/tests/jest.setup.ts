@@ -1,4 +1,4 @@
-import { connectToDatabase } from '../src/utils/db.js';
+import { connectToDatabase, sequelize } from '../src/utils/db.js';
 import { createDefaultUser } from '../src/utils/createDefaultUser.js';
 
 beforeAll(async () => {
@@ -10,9 +10,9 @@ beforeAll(async () => {
   await createDefaultUser();
 }, 30000);
 
-/*afterAll(async () => {
+afterAll(async () => {
   await sequelize.close();
-});*/
+});
 
 import fs from 'fs/promises';
 import path from 'path';
@@ -41,4 +41,4 @@ afterAll(async () => {
       console.error(`Error cleaning folder ${folder}:`, err);
     }
   }
-}, 30000);
+});

@@ -18,8 +18,8 @@ export async function down({
   context: QueryInterface;
 }): Promise<void> {
   await context.sequelize.query(`
-      ALTER DATABASE \`${process.env.MYSQL_DATABASE}\`
-      CHARACTER SET utf8
-      COLLATE utf8_general_ci;
-    `);
+    ALTER DATABASE \`${process.env.MYSQL_DATABASE}\`
+    CHARACTER SET utf8
+    COLLATE utf8_general_ci;
+  `);
 }

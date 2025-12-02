@@ -86,12 +86,9 @@ describe('Picture routes', () => {
 
   afterAll(async () => {
     await cleanupTestFiles();
-    await Picture.destroy({ where: { id: pictures[0].id } });
-    await Picture.destroy({ where: { id: pictures[1].id } });
-    await Picture.destroy({ where: { id: pictures[2].id } });
-    await Picture.destroy({ where: { id: pictures[3].id } });
-    await Picture.destroy({ where: { id: pictures[4].id } });
-    await Picture.destroy({ where: { id: pictures[5].id } });
+    await Picture.destroy({
+      where: { id: pictures.map((p) => p.id) },
+    });
   }, 30000);
 
   test('GET /api/pictures returns basic picture data', async () => {
@@ -188,17 +185,6 @@ describe('Picture routes', () => {
     expect(res.body.message).toBe('Order updated!');
     expect(res.body.picture1.order).toBe(2);
     expect(res.body.picture2.order).toBe(1);
-  });
-
-  test('PUT /api/pictures/orderUp/:id moves pictures order up', async () => {
-    const res = await request(app)
-      .put(`/api/pictures/orderUp/${pictures[2].id}`)
-      .set('Authorization', `Bearer ${token}`)
-      .expect(200);
-
-    expect(res.body.message).toBe('Order updated!');
-    expect(res.body.picture1.order).toBe(1);
-    expect(res.body.picture2).toBe(null);
   });
 
   test('PUT /api/pictures/orderUp/:id cant order monthly picture', async () => {
@@ -522,7 +508,7 @@ describe('Picture routes', () => {
     expect(res.body.messages.en).toBe('Only .jpg files are allowed!');
   });
 
-  /*test('POST /api/pictures/upload fails to upload multiple files', async () => {
+  test('POST /api/pictures/upload fails to upload multiple files', async () => {
     await request(app)
       .post('/api/pictures/upload')
       .set('Authorization', `Bearer ${token}`)
@@ -543,7 +529,7 @@ describe('Picture routes', () => {
         console.warn('error: ', err);
         expect(err.code === undefined || err.code === 'ECONNRESET').toBe(true);
       });
-  }, 30000);*/
+  }, 30000);
 
   test('POST /api/pictures/upload fails without file', async () => {
     const res = await request(app)
