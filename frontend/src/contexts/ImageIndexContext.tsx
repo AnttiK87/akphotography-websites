@@ -7,6 +7,7 @@ interface ImageIndexContextType {
   currentImageIndex: number;
   setCurrentImageIndex: React.Dispatch<React.SetStateAction<number>>;
   images: string[] | undefined;
+  setImages: React.Dispatch<React.SetStateAction<string[] | undefined>>;
 }
 
 interface ImageIndexProviderProps {
@@ -24,7 +25,7 @@ export const ImageIndexProvider = ({ children }: ImageIndexProviderProps) => {
   useEffect(() => {
     async function fetchPictures() {
       const data = await uiComponentService.getHomeBackGround();
-      const randomIndex = Math.floor(Math.random() * data.count) + 1;
+      const randomIndex = Math.floor(Math.random() * (data.count - 1));
       setCurrentImageIndex(randomIndex);
       setImages(data.files);
     }
@@ -34,7 +35,7 @@ export const ImageIndexProvider = ({ children }: ImageIndexProviderProps) => {
 
   return (
     <ImageIndexContext.Provider
-      value={{ currentImageIndex, setCurrentImageIndex, images }}
+      value={{ currentImageIndex, setCurrentImageIndex, images, setImages }}
     >
       {children}
     </ImageIndexContext.Provider>

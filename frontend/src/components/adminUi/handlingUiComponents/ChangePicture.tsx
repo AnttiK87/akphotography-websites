@@ -3,6 +3,9 @@ import { useState } from "react";
 import { showMessage } from "../../../reducers/messageReducer.js";
 import { useAppDispatch } from "../../../hooks/useRedux.js";
 
+import type { AxiosError } from "axios";
+import { handleError } from "../../../utils/handleError";
+
 import { Form, Button } from "react-bootstrap";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -11,8 +14,9 @@ import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { handleOverlayClose } from "../../../utils/closeOverlay.js";
 
 import FileUpload from "../FileUpload.js";
-
 import Cropping from "./Cropping.js";
+
+import uiComponentService from "../../../services/uiComponents.js";
 
 import type { Crop } from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
@@ -24,16 +28,20 @@ type ChangePictureProps = {
   show: boolean;
   setShow: (value: boolean) => void;
   selectedPicture: string | undefined;
-  picturesCount: number | undefined;
+  pictures: string[] | undefined;
   aspect: number;
+  path: string;
+  setVersion: (value: number) => void;
 };
 
 const ChangePicture = ({
   show,
   setShow,
   selectedPicture,
-  picturesCount,
+  pictures,
   aspect,
+  path,
+  setVersion,
 }: ChangePictureProps) => {
   const [file, setFile] = useState<File | undefined>(undefined);
   const [preview, setPreview] = useState<string | undefined>(undefined);
@@ -52,11 +60,26 @@ const ChangePicture = ({
     reset();
   };
 
-  function getCroppedImg(
+  const getSmallestFreeIndex = (pictures: string[]) => {
+    const set = new Set(
+      pictures.map((name) => {
+        const m = name.match(/background(\d+)\./);
+        return m ? Number(m[1]) : null;
+      })
+    );
+
+    let i = 1;
+    while (set.has(i)) {
+      i++;
+    }
+    return i;
+  };
+
+  const getCroppedImg = (
     image: HTMLImageElement,
     crop: Crop,
-    fileName = "cropped.webp"
-  ) {
+    fileName = "cropped.jpg"
+  ) => {
     return new Promise<File | null>((resolve) => {
       const canvas = document.createElement("canvas");
       const scaleX = image.naturalWidth / image.width;
@@ -87,11 +110,11 @@ const ChangePicture = ({
           return;
         }
 
-        const file = new File([blob], fileName, { type: "image/jpeg" });
+        const file = new File([blob], fileName, { type: "image/jpg" });
         resolve(file);
-      }, "image/webp");
+      }, "image/jpg");
     });
-  }
+  };
 
   const changePicture = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -123,10 +146,40 @@ const ChangePicture = ({
       return;
     }
 
+    const fileIndex =
+      !selectedPicture && pictures && getSmallestFreeIndex(pictures);
+
     const formData = new FormData();
     formData.append("image", croppedPicture);
+    formData.append("path", path);
+    formData.append(
+      "filename",
+      selectedPicture ? selectedPicture : `background${fileIndex}.jpg`
+    );
 
-    handleClose();
+    try {
+      const response = await uiComponentService.changePic(formData);
+
+      dispatch(
+        showMessage(
+          {
+            text: response.messageEn,
+            type: "success",
+          },
+          5
+        )
+      );
+
+      if (pictures) {
+        pictures.push(response.picture);
+      }
+
+      setVersion(Date.now());
+      handleClose();
+    } catch (err: unknown) {
+      const error = err as AxiosError;
+      handleError(error, dispatch);
+    }
   };
 
   if (!show) {
@@ -142,7 +195,7 @@ const ChangePicture = ({
       <div id="modal" className="editPictureContainer profilePictureContainer">
         <div className="editPicture">
           <div className="mainHeaderEKW">
-            <h3>Change profile picture:</h3>
+            <h3>Select picture:</h3>
             <div onClick={() => handleClose()}>
               <FontAwesomeIcon className="CloseRatingInfo" icon={faXmark} />
             </div>
@@ -156,7 +209,7 @@ const ChangePicture = ({
               {!preview && (
                 <div className="addProfPic">
                   <label htmlFor="addNewProfilePicture" className="form__label">
-                    Add new profile picture
+                    Add new picture
                   </label>
 
                   <FileUpload

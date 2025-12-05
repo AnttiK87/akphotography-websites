@@ -144,7 +144,7 @@ const ChangeProfilePicture = ({
       <div id="modal" className="editPictureContainer profilePictureContainer">
         <div className="editPicture">
           <div className="mainHeaderEKW">
-            <h3>Change profile picture:</h3>
+            <h3>Change picture:</h3>
             <div onClick={() => handleClose()}>
               <FontAwesomeIcon className="CloseRatingInfo" icon={faXmark} />
             </div>
@@ -158,7 +158,7 @@ const ChangeProfilePicture = ({
               {!preview && (
                 <div className="addProfPic">
                   <label htmlFor="addNewProfilePicture" className="form__label">
-                    Add new profile picture
+                    Add new picture
                   </label>
 
                   <FileUpload

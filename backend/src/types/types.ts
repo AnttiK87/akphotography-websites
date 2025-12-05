@@ -114,3 +114,8 @@ export interface passwordChangeInput {
   newPassword1: string;
   newPassword2: string;
 }
+
+export interface changeUiPicInput {
+  path: string;
+  filename: string;
+}

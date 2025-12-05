@@ -39,7 +39,7 @@ const HomeHeader = () => {
       if (!images) return;
       if (startAnim) {
         setCurrentImageIndex((prev) =>
-          prev >= images?.length - 1 ? 2 : prev + 2
+          prev >= images?.length - 2 ? 2 : prev + 2
         );
       } else {
         setNextImageIndex(
@@ -55,8 +55,8 @@ const HomeHeader = () => {
     const image = new Image();
     const imageNext = new Image();
     if (images === undefined) return;
-    image.src = `/images/homeBackground/${images[currentImageIndex - 1]}`;
-    imageNext.src = `/images/homeBackground/${images[currentImageIndex]}`;
+    image.src = `/images/homeBackground/${images[currentImageIndex]}`;
+    imageNext.src = `/images/homeBackground/${images[currentImageIndex + 1]}`;
     image.onload = () => {
       setIsImageReady(true);
     };
@@ -77,7 +77,7 @@ const HomeHeader = () => {
           ) : (
             <>
               <img
-                src={`/images/homeBackground/${images[currentImageIndex - 1]}`}
+                src={`/images/homeBackground/${images[currentImageIndex]}`}
                 alt="Background Image"
                 loading="eager"
                 onLoad={() => setIsImageReady(true)}
@@ -86,7 +86,7 @@ const HomeHeader = () => {
                 }`}
               />
               <img
-                src={`/images/homeBackground/${images[nextImageIndex - 1]}`}
+                src={`/images/homeBackground/${images[nextImageIndex]}`}
                 alt="Background Image"
                 loading="eager"
                 onLoad={() => setIsImageReady(true)}
