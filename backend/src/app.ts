@@ -17,6 +17,7 @@ import contactFormRouter from './controllers/contactForm.js';
 import usersRouter from './controllers/users.js';
 import loginRouter from './controllers/login.js';
 import logoutRouter from './controllers/logout.js';
+import uicomponentRouter from './controllers/uiComponents.js';
 
 const app = express();
 
@@ -47,6 +48,7 @@ app.use('/api/contact', contactFormRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/login', loginRouter);
 app.use('/api/logout', logoutRouter);
+app.use('/api/uiComponents', uicomponentRouter);
 
 await connectToDatabase();
 await createDefaultUser();

@@ -14,9 +14,11 @@ const HomeHeader = () => {
   const { language } = useLanguage();
   const [textIsAnimated, setTextIsAnimated] = useState(false);
   const [isImageReady, setIsImageReady] = useState(false);
-  const { currentImageIndex, setCurrentImageIndex } = useImageIndex();
+  const { currentImageIndex, setCurrentImageIndex, images } = useImageIndex();
+  const [nextImageIndex, setNextImageIndex] = useState(currentImageIndex + 1);
+  const [startAnim, setStartAnim] = useState(false);
 
-  const duration = 10000;
+  const duration = 5000;
 
   const headerText =
     language === "fin"
@@ -26,21 +28,39 @@ const HomeHeader = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentImageIndex(currentImageIndex === 8 ? 1 : currentImageIndex + 1);
+      setStartAnim((prev) => !prev);
     }, duration);
 
-    return () => {
-      clearInterval(interval);
-    };
-  }, [duration, setCurrentImageIndex, currentImageIndex]);
+    return () => clearInterval(interval);
+  }, [duration]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (!images) return;
+      if (startAnim) {
+        setCurrentImageIndex((prev) =>
+          prev >= images?.length - 1 ? 2 : prev + 2
+        );
+      } else {
+        setNextImageIndex(
+          currentImageIndex >= images?.length - 1 ? 1 : currentImageIndex + 1
+        );
+      }
+    }, 2500);
+
+    return () => clearInterval(interval);
+  }, [currentImageIndex, setCurrentImageIndex, startAnim, images]);
 
   useEffect(() => {
     const image = new Image();
-    image.src = `../../../images/homeBackground/background${currentImageIndex}.jpg`;
+    const imageNext = new Image();
+    if (images === undefined) return;
+    image.src = `/images/homeBackground/${images[currentImageIndex - 1]}`;
+    imageNext.src = `/images/homeBackground/${images[currentImageIndex]}`;
     image.onload = () => {
       setIsImageReady(true);
     };
-  }, [currentImageIndex]);
+  }, [currentImageIndex, images]);
 
   return (
     <div className="wholeScreen">
@@ -52,13 +72,30 @@ const HomeHeader = () => {
       />
       <div className="ImageAndAnimationCont">
         <div className={`maskImgHome ${isImageReady ? "ready" : ""}`}>
-          <img
-            src={`../../../images/homeBackground/background${currentImageIndex}.jpg`}
-            alt="Background Image"
-            loading="eager"
-            onLoad={() => setIsImageReady(true)}
-            className={`background-image ${isImageReady ? "ready" : ""}`}
-          />
+          {images === undefined ? (
+            <div>Unable to load pictures</div>
+          ) : (
+            <>
+              <img
+                src={`/images/homeBackground/${images[currentImageIndex - 1]}`}
+                alt="Background Image"
+                loading="eager"
+                onLoad={() => setIsImageReady(true)}
+                className={`background-image ${isImageReady ? "ready" : ""} ${
+                  startAnim ? "fade-out" : "fade-in"
+                }`}
+              />
+              <img
+                src={`/images/homeBackground/${images[nextImageIndex - 1]}`}
+                alt="Background Image"
+                loading="eager"
+                onLoad={() => setIsImageReady(true)}
+                className={`background-image ${isImageReady ? "ready" : ""} ${
+                  startAnim ? "fade-in" : "fade-out"
+                }`}
+              />
+            </>
+          )}
         </div>
         {textIsAnimated ? (
           <p className={"animated-text inline-block"}>

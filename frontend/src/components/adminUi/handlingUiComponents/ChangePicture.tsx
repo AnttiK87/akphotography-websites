@@ -1,37 +1,40 @@
 import React from "react";
 import { useState } from "react";
-import { useAppDispatch } from "../../hooks/useRedux.js";
-import { showMessage } from "../../reducers/messageReducer.js";
+import { showMessage } from "../../../reducers/messageReducer.js";
+import { useAppDispatch } from "../../../hooks/useRedux.js";
 
 import { Form, Button } from "react-bootstrap";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
-import { changeProfPicture } from "../../reducers/userReducer.js";
 
-import { handleOverlayClose } from "../../utils/closeOverlay.js";
+import { handleOverlayClose } from "../../../utils/closeOverlay.js";
 
-import FileUpload from "./FileUpload.js";
+import FileUpload from "../FileUpload.js";
 
-import Cropping from "./handlingUiComponents/Cropping.js";
+import Cropping from "./Cropping.js";
 
 import type { Crop } from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
 
-import "./EditPicture.css";
-import "./OwnProfile.css";
+import "../EditPicture.css";
+import "../OwnProfile.css";
 
-type ChangeProfilePictureProps = {
+type ChangePictureProps = {
   show: boolean;
   setShow: (value: boolean) => void;
-  setVersion: (value: number) => void;
+  selectedPicture: string | undefined;
+  picturesCount: number | undefined;
+  aspect: number;
 };
 
-const ChangeProfilePicture = ({
+const ChangePicture = ({
   show,
   setShow,
-  setVersion,
-}: ChangeProfilePictureProps) => {
+  selectedPicture,
+  picturesCount,
+  aspect,
+}: ChangePictureProps) => {
   const [file, setFile] = useState<File | undefined>(undefined);
   const [preview, setPreview] = useState<string | undefined>(undefined);
   const [image, setImage] = useState<HTMLImageElement | undefined>(undefined);
@@ -84,15 +87,13 @@ const ChangeProfilePicture = ({
           return;
         }
 
-        const file = new File([blob], fileName, { type: "image/webp" });
+        const file = new File([blob], fileName, { type: "image/jpeg" });
         resolve(file);
       }, "image/webp");
     });
   }
 
-  const changeProfilePicture = async (
-    event: React.FormEvent<HTMLFormElement>
-  ) => {
+  const changePicture = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (!image) {
@@ -125,9 +126,6 @@ const ChangeProfilePicture = ({
     const formData = new FormData();
     formData.append("image", croppedPicture);
 
-    await dispatch(changeProfPicture(formData));
-
-    setVersion(Date.now());
     handleClose();
   };
 
@@ -150,7 +148,7 @@ const ChangeProfilePicture = ({
             </div>
           </div>
           <Form
-            onSubmit={changeProfilePicture}
+            onSubmit={changePicture}
             encType="multipart/form-data"
             className="formContainerEP"
           >
@@ -172,10 +170,10 @@ const ChangeProfilePicture = ({
                 <Cropping
                   crop={crop}
                   setCrop={setCrop}
-                  aspect={1 / 1}
+                  aspect={aspect}
                   preview={preview}
                   setImage={setImage}
-                  circularCrop={true}
+                  circularCrop={false}
                 />
               )}
             </div>
@@ -216,4 +214,4 @@ const ChangeProfilePicture = ({
   );
 };
 
-export default ChangeProfilePicture;
+export default ChangePicture;

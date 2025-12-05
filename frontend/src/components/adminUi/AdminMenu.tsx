@@ -46,18 +46,35 @@ const AdminMenu = () => {
               </h3>
             </Link>
           </Nav.Link>
-          <Nav.Link href="#" as="span">
+          <Nav.Link
+            className="LinkContainerAM"
+            href="/admin/editContent"
+            as="span"
+          >
             <Link className="TextAM LinkAM" to="/admin/editContent">
               edit content
             </Link>
           </Nav.Link>
-          <Nav.Link className="LinkContainerAM" href="#" as="span">
+          <Nav.Link
+            className="LinkContainerAM"
+            href="/admin/uploadPictures"
+            as="span"
+          >
             <Link className="TextAM LinkAM" to="/admin/uploadPictures">
               Add pictures
             </Link>
           </Nav.Link>
-          <Nav.Link href="#" as="span">
-            <Link className="TextAM LinkAM" to={`/admin/ownProfile`}>
+          <Nav.Link
+            className="LinkContainerAM"
+            href="/admin/uiElements"
+            as="span"
+          >
+            <Link className="TextAM LinkAM" to="/admin/uiElements">
+              Ui Elements
+            </Link>
+          </Nav.Link>
+          <Nav.Link href="#/admin/ownProfile" as="span">
+            <Link className="TextAM LinkAM" to="/admin/ownProfile">
               Own profile
             </Link>
           </Nav.Link>
