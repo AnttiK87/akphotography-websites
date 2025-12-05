@@ -24,6 +24,7 @@ import HandlePictures from "./components/adminUi/HandlePicture";
 import OwnProfile from "./components/adminUi/OwnProfile";
 import Notification from "./components/adminUi/Notification";
 import FirstLogin from "./components/adminUi/FirstLogin";
+import HandlingUiElements from "./components/adminUi/handlingUiComponents/handlingUiElements";
 
 import NotFound from "./components/error/NotFound";
 
@@ -69,7 +70,8 @@ function App() {
     location.pathname === "/admin" ||
     location.pathname === "/admin/uploadPictures" ||
     location.pathname === "/admin/editContent" ||
-    location.pathname === "/admin/ownProfile";
+    location.pathname === "/admin/ownProfile" ||
+    location.pathname === "/admin/uiElements";
 
   if (adminUi) {
     return (
@@ -81,6 +83,7 @@ function App() {
           <Route path="/admin" element={<LoginForm />} />
           <Route path="/admin/uploadPictures" element={<UploadImages />} />
           <Route path="/admin/editContent" element={<HandlePictures />} />
+          <Route path="/admin/uiElements" element={<HandlingUiElements />} />
           <Route path="/admin/ownProfile" element={<OwnProfile />} />
         </Routes>
       </>

@@ -34,7 +34,8 @@
 }
 
 .profilePictureContainer {
-  width: 440px;
+  width: 500px;
+  max-width: 90%;
 }
 
 .addProfPic {
@@ -42,7 +43,8 @@
 }
 
 .cropPreview {
-  height: 250px;
+  width: 100%;
+  height: auto;
 }
 
 .plusButton {
@@ -149,8 +151,7 @@ tr {
 .mainHeaderEKW {
   display: flex;
   flex-direction: row;
-  width: 400px;
-  max-width: 100%;
+  width: 100%;
   justify-content: space-between;
 }
 .inputKeyword {

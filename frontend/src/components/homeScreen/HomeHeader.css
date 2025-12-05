@@ -30,14 +30,15 @@
   mask-repeat: no-repeat;
   mask-size: 100% 100%;
   mask-size: 100% 100%;
-  max-height: 80%;
-  max-width: 95%;
   aspect-ratio: 16 / 9;
-  object-fit: contain;
+  width: 90%;
+  max-width: 1050px;
+  height: auto;
+  overflow: hidden;
   top: 2em;
   position: relative;
   transform: rotate(-15deg);
-  transition: all 1s ease-in-out;
+  transition: all 1.5s ease-in-out;
 }
 
 .maskImgHome.ready,
@@ -79,18 +80,30 @@
 
 .background-image {
   scale: 0;
-  max-height: 100%;
-  max-width: 100%;
+  height: 103%;
+
   object-fit: contain;
   transform: rotate(-10deg);
-  transition: all 1s ease-in-out;
+  transition: opacity 2s ease-in-out, transform 1s ease-in-out,
+    scale 1.5s ease-out;
   opacity: 0;
+  inset: 0;
+  top: -7px;
+  position: absolute;
 }
 
 .background-image.ready {
   transform: rotate(-3deg);
   opacity: 1;
   scale: 1;
+}
+
+.background-image.ready.fade-in {
+  opacity: 1;
+}
+
+.background-image.ready.fade-out {
+  opacity: 0;
 }
 
 .animated-text {

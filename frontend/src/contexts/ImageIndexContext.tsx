@@ -1,9 +1,13 @@
-import { createContext, useState } from "react";
+import React from "react";
+import { createContext, useState, useEffect } from "react";
 import type { ReactNode } from "react";
+import uiComponentService from "../services/uiComponents";
 
 interface ImageIndexContextType {
   currentImageIndex: number;
-  setCurrentImageIndex: (index: number) => void;
+  setCurrentImageIndex: React.Dispatch<React.SetStateAction<number>>;
+  images: string[] | undefined;
+  setImages: React.Dispatch<React.SetStateAction<string[] | undefined>>;
 }
 
 interface ImageIndexProviderProps {
@@ -15,12 +19,23 @@ const ImageIndexContext = createContext<ImageIndexContextType | undefined>(
 );
 
 export const ImageIndexProvider = ({ children }: ImageIndexProviderProps) => {
-  const [currentImageIndex, setCurrentImageIndex] = useState<number>(
-    Math.floor(Math.random() * 8) + 1
-  );
+  const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
+  const [images, setImages] = useState<string[] | undefined>(undefined);
+
+  useEffect(() => {
+    async function fetchPictures() {
+      const data = await uiComponentService.getHomeBackGround();
+      const randomIndex = Math.floor(Math.random() * (data.count - 1));
+      setCurrentImageIndex(randomIndex);
+      setImages(data.files);
+    }
+
+    fetchPictures();
+  }, []);
+
   return (
     <ImageIndexContext.Provider
-      value={{ currentImageIndex, setCurrentImageIndex }}
+      value={{ currentImageIndex, setCurrentImageIndex, images, setImages }}
     >
       {children}
     </ImageIndexContext.Provider>

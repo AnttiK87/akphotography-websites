@@ -1,37 +1,48 @@
 import React from "react";
 import { useState } from "react";
-import { useAppDispatch } from "../../hooks/useRedux.js";
-import { showMessage } from "../../reducers/messageReducer.js";
+import { showMessage } from "../../../reducers/messageReducer.js";
+import { useAppDispatch } from "../../../hooks/useRedux.js";
+
+import type { AxiosError } from "axios";
+import { handleError } from "../../../utils/handleError";
 
 import { Form, Button } from "react-bootstrap";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
-import { changeProfPicture } from "../../reducers/userReducer.js";
 
-import { handleOverlayClose } from "../../utils/closeOverlay.js";
+import { handleOverlayClose } from "../../../utils/closeOverlay.js";
 
-import FileUpload from "./FileUpload.js";
+import FileUpload from "../FileUpload.js";
+import Cropping from "./Cropping.js";
 
-import Cropping from "./handlingUiComponents/Cropping.js";
+import uiComponentService from "../../../services/uiComponents.js";
 
 import type { Crop } from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
 
-import "./EditPicture.css";
-import "./OwnProfile.css";
+import "../EditPicture.css";
+import "../OwnProfile.css";
 
-type ChangeProfilePictureProps = {
+type ChangePictureProps = {
   show: boolean;
   setShow: (value: boolean) => void;
+  selectedPicture: string | undefined;
+  pictures: string[] | undefined;
+  aspect: number;
+  path: string;
   setVersion: (value: number) => void;
 };
 
-const ChangeProfilePicture = ({
+const ChangePicture = ({
   show,
   setShow,
+  selectedPicture,
+  pictures,
+  aspect,
+  path,
   setVersion,
-}: ChangeProfilePictureProps) => {
+}: ChangePictureProps) => {
   const [file, setFile] = useState<File | undefined>(undefined);
   const [preview, setPreview] = useState<string | undefined>(undefined);
   const [image, setImage] = useState<HTMLImageElement | undefined>(undefined);
@@ -49,11 +60,26 @@ const ChangeProfilePicture = ({
     reset();
   };
 
-  function getCroppedImg(
+  const getSmallestFreeIndex = (pictures: string[]) => {
+    const set = new Set(
+      pictures.map((name) => {
+        const m = name.match(/background(\d+)\./);
+        return m ? Number(m[1]) : null;
+      })
+    );
+
+    let i = 1;
+    while (set.has(i)) {
+      i++;
+    }
+    return i;
+  };
+
+  const getCroppedImg = (
     image: HTMLImageElement,
     crop: Crop,
-    fileName = "cropped.webp"
-  ) {
+    fileName = "cropped.jpg"
+  ) => {
     return new Promise<File | null>((resolve) => {
       const canvas = document.createElement("canvas");
       const scaleX = image.naturalWidth / image.width;
@@ -84,15 +110,13 @@ const ChangeProfilePicture = ({
           return;
         }
 
-        const file = new File([blob], fileName, { type: "image/webp" });
+        const file = new File([blob], fileName, { type: "image/jpg" });
         resolve(file);
-      }, "image/webp");
+      }, "image/jpg");
     });
-  }
+  };
 
-  const changeProfilePicture = async (
-    event: React.FormEvent<HTMLFormElement>
-  ) => {
+  const changePicture = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (!image) {
@@ -122,13 +146,40 @@ const ChangeProfilePicture = ({
       return;
     }
 
+    const fileIndex =
+      !selectedPicture && pictures && getSmallestFreeIndex(pictures);
+
     const formData = new FormData();
     formData.append("image", croppedPicture);
+    formData.append("path", path);
+    formData.append(
+      "filename",
+      selectedPicture ? selectedPicture : `background${fileIndex}.jpg`
+    );
 
-    await dispatch(changeProfPicture(formData));
+    try {
+      const response = await uiComponentService.changePic(formData);
 
-    setVersion(Date.now());
-    handleClose();
+      dispatch(
+        showMessage(
+          {
+            text: response.messageEn,
+            type: "success",
+          },
+          5
+        )
+      );
+
+      if (pictures) {
+        pictures.push(response.picture);
+      }
+
+      setVersion(Date.now());
+      handleClose();
+    } catch (err: unknown) {
+      const error = err as AxiosError;
+      handleError(error, dispatch);
+    }
   };
 
   if (!show) {
@@ -144,13 +195,13 @@ const ChangeProfilePicture = ({
       <div id="modal" className="editPictureContainer profilePictureContainer">
         <div className="editPicture">
           <div className="mainHeaderEKW">
-            <h3>Change picture:</h3>
+            <h3>Select picture:</h3>
             <div onClick={() => handleClose()}>
               <FontAwesomeIcon className="CloseRatingInfo" icon={faXmark} />
             </div>
           </div>
           <Form
-            onSubmit={changeProfilePicture}
+            onSubmit={changePicture}
             encType="multipart/form-data"
             className="formContainerEP"
           >
@@ -172,10 +223,10 @@ const ChangeProfilePicture = ({
                 <Cropping
                   crop={crop}
                   setCrop={setCrop}
-                  aspect={1 / 1}
+                  aspect={aspect}
                   preview={preview}
                   setImage={setImage}
-                  circularCrop={true}
+                  circularCrop={false}
                 />
               )}
             </div>
@@ -216,4 +267,4 @@ const ChangeProfilePicture = ({
   );
 };
 
-export default ChangeProfilePicture;
+export default ChangePicture;
