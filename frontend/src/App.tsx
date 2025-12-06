@@ -24,7 +24,7 @@ import HandlePictures from "./components/adminUi/HandlePicture";
 import OwnProfile from "./components/adminUi/OwnProfile";
 import Notification from "./components/adminUi/Notification";
 import FirstLogin from "./components/adminUi/FirstLogin";
-import HandlingUiElements from "./components/adminUi/handlingUiComponents/handlingUiElements";
+import HandlingUiElements from "./components/adminUi/handlingUiComponents/HandlingUiElements";
 
 import NotFound from "./components/error/NotFound";
 
