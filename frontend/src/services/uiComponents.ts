@@ -13,11 +13,27 @@ const getHomeBackGround = async (): Promise<ResponseHomeScreenPictures> => {
   return response.data;
 };
 
-const changePic = async (newObject: FormData): Promise<ChangePicResponse> => {
+import type { AxiosProgressEvent } from "axios";
+
+const changePic = async (
+  newObject: FormData,
+  onProgress?: (progress: number, ms: number) => void
+): Promise<ChangePicResponse> => {
   const token = loginService.getToken();
+  const start = performance.now();
 
   const config = {
-    headers: { Authorization: token, "Content-Type": "multipart/form-data" },
+    headers: {
+      Authorization: token,
+    },
+    onUploadProgress: (event: AxiosProgressEvent) => {
+      if (!event.total) return;
+
+      const percent = Math.round((event.loaded! / event.total) * 100);
+      const ms = performance.now() - start;
+
+      onProgress?.(percent, ms);
+    },
   };
 
   const response = await axios.put<ChangePicResponse>(
@@ -25,6 +41,7 @@ const changePic = async (newObject: FormData): Promise<ChangePicResponse> => {
     newObject,
     config
   );
+
   return response.data;
 };
 

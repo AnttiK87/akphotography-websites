@@ -83,7 +83,7 @@ const HandleHeroImages = () => {
           <div className="imageAndDel">
             <img
               className="selectedImage"
-              src={`/images/homeBackground/${selectedPicture}?t=${version}`}
+              src={`/uploads/images/homeBackground/${selectedPicture}?t=${version}`}
               alt="selected picture"
             />
             <button className="deleteBtn" onClick={() => deleteImg()}>

@@ -10,6 +10,7 @@ import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { changeProfPicture } from "../../reducers/userReducer.js";
 
 import { handleOverlayClose } from "../../utils/closeOverlay.js";
+import { optimizeImage } from "../../utils/optimizer.js";
 
 import FileUpload from "./FileUpload.js";
 
@@ -122,8 +123,10 @@ const ChangeProfilePicture = ({
       return;
     }
 
+    const optimized = await optimizeImage(croppedPicture, 300, 1);
+
     const formData = new FormData();
-    formData.append("image", croppedPicture);
+    formData.append("image", optimized);
 
     await dispatch(changeProfPicture(formData));
 

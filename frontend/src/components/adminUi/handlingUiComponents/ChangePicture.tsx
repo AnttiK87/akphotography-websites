@@ -1,7 +1,10 @@
 import React from "react";
 import { useState } from "react";
 import { showMessage } from "../../../reducers/messageReducer.js";
+import { showProgress } from "../../../reducers/progressReducer.js";
 import { useAppDispatch } from "../../../hooks/useRedux.js";
+import uiComponentService from "../../../services/uiComponents.js";
+import { optimizeImage } from "../../../utils/optimizer.js";
 
 import type { AxiosError } from "axios";
 import { handleError } from "../../../utils/handleError";
@@ -12,11 +15,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 
 import { handleOverlayClose } from "../../../utils/closeOverlay.js";
-
 import FileUpload from "../FileUpload.js";
 import Cropping from "./Cropping.js";
-
-import uiComponentService from "../../../services/uiComponents.js";
 
 import type { Crop } from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
@@ -146,11 +146,13 @@ const ChangePicture = ({
       return;
     }
 
+    const optimized = await optimizeImage(croppedPicture, 700, 1);
+
     const fileIndex =
       !selectedPicture && pictures && getSmallestFreeIndex(pictures);
 
     const formData = new FormData();
-    formData.append("image", croppedPicture);
+    formData.append("image", optimized);
     formData.append("path", path);
     formData.append(
       "filename",
@@ -158,10 +160,12 @@ const ChangePicture = ({
     );
 
     try {
-      const t0 = performance.now();
-      const response = await uiComponentService.changePic(formData);
-      const t1 = performance.now();
-      console.log(`Upload + response: ${t1 - t0}ms`);
+      const response = await uiComponentService.changePic(
+        formData,
+        (progress, ms) => {
+          dispatch(showProgress({ progress, ms }));
+        }
+      );
 
       dispatch(
         showMessage(
@@ -173,7 +177,7 @@ const ChangePicture = ({
         )
       );
 
-      if (pictures) {
+      if (pictures && !selectedPicture) {
         pictures.push(response.picture);
       }
 
