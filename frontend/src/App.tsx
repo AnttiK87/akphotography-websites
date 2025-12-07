@@ -23,6 +23,7 @@ import UploadImages from "./components/adminUi/UploadImages";
 import HandlePictures from "./components/adminUi/HandlePicture";
 import OwnProfile from "./components/adminUi/OwnProfile";
 import Notification from "./components/adminUi/Notification";
+import UploadOverlay from "./components/adminUi/UploadOverlay";
 import FirstLogin from "./components/adminUi/FirstLogin";
 import HandlingUiElements from "./components/adminUi/handlingUiComponents/HandlingUiElements";
 
@@ -78,6 +79,7 @@ function App() {
       <>
         <AdminMenu />
         <Notification />
+        <UploadOverlay />
         <FirstLogin />
         <Routes>
           <Route path="/admin" element={<LoginForm />} />

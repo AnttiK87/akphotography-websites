@@ -12,15 +12,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
 import ChangePicture from "./ChangePicture.js";
-import type { UploadFn } from "../../../types/uiComponentTypes";
 
 import "./HandleHeroImages.css";
 
-type HandleHeroImagesProps = {
-  upload: UploadFn;
-};
-
-const HandleHeroImages = ({ upload }: HandleHeroImagesProps) => {
+const HandleHeroImages = () => {
   const dispatch = useAppDispatch();
 
   const [selectedPicture, setSelectedPicture] = useState<string>("");
@@ -88,7 +83,7 @@ const HandleHeroImages = ({ upload }: HandleHeroImagesProps) => {
           <div className="imageAndDel">
             <img
               className="selectedImage"
-              src={`/images/homeBackground/${selectedPicture}?t=${version}`}
+              src={`/uploads/images/homeBackground/${selectedPicture}?t=${version}`}
               alt="selected picture"
             />
             <button className="deleteBtn" onClick={() => deleteImg()}>
@@ -131,7 +126,6 @@ const HandleHeroImages = ({ upload }: HandleHeroImagesProps) => {
         aspect={16 / 9}
         path={path}
         setVersion={setVersion}
-        onUpload={upload}
       />
     </>
   );

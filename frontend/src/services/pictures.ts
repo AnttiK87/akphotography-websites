@@ -10,6 +10,7 @@ import type {
   PicturesAddViewResponse,
   PictureOrder,
 } from "../types/pictureTypes";
+import type { AxiosProgressEvent } from "axios";
 
 const baseUrl = "/api/pictures/";
 
@@ -43,10 +44,23 @@ const getCategoryLatest = async (
   return response.data;
 };
 
-const create = async (newObject: FormData): Promise<AddPictureResponse> => {
+const create = async (
+  newObject: FormData,
+  onProgress?: (progress: number, ms: number) => void
+): Promise<AddPictureResponse> => {
   const token = loginService.getToken();
+  const start = performance.now();
+
   const config = {
     headers: { Authorization: token },
+    onUploadProgress: (event: AxiosProgressEvent) => {
+      if (!event.total) return;
+
+      const percent = Math.round((event.loaded! / event.total) * 100);
+      const ms = performance.now() - start;
+
+      onProgress?.(percent, ms);
+    },
   };
 
   const response = await axios.post<AddPictureResponse>(

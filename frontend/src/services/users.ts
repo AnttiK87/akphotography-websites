@@ -8,6 +8,7 @@ import type {
   UserUpdateResponse,
   changeProfPicResponse,
 } from "../types/userTypes";
+import type { AxiosProgressEvent } from "axios";
 
 const baseUrl = "/api/users";
 
@@ -90,12 +91,22 @@ const updateInfo = async (content: UpdateInfo): Promise<UserUpdateResponse> => {
 };
 
 const changeProfPic = async (
-  newObject: FormData
+  newObject: FormData,
+  onProgress?: (progress: number, ms: number) => void
 ): Promise<changeProfPicResponse> => {
   const token = loginService.getToken();
+  const start = performance.now();
 
   const config = {
     headers: { Authorization: token },
+    onUploadProgress: (event: AxiosProgressEvent) => {
+      if (!event.total) return;
+
+      const percent = Math.round((event.loaded! / event.total) * 100);
+      const ms = performance.now() - start;
+
+      onProgress?.(percent, ms);
+    },
   };
 
   const response = await axios.put<changeProfPicResponse>(

@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import pictureService from "../services/pictures";
 import { showMessage } from "./messageReducer";
+import { showProgress } from "./progressReducer";
 import { handleError } from "../utils/handleError";
 
 import type { AppDispatch } from "./store";
@@ -198,7 +199,12 @@ export const createPicture = (
 ) => {
   return async (dispatch: AppDispatch) => {
     try {
-      const newPicture = await pictureService.create(content);
+      const newPicture = await pictureService.create(
+        content,
+        (progress, ms) => {
+          dispatch(showProgress({ progress, ms }));
+        }
+      );
       dispatch(appendPicture(newPicture.picture));
       dispatch(
         showMessage(

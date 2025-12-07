@@ -14,6 +14,7 @@ import TextField from "@mui/material/TextField";
 import Chip from "@mui/material/Chip";
 
 import FileUpload from "./FileUpload.js";
+import { optimizeImage } from "../../utils/optimizer.js";
 
 import useNotLoggedin from "../../hooks/useNotLoggedin.js";
 import NotLoggedin from "./NotLoggedin.js";
@@ -107,7 +108,7 @@ const UploadImages = () => {
     setTextEn("");
   };
 
-  const addPicture = (event: React.FormEvent<HTMLFormElement>) => {
+  const addPicture = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (!file) {
@@ -124,7 +125,7 @@ const UploadImages = () => {
     const rawType = (form.elements.namedItem("type") as HTMLInputElement)
       ?.value;
 
-    const image: File = file;
+    const image: Blob = await optimizeImage(file, 2000, 1);
     const type: Type = typeCheck(rawType);
     const keywords: string[] | undefined = keywordArray;
     const monthValue: number | undefined = month ? Number(month) : undefined;

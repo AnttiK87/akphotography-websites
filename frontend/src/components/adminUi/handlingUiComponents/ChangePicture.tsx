@@ -1,7 +1,10 @@
 import React from "react";
 import { useState } from "react";
 import { showMessage } from "../../../reducers/messageReducer.js";
+import { showProgress } from "../../../reducers/progressReducer.js";
 import { useAppDispatch } from "../../../hooks/useRedux.js";
+import uiComponentService from "../../../services/uiComponents.js";
+import { optimizeImage } from "../../../utils/optimizer.js";
 
 import type { AxiosError } from "axios";
 import { handleError } from "../../../utils/handleError";
@@ -18,8 +21,6 @@ import Cropping from "./Cropping.js";
 import type { Crop } from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
 
-import type { UploadFn } from "../../../types/uiComponentTypes";
-
 import "../EditPicture.css";
 import "../OwnProfile.css";
 
@@ -31,7 +32,6 @@ type ChangePictureProps = {
   aspect: number;
   path: string;
   setVersion: (value: number) => void;
-  onUpload: UploadFn;
 };
 
 const ChangePicture = ({
@@ -42,7 +42,6 @@ const ChangePicture = ({
   aspect,
   path,
   setVersion,
-  onUpload,
 }: ChangePictureProps) => {
   const [file, setFile] = useState<File | undefined>(undefined);
   const [preview, setPreview] = useState<string | undefined>(undefined);
@@ -147,11 +146,13 @@ const ChangePicture = ({
       return;
     }
 
+    const optimized = await optimizeImage(croppedPicture, 700, 1);
+
     const fileIndex =
       !selectedPicture && pictures && getSmallestFreeIndex(pictures);
 
     const formData = new FormData();
-    formData.append("image", croppedPicture);
+    formData.append("image", optimized);
     formData.append("path", path);
     formData.append(
       "filename",
@@ -159,7 +160,12 @@ const ChangePicture = ({
     );
 
     try {
-      const response = await onUpload(formData);
+      const response = await uiComponentService.changePic(
+        formData,
+        (progress, ms) => {
+          dispatch(showProgress({ progress, ms }));
+        }
+      );
 
       dispatch(
         showMessage(

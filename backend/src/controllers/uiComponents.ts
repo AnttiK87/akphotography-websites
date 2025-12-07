@@ -19,20 +19,12 @@ const isDevEnv = process.env.NODE_ENV === 'development';
 const folder = isTestEnv
   ? 'tests/uploads'
   : isDevEnv
-    ? '/frontend/public/'
-    : '/public_html/dist/';
+    ? '/backend/public_html/uploads/'
+    : 'public_html/uploads/';
 
 // GET /api/uiComponents/homeBackground
 // route for getting home screen background pictures
 router.get('/homeBackground', async (_req: Request, res: Response) => {
-  const isTestEnv = process.env.NODE_ENV === 'test';
-  const isDevEnv = process.env.NODE_ENV === 'development';
-  const folder = isTestEnv
-    ? 'tests/uploads'
-    : isDevEnv
-      ? '/frontend/public/'
-      : '/public_html/dist/';
-
   const uploadFolder = getPath(folder, 'images/homeBackground');
 
   const files = fs

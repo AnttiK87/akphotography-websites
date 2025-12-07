@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import userService from "../services/users";
 import { showMessage } from "./messageReducer";
+import { showProgress } from "./progressReducer";
 import { handleError } from "../utils/handleError";
 
 import type { AppDispatch } from "./store";
@@ -174,7 +175,13 @@ export const updateUserInfo = (content: UpdateInfo) => {
 export const changeProfPicture = (content: FormData) => {
   return async (dispatch: AppDispatch) => {
     try {
-      const profPic = await userService.changeProfPic(content);
+      const profPic = await userService.changeProfPic(
+        content,
+        (progress, ms) => {
+          dispatch(showProgress({ progress, ms }));
+        }
+      );
+
       dispatch(updateProfPic(profPic.newProfPic));
 
       dispatch(

@@ -7,6 +7,7 @@ import messageReducer from "./messageReducer.js";
 import replyReducer from "./replyReducer.js";
 import keywordReducer from "./keywordReducer.js";
 import userReducer from "./userReducer.js";
+import progressReducer from "./progressReducer.js";
 
 const store = configureStore({
   reducer: {
@@ -17,6 +18,7 @@ const store = configureStore({
     replies: replyReducer,
     keywords: keywordReducer,
     user: userReducer,
+    progress: progressReducer,
   },
 });
 
