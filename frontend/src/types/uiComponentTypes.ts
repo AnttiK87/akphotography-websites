@@ -9,3 +9,5 @@ export type ChangePicResponse = {
   messageFi: string;
   picture: string;
 };
+
+export type UploadFn = (formData: FormData) => Promise<ChangePicResponse>;

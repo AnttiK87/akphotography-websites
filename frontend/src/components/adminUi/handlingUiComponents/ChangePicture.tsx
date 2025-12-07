@@ -12,14 +12,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 
 import { handleOverlayClose } from "../../../utils/closeOverlay.js";
-
 import FileUpload from "../FileUpload.js";
 import Cropping from "./Cropping.js";
 
-import uiComponentService from "../../../services/uiComponents.js";
-
 import type { Crop } from "react-image-crop";
 import "react-image-crop/dist/ReactCrop.css";
+
+import type { UploadFn } from "../../../types/uiComponentTypes";
 
 import "../EditPicture.css";
 import "../OwnProfile.css";
@@ -32,6 +31,7 @@ type ChangePictureProps = {
   aspect: number;
   path: string;
   setVersion: (value: number) => void;
+  onUpload: UploadFn;
 };
 
 const ChangePicture = ({
@@ -42,6 +42,7 @@ const ChangePicture = ({
   aspect,
   path,
   setVersion,
+  onUpload,
 }: ChangePictureProps) => {
   const [file, setFile] = useState<File | undefined>(undefined);
   const [preview, setPreview] = useState<string | undefined>(undefined);
@@ -158,10 +159,7 @@ const ChangePicture = ({
     );
 
     try {
-      const t0 = performance.now();
-      const response = await uiComponentService.changePic(formData);
-      const t1 = performance.now();
-      console.log(`Upload + response: ${t1 - t0}ms`);
+      const response = await onUpload(formData);
 
       dispatch(
         showMessage(
@@ -173,7 +171,7 @@ const ChangePicture = ({
         )
       );
 
-      if (pictures) {
+      if (pictures && !selectedPicture) {
         pictures.push(response.picture);
       }
 

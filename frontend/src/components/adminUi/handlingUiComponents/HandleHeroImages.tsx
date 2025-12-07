@@ -12,10 +12,15 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
 import ChangePicture from "./ChangePicture.js";
+import type { UploadFn } from "../../../types/uiComponentTypes";
 
 import "./HandleHeroImages.css";
 
-const HandleHeroImages = () => {
+type HandleHeroImagesProps = {
+  upload: UploadFn;
+};
+
+const HandleHeroImages = ({ upload }: HandleHeroImagesProps) => {
   const dispatch = useAppDispatch();
 
   const [selectedPicture, setSelectedPicture] = useState<string>("");
@@ -126,6 +131,7 @@ const HandleHeroImages = () => {
         aspect={16 / 9}
         path={path}
         setVersion={setVersion}
+        onUpload={upload}
       />
     </>
   );
