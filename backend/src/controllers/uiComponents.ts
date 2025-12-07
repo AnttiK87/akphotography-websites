@@ -20,7 +20,7 @@ const folder = isTestEnv
   ? 'tests/uploads'
   : isDevEnv
     ? '/frontend/public/'
-    : '/public_html/dist/images/';
+    : '/public_html/dist/';
 
 // GET /api/uiComponents/homeBackground
 // route for getting home screen background pictures

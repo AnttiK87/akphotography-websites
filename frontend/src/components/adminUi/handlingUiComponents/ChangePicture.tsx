@@ -158,7 +158,10 @@ const ChangePicture = ({
     );
 
     try {
+      const t0 = performance.now();
       const response = await uiComponentService.changePic(formData);
+      const t1 = performance.now();
+      console.log(`Upload + response: ${t1 - t0}ms`);
 
       dispatch(
         showMessage(
