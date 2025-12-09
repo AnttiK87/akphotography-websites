@@ -10,7 +10,7 @@ interface LightBoxContextType {
   currentIndex: number | undefined;
   setCurrentIndex: (index: number | undefined) => void;
   openLightBox: (index: number) => void;
-  closeLightBox: (value: string) => void;
+  closeLightBox: () => void;
   category: Category;
   setCategory: (category: Category) => void;
   invalidIndex: boolean;
@@ -45,8 +45,7 @@ export const LightBoxProvider = ({ children }: LightBoxProviderProps) => {
     }
   };
 
-  const closeLightBox = (where: string) => {
-    console.warn("context close was called from", where);
+  const closeLightBox = () => {
     setIsLightBoxOpen(false);
     setCurrentIndex(undefined);
   };

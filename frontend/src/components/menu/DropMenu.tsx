@@ -48,11 +48,12 @@ const DropMenu = ({
 
   const eventHandlers = isTouchDevice()
     ? {
-        onClick: handleToggleDropdown,
+        ontouchstart: handleToggleDropdown,
         onMouseEnter: () => setShowDropdown(true),
         onMouseLeave: () => setShowDropdown(false),
       }
     : {
+        ontouchstart: handleToggleDropdown,
         onMouseEnter: () => setShowDropdown(true),
         onMouseLeave: () => setShowDropdown(false),
       };
@@ -75,6 +76,7 @@ const DropMenu = ({
               setLanguage(item.value);
             }
           }}
+          onTouchStart={() => handleToggleDropdown}
         >
           {"link" in item ? (
             <Link className="menuText menuLink" to={item.link}>

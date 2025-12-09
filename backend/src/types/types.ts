@@ -119,3 +119,15 @@ export interface changeUiPicInput {
   path: string;
   filename: string;
 }
+
+export interface UiTextInput {
+  key_name: string;
+  screen: string;
+  language: string;
+  content: string;
+  role: string;
+}
+
+export interface UiTextUpdateInput {
+  content: string;
+}

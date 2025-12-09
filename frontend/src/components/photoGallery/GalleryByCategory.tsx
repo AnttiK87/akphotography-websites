@@ -71,7 +71,7 @@ const GalleryByCategory = () => {
 
     if (parsedIndex == null && currentIndex == null) {
       isLightBoxOpening.current = false;
-      closeLightBox("galleryCategory");
+      closeLightBox();
     }
 
     if (index && parsedIndex && isNaN(parsedIndex)) {

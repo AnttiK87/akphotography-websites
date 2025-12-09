@@ -10,7 +10,16 @@ import FootPrints from "../animations/FootPrints";
 import toesLeft from "../../assets/toes-left-white.png";
 import toesRight from "../../assets/toes-right-white.png";
 
-const HomeHeader = () => {
+import { getText } from "../../utils/getText";
+
+import type { UiText } from "../../types/uiTextTypes";
+
+type HomeHeaderProps = {
+  texts: UiText[];
+};
+
+const HomeHeader = ({ texts }: HomeHeaderProps) => {
+  console.warn(texts);
   const { language } = useLanguage();
   const [textIsAnimated, setTextIsAnimated] = useState(false);
   const [isImageReady, setIsImageReady] = useState(false);
@@ -20,30 +29,42 @@ const HomeHeader = () => {
 
   const duration = 5000;
 
+  const finTitle = getText(texts, "header_title", "fin");
+  const enTitle = getText(texts, "header_title", "en");
+
   const headerText =
     language === "fin"
-      ? "Luonnonvaloa kuvaamassa"
+      ? finTitle
+        ? finTitle
+        : "Luonnonvaloa kuvaamassa"
+      : enTitle
+      ? enTitle
       : "Chasing the Light of Nature";
   const textToHeader = headerText.split("\n");
 
   useEffect(() => {
+    if (!images || images.length === 1) return;
     const interval = setInterval(() => {
       setStartAnim((prev) => !prev);
     }, duration);
 
     return () => clearInterval(interval);
-  }, [duration]);
+  }, [duration, images]);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      if (!images) return;
+      if (!images || images.length === 1) return;
       if (startAnim) {
         setCurrentImageIndex((prev) =>
-          prev >= images?.length - 2 ? 2 : prev + 2
+          prev === images?.length - 2
+            ? 0
+            : prev === images?.length - 1
+            ? 1
+            : prev + 2
         );
       } else {
         setNextImageIndex(
-          currentImageIndex >= images?.length - 1 ? 1 : currentImageIndex + 1
+          currentImageIndex >= images?.length - 1 ? 0 : currentImageIndex + 1
         );
       }
     }, 2500);
@@ -55,10 +76,11 @@ const HomeHeader = () => {
     const image = new Image();
     const imageNext = new Image();
     if (images === undefined) return;
-    image.src = `/uploads/images/homeBackground/${images[currentImageIndex]}`;
-    imageNext.src = `/uploads/images/homeBackground/${
-      images[currentImageIndex + 1]
-    }`;
+    image.src = `/uploads/images/contact/${images[currentImageIndex]}`;
+    if (images.length > 1)
+      imageNext.src = `/uploads/images/contact/${
+        images[currentImageIndex + 1]
+      }`;
     image.onload = () => {
       setIsImageReady(true);
     };
@@ -73,11 +95,11 @@ const HomeHeader = () => {
         isVisible={isImageReady ? true : false}
       />
       <div className="ImageAndAnimationCont">
-        <div className={`maskImgHome ${isImageReady ? "ready" : ""}`}>
-          {images === undefined ? (
-            <div>Unable to load pictures</div>
-          ) : (
-            <>
+        {images === undefined ? (
+          <div>Unable to load pictures</div>
+        ) : (
+          <>
+            <div className={`maskImgHome ${isImageReady ? "ready" : ""}`}>
               <img
                 src={`/uploads/images/homeBackground/${images[currentImageIndex]}`}
                 alt="Background Image"
@@ -96,9 +118,10 @@ const HomeHeader = () => {
                   startAnim ? "fade-in" : "fade-out"
                 }`}
               />
-            </>
-          )}
-        </div>
+            </div>
+          </>
+        )}
+
         {textIsAnimated ? (
           <p className={"animated-text inline-block"}>
             {textToHeader.map((line, lineIndex) => (

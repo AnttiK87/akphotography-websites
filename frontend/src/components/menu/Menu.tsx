@@ -210,7 +210,7 @@ const Menu = () => {
 
   return (
     <>
-      <Navbar collapseOnSelect expand="lg">
+      <Navbar collapseOnSelect expand="xl">
         <div className="navBar">
           <div className="logoAndToggle logoAK">
             <div className="logoSmallScreen">

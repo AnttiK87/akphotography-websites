@@ -1,19 +1,28 @@
 import "./Home.css";
 
+import { ImageIndexProvider } from "../../contexts/ImageIndexContext";
+
+import { useAppSelector } from "../../hooks/useRedux.js";
+import { selectHomeTexts } from "../../reducers/selectors/uiTexts";
+
 import HomeHeader from "./HomeHeader";
 import HomeWelcome from "./HomeWelcome";
 import PhotoGallery from "./PhotoGallery";
 import HomePhotoOfMonth from "./HomePhotoOfMonth";
 
 const Home = () => {
+  const homeScreenTexts = useAppSelector(selectHomeTexts);
+
   return (
     <div className="homeScreen">
-      <HomeHeader />
-      <HomeWelcome />
+      <ImageIndexProvider path="images/homeBackground">
+        <HomeHeader texts={homeScreenTexts} />
+      </ImageIndexProvider>
+      <HomeWelcome texts={homeScreenTexts} />
       <hr className="separatorLine" />
-      <PhotoGallery />
+      <PhotoGallery texts={homeScreenTexts} />
       <hr className="separatorLine" />
-      <HomePhotoOfMonth />
+      <HomePhotoOfMonth texts={homeScreenTexts} />
     </div>
   );
 };

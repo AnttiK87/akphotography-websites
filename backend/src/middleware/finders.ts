@@ -9,6 +9,7 @@ import User from '../models/user.js';
 import Reply from '../models/reply.js';
 import Comment from '../models/comment.js';
 import Keyword from '../models/keyword.js';
+import UiText from '../models/uiTexts.js';
 
 const resourceFinder = <T extends Model>(
   resourceName: string,
@@ -29,6 +30,8 @@ const resourceFinder = <T extends Model>(
       req.comment = resource;
     } else if (reqPropertyName === 'keyword') {
       req.keyword = resource;
+    } else if (reqPropertyName === 'uiText') {
+      req.uiText = resource;
     } else {
       req.user = resource;
     }
@@ -41,3 +44,4 @@ export const replyFinder = resourceFinder('Reply', 'reply', Reply);
 export const commentFinder = resourceFinder('Comment', 'comment', Comment);
 export const keywordFinder = resourceFinder('Keyword', 'keyword', Keyword);
 export const userFinder = resourceFinder('User', 'user', User);
+export const uiTextFinder = resourceFinder('UiText', 'uiText', UiText);

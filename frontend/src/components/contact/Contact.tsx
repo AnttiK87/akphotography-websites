@@ -1,10 +1,15 @@
+import { ImageIndexProvider } from "../../contexts/ImageIndexContext";
+
 import ContactHeader from "./ContactHeader";
 import ContactContent from "./ContactContent";
 
 const Contact = () => {
   return (
     <>
-      <ContactHeader />
+      <ImageIndexProvider path="images/contact">
+        <ContactHeader />
+      </ImageIndexProvider>
+
       <ContactContent />
     </>
   );

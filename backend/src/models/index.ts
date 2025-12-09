@@ -7,6 +7,7 @@ import Keyword from './keyword.js';
 import PictureKeyword from './PictureKeyword.js';
 import User from './user.js';
 import Session from './session.js';
+import UiText from './uiTexts.js';
 
 Picture.hasOne(Text, { foreignKey: 'pictureId', onDelete: 'CASCADE' });
 Text.belongsTo(Picture, { foreignKey: 'pictureId' });
@@ -47,4 +48,5 @@ export default {
   PictureKeyword,
   User,
   Session,
+  UiText,
 };

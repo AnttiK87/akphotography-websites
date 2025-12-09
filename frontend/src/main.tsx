@@ -18,7 +18,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       <Provider store={store}>
         <Router basename="/">
           <LightBoxProvider>
-            <ImageIndexProvider>
+            <ImageIndexProvider path="images/homeBackground">
               <DisableScrollRestoration />
               <App />
             </ImageIndexProvider>

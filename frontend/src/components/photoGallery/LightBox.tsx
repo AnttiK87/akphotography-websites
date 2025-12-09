@@ -162,7 +162,7 @@ const LightBox = () => {
   }, [location.pathname, prevPictureIndex, zoomed, handleZoomOut]);
 
   const handleExit = useCallback(() => {
-    closeLightBox("lightBox");
+    closeLightBox();
     setCurrentIndex(undefined);
 
     if (isLightBoxOpen) {

@@ -5,12 +5,21 @@ import type {
   ResponseHomeScreenPictures,
   ChangePicResponse,
 } from "../types/uiComponentTypes";
+import type {
+  UiText,
+  UiTextResponse,
+  UpdateUiText,
+} from "../types/uiTextTypes";
 
 const baseUrl = "/api/uiComponents";
 
-const getHomeBackGround = async (): Promise<ResponseHomeScreenPictures> => {
-  const response = await axios.get(`${baseUrl}/homeBackground`);
-  return response.data;
+const getPictures = async (path: string) => {
+  const res = await axios.get<ResponseHomeScreenPictures>(
+    `${baseUrl}/getPictures`,
+    { params: { path } }
+  );
+
+  return res.data;
 };
 
 import type { AxiosProgressEvent } from "axios";
@@ -60,4 +69,49 @@ const deletePic = async (data: {
   return response.data;
 };
 
-export default { getHomeBackGround, changePic, deletePic };
+const getUiTexts = async () => {
+  const res = await axios.get<UiText[]>(`${baseUrl}/uiTexts`);
+
+  return res.data;
+};
+
+const newUiText = async (newObject: UiText): Promise<UiTextResponse> => {
+  const token = loginService.getToken();
+  const config = {
+    headers: { Authorization: token },
+  };
+
+  const response = await axios.post<UiTextResponse>(
+    `${baseUrl}`,
+    newObject,
+    config
+  );
+  return response.data;
+};
+
+const updateUiText = async (content: UpdateUiText): Promise<UiTextResponse> => {
+  const token = loginService.getToken();
+  const config = {
+    headers: { Authorization: token },
+  };
+
+  const newObject = {
+    content: content.content,
+  };
+
+  const response = await axios.put<UiTextResponse>(
+    `${baseUrl}/updateUiText/${content.id}`,
+    newObject,
+    config
+  );
+  return response.data;
+};
+
+export default {
+  getPictures,
+  changePic,
+  deletePic,
+  getUiTexts,
+  newUiText,
+  updateUiText,
+};

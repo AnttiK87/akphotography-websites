@@ -21,34 +21,44 @@ const Cropping = ({
   setImage,
   circularCrop,
 }: CroppingProps) => {
-  function onImageLoad(e: React.SyntheticEvent<HTMLImageElement, Event>) {
+  function onImageLoad(e: React.SyntheticEvent<HTMLImageElement>) {
     const img = e.currentTarget;
     const width = img.width;
     const height = img.height;
 
-    const size = Math.min(width, height);
+    const imgAspect = width / height;
 
-    const portrait = height > width;
+    let cropWidth: number;
+    let cropHeight: number;
 
-    const aspectHeight = width / aspect;
+    // Circle = square crop
+    if (circularCrop) {
+      const size = Math.min(width, height);
+      cropWidth = size;
+      cropHeight = size;
+    } else {
+      // normal crop
+      if (imgAspect > aspect) {
+        // image is wider → limit width
+        cropWidth = height * aspect;
+        cropHeight = height;
+      } else {
+        // image is taller → limit height
+        cropWidth = width;
+        cropHeight = width / aspect;
+      }
+    }
 
-    const offset_y =
-      portrait && circularCrop
-        ? (height - width) / 2
-        : !circularCrop
-        ? (height - aspectHeight) / 2
-        : 0;
-    const offset_x = !portrait && circularCrop ? (width - height) / 2 : 0;
+    const x = (width - cropWidth) / 2;
+    const y = (height - cropHeight) / 2;
 
-    const crop: Crop = {
+    setCrop({
       unit: "px",
-      x: offset_x,
-      y: offset_y,
-      width: circularCrop ? size : width,
-      height: circularCrop ? size : aspectHeight,
-    };
-
-    setCrop(crop);
+      x,
+      y,
+      width: cropWidth,
+      height: cropHeight,
+    });
   }
 
   return (

@@ -10,7 +10,16 @@ import FootPrints from "../animations/FootPrints";
 import toesLeft from "../../assets/toes-left.png";
 import toesRight from "../../assets/toes-right.png";
 
-const PhotoGallery = () => {
+import { getText } from "../../utils/getText";
+
+import type { UiText } from "../../types/uiTextTypes";
+
+type PhotoGalleryProps = {
+  texts: UiText[];
+};
+
+const PhotoGallery = ({ texts }: PhotoGalleryProps) => {
+  console.warn(texts);
   const { language } = useLanguage();
   const { isVisible, startAnim, elementRef } = useAnimationLauncher(0.01);
 
@@ -52,54 +61,49 @@ const PhotoGallery = () => {
     {
       path: "/pictures/mammals",
       imgClass: "mammals",
-      textFi: "Nisäkkäät",
-      textEn: "Mammals",
-      src: "../images/galleryCover/mammals.jpg",
-      textContentFi:
-        "Nisäkkäiden ja varsinkin isojen eläinten kuvaaminen on varmasti haastavinta. Eikä vähiten siksi, että niitä pääsee näkemään vain niin kovin harvoin. Ehkäpä  myös siksi jo pelkkä eläimen näkeminen on aina erityinen kokemus.",
-      textContentEn:
-        "Photographing mammals, especially large animals, is certainly the most challenging. Not least because they are so rarely seen. Perhaps that's also why just spotting one is always a special experience.",
+      textFi: getText(texts, "card_title_mammals", "fin"),
+      textEn: getText(texts, "card_title_mammals", "en"),
+      src: "/uploads/images/galleryCover/mammals.jpg",
+      textContentFi: getText(texts, "card_text_mammals", "fin"),
+      textContentEn: getText(texts, "card_text_mammals", "en"),
     },
     {
       path: "/pictures/landscapes",
       imgClass: "landscapes",
-      textFi: "Maisemat",
-      textEn: "Landscapes",
-      src: "../images/galleryCover/landscapes.jpg",
-      textContentFi:
-        "Maisemakuvaamisen suola on mielestäni se, että vaikka käyn kuinka monesti samalla paikalla kuvaamassa, niin kerta toisensa jälkeen maisema ja kuva muuttuvat ja niistä löytää yllättäen uusia piirteitä.",
-      textContentEn:
-        "The beauty of landscape photography, in my opinion, is that no matter how many times I visit the same location, the scenery and the photos always change, revealing new and unexpected details each time.",
+      textFi: getText(texts, "card_title_landscapes", "fin"),
+      textEn: getText(texts, "card_title_landscapes", "en"),
+      src: "/uploads/images/galleryCover/landscapes.jpg",
+      textContentFi: getText(texts, "card_text_landscapes", "fin"),
+      textContentEn: getText(texts, "card_text_landscapes", "en"),
     },
     {
       path: "/pictures/birds",
       imgClass: "birds",
-      textFi: "Linnut",
-      textEn: "Birds",
-      src: "../images/galleryCover/birds.jpg",
-      textContentFi:
-        "Linnut kiehtovat minua selittämättömällä tavalla. Lisäksi ne ovat erityisesti lähellä sydäntäni, koska palava innostus valokuvaamiseen ja etenkin luontokuvaamiseen sai roihun sytyttäneen kipinän kohtaamisesta viirupöllön kanssa.",
-      textContentEn:
-        "Birds fascinate me in an inexplicable way. They are also especially close to my heart because my deep passion for photography, and particularly nature photography, was ignited by an encounter with a Ural owl.",
+      textFi: getText(texts, "card_title_bird", "fin"),
+      textEn: getText(texts, "card_title_bird", "en"),
+      src: "/uploads/images/galleryCover/birds.jpg",
+      textContentFi: getText(texts, "card_text_bird", "fin"),
+      textContentEn: getText(texts, "card_text_birds", "en"),
     },
     {
       path: "/pictures/nature",
       imgClass: "nature",
-      textFi: "Luonto",
-      textEn: "Nature",
-      src: "../images/galleryCover/nature.jpg",
-      textContentFi:
-        "Luonto on ikiaikainen inspiraation lähde. Itseäni en pidä erityisen lahjakkaana taiteellisesti. Kuitenkin luontoa tarkkailemalla minäkin toisinaan saatan löytää luonnon luomaa taidetta. Sen ihastelu minulta onnistuu kyllä.",
-      textContentEn:
-        "Nature is an eternal source of inspiration. I don't consider myself particularly gifted artistically. However, by observing nature, I too can sometimes discover the art it creates. Admiring it is something I can certainly do.",
+      textFi: getText(texts, "card_title_nature", "fin"),
+      textEn: getText(texts, "card_title_nature", "en"),
+      src: "/uploads/images/galleryCover/nature.jpg",
+      textContentFi: getText(texts, "card_text_nature", "fin"),
+      textContentEn: getText(texts, "card_text_nature", "en"),
     },
   ];
 
-  const galleryHeader = language === "fin" ? "Kuvagalleria" : "Photo Gallery";
+  const galleryHeader =
+    language === "fin"
+      ? getText(texts, "gallery_header", "fin")
+      : getText(texts, "gallery_header", "en");
   const galleryText =
     language === "fin"
-      ? "Alla olevien kuvien kautta pääset kuvagalleriaani. Kuvat on jaoteltu neljään kategoriaan: linnut, nisäkkäät, maisemat ja luonto."
-      : "Through the images below you can access my photo gallery. The images are divided into four categories: birds, mammals, landscapes and nature.";
+      ? getText(texts, "gallery_text", "fin")
+      : getText(texts, "gallery_text", "en");
 
   return (
     <div ref={elementRef} className="scrollContainer">
