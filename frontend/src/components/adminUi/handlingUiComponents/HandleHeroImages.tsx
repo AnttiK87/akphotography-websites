@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { useImageIndex } from "../../../hooks/useImageIndex";
+import { useState, useEffect } from "react";
 
 import { showMessage } from "../../../reducers/messageReducer.js";
 import { useAppDispatch } from "../../../hooks/useRedux.js";
@@ -15,19 +14,54 @@ import ChangePicture from "./ChangePicture.js";
 
 import "./HandleHeroImages.css";
 
-const HandleHeroImages = () => {
+type HandleHeroImagesProps = {
+  view: {
+    view: string;
+    pathHero: string | undefined;
+    pathContent: string | undefined;
+    pathCard: string | undefined;
+  };
+};
+
+const HandleHeroImages = ({ view }: HandleHeroImagesProps) => {
   const dispatch = useAppDispatch();
 
   const [selectedPicture, setSelectedPicture] = useState<string>("");
-  const { images, setImages } = useImageIndex();
+  const [images, setImages] = useState<string[]>([]);
   const [showChangePic, setShowChangePic] = useState(false);
   const [version, setVersion] = useState(Date.now());
-  const path = "/images/homeBackground/";
+
+  useEffect(() => {
+    async function fetchPictures() {
+      if (view.pathHero === undefined) return;
+      const data = await uiComponentService.getPictures(view.pathHero);
+      setImages(data.files);
+    }
+
+    fetchPictures();
+  }, [view.pathHero]);
 
   const deleteImg = async () => {
     if (window.confirm(`Do you really want to delete this picture?`)) {
       try {
-        const data = { path: path, filename: selectedPicture };
+        if (view.pathHero === undefined) {
+          dispatch(
+            showMessage(
+              {
+                text: "Unknown path!",
+                type: "error",
+              },
+              5
+            )
+          );
+
+          return;
+        }
+
+        const data: { path: string; filename: string } = {
+          path: view.pathHero,
+          filename: selectedPicture,
+        };
 
         const response = await uiComponentService.deletePic(data);
 
@@ -54,15 +88,13 @@ const HandleHeroImages = () => {
     return;
   };
 
+  if (view.pathHero === undefined) return null;
+
   return (
     <>
       <div className="handle-hero">
-        <h4>Change home screen hero images</h4>
-        <select
-          value={selectedPicture}
-          onChange={(e) => setSelectedPicture(e.target.value)}
-        >
-          <option value="">Choose picture</option>
+        <h4>Change hero images on {view.view} screen</h4>
+        <div className="heroImages">
           {images ? (
             images
               ?.sort((a, b) => {
@@ -71,24 +103,38 @@ const HandleHeroImages = () => {
                 return numA - numB;
               })
               .map((image) => (
-                <option key={image} value={image}>
-                  {image}
-                </option>
+                <div
+                  className="heroItem"
+                  onClick={() =>
+                    selectedPicture === image
+                      ? setSelectedPicture("")
+                      : setSelectedPicture(image)
+                  }
+                  key={image}
+                >
+                  <img
+                    className="heroImage"
+                    src={`/uploads${view.pathHero}${image}?t=${version}`}
+                    alt="selected picture"
+                  />
+                </div>
               ))
           ) : (
-            <option value="">Lataus epäonnistui</option>
+            <></>
           )}
-        </select>
-        {selectedPicture && (
+        </div>
+        {selectedPicture && images && (
           <div className="imageAndDel">
             <img
               className="selectedImage"
-              src={`/uploads/images/homeBackground/${selectedPicture}?t=${version}`}
+              src={`/uploads${view.pathHero}${selectedPicture}?t=${version}`}
               alt="selected picture"
             />
-            <button className="deleteBtn" onClick={() => deleteImg()}>
-              <FontAwesomeIcon icon={faTrash} />
-            </button>
+            {images?.length > 1 && (
+              <button className="deleteBtn" onClick={() => deleteImg()}>
+                <FontAwesomeIcon icon={faTrash} />
+              </button>
+            )}
           </div>
         )}
         <div className="EditButtonsOP">
@@ -108,7 +154,7 @@ const HandleHeroImages = () => {
               </button>
             </>
           )}
-          {!selectedPicture && (
+          {!selectedPicture && images.length < 10 && (
             <button
               className="button-primary"
               onClick={() => setShowChangePic(true)}
@@ -124,7 +170,7 @@ const HandleHeroImages = () => {
         selectedPicture={selectedPicture}
         pictures={images}
         aspect={16 / 9}
-        path={path}
+        path={view.pathHero}
         setVersion={setVersion}
       />
     </>

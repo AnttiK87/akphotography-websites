@@ -1,3 +1,5 @@
+import { ImageIndexProvider } from "../../contexts/ImageIndexContext";
+
 import AboutHeader from "./AboutHeader";
 import AboutContent from "./AboutContent";
 
@@ -53,8 +55,6 @@ const About = () => {
       </p>
     );
 
-  const pictureAbout1 = "../../images/about/konnus.jpg";
-
   const textAbout2 =
     language === "fin" ? (
       <p className="textAbout">
@@ -101,8 +101,6 @@ const About = () => {
       </p>
     );
 
-  const pictureAbout2 = "../../images/about/equipment.jpg";
-
   const textAbout3 =
     language === "fin" ? (
       <p className="textAbout">
@@ -143,11 +141,15 @@ const About = () => {
       </p>
     );
 
-  const pictureAbout3 = "../../images/about/birds.jpg";
+  const pictureAbout1 = "/uploads/images/aboutpage/picture1.jpg";
+  const pictureAbout2 = "/uploads/images/aboutpage/equipment.jpg";
+  const pictureAbout3 = "/uploads/images/aboutpage/picture2.jpg";
 
   return (
     <>
-      <AboutHeader />
+      <ImageIndexProvider path="images/about">
+        <AboutHeader />
+      </ImageIndexProvider>
       <AboutContent
         headerAbout={headerAbout}
         textAbout={textAbout1}

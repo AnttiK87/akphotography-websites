@@ -3,6 +3,7 @@ import type { Picture } from '../models/picture.js';
 import type { Reply } from '../models/reply.js';
 import type { Comment } from '../models/comment.js';
 import type { Keyword } from '../models/keyword.js';
+import type { UiText } from '../models/uiText.js';
 import type { JwtPayload } from 'jsonwebtoken';
 
 export interface DecodedToken extends JwtPayload {
@@ -15,6 +16,7 @@ export interface DecodedToken extends JwtPayload {
 declare global {
   namespace Express {
     interface Request {
+      uiText?: UiText;
       keyword?: Keyword;
       picture?: Picture;
       reply?: Reply;

@@ -12,26 +12,31 @@ interface ImageIndexContextType {
 
 interface ImageIndexProviderProps {
   children: ReactNode;
+  path: string | undefined;
 }
 
 const ImageIndexContext = createContext<ImageIndexContextType | undefined>(
   undefined
 );
 
-export const ImageIndexProvider = ({ children }: ImageIndexProviderProps) => {
+export const ImageIndexProvider = ({
+  children,
+  path,
+}: ImageIndexProviderProps) => {
   const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
   const [images, setImages] = useState<string[] | undefined>(undefined);
 
   useEffect(() => {
     async function fetchPictures() {
-      const data = await uiComponentService.getHomeBackGround();
+      if (path === undefined) return;
+      const data = await uiComponentService.getPictures(path);
       const randomIndex = Math.floor(Math.random() * (data.count - 1));
       setCurrentImageIndex(randomIndex);
       setImages(data.files);
     }
 
     fetchPictures();
-  }, []);
+  }, [path]);
 
   return (
     <ImageIndexContext.Provider

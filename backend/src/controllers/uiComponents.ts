@@ -10,7 +10,11 @@ import { handleUpload } from '../middleware/uploadMiddleware.js';
 import { getPath } from '../utils/pathUtils.js';
 import { AppError } from '../errors/AppError.js';
 
-import { changeUiPicInput } from '../types/types.js';
+import { changeUiPicInput, UiTextInput } from '../types/types.js';
+
+import { uiTextFinder } from '../middleware/finders.js';
+
+import UiText from '../models/uiTexts.js';
 
 const router = express.Router();
 
@@ -24,8 +28,9 @@ const folder = isTestEnv
 
 // GET /api/uiComponents/homeBackground
 // route for getting home screen background pictures
-router.get('/homeBackground', async (_req: Request, res: Response) => {
-  const uploadFolder = getPath(folder, 'images/homeBackground');
+router.get('/getPictures', async (req: Request, res: Response) => {
+  const path: string = String(req.query.path) || 'images/homeBackground';
+  const uploadFolder = getPath(folder, path);
 
   const files = fs
     .readdirSync(uploadFolder)
@@ -89,6 +94,67 @@ router.put(
       messageEn: 'Picture deleted!',
       messageFi: 'Kuva poistettu!',
       picture: req.body.filename,
+    });
+  },
+);
+
+// GET /api/uiComponents/uiTexts
+//route for getting all users
+router.get('/uiTexts', async (_req: Request, res: Response) => {
+  const uiTexts = await UiText.findAll();
+  res.json(uiTexts);
+});
+
+router.post(
+  '/addUiText',
+  tokenExtractor,
+  async (req: Request<object, object, UiTextInput>, res: Response) => {
+    const { key_name, screen, language, content, role } = req.body;
+
+    const newUiText = await UiText.create({
+      key_name,
+      screen,
+      language,
+      content,
+      role,
+    });
+
+    res.json({
+      messageEn: 'New UiText added!',
+      messageFi: 'Uusi teksti lisätty!',
+      uiText: newUiText,
+    });
+  },
+);
+
+// PUT /api/users/updateInfo
+// route for changing user info
+// Middlewares used:
+// - tokenExtractor: validates the token and checks if the user is authenticated
+// - userExtractor: extracts the user from the token
+// - handleUserInfoChange: handles the updated user info
+router.put(
+  '/updateUiText',
+  tokenExtractor,
+  uiTextFinder,
+  async (req: Request<object, object, UiTextInput>, res: Response) => {
+    const { content } = req.body;
+    const uiText: UiText = req.uiText;
+
+    if (content !== req.uiText.content) {
+      throw new AppError(
+        { fi: 'Et muuttanut tietoja', en: 'No changes provided' },
+        400,
+      );
+    }
+
+    uiText.content = content;
+    const updatedUiText = await uiText.save();
+
+    res.json({
+      messageEn: `${updatedUiText.key_name} text edited!`,
+      messageFi: `${updatedUiText.key_name} tekstiä muokattu!`,
+      uiText: updatedUiText,
     });
   },
 );

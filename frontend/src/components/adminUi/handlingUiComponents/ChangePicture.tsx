@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { showMessage } from "../../../reducers/messageReducer.js";
 import { showProgress } from "../../../reducers/progressReducer.js";
 import { useAppDispatch } from "../../../hooks/useRedux.js";
@@ -47,6 +47,16 @@ const ChangePicture = ({
   const [preview, setPreview] = useState<string | undefined>(undefined);
   const [image, setImage] = useState<HTMLImageElement | undefined>(undefined);
   const [crop, setCrop] = useState<Crop>();
+  const [height, setHeight] = useState<number>(700);
+
+  useEffect(() => {
+    const image = new Image();
+    if (selectedPicture === undefined) return;
+    image.src = `/uploads/${path}${selectedPicture}`;
+    image.onload = () => {
+      setHeight(image.naturalHeight);
+    };
+  }, [selectedPicture, path]);
 
   const dispatch = useAppDispatch();
 
@@ -146,7 +156,7 @@ const ChangePicture = ({
       return;
     }
 
-    const optimized = await optimizeImage(croppedPicture, 700, 1);
+    const optimized = await optimizeImage(croppedPicture, height, 1);
 
     const fileIndex =
       !selectedPicture && pictures && getSmallestFreeIndex(pictures);

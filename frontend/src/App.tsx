@@ -1,4 +1,7 @@
 import { useState, useEffect } from "react";
+import { useAppDispatch } from "./hooks/useRedux.js";
+
+import { initializesUiTexts } from "./reducers/uiTextsReducer.js";
 
 import { Routes, Route, useLocation } from "react-router-dom";
 import { useLanguage } from "./hooks/useLanguage";
@@ -36,8 +39,12 @@ import toesRight from "./assets/toes-right-white.png";
 import film from "./assets/film.png";
 
 function App() {
+  const dispatch = useAppDispatch();
+
   const { language } = useLanguage();
   const [isLoaded, setIsLoaded] = useState(false);
+  const [textsLoaded, setTextsLoaded] = useState(false);
+  const [isError, setIsError] = useState(false);
   const { currentImageIndex } = useImageIndex();
 
   const background = new Image();
@@ -48,7 +55,18 @@ function App() {
   const imagesLoaded = useImagePreloader(images);
 
   useEffect(() => {
-    const handleLoad = () => setIsLoaded(true);
+    const handleLoad = () => {
+      if (textsLoaded) {
+        setIsLoaded(true);
+      }
+    };
+
+    dispatch(initializesUiTexts())
+      .then(() => setTextsLoaded(true))
+      .catch(() => {
+        setTextsLoaded(false);
+        setIsError(true);
+      });
 
     if (document.readyState === "complete") {
       handleLoad();
@@ -56,7 +74,7 @@ function App() {
       window.addEventListener("load", handleLoad);
       return () => window.removeEventListener("load", handleLoad);
     }
-  }, []);
+  }, [dispatch, textsLoaded]);
 
   useEffect(() => {
     if (language === "fin") {
@@ -94,6 +112,10 @@ function App() {
 
   if (!isLoaded || !imagesLoaded) {
     return <LoadingScreen />;
+  }
+
+  if (isError) {
+    return <div>ERROR</div>;
   }
 
   return (
