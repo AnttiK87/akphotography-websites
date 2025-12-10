@@ -16,7 +16,6 @@ type HomeWelcomeProps = {
 };
 
 const HomeWelcome = ({ texts }: HomeWelcomeProps) => {
-  console.warn(texts);
   const { language } = useLanguage();
   const { isVisible, startAnim, elementRef } = useAnimationLauncher(0.2);
 

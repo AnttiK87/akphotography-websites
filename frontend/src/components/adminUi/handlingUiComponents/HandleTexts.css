@@ -1,0 +1,23 @@
+.textFieldContainer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: start;
+  width: 500px;
+  max-width: 90%;
+}
+
+.no-margin {
+  margin: 0.3rem 0 !important;
+}
+
+.field-button {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.select-text {
+  min-width: 250px;
+  max-width: 90%;
+  margin: 0.2rem 0;
+}

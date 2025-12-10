@@ -6,11 +6,16 @@ import { useImageIndex } from "../../hooks/useImageIndex";
 
 import AnimatedText from "../animations/AnimatedText";
 
+import { useAppSelector } from "../../hooks/useRedux.js";
+import { makeSelectTextsByScreen } from "../../reducers/selectors/uiTexts";
+import { getText } from "../../utils/getText";
+
 import FootPrints from "../animations/FootPrints";
 import toesLeft from "../../assets/toes-left-white.png";
 import toesRight from "../../assets/toes-right-white.png";
 
 const ContactHeader = () => {
+  const contactTexts = useAppSelector(makeSelectTextsByScreen("contact"));
   const { language } = useLanguage();
   const [textIsAnimated, setTextIsAnimated] = useState(false);
   const [isImageReady, setIsImageReady] = useState(false);
@@ -20,7 +25,15 @@ const ContactHeader = () => {
 
   const duration = 5000;
 
-  const headerText = language === "fin" ? "Ota yhteyttä" : "Contact me";
+  const heroText =
+    language === "fin"
+      ? getText(contactTexts, "hero_text_contact", "fin")
+      : getText(contactTexts, "hero_text_contact", "en");
+  const headerText = heroText
+    ? heroText
+    : language === "fin"
+    ? "Ota yhteyttä"
+    : "Contact me";
   const textToHeader = headerText.split("\n");
 
   useEffect(() => {

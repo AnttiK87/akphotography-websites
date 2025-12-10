@@ -19,7 +19,6 @@ type HomeHeaderProps = {
 };
 
 const HomeHeader = ({ texts }: HomeHeaderProps) => {
-  console.warn(texts);
   const { language } = useLanguage();
   const [textIsAnimated, setTextIsAnimated] = useState(false);
   const [isImageReady, setIsImageReady] = useState(false);

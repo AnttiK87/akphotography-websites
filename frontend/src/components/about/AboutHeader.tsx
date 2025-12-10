@@ -8,7 +8,11 @@ import FootPrints from "../animations/FootPrints";
 import toesLeft from "../../assets/toes-left-white.png";
 import toesRight from "../../assets/toes-right-white.png";
 
-const AboutHeader = () => {
+type AboutHeaderProps = {
+  heroText: string | undefined;
+};
+
+const AboutHeader = ({ heroText }: AboutHeaderProps) => {
   const { language } = useLanguage();
   const [textIsAnimated, setTextIsAnimated] = useState(false);
   const [isImageReady, setIsImageReady] = useState(false);
@@ -18,7 +22,11 @@ const AboutHeader = () => {
 
   const duration = 5000;
 
-  const headerText = language === "fin" ? "Kameran takana" : "Info about me";
+  const headerText = heroText
+    ? heroText
+    : language === "fin"
+    ? "Kameran takana"
+    : "Info about me";
   const textToHeader = headerText.split("\n");
 
   useEffect(() => {

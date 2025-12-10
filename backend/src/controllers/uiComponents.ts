@@ -10,7 +10,11 @@ import { handleUpload } from '../middleware/uploadMiddleware.js';
 import { getPath } from '../utils/pathUtils.js';
 import { AppError } from '../errors/AppError.js';
 
-import { changeUiPicInput, UiTextInput } from '../types/types.js';
+import {
+  changeUiPicInput,
+  UiTextInput,
+  UiTextUpdateInput,
+} from '../types/types.js';
 
 import { uiTextFinder } from '../middleware/finders.js';
 
@@ -134,14 +138,14 @@ router.post(
 // - userExtractor: extracts the user from the token
 // - handleUserInfoChange: handles the updated user info
 router.put(
-  '/updateUiText',
+  '/updateUiText/:id',
   tokenExtractor,
   uiTextFinder,
-  async (req: Request<object, object, UiTextInput>, res: Response) => {
-    const { content } = req.body;
+  async (req: Request<object, object, UiTextUpdateInput>, res: Response) => {
+    const { content, role } = req.body;
     const uiText: UiText = req.uiText;
 
-    if (content !== req.uiText.content) {
+    if (content === req.uiText.content && role === req.uiText.role) {
       throw new AppError(
         { fi: 'Et muuttanut tietoja', en: 'No changes provided' },
         400,
@@ -149,6 +153,7 @@ router.put(
     }
 
     uiText.content = content;
+    uiText.role = role;
     const updatedUiText = await uiText.save();
 
     res.json({

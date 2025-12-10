@@ -6,6 +6,10 @@ import useAnimationLauncher from "../../hooks/useAnimationLauncher";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFacebook, faInstagram } from "@fortawesome/free-brands-svg-icons";
 
+import { useAppSelector } from "../../hooks/useRedux.js";
+import { makeSelectTextsByScreen } from "../../reducers/selectors/uiTexts";
+import { getText } from "../../utils/getText";
+
 import FootPrints from "../animations/FootPrints";
 import toesLeft from "../../assets/toes-left.png";
 import toesRight from "../../assets/toes-right.png";
@@ -16,13 +20,14 @@ import leaf from "../../assets/leaf.png";
 import ContactForm from "./ContactForm";
 
 const ContactContent = () => {
+  const contactTexts = useAppSelector(makeSelectTextsByScreen("contact"));
   const { language } = useLanguage();
   const { isVisible, startAnim, elementRef } = useAnimationLauncher(0.3);
 
   const headerContact =
     language === "fin"
-      ? "Jäikö jokin askarruttamaan?"
-      : "Did anything leave you curious?";
+      ? getText(contactTexts, "headerContact", "fin")
+      : getText(contactTexts, "headerContact", "en");
 
   const socialIcons = (
     <div className="socialIcons">
@@ -45,14 +50,16 @@ const ContactContent = () => {
 
   const textContact1 =
     language === "fin"
-      ? "Mikäli haluat tietää lisää ota yhteyttä:"
-      : "If you want to know more contact me:";
+      ? getText(contactTexts, "textContact1", "fin")
+      : getText(contactTexts, "textContact1", "en");
   const textContact2 =
-    language === "fin" ? "Harrastevalokuvaaja" : "Hobbyist photographer";
+    language === "fin"
+      ? getText(contactTexts, "textContact2", "fin")
+      : getText(contactTexts, "textContact2", "en");
   const textContact3 =
     language === "fin"
-      ? "Voit myös lähettää viestin minulle oheisella yhteydenottolomakkeella."
-      : "You can also send me a message using the contact form provided.";
+      ? getText(contactTexts, "textContact3", "fin")
+      : getText(contactTexts, "textContact1", "en");
 
   const textContact = (
     <div className="contactTextElem">
