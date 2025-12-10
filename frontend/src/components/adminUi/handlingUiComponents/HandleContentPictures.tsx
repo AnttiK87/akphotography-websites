@@ -30,6 +30,7 @@ const HandleContentPictures = ({ view }: HandleContentPicturesProps) => {
     }
 
     fetchPictures();
+    setSelectedPicture("");
   }, [view.pathContent]);
 
   useEffect(() => {

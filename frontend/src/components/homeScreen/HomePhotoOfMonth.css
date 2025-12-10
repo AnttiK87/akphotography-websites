@@ -13,6 +13,7 @@
   word-wrap: break-word;
   overflow-wrap: break-word;
   text-align: justify;
+  white-space: pre-line;
 }
 
 @media (max-width: 1500px) {

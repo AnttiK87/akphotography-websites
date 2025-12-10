@@ -39,6 +39,7 @@ const HandleHeroImages = ({ view }: HandleHeroImagesProps) => {
     }
 
     fetchPictures();
+    setSelectedPicture("");
   }, [view.pathHero]);
 
   const deleteImg = async () => {

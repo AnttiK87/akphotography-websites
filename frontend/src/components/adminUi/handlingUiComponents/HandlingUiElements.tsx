@@ -6,6 +6,7 @@ import NotLoggedin from "../NotLoggedin.js";
 import HandleHeroImages from "./HandleHeroImages.js";
 import HandleContentPictures from "./HandleContentPictures.js";
 import HandleCardPictures from "./HandleCardPictures.js";
+import HandleTexts from "./HandleTexts.js";
 
 import "./HandlingUiElements.css";
 
@@ -76,9 +77,14 @@ const HandlingUiElements = () => {
         </select>
         {selectedView && (
           <>
+            <HandleTexts view={selectedView} />
+            <hr className="separatorLine" />
             <HandleHeroImages view={selectedView} />
+            <hr className="separatorLine" />
             <HandleContentPictures view={selectedView} />
+            <hr className="separatorLine" />
             <HandleCardPictures view={selectedView} />
+            <hr className="separatorLine" />
           </>
         )}
       </div>

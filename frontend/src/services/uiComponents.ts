@@ -97,6 +97,7 @@ const updateUiText = async (content: UpdateUiText): Promise<UiTextResponse> => {
 
   const newObject = {
     content: content.content,
+    role: content.role,
   };
 
   const response = await axios.put<UiTextResponse>(

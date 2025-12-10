@@ -30,6 +30,7 @@ const HandleCardPictures = ({ view }: HandleCardPicturesProps) => {
     }
 
     fetchPictures();
+    setSelectedPicture("");
   }, [view.pathCard]);
 
   useEffect(() => {

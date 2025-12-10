@@ -19,7 +19,6 @@ type PhotoGalleryProps = {
 };
 
 const PhotoGallery = ({ texts }: PhotoGalleryProps) => {
-  console.warn(texts);
   const { language } = useLanguage();
   const { isVisible, startAnim, elementRef } = useAnimationLauncher(0.01);
 
@@ -83,7 +82,7 @@ const PhotoGallery = ({ texts }: PhotoGalleryProps) => {
       textEn: getText(texts, "card_title_bird", "en"),
       src: "/uploads/images/galleryCover/birds.jpg",
       textContentFi: getText(texts, "card_text_bird", "fin"),
-      textContentEn: getText(texts, "card_text_birds", "en"),
+      textContentEn: getText(texts, "card_text_bird", "en"),
     },
     {
       path: "/pictures/nature",

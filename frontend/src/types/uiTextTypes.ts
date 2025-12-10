@@ -18,4 +18,5 @@ export type UiTextResponse = {
 export type UpdateUiText = {
   id: number;
   content: string;
+  role: string;
 };

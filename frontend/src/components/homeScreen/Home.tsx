@@ -3,7 +3,7 @@ import "./Home.css";
 import { ImageIndexProvider } from "../../contexts/ImageIndexContext";
 
 import { useAppSelector } from "../../hooks/useRedux.js";
-import { selectHomeTexts } from "../../reducers/selectors/uiTexts";
+import { makeSelectTextsByScreen } from "../../reducers/selectors/uiTexts";
 
 import HomeHeader from "./HomeHeader";
 import HomeWelcome from "./HomeWelcome";
@@ -11,7 +11,7 @@ import PhotoGallery from "./PhotoGallery";
 import HomePhotoOfMonth from "./HomePhotoOfMonth";
 
 const Home = () => {
-  const homeScreenTexts = useAppSelector(selectHomeTexts);
+  const homeScreenTexts = useAppSelector(makeSelectTextsByScreen("home"));
 
   return (
     <div className="homeScreen">

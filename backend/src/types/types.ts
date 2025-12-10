@@ -130,4 +130,5 @@ export interface UiTextInput {
 
 export interface UiTextUpdateInput {
   content: string;
+  role: string;
 }
