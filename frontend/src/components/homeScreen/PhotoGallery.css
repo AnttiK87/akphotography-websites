@@ -23,7 +23,7 @@
   width: 80%;
   margin: 0 auto;
   margin-bottom: 2vh;
-
+  white-space: pre-line;
   transition: all 1s ease-in-out;
   opacity: 0;
   transform: translateX(500px);
