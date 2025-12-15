@@ -37,7 +37,7 @@ const DropMenu = ({
 }: EditPictureProps) => {
   const { setLanguage } = useLanguage();
   const isTouchDevice = () => {
-    return "ontouchstart" in window || navigator.maxTouchPoints > 0;
+    return "onTouchStart" in window || navigator.maxTouchPoints > 0;
   };
 
   const handleToggleDropdown = () => {
@@ -48,12 +48,12 @@ const DropMenu = ({
 
   const eventHandlers = isTouchDevice()
     ? {
-        ontouchstart: handleToggleDropdown,
+        onTouchStart: handleToggleDropdown,
         onMouseEnter: () => setShowDropdown(true),
         onMouseLeave: () => setShowDropdown(false),
       }
     : {
-        ontouchstart: handleToggleDropdown,
+        onTouchStart: handleToggleDropdown,
         onMouseEnter: () => setShowDropdown(true),
         onMouseLeave: () => setShowDropdown(false),
       };

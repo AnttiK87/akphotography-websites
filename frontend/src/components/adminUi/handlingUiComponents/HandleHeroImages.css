@@ -52,9 +52,9 @@
   position: relative;
 }
 
-.button-primary {
+.button-primary.hero {
   width: fit-content;
-  margin: 1rem 1rem 0 0;
+  margin: 1rem 0.5rem 1rem 0;
 }
 
 .imageAndDel {
@@ -99,7 +99,7 @@
   transform: scale(0.92);
 }
 
-.EditButtonsOP {
+.EditButtonsOP.hero {
   flex-direction: row;
   margin: 0 0 0.5rem 0;
 }

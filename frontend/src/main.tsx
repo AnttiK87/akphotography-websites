@@ -12,13 +12,15 @@ import DisableScrollRestoration from "./utils/DisableScrollRestoration";
 
 import "./index.css";
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
+const rootElement = document.getElementById("root")!;
+
+ReactDOM.createRoot(rootElement).render(
   <React.StrictMode>
     <LanguageProvider>
       <Provider store={store}>
         <Router basename="/">
           <LightBoxProvider>
-            <ImageIndexProvider path="images/homeBackground">
+            <ImageIndexProvider>
               <DisableScrollRestoration />
               <App />
             </ImageIndexProvider>
@@ -28,3 +30,6 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     </LanguageProvider>
   </React.StrictMode>
 );
+
+const loader = document.getElementById("initial-loader");
+if (loader) loader.remove();

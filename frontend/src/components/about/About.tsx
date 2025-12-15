@@ -1,5 +1,3 @@
-import { ImageIndexProvider } from "../../contexts/ImageIndexContext";
-
 import AboutHeader from "./AboutHeader";
 import AboutContent from "./AboutContent";
 
@@ -49,10 +47,8 @@ const About = () => {
   const pictureAbout3 = "/uploads/images/aboutpage/picture2.jpg";
 
   return (
-    <>
-      <ImageIndexProvider path="images/about">
-        <AboutHeader heroText={heroText} />
-      </ImageIndexProvider>
+    <div className="homeScreen">
+      <AboutHeader heroText={heroText} />
       <AboutContent
         headerAbout={headerAbout}
         textAbout={textAbout1}
@@ -75,7 +71,7 @@ const About = () => {
         classNamePrints={"prints2"}
         classNameElement={"reverse"}
       />
-    </>
+    </div>
   );
 };
 

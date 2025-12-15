@@ -10,6 +10,7 @@ import { useImageIndex } from "./hooks/useImageIndex";
 
 import "./App.css";
 
+import ErrorScreen from "./components/ErrorScreen";
 import LoadingScreen from "./components/animations/LoadingScreen";
 
 import Footer from "./components/footer/Footer";
@@ -34,39 +35,50 @@ import NotFound from "./components/error/NotFound";
 
 import birdWhite from "./assets/bird-white.png";
 import leaf from "./assets/leaf.png";
-import toesLeft from "./assets/toes-left-white.png";
-import toesRight from "./assets/toes-right-white.png";
-import film from "./assets/film.png";
+import toesLeft from "./assets/toes-left.png";
+import toesRight from "./assets/toes-right.png";
 
 function App() {
   const dispatch = useAppDispatch();
+
+  const location = useLocation();
+  const adminUi =
+    location.pathname === "/admin" ||
+    location.pathname === "/admin/uploadPictures" ||
+    location.pathname === "/admin/editContent" ||
+    location.pathname === "/admin/ownProfile" ||
+    location.pathname === "/admin/uiElements";
 
   const { language } = useLanguage();
   const [isLoaded, setIsLoaded] = useState(false);
   const [textsLoaded, setTextsLoaded] = useState(false);
   const [isError, setIsError] = useState(false);
-  const { currentImageIndex } = useImageIndex();
+  const { images, isImageError } = useImageIndex();
 
-  const background = new Image();
-  background.src = `../../../images/homeBackground/background${currentImageIndex}.jpg`;
-
-  const images = [birdWhite, leaf, toesLeft, toesRight, film, background];
-
-  const imagesLoaded = useImagePreloader(images);
+  const imageUrls = !adminUi ? [birdWhite, leaf, toesLeft, toesRight] : [];
+  const imagesLoaded = useImagePreloader(imageUrls);
 
   useEffect(() => {
-    const handleLoad = () => {
-      if (textsLoaded) {
-        setIsLoaded(true);
-      }
-    };
-
     dispatch(initializesUiTexts())
       .then(() => setTextsLoaded(true))
       .catch(() => {
         setTextsLoaded(false);
         setIsError(true);
       });
+  }, [dispatch]);
+
+  useEffect(() => {
+    const handleLoad = () => {
+      if (
+        (textsLoaded || isError) &&
+        imagesLoaded &&
+        images &&
+        images.length > 0
+      ) {
+        setIsLoaded(true);
+        document.body.classList.add("app-ready");
+      }
+    };
 
     if (document.readyState === "complete") {
       handleLoad();
@@ -74,7 +86,7 @@ function App() {
       window.addEventListener("load", handleLoad);
       return () => window.removeEventListener("load", handleLoad);
     }
-  }, [dispatch, textsLoaded]);
+  }, [isLoaded, textsLoaded, imagesLoaded, images, isError]);
 
   useEffect(() => {
     if (language === "fin") {
@@ -84,13 +96,13 @@ function App() {
     }
   }, [language]);
 
-  const location = useLocation();
-  const adminUi =
-    location.pathname === "/admin" ||
-    location.pathname === "/admin/uploadPictures" ||
-    location.pathname === "/admin/editContent" ||
-    location.pathname === "/admin/ownProfile" ||
-    location.pathname === "/admin/uiElements";
+  if (!isLoaded) {
+    return <LoadingScreen />;
+  }
+
+  if (isError || isImageError) {
+    return <ErrorScreen />;
+  }
 
   if (adminUi) {
     return (
@@ -108,14 +120,6 @@ function App() {
         </Routes>
       </>
     );
-  }
-
-  if (!isLoaded || !imagesLoaded) {
-    return <LoadingScreen />;
-  }
-
-  if (isError) {
-    return <div>ERROR</div>;
   }
 
   return (
