@@ -1,8 +1,8 @@
-import "./animations/loadingScreen.css";
+import "./LoadingScreen.css";
 
-import { useLanguage } from "../hooks/useLanguage";
+import { useLanguage } from "../../hooks/useLanguage";
 
-function LoadingScreen() {
+function ErrorScreen() {
   const { language } = useLanguage();
 
   const loadingText =
@@ -17,4 +17,4 @@ function LoadingScreen() {
   );
 }
 
-export default LoadingScreen;
+export default ErrorScreen;

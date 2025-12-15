@@ -10,7 +10,7 @@ import { useImageIndex } from "./hooks/useImageIndex";
 
 import "./App.css";
 
-import ErrorScreen from "./components/ErrorScreen";
+import ErrorScreen from "./components/animations/ErrorScreen.js";
 import LoadingScreen from "./components/animations/LoadingScreen";
 
 import Footer from "./components/footer/Footer";
