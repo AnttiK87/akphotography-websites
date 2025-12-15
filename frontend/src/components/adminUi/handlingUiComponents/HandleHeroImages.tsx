@@ -138,17 +138,17 @@ const HandleHeroImages = ({ view }: HandleHeroImagesProps) => {
             )}
           </div>
         )}
-        <div className="EditButtonsOP">
+        <div className="EditButtonsOP hero">
           {selectedPicture && (
             <>
               <button
-                className="button-primary"
+                className="button-primary hero"
                 onClick={() => setShowChangePic(true)}
               >
                 Change picture
               </button>
               <button
-                className="button-primary"
+                className="button-primary hero"
                 onClick={() => setSelectedPicture("")}
               >
                 Clear
@@ -157,7 +157,7 @@ const HandleHeroImages = ({ view }: HandleHeroImagesProps) => {
           )}
           {!selectedPicture && images.length < 10 && (
             <button
-              className="button-primary"
+              className="button-primary hero"
               onClick={() => setShowChangePic(true)}
             >
               Add new picture

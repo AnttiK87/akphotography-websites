@@ -22,9 +22,14 @@ const HomeHeader = ({ texts }: HomeHeaderProps) => {
   const { language } = useLanguage();
   const [textIsAnimated, setTextIsAnimated] = useState(false);
   const [isImageReady, setIsImageReady] = useState(false);
-  const { currentImageIndex, setCurrentImageIndex, images } = useImageIndex();
+  const { currentImageIndex, setCurrentImageIndex, images, setPath } =
+    useImageIndex();
   const [nextImageIndex, setNextImageIndex] = useState(currentImageIndex + 1);
   const [startAnim, setStartAnim] = useState(false);
+
+  useEffect(() => {
+    setPath("images/homeBackground");
+  }, [setPath]);
 
   const duration = 5000;
 
@@ -70,20 +75,6 @@ const HomeHeader = ({ texts }: HomeHeaderProps) => {
 
     return () => clearInterval(interval);
   }, [currentImageIndex, setCurrentImageIndex, startAnim, images]);
-
-  useEffect(() => {
-    const image = new Image();
-    const imageNext = new Image();
-    if (images === undefined) return;
-    image.src = `/uploads/images/contact/${images[currentImageIndex]}`;
-    if (images.length > 1)
-      imageNext.src = `/uploads/images/contact/${
-        images[currentImageIndex + 1]
-      }`;
-    image.onload = () => {
-      setIsImageReady(true);
-    };
-  }, [currentImageIndex, images]);
 
   return (
     <div className="wholeScreen">

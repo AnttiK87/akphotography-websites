@@ -201,14 +201,14 @@ const HandleTexts = ({ view }: HHandleTextsProps) => {
             </select>
             <div>
               <button
-                className="button-primary  delButton"
+                className="button-primary  delButton hero"
                 type="button"
                 onClick={clear}
               >
                 Clear All
               </button>
               <button
-                className="button-primary no-margin"
+                className="button-primary hero"
                 type="button"
                 onClick={() => submit(selectedText?.id, editedText, newType)}
               >

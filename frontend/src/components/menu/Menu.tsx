@@ -214,11 +214,13 @@ const Menu = () => {
         <div className="navBar">
           <div className="logoAndToggle logoAK">
             <div className="logoSmallScreen">
-              <div>
-                <img className="leaf" src={leaf} alt={`leaf`} />
-                <img className="bird" src={birdWhite} alt={`whiteBird`} />
-              </div>
-              <h1 className="menuText">AK Photography</h1>
+              <Link to={"/"}>
+                <div>
+                  <img className="leaf" src={leaf} alt={`leaf`} />
+                  <img className="bird" src={birdWhite} alt={`whiteBird`} />
+                </div>
+                <h1 className="menuText">AK Photography</h1>
+              </Link>
             </div>
             <button
               className={
@@ -246,11 +248,13 @@ const Menu = () => {
           <Navbar.Collapse className="navBarSmall" id="responsive-navbar-nav">
             <Nav className="nav-container mr-auto">
               <div className="logoBigScreen logoAK">
-                <div>
-                  <img className="leaf" src={leaf} alt={`leaf`} />
-                  <img className="bird" src={birdWhite} alt={`whiteBird`} />
-                </div>
-                <h1 className="menuText">AK Photography</h1>
+                <Link to={"/"}>
+                  <div>
+                    <img className="leaf" src={leaf} alt={`leaf`} />
+                    <img className="bird" src={birdWhite} alt={`whiteBird`} />
+                  </div>
+                  <h1 className="menuText">AK Photography</h1>
+                </Link>
               </div>
               <div className="links">
                 <Nav.Link as="span">

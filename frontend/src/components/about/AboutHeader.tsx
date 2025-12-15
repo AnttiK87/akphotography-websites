@@ -16,9 +16,14 @@ const AboutHeader = ({ heroText }: AboutHeaderProps) => {
   const { language } = useLanguage();
   const [textIsAnimated, setTextIsAnimated] = useState(false);
   const [isImageReady, setIsImageReady] = useState(false);
-  const { currentImageIndex, setCurrentImageIndex, images } = useImageIndex();
+  const { currentImageIndex, setCurrentImageIndex, images, setPath } =
+    useImageIndex();
   const [nextImageIndex, setNextImageIndex] = useState(currentImageIndex + 1);
   const [startAnim, setStartAnim] = useState(false);
+
+  useEffect(() => {
+    setPath("images/about");
+  }, [setPath]);
 
   const duration = 5000;
 
@@ -58,18 +63,6 @@ const AboutHeader = ({ heroText }: AboutHeaderProps) => {
 
     return () => clearInterval(interval);
   }, [currentImageIndex, setCurrentImageIndex, startAnim, images]);
-
-  useEffect(() => {
-    const image = new Image();
-    const imageNext = new Image();
-    if (images === undefined) return;
-    image.src = `/uploads/images/about/${images[currentImageIndex]}`;
-    if (images.length > 1)
-      imageNext.src = `/uploads/images/about/${images[currentImageIndex + 1]}`;
-    image.onload = () => {
-      setIsImageReady(true);
-    };
-  }, [currentImageIndex, images]);
 
   return (
     <div className="wholeScreen">

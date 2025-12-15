@@ -82,17 +82,17 @@ const HandleContentPictures = ({ view }: HandleContentPicturesProps) => {
             />
           </div>
         )}
-        <div className="EditButtonsOP">
+        <div className="EditButtonsOP hero">
           {selectedPicture && (
             <>
               <button
-                className="button-primary"
+                className="button-primary hero"
                 onClick={() => setShowChangePic(true)}
               >
                 Change picture
               </button>
               <button
-                className="button-primary"
+                className="button-primary hero"
                 onClick={() => setSelectedPicture("")}
               >
                 Clear
