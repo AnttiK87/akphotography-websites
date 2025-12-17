@@ -90,7 +90,7 @@ const LightBox = () => {
 
   const addViewedImage = (imageId: number) => {
     if (imageId != undefined && imageId != null) {
-      const sessionViewedImg = sessionStorage.getItem("viewedImages");
+      const sessionViewedImg = localStorage.getItem("viewedImages");
       let viewedImages: number[] = [];
 
       try {
@@ -102,15 +102,16 @@ const LightBox = () => {
 
       if (!viewedImages.includes(imageId)) {
         viewedImages.push(imageId);
-        sessionStorage.setItem("viewedImages", JSON.stringify(viewedImages));
+        localStorage.setItem("viewedImages", JSON.stringify(viewedImages));
         pictureServices.addView(imageId);
       }
     }
   };
 
   useEffect(() => {
+    if (!isLightBoxOpen) return;
     addViewedImage(picturesByCategory[validIndex]?.id);
-  }, [validIndex, picturesByCategory]);
+  }, [validIndex, picturesByCategory, isLightBoxOpen]);
 
   const [show, setShow] = useState(false);
   const [edit, setEdit] = useState(false);

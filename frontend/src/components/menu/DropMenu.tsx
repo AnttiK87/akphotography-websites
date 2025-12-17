@@ -2,13 +2,20 @@ import React from "react";
 
 import { NavDropdown } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import { useLanguage } from "../../hooks/useLanguage";
+import useGalleryNewIndicator from "../../hooks/useGalleryNewIndicator";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircle } from "@fortawesome/free-solid-svg-icons";
+
 import type { Language } from "../../types/types";
 
 type PictureItem = {
   label: string;
   link: string;
+  category: string;
 };
 
 type LanguageItem = {
@@ -36,6 +43,10 @@ const DropMenu = ({
   languageSelect,
 }: EditPictureProps) => {
   const { setLanguage } = useLanguage();
+  const navigate = useNavigate();
+  const { newImages, getNewImages, getNewImagesByCategory } =
+    useGalleryNewIndicator();
+
   const isTouchDevice = () => {
     return "onTouchStart" in window || navigator.maxTouchPoints > 0;
   };
@@ -63,9 +74,23 @@ const DropMenu = ({
       className={classes}
       title={
         !languageSelect ? (
-          <Link className="menuText menuLink" to="/pictures">
-            {title}
-          </Link>
+          <div
+            className={`textAndDot ${
+              getNewImages(newImages).length === 0 ? "noMarginDot" : ""
+            }`}
+          >
+            <span
+              className="menuText menuLink"
+              onClick={() => navigate("/pictures")}
+            >
+              {title}
+            </span>
+            {getNewImages(newImages).length > 0 ? (
+              <FontAwesomeIcon className="newCircle" icon={faCircle} />
+            ) : (
+              <></>
+            )}
+          </div>
         ) : (
           title
         )
@@ -78,6 +103,7 @@ const DropMenu = ({
       {items.map((item, index) => (
         <NavDropdown.Item
           key={index}
+          className="dropItem"
           as="span"
           onClick={() => {
             if (languageSelect && "value" in item) {
@@ -87,9 +113,16 @@ const DropMenu = ({
           onTouchStart={() => handleToggleDropdown}
         >
           {"link" in item ? (
-            <Link className="menuText menuLink" to={item.link}>
-              {item.label}
-            </Link>
+            <div className="textAndDot">
+              <Link className="menuText menuLink" to={item.link}>
+                {item.label}
+              </Link>
+              {getNewImagesByCategory(newImages, item.category).length > 0 ? (
+                <FontAwesomeIcon className="newCircle" icon={faCircle} />
+              ) : (
+                <></>
+              )}
+            </div>
           ) : (
             <span className="menuText menuLink">{item.label}</span>
           )}

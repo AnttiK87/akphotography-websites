@@ -80,19 +80,27 @@ const Menu = () => {
 
   const pictureItems = [
     {
+      category: "mammals",
       label: language === "fin" ? "Nisäkkäät" : "Mammals",
       link: "/pictures/mammals",
     },
     {
+      category: "landscapes",
       label: language === "fin" ? "Maisemat" : "Landscapes",
       link: "/pictures/landscapes",
     },
     {
+      category: "nature",
       label: language === "fin" ? "Luonto" : "Nature",
       link: "/pictures/nature",
     },
-    { label: language === "fin" ? "Linnut" : "Birds", link: "/pictures/birds" },
     {
+      category: "birds",
+      label: language === "fin" ? "Linnut" : "Birds",
+      link: "/pictures/birds",
+    },
+    {
+      category: "monthly",
       label: language === "fin" ? "Kuukauden kuva" : "Photo of the Month",
       link: "/pictures/monthly",
     },

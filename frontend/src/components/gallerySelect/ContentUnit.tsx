@@ -3,12 +3,17 @@ import pictureService from "../../services/pictures";
 
 import { useNavigate } from "react-router-dom";
 import { useLanguage } from "../../hooks/useLanguage.js";
+import useGalleryNewIndicator from "../../hooks/useGalleryNewIndicator";
 
 import useAnimationLauncher from "../../hooks/useAnimationLauncher.js";
 
 import FootPrints from "../animations/FootPrints";
 import toesLeft from "../../assets/toes-left.png";
 import toesRight from "../../assets/toes-right.png";
+import newBadgeEn from "../../assets/newBadge-en.png";
+import newBadgeFin from "../../assets/newBadge-fin.png";
+import newBadgeReverseEn from "../../assets/newBadgeReverse-en.png";
+import newBadgeReverseFin from "../../assets/newBadgeReverse-fin.png";
 
 import type { Category } from "../../types/types";
 import type { PicturesByCategoryResponse } from "../../types/pictureTypes";
@@ -40,6 +45,10 @@ const ContentUnit = ({ category, index, length }: ContentUnitProps) => {
   const [latestPictures, setLatestPictures] = useState<
     PicturesByCategoryResponse | undefined
   >(undefined);
+
+  const { newImages, getNewImagesByCategory } = useGalleryNewIndicator();
+  const newImagesInCategory =
+    getNewImagesByCategory(newImages, category.imgClass).length > 0;
 
   useEffect(() => {
     setIsLoading(true);
@@ -173,6 +182,21 @@ const ContentUnit = ({ category, index, length }: ContentUnitProps) => {
         />
 
         <div className="pictureUnit">
+          {newImagesInCategory && (
+            <img
+              className={`newBadge ${index % 2 === 1 ? "reverse" : ""}`}
+              src={
+                language === "fin"
+                  ? index % 2 === 1
+                    ? newBadgeReverseFin
+                    : newBadgeFin
+                  : index % 2 === 1
+                  ? newBadgeReverseEn
+                  : newBadgeEn
+              }
+              alt="newBadge"
+            />
+          )}
           <div className={`textAndCard ${index % 2 === 1 ? "reverse" : ""}`}>
             <div className={`textElement ${index % 2 === 1 ? "reverse" : ""}`}>
               <h1

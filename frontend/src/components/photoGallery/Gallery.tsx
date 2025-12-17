@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import { RowsPhotoAlbum, type Photo } from "react-photo-album";
 import { useLocation } from "react-router-dom";
 import "react-photo-album/rows.css";
@@ -9,10 +9,19 @@ import usePicturesByCategory from "../../hooks/usePicturesByCategory";
 import useLightBox from "../../hooks/useLightBox";
 import useWindowWidth from "../../hooks/useWindowWidth";
 
+import useGalleryNewIndicator from "../../hooks/useGalleryNewIndicator";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircle } from "@fortawesome/free-solid-svg-icons";
+
 import type { Category } from "../../types/types";
 
 type GalleryProps = {
   category: Category;
+};
+
+type GalleryPhoto = Photo & {
+  id: number;
 };
 
 const Gallery = ({ category }: GalleryProps) => {
@@ -21,8 +30,16 @@ const Gallery = ({ category }: GalleryProps) => {
 
   const [page, setPage] = useState(1);
   const [allLoaded, setAllLoaded] = useState(false);
-  const [photoAlbums, setPhotoAlbums] = useState<Photo[][]>([]);
+  const [photoAlbums, setPhotoAlbums] = useState<GalleryPhoto[][]>([]);
   const observerRef = useRef(null);
+
+  const { newImages, getNewImagesByCategory } = useGalleryNewIndicator();
+  const newImagesInCategory = getNewImagesByCategory(newImages, category);
+
+  const unviewedIdSet = useMemo(
+    () => new Set(newImagesInCategory.map((img) => img.id)),
+    [newImagesInCategory]
+  );
 
   const { isLoading, isError, picturesByCategory } =
     usePicturesByCategory(category);
@@ -92,13 +109,20 @@ const Gallery = ({ category }: GalleryProps) => {
     return <div>Error loading pictures</div>;
   }
 
-  const renderPhoto = (photo: Photo, index: number) => (
-    <div key={index}>
-      <div className={category === "monthly" ? "galleryImgText" : "hideText"}>
-        <h1 className="GalleryPhotoHeader">{photo.title}</h1>
+  const renderPhoto = (photo: GalleryPhoto, index: number) => {
+    const isUnviewed = unviewedIdSet.has(photo.id);
+
+    return (
+      <div key={index} className="photoWrapper">
+        <div className={category === "monthly" ? "galleryImgText" : "hideText"}>
+          <h1 className="GalleryPhotoHeader">{photo.title}</h1>
+        </div>
+        {isUnviewed && (
+          <FontAwesomeIcon className="newCircleGallery" icon={faCircle} />
+        )}
       </div>
-    </div>
-  );
+    );
+  };
 
   return (
     <>

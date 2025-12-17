@@ -70,6 +70,7 @@
   overflow-wrap: break-word;
   text-align: start;
   white-space: pre-line;
+  margin: 0;
 }
 
 .cardPictures {
@@ -125,4 +126,45 @@
   transform: translateX(-500px);
   visibility: hidden;
   pointer-events: none;
+}
+
+.newBadge {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 300px;
+  width: 300px;
+}
+
+.newBadge.reverse {
+  right: 0;
+  left: auto;
+}
+
+@media (max-width: 790px) {
+  .textAndCard {
+    flex-direction: column-reverse;
+  }
+
+  .textAndCard.reverse {
+    flex-direction: column-reverse;
+  }
+
+  .pictureStack {
+    position: static;
+  }
+
+  .cardPictures {
+    max-height: 300px;
+    flex: none;
+    margin-left: 0;
+  }
+
+  .cardPictures.reverse {
+    margin-right: 0;
+  }
+
+  .imgPhotos {
+    max-height: 300px;
+  }
 }
