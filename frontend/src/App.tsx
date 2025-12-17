@@ -18,6 +18,7 @@ import Menu from "./components/menu/Menu";
 import Home from "./components/homeScreen/Home";
 import About from "./components/about/About";
 import Contact from "./components/contact/Contact";
+import GallerySelect from "./components/gallerySelect/GallerySelect.js";
 import GalleryByCategory from "./components/photoGallery/GalleryByCategory";
 import LightBox from "./components/photoGallery/LightBox";
 
@@ -131,6 +132,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/info" element={<About />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/pictures" element={<GallerySelect />} />
         <Route path="/pictures/:category" element={<GalleryByCategory />} />
         <Route
           path="/pictures/:category/:index"

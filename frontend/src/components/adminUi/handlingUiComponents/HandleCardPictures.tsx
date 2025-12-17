@@ -110,6 +110,7 @@ const HandleCardPictures = ({ view }: HandleCardPicturesProps) => {
         path={view.pathCard}
         setVersion={setVersion}
       />
+      <hr className="separatorLine" />
     </>
   );
 };

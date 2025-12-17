@@ -61,7 +61,15 @@ const DropMenu = ({
   return (
     <NavDropdown
       className={classes}
-      title={title}
+      title={
+        !languageSelect ? (
+          <Link className="menuText menuLink" to="/pictures">
+            {title}
+          </Link>
+        ) : (
+          title
+        )
+      }
       id="custom-dropdown"
       data-testid={`dropdown-menu-${languageSelect ? "language" : "pictures"}`}
       show={showDropdown}

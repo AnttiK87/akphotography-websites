@@ -218,6 +218,7 @@ const HandleTexts = ({ view }: HHandleTextsProps) => {
           </div>
         </div>
       </div>
+      <hr className="separatorLine" />
     </>
   );
 };

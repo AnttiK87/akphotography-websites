@@ -28,6 +28,12 @@ const HandlingUiElements = () => {
       pathCard: "/images/galleryCover/",
     },
     {
+      view: "pictures",
+      pathHero: "/images/pictures/",
+      pathContent: undefined,
+      pathCard: undefined,
+    },
+    {
       view: "gallery",
       pathHero: undefined,
       pathContent: undefined,
@@ -78,13 +84,12 @@ const HandlingUiElements = () => {
         {selectedView && (
           <>
             <HandleTexts view={selectedView} />
-            <hr className="separatorLine" />
+
             <HandleHeroImages view={selectedView} />
-            <hr className="separatorLine" />
+
             <HandleContentPictures view={selectedView} />
-            <hr className="separatorLine" />
+
             <HandleCardPictures view={selectedView} />
-            <hr className="separatorLine" />
           </>
         )}
       </div>

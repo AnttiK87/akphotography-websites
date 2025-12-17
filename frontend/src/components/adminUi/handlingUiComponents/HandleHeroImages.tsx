@@ -174,6 +174,7 @@ const HandleHeroImages = ({ view }: HandleHeroImagesProps) => {
         path={view.pathHero}
         setVersion={setVersion}
       />
+      <hr className="separatorLine" />
     </>
   );
 };
