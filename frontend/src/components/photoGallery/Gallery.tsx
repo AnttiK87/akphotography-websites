@@ -11,8 +11,7 @@ import useWindowWidth from "../../hooks/useWindowWidth";
 
 import useGalleryNewIndicator from "../../hooks/useGalleryNewIndicator";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircle } from "@fortawesome/free-solid-svg-icons";
+import newBadgeSmall from "../../assets/newBadge-small.png";
 
 import type { Category } from "../../types/types";
 
@@ -118,7 +117,7 @@ const Gallery = ({ category }: GalleryProps) => {
           <h1 className="GalleryPhotoHeader">{photo.title}</h1>
         </div>
         {isUnviewed && (
-          <FontAwesomeIcon className="newCircleGallery" icon={faCircle} />
+          <img className="newBadgeSmall" src={newBadgeSmall} alt="newBadge" />
         )}
       </div>
     );

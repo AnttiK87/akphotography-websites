@@ -1,6 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
+import useGalleryNewIndicator from "../../hooks/useGalleryNewIndicator";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import { useLanguage } from "../../hooks/useLanguage";
@@ -12,6 +14,7 @@ import type { Language } from "../../types/types";
 type PictureItem = {
   label: string;
   link: string;
+  category: string;
 };
 
 type LanguageItem = {
@@ -47,6 +50,8 @@ const DropMenuSmall = ({
 }: EditPictureProps) => {
   const { language, setLanguage } = useLanguage();
 
+  const { newImages, getNewImagesByCategory } = useGalleryNewIndicator();
+
   var classToUse = className === "dropSmall" ? ".dropSmall" : ".dropSmallLang";
 
   const enableScroll = () => {
@@ -76,16 +81,27 @@ const DropMenuSmall = ({
         <div key={index}>
           {"link" in item ? (
             <span className="nav-link nav-link-small">
-              <Link
-                className={`menuText menuLink`}
-                to={item.link}
-                onClick={() => {
-                  closeAllMenus();
-                  enableScroll();
-                }}
-              >
-                {item.label}
-              </Link>
+              <div className="textAndDot">
+                <Link
+                  className={`menuText menuLink`}
+                  to={item.link}
+                  onClick={() => {
+                    closeAllMenus();
+                    enableScroll();
+                  }}
+                >
+                  {item.label}
+                </Link>
+                {getNewImagesByCategory(newImages, item.category).length > 0 ? (
+                  <div className="newImages">
+                    {getNewImagesByCategory(newImages, item.category).length > 9
+                      ? "9+"
+                      : getNewImagesByCategory(newImages, item.category).length}
+                  </div>
+                ) : (
+                  <></>
+                )}
+              </div>
             </span>
           ) : (
             <span

@@ -65,6 +65,7 @@
 
 .nav-link {
   white-space: nowrap;
+  margin: 0;
 }
 
 .languageSelect {
@@ -127,6 +128,7 @@
   font-size: 1.2em;
   cursor: pointer;
   width: fit-content;
+  margin: 0 0.5em;
 }
 
 .menuLink::after {
@@ -163,7 +165,7 @@
 .navbar-toggler .line {
   position: absolute;
   width: 100%;
-  height: 3px;
+  height: 4px;
   background-color: white;
   border-radius: 2px;
   transition: transform 0.3s ease, top 0.3s ease;
@@ -212,22 +214,29 @@
 
 .textAndDot {
   position: relative;
-  display: inline-flex;
-  align-items: center;
-  padding: 0 0.5em 0 0;
-  width: 100%;
 }
 
-.textAndDot.noMarginDot {
-  padding: 0;
-}
-
-.newCircle {
+.newImages {
+  height: 18px;
+  width: 18px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  border-radius: 20px;
+  background-color: red;
+  color: white;
+  margin: 0;
   position: absolute;
-  top: 0.1em;
-  right: 0;
-  font-size: 0.3rem;
-  color: red;
+  top: -4px;
+  right: -10px;
+  user-select: none;
+  display: grid;
+  place-items: center;
+  align-content: space-around;
+  justify-content: space-around;
+}
+
+.newImages.menuToggle {
+  display: none;
 }
 
 @media (max-height: 500px) {
@@ -252,6 +261,25 @@
 }
 
 @media (max-width: 1200px) {
+  .menuLink {
+    margin: 0;
+  }
+
+  .newImages {
+    height: 22px;
+    width: 22px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    right: -24px;
+    top: -4px;
+    z-index: 10;
+  }
+
+  .newImages.menuToggle {
+    right: -15px;
+    display: block;
+  }
+
   .logoAK {
     margin-left: 0;
   }
@@ -329,6 +357,7 @@
   .iconDropdown {
     transform: rotate(-90deg);
     align-self: flex-end;
+    top: 3px;
   }
 
   .dropSmallButton {

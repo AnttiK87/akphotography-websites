@@ -4,7 +4,6 @@ import pictureService from "../../services/pictures";
 import { useNavigate } from "react-router-dom";
 import { useLanguage } from "../../hooks/useLanguage.js";
 import useGalleryNewIndicator from "../../hooks/useGalleryNewIndicator";
-
 import useAnimationLauncher from "../../hooks/useAnimationLauncher.js";
 
 import FootPrints from "../animations/FootPrints";

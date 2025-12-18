@@ -6,11 +6,14 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { useLanguage } from "../../hooks/useLanguage";
+import useGalleryNewIndicator from "../../hooks/useGalleryNewIndicator";
 import useAnimationLauncher from "../../hooks/useAnimationLauncher";
 
 import FootPrints from "../animations/FootPrints";
 import toesLeft from "../../assets/toes-left.png";
 import toesRight from "../../assets/toes-right.png";
+import newBadgeEn from "../../assets/newBadge-en.png";
+import newBadgeFin from "../../assets/newBadge-fin.png";
 
 import { getText } from "../../utils/getText";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -34,6 +37,8 @@ const PhotoGallery = ({ texts }: PhotoGalleryProps) => {
   const [reached, setReached] = useState([false, false, false]);
   const [next, setNext] = useState<number | undefined>(19);
   const [prev, setPrev] = useState<number | undefined>(undefined);
+
+  const { newImages, getNewImagesByCategory } = useGalleryNewIndicator();
 
   const height = elementRef.current
     ? elementRef.current.scrollHeight
@@ -195,6 +200,13 @@ const PhotoGallery = ({ texts }: PhotoGalleryProps) => {
                       index - 3 === 0 ? "first" : ""
                     }`}
                   >
+                    {getNewImagesByCategory(newImages, imgClass).length > 0 && (
+                      <img
+                        className="newBadge"
+                        src={language === "fin" ? newBadgeFin : newBadgeEn}
+                        alt="newBadge"
+                      />
+                    )}
                     <div className="imgAndText">
                       <img className="imgGallery" src={src} alt={imgClass} />
                       <p className="textContent">

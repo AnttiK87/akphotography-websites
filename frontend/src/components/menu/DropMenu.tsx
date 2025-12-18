@@ -7,9 +7,6 @@ import { useNavigate } from "react-router-dom";
 import { useLanguage } from "../../hooks/useLanguage";
 import useGalleryNewIndicator from "../../hooks/useGalleryNewIndicator";
 
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircle } from "@fortawesome/free-solid-svg-icons";
-
 import type { Language } from "../../types/types";
 
 type PictureItem = {
@@ -46,6 +43,7 @@ const DropMenu = ({
   const navigate = useNavigate();
   const { newImages, getNewImages, getNewImagesByCategory } =
     useGalleryNewIndicator();
+  const countAll = getNewImages(newImages).length;
 
   const isTouchDevice = () => {
     return "onTouchStart" in window || navigator.maxTouchPoints > 0;
@@ -74,19 +72,17 @@ const DropMenu = ({
       className={classes}
       title={
         !languageSelect ? (
-          <div
-            className={`textAndDot ${
-              getNewImages(newImages).length === 0 ? "noMarginDot" : ""
-            }`}
-          >
+          <div className="textAndDot">
             <span
               className="menuText menuLink"
               onClick={() => navigate("/pictures")}
             >
               {title}
             </span>
-            {getNewImages(newImages).length > 0 ? (
-              <FontAwesomeIcon className="newCircle" icon={faCircle} />
+            {countAll > 0 ? (
+              <>
+                <p className="newImages">{countAll > 9 ? "9+" : countAll}</p>
+              </>
             ) : (
               <></>
             )}
@@ -118,7 +114,11 @@ const DropMenu = ({
                 {item.label}
               </Link>
               {getNewImagesByCategory(newImages, item.category).length > 0 ? (
-                <FontAwesomeIcon className="newCircle" icon={faCircle} />
+                <div className="newImages">
+                  {getNewImagesByCategory(newImages, item.category).length > 9
+                    ? "9+"
+                    : getNewImagesByCategory(newImages, item.category).length}
+                </div>
               ) : (
                 <></>
               )}

@@ -4,13 +4,17 @@ import { Link } from "react-router-dom";
 
 import { useLanguage } from "../../hooks/useLanguage";
 import useAnimationLauncher from "../../hooks/useAnimationLauncher";
+import useGalleryNewIndicator from "../../hooks/useGalleryNewIndicator";
+
+import { getText } from "../../utils/getText";
 
 import Carouselle from "./Carouselle";
 
 import FootPrints from "../animations/FootPrints";
 import toesLeft from "../../assets/toes-left.png";
 import toesRight from "../../assets/toes-right.png";
-import { getText } from "../../utils/getText";
+import newBadgeEn from "../../assets/newBadge-en.png";
+import newBadgeFin from "../../assets/newBadge-fin.png";
 
 import type { UiText } from "../../types/uiTextTypes";
 
@@ -21,6 +25,10 @@ type HomePhotoOfMonthProps = {
 const HomePhotoOfMonth = ({ texts }: HomePhotoOfMonthProps) => {
   const { language } = useLanguage();
   const { isVisible, startAnim, elementRef } = useAnimationLauncher(0.2);
+
+  const { newImages, getNewImagesByCategory } = useGalleryNewIndicator();
+  const newImagesInCategory =
+    getNewImagesByCategory(newImages, "monthly").length > 0;
 
   const headerPhotoOfMonth =
     language === "fin" ? (
@@ -46,6 +54,13 @@ const HomePhotoOfMonth = ({ texts }: HomePhotoOfMonthProps) => {
         className={"prints2"}
       />
       <div className="grid-containerPoM">
+        {newImagesInCategory && (
+          <img
+            className="newBadge"
+            src={language === "fin" ? newBadgeFin : newBadgeEn}
+            alt="newBadge"
+          />
+        )}
         <div className={`elementPoM1 ${startAnim ? "fade-in" : ""}`}>
           <Link className="LinkPoM" to="/pictures/monthly">
             {headerPhotoOfMonth}
