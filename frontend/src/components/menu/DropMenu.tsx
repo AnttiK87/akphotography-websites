@@ -2,13 +2,19 @@ import React from "react";
 
 import { NavDropdown } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import { useLanguage } from "../../hooks/useLanguage";
+import useGalleryNewIndicator from "../../hooks/useGalleryNewIndicator";
+import useRandomAnimationWithDelay from "../../hooks/useRandomAnimation";
+import { getPrivacySettings } from "../../utils/readPrivasySettings";
+
 import type { Language } from "../../types/types";
 
 type PictureItem = {
   label: string;
   link: string;
+  category: string;
 };
 
 type LanguageItem = {
@@ -36,6 +42,14 @@ const DropMenu = ({
   languageSelect,
 }: EditPictureProps) => {
   const { setLanguage } = useLanguage();
+  const { allowStoreViewedImages } = getPrivacySettings();
+
+  const navigate = useNavigate();
+  const { newImages, getNewImages, getNewImagesByCategory } =
+    useGalleryNewIndicator();
+  const countAll = getNewImages(newImages).length;
+  const animate = useRandomAnimationWithDelay(3000, 5000);
+
   const isTouchDevice = () => {
     return "onTouchStart" in window || navigator.maxTouchPoints > 0;
   };
@@ -61,7 +75,29 @@ const DropMenu = ({
   return (
     <NavDropdown
       className={classes}
-      title={title}
+      title={
+        !languageSelect ? (
+          <div className="textAndDot">
+            <span
+              className="menuText menuLink"
+              onClick={() => navigate("/pictures")}
+            >
+              {title}
+            </span>
+            {countAll > 0 && allowStoreViewedImages ? (
+              <>
+                <p className={`newImages ${animate ? "scaleUp" : ""}`}>
+                  {countAll > 9 ? "9+" : countAll}
+                </p>
+              </>
+            ) : (
+              <></>
+            )}
+          </div>
+        ) : (
+          title
+        )
+      }
       id="custom-dropdown"
       data-testid={`dropdown-menu-${languageSelect ? "language" : "pictures"}`}
       show={showDropdown}
@@ -70,6 +106,7 @@ const DropMenu = ({
       {items.map((item, index) => (
         <NavDropdown.Item
           key={index}
+          className="dropItem"
           as="span"
           onClick={() => {
             if (languageSelect && "value" in item) {
@@ -79,9 +116,21 @@ const DropMenu = ({
           onTouchStart={() => handleToggleDropdown}
         >
           {"link" in item ? (
-            <Link className="menuText menuLink" to={item.link}>
-              {item.label}
-            </Link>
+            <div className="textAndDot">
+              <Link className="menuText menuLink" to={item.link}>
+                {item.label}
+              </Link>
+              {getNewImagesByCategory(newImages, item.category).length > 0 &&
+              allowStoreViewedImages ? (
+                <div className="newImages">
+                  {getNewImagesByCategory(newImages, item.category).length > 9
+                    ? "9+"
+                    : getNewImagesByCategory(newImages, item.category).length}
+                </div>
+              ) : (
+                <></>
+              )}
+            </div>
           ) : (
             <span className="menuText menuLink">{item.label}</span>
           )}

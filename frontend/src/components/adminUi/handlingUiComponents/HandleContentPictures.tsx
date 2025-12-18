@@ -110,6 +110,7 @@ const HandleContentPictures = ({ view }: HandleContentPicturesProps) => {
         path={view.pathContent}
         setVersion={setVersion}
       />
+      <hr className="separatorLine" />
     </>
   );
 };

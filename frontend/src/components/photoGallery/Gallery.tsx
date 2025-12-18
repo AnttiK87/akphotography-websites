@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import { RowsPhotoAlbum, type Photo } from "react-photo-album";
 import { useLocation } from "react-router-dom";
 import "react-photo-album/rows.css";
@@ -8,6 +8,14 @@ import "./Gallery.css";
 import usePicturesByCategory from "../../hooks/usePicturesByCategory";
 import useLightBox from "../../hooks/useLightBox";
 import useWindowWidth from "../../hooks/useWindowWidth";
+import { useLanguage } from "../../hooks/useLanguage";
+import useRandomAnimationWithDelay from "../../hooks/useRandomAnimation";
+import { getPrivacySettings } from "../../utils/readPrivasySettings.js";
+
+import useGalleryNewIndicator from "../../hooks/useGalleryNewIndicator";
+
+import newBadgeSmallFi from "../../assets/newBadgeSmall-fi.png";
+import newBadgeSmallEn from "../../assets/newBadgeSmall-en.png";
 
 import type { Category } from "../../types/types";
 
@@ -15,14 +23,63 @@ type GalleryProps = {
   category: Category;
 };
 
+type GalleryPhoto = Photo & {
+  id: number;
+};
+
+type PhotoBadgeProps = {
+  photo: GalleryPhoto;
+  isUnviewed: boolean;
+  language: string;
+  newBadgeSmallFi: string;
+  newBadgeSmallEn: string;
+  category: Category;
+};
+
+const PhotoWithBadge = ({
+  photo,
+  isUnviewed,
+  language,
+  newBadgeSmallFi,
+  newBadgeSmallEn,
+  category,
+}: PhotoBadgeProps) => {
+  const { allowStoreViewedImages } = getPrivacySettings();
+  const startBadgeAnimation = useRandomAnimationWithDelay(3000, 5000);
+
+  return (
+    <div className="photoWrapper" key={photo.id}>
+      <div className={category === "monthly" ? "galleryImgText" : "hideText"}>
+        <h1 className="GalleryPhotoHeader">{photo.title}</h1>
+      </div>
+      {isUnviewed && allowStoreViewedImages && (
+        <img
+          className={`newBadgeSmall ${startBadgeAnimation ? "jiggle" : ""}`}
+          src={language === "fin" ? newBadgeSmallFi : newBadgeSmallEn}
+          alt="newBadge"
+        />
+      )}
+    </div>
+  );
+};
+
 const Gallery = ({ category }: GalleryProps) => {
   const location = useLocation();
+  const { language } = useLanguage();
   const width = useWindowWidth();
 
   const [page, setPage] = useState(1);
   const [allLoaded, setAllLoaded] = useState(false);
-  const [photoAlbums, setPhotoAlbums] = useState<Photo[][]>([]);
+  const [photoAlbums, setPhotoAlbums] = useState<GalleryPhoto[][]>([]);
   const observerRef = useRef(null);
+
+  const { newImages, getNewImagesByCategory } = useGalleryNewIndicator();
+  const newImagesInCategory = getNewImagesByCategory(newImages, category);
+
+  const unviewedIdSet = useMemo(
+    () => new Set(newImagesInCategory.map((img) => img.id)),
+    [newImagesInCategory]
+  );
 
   const { isLoading, isError, picturesByCategory } =
     usePicturesByCategory(category);
@@ -92,13 +149,21 @@ const Gallery = ({ category }: GalleryProps) => {
     return <div>Error loading pictures</div>;
   }
 
-  const renderPhoto = (photo: Photo, index: number) => (
-    <div key={index}>
-      <div className={category === "monthly" ? "galleryImgText" : "hideText"}>
-        <h1 className="GalleryPhotoHeader">{photo.title}</h1>
-      </div>
-    </div>
-  );
+  const renderPhoto = (photo: GalleryPhoto) => {
+    const isUnviewed = unviewedIdSet.has(photo.id);
+
+    return (
+      <PhotoWithBadge
+        key={photo.id}
+        photo={photo}
+        isUnviewed={isUnviewed}
+        language={language}
+        newBadgeSmallFi={newBadgeSmallFi}
+        newBadgeSmallEn={newBadgeSmallEn}
+        category={category}
+      />
+    );
+  };
 
   return (
     <>
@@ -115,7 +180,7 @@ const Gallery = ({ category }: GalleryProps) => {
               handleOpenLightbox(globalIndex);
             }}
             render={{
-              extras: (_, { photo, index }) => renderPhoto(photo, index),
+              extras: (_, { photo }) => renderPhoto(photo),
             }}
           />
         ))}

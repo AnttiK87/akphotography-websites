@@ -1,5 +1,6 @@
 /*text styling*/
 .containerGalleryText {
+  margin-top: 2em;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -10,12 +11,27 @@
   font-size: 4.5em;
   color: #00433c;
   transform: scaleY(1.1);
-  width: 80%;
+  width: fit-content;
   margin: 0 auto;
 
   transition: all 1s ease-in-out;
   opacity: 0;
   transform: translateX(-500px);
+}
+
+.headerGallery::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 4px;
+  background-color: #00433c;
+  transition: width 0.4s ease-out;
+}
+
+.headerGallery:hover::after {
+  width: 100%;
 }
 
 .textGallery {
@@ -69,7 +85,7 @@
   }
 
   .headerGallery {
-    font-size: 1.9em;
+    font-size: 2.5em;
   }
 
   .textGallery {
@@ -91,7 +107,7 @@
 
 @media (max-width: 500px) {
   .containerGalleryText {
-    margin-top: 2em;
+    margin-top: 0em;
     flex-direction: column;
     justify-content: end;
   }
@@ -114,7 +130,7 @@
   visibility: visible;
   opacity: 1;
   transition: all 0.5s ease-in-out;
-  padding: 1rem;
+  padding: 0.5rem;
   display: inline-flex;
   flex-direction: column;
   align-items: center;
@@ -147,19 +163,23 @@
   position: sticky;
   height: 100vh;
   top: 0;
+  margin: 1em 0;
   overflow: hidden;
   display: flex;
-  align-content: center;
   flex-direction: column;
+  justify-content: center;
 }
 
 .galleryContainer {
   display: grid;
-  height: 80vh;
-  grid-template-rows: 80%;
+  width: 100%;
+  max-height: 100%;
+  grid-template-rows: 75%;
   justify-content: center;
   align-content: center;
   position: relative;
+  top: -2em;
+  justify-items: center;
 }
 
 .nature,
@@ -198,6 +218,15 @@
   cursor: pointer;
 }
 
+.card.first > .newBadge {
+  opacity: 1;
+  transition: opacity 2s ease;
+}
+
+.card.first:hover > .newBadge {
+  opacity: 0;
+}
+
 .imgAndText {
   position: relative;
   height: 90%;
@@ -223,6 +252,43 @@
 
 .card.first:hover .textContent {
   opacity: 1;
+  z-index: 30;
+}
+
+.buttonsAndCards {
+  display: flex;
+  width: 100%;
+  max-height: 80%;
+  align-items: start;
+}
+
+.cardButton {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  right: 5vw;
+  margin-top: 10em;
+  margin-bottom: auto;
+}
+
+.cardButton > button.prev {
+  transform: rotate(180deg);
+}
+
+.cardButton > button.disabled {
+  color: #00433c47;
+}
+
+.cardButton > button {
+  background-color: transparent;
+  border: none;
+  font-size: 3em;
+  color: #00433c;
+}
+
+.dots {
+  font-size: 3em;
+  color: #00433c;
 }
 
 @media (max-width: 990px) {
@@ -238,7 +304,7 @@
   .galleryContainer {
     grid-template-columns: 65%;
     justify-items: center;
-    max-height: fit-content;
+    max-height: 100%;
     align-content: start;
     top: 0;
   }
@@ -252,8 +318,16 @@
   .galleryContainer {
     grid-template-columns: 65%;
     justify-items: center;
-    max-height: fit-content;
     align-content: start;
+  }
+
+  .dots {
+    display: none;
+  }
+
+  .cardButton {
+    flex-direction: row;
+    bottom: 2em;
   }
 }
 
@@ -261,12 +335,15 @@
   .galleryContainer {
     grid-template-columns: 85%;
     justify-items: center;
-    max-height: fit-content;
     align-content: start;
   }
 }
 
 @media (max-height: 590px) {
+  .cardButton {
+    display: none;
+  }
+
   .imgGallery {
     max-width: 100%;
   }

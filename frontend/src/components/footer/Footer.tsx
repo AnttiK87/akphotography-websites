@@ -9,7 +9,11 @@ import FootPrints from "../animations/FootPrints";
 import toesLeft from "../../assets/toes-left.png";
 import toesRight from "../../assets/toes-right.png";
 
-const Footer = () => {
+type FooterProps = {
+  setShowPrivacy: (value: boolean) => void;
+};
+
+const Footer = ({ setShowPrivacy }: FooterProps) => {
   const { isVisible, startAnim, elementRef } = useAnimationLauncher(0.2);
   const { language } = useLanguage();
 
@@ -50,39 +54,49 @@ const Footer = () => {
             ? "Kuvien käyttö ilman lupaa on kielletty."
             : "Unauthorized use of images is prohibited."}
         </div>
+
         <div className="social">
-          <div>
-            <p>
+          <div onClick={() => setShowPrivacy(true)} className="privacyLink">
+            <p className="social-link">
               {language === "fin"
-                ? "Seuraa minua myös sosiaalisessa mediassa!"
-                : "Follow me on social media!"}
+                ? "Muuta yksityisyys asetuksia"
+                : "Change privacy settings"}
             </p>
           </div>
-          <div className="smallColumn">
-            <a
-              href="https://www.facebook.com/profile.php?id=100081355767265"
-              title="Facebook/antti kortelainen"
-              target="_blank"
-              className="social-link"
-            >
-              Facebook
-            </a>
-            <a
-              href="https://www.instagram.com/kortelainen.antti/"
-              title="instagram/antti kortelainen"
-              target="_blank"
-              className="social-link"
-            >
-              Instagram
-            </a>
-            <a
-              href="https://www.youtube.com/channel/UCfLqukGb4EkENku7V29IiGg"
-              title="YouTube/antti kortelainen"
-              target="_blank"
-              className="social-link"
-            >
-              YouTube
-            </a>
+          <div className="linksSocial">
+            <div>
+              <p>
+                {language === "fin"
+                  ? "Seuraa minua myös sosiaalisessa mediassa!"
+                  : "Follow me on social media!"}
+              </p>
+            </div>
+            <div className="smallColumn">
+              <a
+                href="https://www.facebook.com/profile.php?id=100081355767265"
+                title="Facebook/antti kortelainen"
+                target="_blank"
+                className="social-link"
+              >
+                Facebook
+              </a>
+              <a
+                href="https://www.instagram.com/kortelainen.antti/"
+                title="instagram/antti kortelainen"
+                target="_blank"
+                className="social-link"
+              >
+                Instagram
+              </a>
+              <a
+                href="https://www.youtube.com/channel/UCfLqukGb4EkENku7V29IiGg"
+                title="YouTube/antti kortelainen"
+                target="_blank"
+                className="social-link"
+              >
+                YouTube
+              </a>
+            </div>
           </div>
         </div>
       </div>

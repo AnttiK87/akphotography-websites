@@ -1,16 +1,27 @@
 import "./PhotoGallery.css";
 
+import { Link } from "react-router-dom";
+
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { useLanguage } from "../../hooks/useLanguage";
+import useGalleryNewIndicator from "../../hooks/useGalleryNewIndicator";
 import useAnimationLauncher from "../../hooks/useAnimationLauncher";
+import { getPrivacySettings } from "../../utils/readPrivasySettings.js";
 
 import FootPrints from "../animations/FootPrints";
 import toesLeft from "../../assets/toes-left.png";
 import toesRight from "../../assets/toes-right.png";
+import newBadgeEn from "../../assets/newBadge-en.png";
+import newBadgeFin from "../../assets/newBadge-fin.png";
 
 import { getText } from "../../utils/getText";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faArrowDown,
+  faEllipsisVertical,
+} from "@fortawesome/free-solid-svg-icons";
 
 import type { UiText } from "../../types/uiTextTypes";
 
@@ -20,29 +31,68 @@ type PhotoGalleryProps = {
 
 const PhotoGallery = ({ texts }: PhotoGalleryProps) => {
   const { language } = useLanguage();
+  const { allowStoreViewedImages } = getPrivacySettings();
   const { isVisible, startAnim, elementRef } = useAnimationLauncher(0.01);
 
   const navigate = useNavigate();
 
   const [reached, setReached] = useState([false, false, false]);
+  const [next, setNext] = useState<number | undefined>(19);
+  const [prev, setPrev] = useState<number | undefined>(undefined);
+
+  const { newImages, getNewImagesByCategory } = useGalleryNewIndicator();
+
+  const height = elementRef.current
+    ? elementRef.current.scrollHeight
+    : undefined;
+  const rectTop = elementRef.current
+    ? elementRef.current.getBoundingClientRect().top + window.scrollY
+    : undefined;
+
+  const scrollToNext = (percent: number, rectTop: number, height: number) => {
+    const top = (percent / 100) * height + rectTop;
+    window.scrollTo({
+      top: top,
+      behavior: "smooth",
+    });
+  };
+
+  const scrollToPrew = (percent: number, rectTop: number, height: number) => {
+    const top = (percent / 100) * height + rectTop;
+    window.scrollTo({
+      top: top,
+      behavior: "smooth",
+    });
+  };
 
   useEffect(() => {
     const handleScroll = () => {
-      if (!elementRef.current) return;
-      const rectTop =
-        elementRef.current.getBoundingClientRect().top + window.scrollY;
-      const scrollPercent =
-        ((window.scrollY - rectTop) / elementRef.current.scrollHeight) * 100;
+      if (!rectTop || !height) return;
 
-      if (scrollPercent >= 50) setReached([true, true, true]);
-      else if (scrollPercent >= 35) setReached([true, true, false]);
-      else if (scrollPercent >= 20) setReached([true, false, false]);
-      else setReached([false, false, false]);
+      const scrollPercent = ((window.scrollY - rectTop) / height) * 100;
+
+      if (scrollPercent >= 50) {
+        setReached([true, true, true]);
+        setNext(undefined);
+        setPrev(36);
+      } else if (scrollPercent >= 35) {
+        setReached([true, true, false]);
+        setNext(74);
+        setPrev(21);
+      } else if (scrollPercent >= 20) {
+        setReached([true, false, false]);
+        setNext(49);
+        setPrev(1);
+      } else if (scrollPercent >= 0) {
+        setReached([false, false, false]);
+        setNext(34);
+        setPrev(undefined);
+      }
     };
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [elementRef]);
+  }, [rectTop, height]);
 
   if (isVisible) {
     const links = document.querySelectorAll(".card");
@@ -114,53 +164,93 @@ const PhotoGallery = ({ texts }: PhotoGalleryProps) => {
           isVisible={isVisible}
         />
         <div className="containerGalleryText">
-          <p className={`headerGallery ${startAnim ? "fade-in" : ""}`}>
-            {galleryHeader}
-          </p>
+          <Link className="LinkPoM" to="/pictures">
+            <p className={`headerGallery ${startAnim ? "fade-in" : ""}`}>
+              {galleryHeader}
+            </p>
+          </Link>
+
           <p className={`textGallery ${startAnim ? "fade-in" : ""}`}>
             {galleryText}
           </p>
         </div>
-        <div className="galleryContainer">
-          {galleryItems.map(
-            (
-              {
-                path,
-                imgClass,
-                textFi,
-                textEn,
-                src,
-                textContentFi,
-                textContentEn,
-              },
-              index
-            ) => {
-              const isReached = reached[3 - index];
-              const isFirst = reached[2 - index];
+        <div className="buttonsAndCards">
+          <div className="galleryContainer">
+            {galleryItems.map(
+              (
+                {
+                  path,
+                  imgClass,
+                  textFi,
+                  textEn,
+                  src,
+                  textContentFi,
+                  textContentEn,
+                },
+                index
+              ) => {
+                const isReached = reached[3 - index];
+                const isFirst = reached[2 - index];
 
-              return (
-                <div
-                  key={index}
-                  onClick={() => navigate(path)}
-                  className={`card ${imgClass} ${
-                    isReached ? (index % 2 === 0 ? "hideL" : "hideR") : ""
-                  } ${isFirst ? "first" : ""} ${
-                    index - 3 === 0 ? "first" : ""
-                  }`}
-                >
-                  <div className="imgAndText">
-                    <img className="imgGallery" src={src} alt={imgClass} />
-                    <p className="textContent">
-                      {language === "fin" ? textContentFi : textContentEn}
+                return (
+                  <div
+                    key={index}
+                    onClick={() => navigate(path)}
+                    className={`card ${imgClass} ${
+                      isReached ? (index % 2 === 0 ? "hideL" : "hideR") : ""
+                    } ${isFirst ? "first" : ""} ${
+                      index - 3 === 0 ? "first" : ""
+                    }`}
+                  >
+                    {getNewImagesByCategory(newImages, imgClass).length > 0 &&
+                      allowStoreViewedImages && (
+                        <img
+                          className="newBadge"
+                          src={language === "fin" ? newBadgeFin : newBadgeEn}
+                          alt="newBadge"
+                        />
+                      )}
+                    <div className="imgAndText">
+                      <img className="imgGallery" src={src} alt={imgClass} />
+                      <p className="textContent">
+                        {language === "fin" ? textContentFi : textContentEn}
+                      </p>
+                    </div>
+                    <p className="textImg">
+                      {language === "fin" ? textFi : textEn}
                     </p>
                   </div>
-                  <p className="textImg">
-                    {language === "fin" ? textFi : textEn}
-                  </p>
-                </div>
-              );
-            }
-          )}
+                );
+              }
+            )}
+          </div>
+          <div className="cardButton">
+            {prev && rectTop && height ? (
+              <button
+                className="prev"
+                onClick={() => scrollToPrew(prev, rectTop, height)}
+              >
+                <FontAwesomeIcon icon={faArrowDown} />
+              </button>
+            ) : (
+              <button className="prev disabled">
+                <FontAwesomeIcon icon={faArrowDown} />
+              </button>
+            )}
+            <FontAwesomeIcon className="dots" icon={faEllipsisVertical} />
+            {next && rectTop && height ? (
+              <button
+                className="next"
+                onClick={() => scrollToNext(next, rectTop, height)}
+              >
+                <FontAwesomeIcon icon={faArrowDown} />
+              </button>
+            ) : (
+              <button className="next disabled">
+                <FontAwesomeIcon icon={faArrowDown} />
+              </button>
+            )}
+          </div>
         </div>
       </main>
     </div>

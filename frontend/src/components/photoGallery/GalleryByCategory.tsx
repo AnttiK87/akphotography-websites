@@ -1,9 +1,11 @@
 import { useLanguage } from "../../hooks/useLanguage";
+import { getPrivacySettings } from "../../utils/readPrivasySettings.js";
 import { useEffect, useCallback, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
 import useAnimationLauncher from "../../hooks/useAnimationLauncher";
 import useLightBox from "../../hooks/useLightBox";
+import useGalleryNewIndicator from "../../hooks/useGalleryNewIndicator";
 
 import { useAppSelector } from "../../hooks/useRedux.js";
 import { makeSelectTextsByScreen } from "../../reducers/selectors/uiTexts";
@@ -15,6 +17,8 @@ import Gallery from "./Gallery";
 import FootPrints from "../animations/FootPrints";
 import toesLeft from "../../assets/toes-left.png";
 import toesRight from "../../assets/toes-right.png";
+import newBadgeEn from "../../assets/newBadge-en.png";
+import newBadgeFin from "../../assets/newBadge-fin.png";
 
 import "./GalleryByCategory.css";
 
@@ -25,6 +29,10 @@ const GalleryByCategory = () => {
 
   const { index, category } = useParams();
   const navigate = useNavigate();
+
+  const { newImages, getNewImagesByCategory } = useGalleryNewIndicator();
+  const newImagesInCategory = getNewImagesByCategory(newImages, category);
+  const isNewImages = newImagesInCategory.length > 0;
 
   const validateCategory = useCallback((category: unknown): ValidCategory => {
     const validCategories: ValidCategory[] = [
@@ -97,6 +105,7 @@ const GalleryByCategory = () => {
   ]);
 
   const { language } = useLanguage();
+  const { allowStoreViewedImages } = getPrivacySettings();
   const { isVisible, startAnim, elementRef } = useAnimationLauncher(0);
 
   const TextByCategory = {
@@ -172,6 +181,13 @@ const GalleryByCategory = () => {
         />
 
         <div className="grid-containerPoM">
+          {isNewImages && allowStoreViewedImages && (
+            <img
+              className="newBadge"
+              src={language === "fin" ? newBadgeFin : newBadgeEn}
+              alt="newBadge"
+            />
+          )}
           <div className={`elementPoM1 ${startAnim ? "fade-in" : ""}`}>
             {headerPhotoOfMonth}
           </div>

@@ -15,6 +15,10 @@ import "./Menu.css";
 import DropMenu from "./DropMenu";
 import DropMenuSmall from "./DropMenuSmall";
 
+import useGalleryNewIndicator from "../../hooks/useGalleryNewIndicator";
+import useRandomAnimationWithDelay from "../../hooks/useRandomAnimation";
+import { getPrivacySettings } from "../../utils/readPrivasySettings";
+
 import birdWhite from "../../assets/bird-white.png";
 import leaf from "../../assets/leaf.png";
 import fiFlag from "../../assets/fi.svg";
@@ -24,6 +28,11 @@ import type { Language } from "../../types/types";
 
 const Menu = () => {
   const { language } = useLanguage();
+  const { allowStoreViewedImages } = getPrivacySettings();
+
+  const { newImages, getNewImages } = useGalleryNewIndicator();
+  const countAll = getNewImages(newImages).length;
+  const animate = useRandomAnimationWithDelay(3000, 5000);
 
   const languageTitle =
     language === "fin" ? (
@@ -80,19 +89,27 @@ const Menu = () => {
 
   const pictureItems = [
     {
+      category: "mammals",
       label: language === "fin" ? "Nisäkkäät" : "Mammals",
       link: "/pictures/mammals",
     },
     {
+      category: "landscapes",
       label: language === "fin" ? "Maisemat" : "Landscapes",
       link: "/pictures/landscapes",
     },
     {
+      category: "nature",
       label: language === "fin" ? "Luonto" : "Nature",
       link: "/pictures/nature",
     },
-    { label: language === "fin" ? "Linnut" : "Birds", link: "/pictures/birds" },
     {
+      category: "birds",
+      label: language === "fin" ? "Linnut" : "Birds",
+      link: "/pictures/birds",
+    },
+    {
+      category: "monthly",
       label: language === "fin" ? "Kuukauden kuva" : "Photo of the Month",
       link: "/pictures/monthly",
     },
@@ -222,28 +239,43 @@ const Menu = () => {
                 <h1 className="menuText">AK Photography</h1>
               </Link>
             </div>
-            <button
-              className={
-                isMenuOpen ? "navbar-toggler" : "navbar-toggler  collapsed"
-              }
-              type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#navbarNav"
-              aria-controls="navbarNav"
-              aria-expanded="false"
-              aria-label="Toggle navigation"
-              onClick={() =>
-                toggleMenu(
-                  ".navBarSmall",
-                  ".dropVisible",
-                  isMenuOpen,
-                  setIsMenuOpen
-                )
-              }
-            >
-              <span className="line"></span>
-              <span className="line"></span>
-            </button>
+            <div className="textAndDot">
+              {countAll > 0 && !isMenuOpen && allowStoreViewedImages ? (
+                <>
+                  <p
+                    className={`newImages menuToggle ${
+                      animate ? "scaleUp" : ""
+                    }`}
+                  >
+                    {countAll > 9 ? "9+" : countAll}
+                  </p>
+                </>
+              ) : (
+                <></>
+              )}
+              <button
+                className={
+                  isMenuOpen ? "navbar-toggler" : "navbar-toggler  collapsed"
+                }
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarNav"
+                aria-controls="navbarNav"
+                aria-expanded="false"
+                aria-label="Toggle navigation"
+                onClick={() =>
+                  toggleMenu(
+                    ".navBarSmall",
+                    ".dropVisible",
+                    isMenuOpen,
+                    setIsMenuOpen
+                  )
+                }
+              >
+                <span className="line"></span>
+                <span className="line"></span>
+              </button>
+            </div>
           </div>
           <Navbar.Collapse className="navBarSmall" id="responsive-navbar-nav">
             <Nav className="nav-container mr-auto">
@@ -274,23 +306,34 @@ const Menu = () => {
                   classes={"custom-dropdown menuText pictures"}
                 />
                 <span className="nav-link dropSmallButton">
-                  <a
-                    className="menuText menuLink"
-                    onClick={() => {
-                      toggleMenu(
-                        ".dropSmall",
-                        undefined,
-                        isDropdownOpen,
-                        setIsDropdownOpen
-                      );
-                    }}
-                  >
-                    {language === "fin" ? "Kuvat" : "Pictures"}{" "}
-                    <FontAwesomeIcon
-                      className="menuText menuLink iconDropdown"
-                      icon={faChevronDown}
-                    />
-                  </a>
+                  <div className="textAndDot">
+                    {countAll > 0 && allowStoreViewedImages ? (
+                      <>
+                        <p className="newImages">
+                          {countAll > 9 ? "9+" : countAll}
+                        </p>
+                      </>
+                    ) : (
+                      <></>
+                    )}
+                    <a
+                      className="menuText menuLink"
+                      onClick={() => {
+                        toggleMenu(
+                          ".dropSmall",
+                          undefined,
+                          isDropdownOpen,
+                          setIsDropdownOpen
+                        );
+                      }}
+                    >
+                      {language === "fin" ? "Kuvat" : "Pictures"}{" "}
+                      <FontAwesomeIcon
+                        className="menuText menuLink iconDropdown"
+                        icon={faChevronDown}
+                      />
+                    </a>
+                  </div>
                 </span>
                 <Nav.Link as="span">
                   <Link

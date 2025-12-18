@@ -21,12 +21,14 @@ import StarIcons from "./Stars.js";
 import CommentForm from "./CommentForm.js";
 
 import pictureServices from "../../services/pictures.js";
+import { getPrivacySettings } from "../../utils/readPrivasySettings.js";
 
 import type { GalleryPicture } from "../../types/pictureTypes.js";
 
 import "./LightBox.css";
 
 const LightBox = () => {
+  const { allowStoreViewedImages } = getPrivacySettings();
   const location = useLocation();
   const isMobile = useIsMobile();
   const navigate = useNavigate();
@@ -88,29 +90,34 @@ const LightBox = () => {
     setInvalidIndex,
   ]);
 
-  const addViewedImage = (imageId: number) => {
-    if (imageId != undefined && imageId != null) {
-      const sessionViewedImg = sessionStorage.getItem("viewedImages");
-      let viewedImages: number[] = [];
-
-      try {
-        viewedImages = sessionViewedImg ? JSON.parse(sessionViewedImg) : [];
-      } catch (error) {
-        console.warn("Error parsin viewed images in session storage:", error);
-        viewedImages = [];
-      }
-
-      if (!viewedImages.includes(imageId)) {
-        viewedImages.push(imageId);
-        sessionStorage.setItem("viewedImages", JSON.stringify(viewedImages));
-        pictureServices.addView(imageId);
-      }
-    }
-  };
-
   useEffect(() => {
+    if (!isLightBoxOpen) return;
+    const addViewedImage = (imageId: number) => {
+      if (imageId != undefined && imageId != null) {
+        const sessionViewedImg = allowStoreViewedImages
+          ? localStorage.getItem("viewedImages")
+          : null;
+        let viewedImages: number[] = [];
+
+        try {
+          viewedImages = sessionViewedImg ? JSON.parse(sessionViewedImg) : [];
+        } catch (error) {
+          console.warn("Error parsin viewed images in session storage:", error);
+          viewedImages = [];
+        }
+
+        if (!viewedImages.includes(imageId)) {
+          viewedImages.push(imageId);
+          if (allowStoreViewedImages) {
+            localStorage.setItem("viewedImages", JSON.stringify(viewedImages));
+          }
+          pictureServices.addView(imageId);
+        }
+      }
+    };
+
     addViewedImage(picturesByCategory[validIndex]?.id);
-  }, [validIndex, picturesByCategory]);
+  }, [validIndex, picturesByCategory, isLightBoxOpen, allowStoreViewedImages]);
 
   const [show, setShow] = useState(false);
   const [edit, setEdit] = useState(false);

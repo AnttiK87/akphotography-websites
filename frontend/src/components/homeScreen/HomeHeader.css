@@ -25,14 +25,15 @@
 }
 .maskImgHome,
 .maskImgAbout,
-.maskImgContact {
+.maskImgContact,
+.maskImgPictures {
   -webkit-mask-repeat: no-repeat;
   mask-repeat: no-repeat;
   mask-size: 100% 100%;
   mask-size: 100% 100%;
   aspect-ratio: 16 / 9;
   width: 90%;
-  max-width: 1050px;
+  max-width: 1000px;
   height: auto;
   overflow: hidden;
   top: 2em;
@@ -43,7 +44,8 @@
 
 .maskImgHome.ready,
 .maskImgAbout.ready,
-.maskImgContact.ready {
+.maskImgContact.ready,
+.maskImgPictures.ready {
   transform: rotate(3deg);
 }
 
@@ -62,10 +64,16 @@
   mask-image: url(/src/assets/camera.png);
 }
 
+.maskImgPictures {
+  -webkit-mask-image: url(/src/assets/pictures.png);
+  mask-image: url(/src/assets/pictures.png);
+}
+
 @media (max-width: 1200px) {
   .maskImgHome,
   .maskImgAbout,
-  .maskImgContact {
+  .maskImgContact,
+  .maskImgPictures {
     top: 0em;
   }
 }
@@ -73,8 +81,18 @@
 @media (max-width: 500px) {
   .maskImgHome,
   .maskImgAbout,
-  .maskImgContact {
+  .maskImgContact,
+  .maskImgPictures {
     top: -3em;
+  }
+}
+
+@media (orientation: portrait) {
+  .maskImgHome,
+  .maskImgAbout,
+  .maskImgContact,
+  .maskImgPictures {
+    width: 95%;
   }
 }
 
@@ -132,10 +150,11 @@
   }
 }
 
-@media (min-width: 500px) and (max-width: 1200px) and (max-height: 790px) {
+@media (min-width: 570px) and (max-width: 1200px) and (max-height: 790px) {
   .maskImgHome,
   .maskImgAbout,
-  .maskImgContact {
+  .maskImgContact,
+  .maskImgPictures {
     width: auto;
     max-height: 80%;
     height: 500px;

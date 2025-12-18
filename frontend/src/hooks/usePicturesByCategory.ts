@@ -90,6 +90,7 @@ const usePicturesByCategory = (category: Category) => {
           uploadedAt: item.uploadedAt,
           title: formatMonthYear(item.monthYear, language),
           keywords: item.keywords,
+          order: item.order,
           description:
             language === "fin"
               ? item.text?.textFi || ""

@@ -1,8 +1,14 @@
+import { getPrivacySettings } from "./readPrivasySettings.js";
+
 export const getUserId = () => {
-  let userId = localStorage.getItem("userId");
+  const { allowStoreId } = getPrivacySettings();
+
+  let userId = allowStoreId ? localStorage.getItem("userId") : undefined;
   if (!userId) {
     userId = crypto.randomUUID();
-    localStorage.setItem("userId", userId);
+    if (allowStoreId) {
+      localStorage.setItem("userId", userId);
+    }
   }
   return userId;
 };
