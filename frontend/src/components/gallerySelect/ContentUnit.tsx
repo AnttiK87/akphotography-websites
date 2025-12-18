@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useLanguage } from "../../hooks/useLanguage.js";
 import useGalleryNewIndicator from "../../hooks/useGalleryNewIndicator";
 import useAnimationLauncher from "../../hooks/useAnimationLauncher.js";
+import { getPrivacySettings } from "../../utils/readPrivasySettings.js";
 
 import FootPrints from "../animations/FootPrints";
 import toesLeft from "../../assets/toes-left.png";
@@ -37,6 +38,7 @@ const ContentUnit = ({ category, index, length }: ContentUnitProps) => {
   const { language } = useLanguage();
   const navigate = useNavigate();
   const { isVisible, startAnim, elementRef } = useAnimationLauncher(0);
+  const { allowStoreViewedImages } = getPrivacySettings();
 
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
@@ -181,7 +183,7 @@ const ContentUnit = ({ category, index, length }: ContentUnitProps) => {
         />
 
         <div className="pictureUnit">
-          {newImagesInCategory && (
+          {newImagesInCategory && allowStoreViewedImages && (
             <img
               className={`newBadge ${index % 2 === 1 ? "reverse" : ""}`}
               src={

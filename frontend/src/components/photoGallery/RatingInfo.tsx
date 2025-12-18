@@ -2,6 +2,7 @@ import { useLanguage } from "../../hooks/useLanguage";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { handleOverlayClose } from "../../utils/closeOverlay.js";
+import { getPrivacySettings } from "../../utils/readPrivasySettings.js";
 
 import "./RatingInfo.css";
 
@@ -23,7 +24,11 @@ const RatingInfo = ({
   id,
 }: RatingInfoProps) => {
   const { language } = useLanguage();
-  const savedRating = Number(localStorage.getItem(`rating${id}`));
+  const { allowStoreReviews, allowStoreId } = getPrivacySettings();
+
+  const savedRating = allowStoreReviews
+    ? Number(localStorage.getItem(`rating${id}`))
+    : null;
 
   const handleClose = () => {
     setShow(false);
@@ -74,7 +79,11 @@ const RatingInfo = ({
           <div className="ratingInfoText1">
             {language === "fin" ? (
               <div>
-                <div>Et ole vielä antanut tälle kuvalle tähtiä.</div>
+                <div>
+                  {allowStoreReviews
+                    ? "Et ole vielä antanut tälle kuvalle tähtiä."
+                    : "Olet estänyt yksityisyys asetuksista antamiesi arvostelujen tallentamisen"}
+                </div>
                 <div className="ratingInfoText2">
                   Kuvalle annettujen arvioiden kokonaismäärä on <b>{lenght}</b>{" "}
                   ja tähtien keskiarvo on: <b>{avgRating}</b>.
@@ -83,7 +92,9 @@ const RatingInfo = ({
             ) : (
               <div>
                 <div>
-                  You haven&apos;t given star rating for this picture yet.
+                  {allowStoreReviews
+                    ? "You haven't given star rating for this picture yet."
+                    : "You have disabled saving reviews from privacy settings."}
                 </div>
                 <div className="ratingInfoText2">
                   This pictures rating count is: <b>{lenght}</b>, with an
@@ -134,12 +145,18 @@ const RatingInfo = ({
           )}
         </div>
         <div className="ratingInfoButtons">
-          <button
-            className="button-primary  delButton"
-            onClick={() => addRating(0, id)}
-          >
-            {language === "fin" ? "Poista oma arvio" : "Delete your rating"}
-          </button>
+          {allowStoreId ? (
+            <button
+              className="button-primary  delButton"
+              onClick={() => addRating(0, id)}
+            >
+              {language === "fin" ? "Poista oma arvio" : "Delete your rating"}
+            </button>
+          ) : language === "fin" ? (
+            "Olet arvioinut tämän kuvan. Yksityisyys asetukset estävät arvostelun muuttamisen."
+          ) : (
+            "You have already reviewed this photo. Your privacy settings doesn't allow updating this review."
+          )}
         </div>
       </div>
     </div>

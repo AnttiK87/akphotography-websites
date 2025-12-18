@@ -6,6 +6,7 @@ import useGalleryNewIndicator from "../../hooks/useGalleryNewIndicator";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import { useLanguage } from "../../hooks/useLanguage";
+import { getPrivacySettings } from "../../utils/readPrivasySettings";
 
 import "./Menu.css";
 
@@ -49,6 +50,7 @@ const DropMenuSmall = ({
   languageSelect,
 }: EditPictureProps) => {
   const { language, setLanguage } = useLanguage();
+  const { allowStoreViewedImages } = getPrivacySettings();
 
   const { newImages, getNewImagesByCategory } = useGalleryNewIndicator();
 
@@ -92,7 +94,8 @@ const DropMenuSmall = ({
                 >
                   {item.label}
                 </Link>
-                {getNewImagesByCategory(newImages, item.category).length > 0 ? (
+                {getNewImagesByCategory(newImages, item.category).length > 0 &&
+                allowStoreViewedImages ? (
                   <div className="newImages">
                     {getNewImagesByCategory(newImages, item.category).length > 9
                       ? "9+"

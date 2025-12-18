@@ -6,6 +6,8 @@ import { useNavigate } from "react-router-dom";
 
 import { useLanguage } from "../../hooks/useLanguage";
 import useGalleryNewIndicator from "../../hooks/useGalleryNewIndicator";
+import useRandomAnimationWithDelay from "../../hooks/useRandomAnimation";
+import { getPrivacySettings } from "../../utils/readPrivasySettings";
 
 import type { Language } from "../../types/types";
 
@@ -40,10 +42,13 @@ const DropMenu = ({
   languageSelect,
 }: EditPictureProps) => {
   const { setLanguage } = useLanguage();
+  const { allowStoreViewedImages } = getPrivacySettings();
+
   const navigate = useNavigate();
   const { newImages, getNewImages, getNewImagesByCategory } =
     useGalleryNewIndicator();
   const countAll = getNewImages(newImages).length;
+  const animate = useRandomAnimationWithDelay(3000, 5000);
 
   const isTouchDevice = () => {
     return "onTouchStart" in window || navigator.maxTouchPoints > 0;
@@ -79,9 +84,11 @@ const DropMenu = ({
             >
               {title}
             </span>
-            {countAll > 0 ? (
+            {countAll > 0 && allowStoreViewedImages ? (
               <>
-                <p className="newImages">{countAll > 9 ? "9+" : countAll}</p>
+                <p className={`newImages ${animate ? "scaleUp" : ""}`}>
+                  {countAll > 9 ? "9+" : countAll}
+                </p>
               </>
             ) : (
               <></>
@@ -113,7 +120,8 @@ const DropMenu = ({
               <Link className="menuText menuLink" to={item.link}>
                 {item.label}
               </Link>
-              {getNewImagesByCategory(newImages, item.category).length > 0 ? (
+              {getNewImagesByCategory(newImages, item.category).length > 0 &&
+              allowStoreViewedImages ? (
                 <div className="newImages">
                   {getNewImagesByCategory(newImages, item.category).length > 9
                     ? "9+"

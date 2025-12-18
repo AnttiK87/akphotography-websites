@@ -233,6 +233,54 @@
   place-items: center;
   align-content: space-around;
   justify-content: space-around;
+  scale: 1;
+}
+
+.newImages.scaleUp {
+  display: inline-block;
+  animation: grow 1s ease-in-out;
+}
+
+@keyframes grow {
+  0% {
+    transform: scale(1);
+  }
+  10% {
+    transform: scale(1.2);
+  }
+  20% {
+    transform: scale(1.4);
+  }
+  25% {
+    transform: scale(1.5);
+  }
+  30% {
+    transform: scale(1.4);
+  }
+  40% {
+    transform: scale(1.2);
+  }
+  50% {
+    transform: scale(1);
+  }
+  60% {
+    transform: scale(1.2);
+  }
+  70% {
+    transform: scale(1.4);
+  }
+  75% {
+    transform: scale(1.5);
+  }
+  80% {
+    transform: scale(1.4);
+  }
+  90% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 .newImages.menuToggle {

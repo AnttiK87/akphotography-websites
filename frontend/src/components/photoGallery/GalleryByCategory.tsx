@@ -1,4 +1,5 @@
 import { useLanguage } from "../../hooks/useLanguage";
+import { getPrivacySettings } from "../../utils/readPrivasySettings.js";
 import { useEffect, useCallback, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
@@ -104,6 +105,7 @@ const GalleryByCategory = () => {
   ]);
 
   const { language } = useLanguage();
+  const { allowStoreViewedImages } = getPrivacySettings();
   const { isVisible, startAnim, elementRef } = useAnimationLauncher(0);
 
   const TextByCategory = {
@@ -179,7 +181,7 @@ const GalleryByCategory = () => {
         />
 
         <div className="grid-containerPoM">
-          {isNewImages && (
+          {isNewImages && allowStoreViewedImages && (
             <img
               className="newBadge"
               src={language === "fin" ? newBadgeFin : newBadgeEn}

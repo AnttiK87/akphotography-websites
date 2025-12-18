@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { useLanguage } from "../../hooks/useLanguage";
 import useAnimationLauncher from "../../hooks/useAnimationLauncher";
 import useGalleryNewIndicator from "../../hooks/useGalleryNewIndicator";
+import { getPrivacySettings } from "../../utils/readPrivasySettings.js";
 
 import { getText } from "../../utils/getText";
 
@@ -24,6 +25,7 @@ type HomePhotoOfMonthProps = {
 
 const HomePhotoOfMonth = ({ texts }: HomePhotoOfMonthProps) => {
   const { language } = useLanguage();
+  const { allowStoreViewedImages } = getPrivacySettings();
   const { isVisible, startAnim, elementRef } = useAnimationLauncher(0.2);
 
   const { newImages, getNewImagesByCategory } = useGalleryNewIndicator();
@@ -54,7 +56,7 @@ const HomePhotoOfMonth = ({ texts }: HomePhotoOfMonthProps) => {
         className={"prints2"}
       />
       <div className="grid-containerPoM">
-        {newImagesInCategory && (
+        {newImagesInCategory && allowStoreViewedImages && (
           <img
             className="newBadge"
             src={language === "fin" ? newBadgeFin : newBadgeEn}

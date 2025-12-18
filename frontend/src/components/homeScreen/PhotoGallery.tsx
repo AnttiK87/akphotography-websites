@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { useLanguage } from "../../hooks/useLanguage";
 import useGalleryNewIndicator from "../../hooks/useGalleryNewIndicator";
 import useAnimationLauncher from "../../hooks/useAnimationLauncher";
+import { getPrivacySettings } from "../../utils/readPrivasySettings.js";
 
 import FootPrints from "../animations/FootPrints";
 import toesLeft from "../../assets/toes-left.png";
@@ -30,6 +31,7 @@ type PhotoGalleryProps = {
 
 const PhotoGallery = ({ texts }: PhotoGalleryProps) => {
   const { language } = useLanguage();
+  const { allowStoreViewedImages } = getPrivacySettings();
   const { isVisible, startAnim, elementRef } = useAnimationLauncher(0.01);
 
   const navigate = useNavigate();
@@ -200,13 +202,14 @@ const PhotoGallery = ({ texts }: PhotoGalleryProps) => {
                       index - 3 === 0 ? "first" : ""
                     }`}
                   >
-                    {getNewImagesByCategory(newImages, imgClass).length > 0 && (
-                      <img
-                        className="newBadge"
-                        src={language === "fin" ? newBadgeFin : newBadgeEn}
-                        alt="newBadge"
-                      />
-                    )}
+                    {getNewImagesByCategory(newImages, imgClass).length > 0 &&
+                      allowStoreViewedImages && (
+                        <img
+                          className="newBadge"
+                          src={language === "fin" ? newBadgeFin : newBadgeEn}
+                          alt="newBadge"
+                        />
+                      )}
                     <div className="imgAndText">
                       <img className="imgGallery" src={src} alt={imgClass} />
                       <p className="textContent">

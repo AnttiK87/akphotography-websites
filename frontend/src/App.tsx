@@ -21,6 +21,7 @@ import Contact from "./components/contact/Contact";
 import GallerySelect from "./components/gallerySelect/GallerySelect.js";
 import GalleryByCategory from "./components/photoGallery/GalleryByCategory";
 import LightBox from "./components/photoGallery/LightBox";
+import PrivacyBanner from "./components/permissions/PrivacyBanner";
 
 import LoginForm from "./components/adminUi/LoginForm";
 import AdminMenu from "./components/adminUi/AdminMenu";
@@ -52,6 +53,7 @@ function App() {
 
   const { language } = useLanguage();
   const [isLoaded, setIsLoaded] = useState(false);
+  const [showPrivacy, setShowPrivacy] = useState(false);
   const [textsLoaded, setTextsLoaded] = useState(false);
   const [isError, setIsError] = useState(false);
   const { images, isImageError } = useImageIndex();
@@ -128,6 +130,10 @@ function App() {
       <Menu />
       <Notification />
       <LightBox />
+      <PrivacyBanner
+        showPrivacy={showPrivacy}
+        setShowPrivacy={setShowPrivacy}
+      />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/info" element={<About />} />
@@ -140,7 +146,7 @@ function App() {
         />
         <Route path="*" element={<NotFound />} />
       </Routes>
-      <Footer />
+      <Footer setShowPrivacy={setShowPrivacy} />
     </>
   );
 }

@@ -16,6 +16,8 @@ import DropMenu from "./DropMenu";
 import DropMenuSmall from "./DropMenuSmall";
 
 import useGalleryNewIndicator from "../../hooks/useGalleryNewIndicator";
+import useRandomAnimationWithDelay from "../../hooks/useRandomAnimation";
+import { getPrivacySettings } from "../../utils/readPrivasySettings";
 
 import birdWhite from "../../assets/bird-white.png";
 import leaf from "../../assets/leaf.png";
@@ -26,9 +28,11 @@ import type { Language } from "../../types/types";
 
 const Menu = () => {
   const { language } = useLanguage();
+  const { allowStoreViewedImages } = getPrivacySettings();
 
   const { newImages, getNewImages } = useGalleryNewIndicator();
   const countAll = getNewImages(newImages).length;
+  const animate = useRandomAnimationWithDelay(3000, 5000);
 
   const languageTitle =
     language === "fin" ? (
@@ -236,9 +240,13 @@ const Menu = () => {
               </Link>
             </div>
             <div className="textAndDot">
-              {countAll > 0 && !isMenuOpen ? (
+              {countAll > 0 && !isMenuOpen && allowStoreViewedImages ? (
                 <>
-                  <p className="newImages menuToggle">
+                  <p
+                    className={`newImages menuToggle ${
+                      animate ? "scaleUp" : ""
+                    }`}
+                  >
                     {countAll > 9 ? "9+" : countAll}
                   </p>
                 </>
@@ -299,7 +307,7 @@ const Menu = () => {
                 />
                 <span className="nav-link dropSmallButton">
                   <div className="textAndDot">
-                    {countAll > 0 ? (
+                    {countAll > 0 && allowStoreViewedImages ? (
                       <>
                         <p className="newImages">
                           {countAll > 9 ? "9+" : countAll}

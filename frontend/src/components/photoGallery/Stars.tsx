@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
+import { useLanguage } from "../../hooks/useLanguage";
 
 import { useAppDispatch, useAppSelector } from "../../hooks/useRedux.js";
 
+import { showMessage } from "../../reducers/messageReducer";
 import { createRating, initializeRatings } from "../../reducers/ratingReducer";
 import { getUserId } from "../../utils/createAndGetUserId";
 
@@ -9,6 +11,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleInfo } from "@fortawesome/free-solid-svg-icons";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
+import { getPrivacySettings } from "../../utils/readPrivasySettings.js";
 import RatingInfo from "./RatingInfo";
 
 import "./Stars.css";
@@ -19,6 +22,9 @@ type StarIconsProps = {
 };
 
 const StarIcons = ({ id, isMobile }: StarIconsProps) => {
+  const { allowStoreReviews, allowStoreId } = getPrivacySettings();
+  const { language } = useLanguage();
+
   const dispatch = useAppDispatch();
   const ratings = useAppSelector((state) => state.ratings.ratings);
 
@@ -36,12 +42,16 @@ const StarIcons = ({ id, isMobile }: StarIconsProps) => {
       : 0
   );
 
-  const savedRating = Number(localStorage.getItem(`rating${id}`)) || 0;
+  const savedRating = allowStoreReviews
+    ? Number(localStorage.getItem(`rating${id}`))
+    : null;
 
   useEffect(() => {
     dispatch(initializeRatings(id));
-    localStorage.getItem(`rating${id}`);
-  }, [dispatch, id]);
+    if (allowStoreReviews) {
+      localStorage.getItem(`rating${id}`);
+    }
+  }, [dispatch, id, allowStoreReviews]);
 
   useEffect(() => {
     setAvgRating(
@@ -68,12 +78,44 @@ const StarIcons = ({ id, isMobile }: StarIconsProps) => {
     newRating: number,
     id: number
   ) => {
+    if (savedRating != 0 && !allowStoreId) {
+      dispatch(
+        showMessage(
+          {
+            text: `${
+              language === "fin"
+                ? "Olet jo arvioinut tämän kuvan. Yksityisyys asetukset estävät arvostelun muuttamisen."
+                : "You have already reviewed this photo. Your privacy settings doesn't aloow updating this review."
+            }`,
+            type: "error",
+          },
+          2
+        )
+      );
+      return;
+    }
     const updatedRating = currentRating == newRating ? 0 : newRating;
     setCurrentUserRating(updatedRating);
     addRating(updatedRating, id);
   };
 
   const addRating = (rating: number, id: number) => {
+    if (!allowStoreReviews) {
+      dispatch(
+        showMessage(
+          {
+            text: `${
+              language === "fin"
+                ? "Olet estänyt yksityisyys asetuksista antamiesi arvostelujen tallentamisen"
+                : "You have disabled saving reviews from privacy settings."
+            }`,
+            type: "error",
+          },
+          2
+        )
+      );
+      return;
+    }
     const userId = getUserId();
 
     const newRating = rating;
@@ -85,10 +127,14 @@ const StarIcons = ({ id, isMobile }: StarIconsProps) => {
     };
 
     if (rating === 0) {
-      localStorage.removeItem(`rating${id}`);
+      if (allowStoreReviews) {
+        localStorage.removeItem(`rating${id}`);
+      }
       setCurrentUserRating(0);
     } else {
-      localStorage.setItem(`rating${id}`, String(rating));
+      if (allowStoreReviews) {
+        localStorage.setItem(`rating${id}`, String(rating));
+      }
     }
     dispatch(createRating(addRating));
   };
