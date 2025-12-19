@@ -70,7 +70,7 @@ const LightBox = () => {
       : null;
   };
 
-  const [validIndex, setValidIndex] = useState(0);
+  const [validIndex, setValidIndex] = useState<number | undefined>(undefined);
 
   useEffect(() => {
     if (!isLoading && picturesByCategory.length > 0) {
@@ -91,7 +91,7 @@ const LightBox = () => {
   ]);
 
   useEffect(() => {
-    if (!isLightBoxOpen) return;
+    if (!isLightBoxOpen || validIndex === undefined) return;
     const addViewedImage = (imageId: number) => {
       if (imageId != undefined && imageId != null) {
         const sessionViewedImg = allowStoreViewedImages
@@ -115,7 +115,6 @@ const LightBox = () => {
         }
       }
     };
-
     addViewedImage(picturesByCategory[validIndex]?.id);
   }, [validIndex, picturesByCategory, isLightBoxOpen, allowStoreViewedImages]);
 
@@ -128,6 +127,7 @@ const LightBox = () => {
   const { isActive, startTimer, stopTimer } = useTimer();
 
   useEffect(() => {
+    if (!isLightBoxOpen || validIndex === undefined) return;
     if (!isLoading) {
       if (picturesByCategory[validIndex]?.description === "") {
         setIsText(false);
@@ -137,7 +137,7 @@ const LightBox = () => {
         return;
       }
     }
-  }, [isLoading, picturesByCategory, validIndex]);
+  }, [isLoading, picturesByCategory, validIndex, isLightBoxOpen]);
 
   const { isFullScreen, enterFullscreen, exitFullscreen } = useFullScreen(
     isMobile,
@@ -145,10 +145,18 @@ const LightBox = () => {
   );
 
   const nextPictureIndex =
-    validIndex === picturesByCategory.length - 1 ? 0 : validIndex + 1;
+    validIndex === picturesByCategory.length - 1
+      ? 0
+      : validIndex !== undefined
+      ? validIndex + 1
+      : 0;
 
   const prevPictureIndex =
-    validIndex === 0 ? picturesByCategory.length - 1 : validIndex - 1;
+    validIndex === 0
+      ? picturesByCategory.length - 1
+      : validIndex !== undefined
+      ? validIndex - 1
+      : 0;
 
   const handleNextPicture = useCallback(() => {
     const basePath = location.pathname.replace(/\/\d+$/, "");
@@ -170,6 +178,7 @@ const LightBox = () => {
 
   const handleExit = useCallback(() => {
     closeLightBox();
+    setValidIndex(undefined);
     setCurrentIndex(undefined);
 
     if (isLightBoxOpen) {
@@ -351,7 +360,7 @@ const LightBox = () => {
     return (
       <div className="lightBoxBC InfoTextLB">No pictures found! Closing...</div>
     );
-  if (picturesByCategory.length < validIndex)
+  if (validIndex === undefined || picturesByCategory.length < validIndex)
     return (
       <div className="lightBoxBC InfoTextLB">
         Used index is not valid! Closing...

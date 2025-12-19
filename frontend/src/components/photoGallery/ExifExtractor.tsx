@@ -108,7 +108,7 @@ const ImageMetadata = ({ src }: ImageMetadataProps) => {
       ) : (
         <div className="iconExifText">
           {language === "fin"
-            ? "Tekniset tiedot puuttuva"
+            ? "Tekniset tiedot puuttuvat"
             : "No technical data"}
         </div>
       )}

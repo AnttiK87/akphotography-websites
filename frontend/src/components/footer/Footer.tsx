@@ -59,7 +59,7 @@ const Footer = ({ setShowPrivacy }: FooterProps) => {
           <div onClick={() => setShowPrivacy(true)} className="privacyLink">
             <p className="social-link">
               {language === "fin"
-                ? "Muuta yksityisyys asetuksia"
+                ? "Muuta yksityisyysasetuksia"
                 : "Change privacy settings"}
             </p>
           </div>

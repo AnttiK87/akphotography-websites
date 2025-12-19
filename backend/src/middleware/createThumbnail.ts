@@ -60,7 +60,10 @@ export const writeToHardDrive = async (
     const resizeWidth = Math.round(width * scale);
     const resizeHeight = Math.round(height * scale);
 
-    await sharp(file.buffer).resize(resizeWidth, resizeHeight).toFile(filePath);
+    await sharp(file.buffer)
+      .resize(resizeWidth, resizeHeight)
+      .withMetadata()
+      .toFile(filePath);
 
     file.path = filePath;
     file.filename = filename;
