@@ -84,7 +84,7 @@ const StarIcons = ({ id, isMobile }: StarIconsProps) => {
           {
             text: `${
               language === "fin"
-                ? "Olet jo arvioinut tämän kuvan. Yksityisyys asetukset estävät arvostelun muuttamisen."
+                ? "Olet jo arvioinut tämän kuvan. Yksityisyysasetukset estävät arvostelun muuttamisen."
                 : "You have already reviewed this photo. Your privacy settings doesn't aloow updating this review."
             }`,
             type: "error",
@@ -106,7 +106,7 @@ const StarIcons = ({ id, isMobile }: StarIconsProps) => {
           {
             text: `${
               language === "fin"
-                ? "Olet estänyt yksityisyys asetuksista antamiesi arvostelujen tallentamisen"
+                ? "Olet estänyt yksityisyysasetuksista antamiesi arvostelujen tallentamisen"
                 : "You have disabled saving reviews from privacy settings."
             }`,
             type: "error",

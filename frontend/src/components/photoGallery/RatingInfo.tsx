@@ -82,7 +82,7 @@ const RatingInfo = ({
                 <div>
                   {allowStoreReviews
                     ? "Et ole vielä antanut tälle kuvalle tähtiä."
-                    : "Olet estänyt yksityisyys asetuksista antamiesi arvostelujen tallentamisen"}
+                    : "Olet estänyt yksityisyysasetuksista antamiesi arvostelujen tallentamisen"}
                 </div>
                 <div className="ratingInfoText2">
                   Kuvalle annettujen arvioiden kokonaismäärä on <b>{lenght}</b>{" "}
@@ -153,7 +153,7 @@ const RatingInfo = ({
               {language === "fin" ? "Poista oma arvio" : "Delete your rating"}
             </button>
           ) : language === "fin" ? (
-            "Olet arvioinut tämän kuvan. Yksityisyys asetukset estävät arvostelun muuttamisen."
+            "Olet arvioinut tämän kuvan. Yksityisyysasetukset estävät arvostelun muuttamisen."
           ) : (
             "You have already reviewed this photo. Your privacy settings doesn't allow updating this review."
           )}
