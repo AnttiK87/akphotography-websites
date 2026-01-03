@@ -134,7 +134,7 @@
   left: 0;
   height: 300px;
   width: 300px;
-  z-index: 10;
+  z-index: 1;
 }
 
 .newBadge.reverse {

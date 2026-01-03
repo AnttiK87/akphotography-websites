@@ -126,10 +126,20 @@ export const handleRatingChange = async (
   res: Response,
   next: NextFunction,
 ) => {
-  const { userId, pictureId, rating } = req.body;
+  const { userId, pictureId, rating, update } = req.body;
 
   // get rating related to picture and given by specific user
   const existing = await Rating.findOne({ where: { userId, pictureId } });
+
+  if (update && !existing) {
+    throw new AppError(
+      {
+        fi: 'Olet jo arvioinut tämän kuvan. Aiemmat yksityisyysasetuksesi estävät arvostelun muuttamisen.',
+        en: "You have already reviewed this photo. Your previous privacy settings doesn't allow updating this review.",
+      },
+      400,
+    );
+  }
 
   // if rating exist handle change or deletion
   if (existing) {
@@ -142,6 +152,15 @@ export const handleRatingChange = async (
       res.json({ message: 'Rating updated', rating: updated });
       return;
     }
+  }
+  if (!existing && rating === 0) {
+    throw new AppError(
+      {
+        fi: 'Virhe! Arvostelua ei ole olemassa.',
+        en: 'Error! This review does not exist.',
+      },
+      400,
+    );
   }
 
   next();
