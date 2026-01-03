@@ -32,7 +32,7 @@ describe('POST /api/ratings', () => {
   test('POST /api/ratings creates a new rating when none exists', async () => {
     const res = await request(app)
       .post('/api/ratings')
-      .send({ userId, pictureId, rating: 4 });
+      .send({ userId, pictureId, rating: 4, update: false });
 
     expect(res.status).toBe(200);
     expect(res.body.message).toBe('Rating saved');
@@ -42,7 +42,7 @@ describe('POST /api/ratings', () => {
   test('POST /api/ratings fails to add a new rating with invalid picture id', async () => {
     const res = await request(app)
       .post('/api/ratings')
-      .send({ userId, pictureId: 555, rating: 4 });
+      .send({ userId, pictureId: 555, rating: 4, update: false });
 
     expect(res.status).toBe(404);
     expect(res.body.messages.en).toBe('Picture not found');
@@ -66,7 +66,7 @@ describe('POST /api/ratings', () => {
 
     const res = await request(app)
       .post('/api/ratings')
-      .send({ userId, pictureId, rating: 5 });
+      .send({ userId, pictureId, rating: 5, update: true });
 
     expect(res.status).toBe(200);
     expect(res.body.message).toBe('Rating updated');
@@ -78,7 +78,7 @@ describe('POST /api/ratings', () => {
 
     const res = await request(app)
       .post('/api/ratings')
-      .send({ userId, pictureId, rating: 0 });
+      .send({ userId, pictureId, rating: 0, update: true });
 
     expect(res.status).toBe(200);
     expect(res.body.message).toBe('Rating deleted');
@@ -91,7 +91,7 @@ describe('POST /api/ratings', () => {
   test('POST /api/ratings fails when required fields are missing', async () => {
     const res = await request(app)
       .post('/api/ratings')
-      .send({ pictureId, rating: 4 }); // Missing userId
+      .send({ pictureId, rating: 4 }); // Missing userId and update
 
     expect(res.status).toBe(400);
     expect(res.body.error).toBe('Validation error');
