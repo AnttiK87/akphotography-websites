@@ -44,14 +44,15 @@ const StarIcons = ({ id, isMobile }: StarIconsProps) => {
 
   const savedRating = allowStoreReviews
     ? Number(localStorage.getItem(`rating${id}`))
-    : null;
+    : 0;
 
   useEffect(() => {
     dispatch(initializeRatings(id));
     if (allowStoreReviews) {
       localStorage.getItem(`rating${id}`);
+      setCurrentUserRating(savedRating ? savedRating : 0);
     }
-  }, [dispatch, id, allowStoreReviews]);
+  }, [dispatch, id, allowStoreReviews, savedRating]);
 
   useEffect(() => {
     setAvgRating(
@@ -84,8 +85,8 @@ const StarIcons = ({ id, isMobile }: StarIconsProps) => {
           {
             text: `${
               language === "fin"
-                ? "Olet jo arvioinut tämän kuvan. Yksityisyysasetukset estävät arvostelun muuttamisen."
-                : "You have already reviewed this photo. Your privacy settings doesn't aloow updating this review."
+                ? "Olet jo arvioinut tämän kuvan. Yksityisyysasetuksesi estävät arvostelun muuttamisen."
+                : "You have already reviewed this photo. Your privacy settings doesn't allow updating this review."
             }`,
             type: "error",
           },
@@ -94,12 +95,14 @@ const StarIcons = ({ id, isMobile }: StarIconsProps) => {
       );
       return;
     }
+
     const updatedRating = currentRating == newRating ? 0 : newRating;
+
     setCurrentUserRating(updatedRating);
     addRating(updatedRating, id);
   };
 
-  const addRating = (rating: number, id: number) => {
+  const addRating = async (rating: number, id: number) => {
     if (!allowStoreReviews) {
       dispatch(
         showMessage(
@@ -124,19 +127,23 @@ const StarIcons = ({ id, isMobile }: StarIconsProps) => {
       rating: newRating,
       pictureId: id,
       userId: userId,
+      update: savedRating != 0,
     };
 
-    if (rating === 0) {
-      if (allowStoreReviews) {
-        localStorage.removeItem(`rating${id}`);
-      }
-      setCurrentUserRating(0);
-    } else {
-      if (allowStoreReviews) {
-        localStorage.setItem(`rating${id}`, String(rating));
+    const resultAction = await dispatch(createRating(addRating));
+
+    if (resultAction) {
+      if (rating === 0) {
+        if (allowStoreReviews) {
+          localStorage.removeItem(`rating${id}`);
+        }
+        setCurrentUserRating(0);
+      } else {
+        if (allowStoreReviews) {
+          localStorage.setItem(`rating${id}`, String(rating));
+        }
       }
     }
-    dispatch(createRating(addRating));
   };
 
   return (

@@ -65,6 +65,7 @@ export const createRating = (content: AddRating) => {
       } else {
         dispatch(updateRating(newRating.rating));
       }
+      return newRating;
     } catch (err: unknown) {
       const error = err as AxiosError;
       handleError(error, dispatch);
