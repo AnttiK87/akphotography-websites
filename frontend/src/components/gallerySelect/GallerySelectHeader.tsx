@@ -30,8 +30,8 @@ const GallerySelectHeader = ({ heroText }: GallerySelectHeaderProps) => {
   const headerText = heroText
     ? heroText
     : language === "fin"
-    ? "Kuvat"
-    : "Pictures";
+      ? "Kuvat"
+      : "Pictures";
   const textToHeader = headerText.split("\n");
 
   useEffect(() => {
@@ -51,12 +51,12 @@ const GallerySelectHeader = ({ heroText }: GallerySelectHeaderProps) => {
           prev === images?.length - 2
             ? 0
             : prev === images?.length - 1
-            ? 1
-            : prev + 2
+              ? 1
+              : prev + 2,
         );
       } else {
         setNextImageIndex(
-          currentImageIndex >= images?.length - 1 ? 0 : currentImageIndex + 1
+          currentImageIndex >= images?.length - 1 ? 0 : currentImageIndex + 1,
         );
       }
     }, 2500);
@@ -89,7 +89,7 @@ const GallerySelectHeader = ({ heroText }: GallerySelectHeaderProps) => {
               />
               {images.length > 1 && (
                 <img
-                  src={`/uploads/images/about/${images[nextImageIndex]}`}
+                  src={`/uploads/images/pictures/${images[nextImageIndex]}`}
                   alt="Background Image"
                   loading="eager"
                   onLoad={() => setIsImageReady(true)}
