@@ -24,13 +24,13 @@ interface LightBoxProviderProps {
 }
 
 const LightBoxContext = createContext<LightBoxContextType | undefined>(
-  undefined
+  undefined,
 );
 
 export const LightBoxProvider = ({ children }: LightBoxProviderProps) => {
   const [isLightBoxOpen, setIsLightBoxOpen] = useState(false);
   const [currentIndex, setCurrentIndex] = useState<number | undefined>(
-    undefined
+    undefined,
   );
   const [invalidIndex, setInvalidIndex] = useState(false);
   const [category, setCategory] = useState<Category>(undefined);
@@ -49,6 +49,12 @@ export const LightBoxProvider = ({ children }: LightBoxProviderProps) => {
     setIsLightBoxOpen(false);
     setCurrentIndex(undefined);
   };
+
+  useEffect(() => {
+    if (isLightBoxOpen) {
+      window.addEventListener("popstate", closeLightBox);
+    }
+  }, [isLightBoxOpen]);
 
   useEffect(() => {
     if (isLightBoxOpen) {
